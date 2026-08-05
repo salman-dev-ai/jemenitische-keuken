@@ -6,17 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
- /**
+    /**
      * Run the migrations.
      * Responsibility: Handles online table reservations placed by customers.
      */
     public function up(): void
     {
-   Schema::create('reservations', function (Blueprint $table) {
+        Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->string('reference_code')->unique(); // Public reference (e.g., RES-8X29B)
-/// NULL تعيين قيمة الحقل إلى
-//  تلقائياً إذا تم حذف السجل الأساسي المرتبط به في الجدول الآخر بدلاً من حذف السجل الحالي
+            /// NULL تعيين قيمة الحقل إلى
+            //  تلقائياً إذا تم حذف السجل الأساسي المرتبط به في الجدول الآخر بدلاً من حذف السجل الحالي
             $table->foreignId('table_id')->nullable()->nullOnDelete();
 
             // Customer Information

@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\LaravelPackageTools\Concerns\Package\HasTranslations;
+use Spatie\Translatable\HasTranslations;
+
+
+
 
 /**
  * Responsibility: Manages the core settings, location, and global toggles for the   restaurant  .
@@ -28,7 +31,7 @@ class RestaurantSetting extends Model
         'phone',
         'whatsapp',
         'email',
-        'address_line',
+         'address',
         'city',
         'postal_code',
         'google_maps_link',

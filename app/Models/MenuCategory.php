@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\LaravelPackageTools\Concerns\Package\HasTranslations;
+use Spatie\Translatable\HasTranslations;
 
 
 /**
@@ -16,6 +17,7 @@ class MenuCategory extends Model
 
     public array $translatable = ['name', 'description'];
 
+    use HasFactory;
     protected $fillable = [
 
         'name',
@@ -30,7 +32,7 @@ class MenuCategory extends Model
     {
         return [
             'is_active' => 'boolean',
-            'sort_order',
+            'sort_order'=>'integer',
         ];
     }
 

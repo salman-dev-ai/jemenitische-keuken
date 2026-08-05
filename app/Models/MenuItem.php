@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\LaravelPackageTools\Concerns\Package\HasTranslations;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Translatable\HasTranslations;
 /**
  * Responsibility: Represents a specific dish or drink, handling pricing, translations, and category association.
  */
@@ -16,6 +16,7 @@ class MenuItem extends Model
     // دمج الـ Traits الخاصة بالترجمة والحذف الآمن
     use HasTranslations, SoftDeletes;
 
+    use HasFactory;
     public array $translatable = ['name', 'description', 'allergens'];
 
     protected $fillable = [

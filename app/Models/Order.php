@@ -7,10 +7,13 @@ use App\Enums\OrderType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
 class Order extends Model
 {
+
+use HasFactory;
     /**
      * Responsibility: Manages different types of orders (e.g., dine-in, takeout).
      */
