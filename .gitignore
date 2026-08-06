@@ -24,3 +24,5 @@ yarn-error.log
 /.zed
 
 .info.md
+latable plugingit pull --rebase origin main
+
