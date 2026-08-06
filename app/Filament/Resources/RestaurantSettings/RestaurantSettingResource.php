@@ -22,37 +22,50 @@ class RestaurantSettingResource extends Resource
     protected static ?string $model = RestaurantSetting::class;
 
     protected static string|BackedEnum|null $navigationIcon =
-        Heroicon::OutlinedCog6Tooth;
+    Heroicon::OutlinedCog6Tooth;
 
     protected static ?string $navigationLabel =
-        'إعدادات المطعم';
+    'إعدادات المطعم';
 
     protected static ?string $modelLabel =
-        'إعداد المطعم';
+    'إعداد المطعم';
 
+    // This is the plural label for the model, used in the navigation
+    //  and other places where multiple records are displayed and title
     protected static ?string $pluralModelLabel =
-        'إعدادات المطعم';
+    'إعدادات المطعم';
 
     protected static string|UnitEnum|null $navigationGroup =
-        'النظام';
+    'النظام';
 
+    // This is the order of the resource in the navigation,
+    // lower numbers are displayed first
     protected static ?int $navigationSort = 1;
 
+
+    // This resource represents singleton restaurant settings.
+    // Creating another settings record is not allowed.
+    // show the edit page for the first record in the list
     public static function form(Schema $schema): Schema
     {
         return RestaurantSettingForm::configure($schema);
     }
 
+    // This resource represents singleton restaurant settings.
+    // show table with the first record in the list
+    // and allow editing it
     public static function table(Table $table): Table
     {
         return RestaurantSettingsTable::configure($table);
     }
+
 
     public static function getRelations(): array
     {
         return [];
     }
 
+    // navigation  to the edit page  or  the main page of the resource
     public static function getPages(): array
     {
         return [

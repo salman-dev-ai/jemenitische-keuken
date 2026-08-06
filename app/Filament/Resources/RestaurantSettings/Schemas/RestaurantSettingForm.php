@@ -1,5 +1,5 @@
 <?php
-
+ 
 namespace App\Filament\Resources\RestaurantSettings\Schemas;
 
 use Filament\Forms\Components\KeyValue;
@@ -28,10 +28,8 @@ class RestaurantSettingForm
                         Tab::make('المعلومات الأساسية')
                             ->icon(Heroicon::OutlinedInformationCircle)
                             ->schema([
-                                TextInput::make('name')
-                                    ->label('اسم المطعم')
-                                    ->required()
-                                    ->maxLength(255),
+                                TextInput::make('name')->label('name restaurant')->required()->maxLength(255),
+
 
                                 TextInput::make('phone')
                                     ->label('رقم الهاتف')
@@ -49,8 +47,9 @@ class RestaurantSettingForm
                                     ->email()
                                     ->required()
                                     ->maxLength(255),
-                            ])
-                            ->columns(2),
+                            ])->columns(2),
+
+
 
                         /*
                         |--------------------------------------------------------------------------
@@ -58,7 +57,7 @@ class RestaurantSettingForm
                         |--------------------------------------------------------------------------
                         */
 
-                        Tab::make('العنوان والموقع')
+                        Tab::make('العنوان & الموقع')
                             ->icon(Heroicon::OutlinedMapPin)
                             ->schema([
                                 TextInput::make('address')
@@ -84,13 +83,14 @@ class RestaurantSettingForm
                             ])
                             ->columns(3),
 
+
                         /*
                         |--------------------------------------------------------------------------
                         | 3. Operations
                         |--------------------------------------------------------------------------
                         */
 
-                        Tab::make('التشغيل وساعات العمل')
+                        Tab::make('التشغيل & ساعات العمل')
                             ->icon(Heroicon::OutlinedClock)
                             ->schema([
                                 Toggle::make('accepts_reservations')
@@ -113,9 +113,11 @@ class RestaurantSettingForm
                                     ->valuePlaceholder('مثال: 12:00 - 22:00')
                                     ->columnSpanFull(),
                             ])
-                            ->columns(2),
-                    ])
-                    ->columnSpanFull(),
+                            ->columns(2)
+
+                    ])->columnSpanFull(),
+
+
             ]);
     }
 }

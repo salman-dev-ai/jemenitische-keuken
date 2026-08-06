@@ -41,3 +41,35 @@ To ensure a smooth transition from database architecture to UI development, we i
 *   **Intelligent Factories:** Developed dynamic factories for `Tables`, `Reservations`, and `Orders` with randomized, yet logical, datasets (e.g., historical vs. future reservation dates, tax calculations matching NL regulations).
 *   **Multilingual Support in Dummy Data:** Utilized Faker to generate multilingual JSON content (NL, AR, EN) for `MenuCategory` and `MenuItem` to validate the `Spatie\Translatable` implementation.
 *   **One-Command Setup:** The entire database state can be rebuilt and populated instantaneously using `php artisan migrate:fresh --seed`, accelerating developer onboarding and CI/CD testing pipelines.
+
+
+                    RestaurantSetting
+                           │
+                           ▼
+                RestaurantSettingResource
+                           │
+             ┌─────────────┴─────────────┐
+             │                           │
+             ▼                           ▼
+    RestaurantSettingForm       RestaurantSettingsTable
+             │                           │
+             ▼                           ▼
+          Schema                       Table
+             │                           │
+             └─────────────┬─────────────┘
+                           ▼
+                         Pages
+                       /       \
+                      /         \
+                   List          Edit
+                    │             │
+                    ▼             ▼
+                  Table          Form
+                                  │
+                                  ▼
+                             Eloquent
+                                  │
+                                  ▼
+                              Database
+
+                    
