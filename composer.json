@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "filament/filament": "5.*",
+        "lara-zeus/spatie-translatable": "*",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "livewire/flux": "^2.0",
