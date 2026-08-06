@@ -37,7 +37,7 @@ class AdminPanelProvider extends PanelProvider
                 'warning' => Color::Orange,
                 'brand' => Color::hex('#3E1F15'), // اللون البني الداكن كخلفيات للـ Brand
             ])
-            // تعيين الخط ليتناسب مع الطابع الأنيق (Premium)
+            //تعيين الخط ليتناسب مع الطابع الأنيق (Premium)
             ->font('Tajawal')
             ->brandName('المطبخ اليمني - Jemenitische Keuken')
             ->brandLogo(asset('images/logo.jpg'))
