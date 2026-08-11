@@ -72,4 +72,12 @@ To ensure a smooth transition from database architecture to UI development, we i
                                   ▼
                               Database
 
-                    
+                    ### 🎛️ Admin Panel & Resource Schemas (Phase 2)
+
+Implemented a full-featured, secure, and scalable administration panel using Filament v5 and Laravel 13, strictly following modular separation of concerns and modern UI standards for restaurant operations.
+
+*   **Schema Separation Architecture:** Form schemas are fully decoupled into dedicated `Schemas/` subdirectories (e.g., `RestaurantSettingForm`), utilizing `Filament\Schemas\Schema` contracts to ensure clean, maintainable, and skinny Resource classes.
+*   **Brand Identity Integration:** Custom-tailored `AdminPanelProvider` to reflect the authentic brand identity (#D47716 gold/orange & #3E1F15 dark brown) with the Tajawal typography and native Arabic RTL support.
+*   **Single-Record Lockdown:** Enforced strict security constraints on `RestaurantSettingResource` by disabling `create` and `delete` actions, restricting administrative actions strictly to modifying the single existing branch setup.
+*   **Menu & Capacity Management:** Integrated drag-and-drop category reordering (`sort_order`), real-time reactive slug generation, media upload pipelines with built-in image cropping for dishes, and zone-based table assignment.
+*   **Operational Workflows:** Developed reactive order management with dynamic Dutch VAT (9% BTW) calculations, automated unit price lookups, and state-machine status toggles for daily bookings and kitchen operations.
