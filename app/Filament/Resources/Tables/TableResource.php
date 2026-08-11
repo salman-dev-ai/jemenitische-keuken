@@ -21,6 +21,7 @@ class TableResource extends Resource
     protected static ?string $model = Table1::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleGroup;
+    // protected static string|BackedEnum|null $navigationIcon = 'lucide-rocking-chair';
 
 
     protected static ?string $navigationLabel = 'إدارة الطاولات';

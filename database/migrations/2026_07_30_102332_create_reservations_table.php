@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('table_id')->nullable()->nullOnDelete();
 
             // Customer Information
-            $table->string('guest_name');
+            $table->string('guest_name'); 
             $table->string('guest_email');
             $table->string('guest_phone');
 
