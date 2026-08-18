@@ -21,7 +21,7 @@ class MenuItemsTable
     {
         return $table
             ->columns([
-                ImageColumn::make('image')
+                ImageColumn::make('image_path')
                     ->label('الصورة')
                     ->circular(), // عرض الصورة بشكل دائري أنيق
 
@@ -41,11 +41,9 @@ class MenuItemsTable
                     ->money('EUR') // تهيئة الرقم كعملة (يورو)
                     ->sortable(),
 
-                IconColumn::make('is_vegetarian')
-                    ->label('نباتي')
-                    ->boolean(),
 
-                ToggleColumn::make('is_active')
+
+                ToggleColumn::make('is_available')
                     ->label('متاح')
                     ->sortable(),
             ])

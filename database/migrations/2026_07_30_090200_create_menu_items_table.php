@@ -31,6 +31,7 @@ return new class extends Migration
             $table->boolean('is_available')->default(true);
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_spicy')->default(false);
+            
             $table->integer('sort_order')->default(0);
 
             $table->timestamps();
