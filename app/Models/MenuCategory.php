@@ -5,21 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Translatable\HasTranslations;
+use Illuminate\Database\Eloquent\Builder;
 
-
-/**
- * Responsibility: Represents a menu category and manages its translated attributes and related items.
- */
 class MenuCategory extends Model
 {
-    use HasTranslations;
-
-    public array $translatable = ['name', 'description'];
-
     use HasFactory;
-    protected $fillable = [
 
+    protected $fillable = [
         'name',
         'slug',
         'description',
@@ -28,21 +20,48 @@ class MenuCategory extends Model
         'is_active',
     ];
 
-    protected function casts(): array
+    /**
+     * تحويل حقول الـ JSON تلقائياً إلى مصفوفات PHP
+     */
+    protected $casts = [
+        'name' => 'array',
+        'description' => 'array',
+        'sort_order' => 'integer',
+        'is_active' => 'boolean',
+    ];
+
+    /**
+     * نطاق لجلب الأقسام المفعلة فقط مرتبة حسب أولوية العرض
+     */
+    public function scopeActive(Builder $query): Builder
     {
-        return [
-            'is_active' => 'boolean',
-            'sort_order'=>'integer',
-        ];
+        return $query->where('is_active', true)->orderBy('sort_order', 'asc');
     }
 
     /**
-     * Relationship: A Category has many Menu Items
+     * استرجاع الاسم حسب لغة المستخدم الحالية (ar / nl / en)
      */
-
-    public function items(): HasMany
+    public function getLocalizedNameAttribute(): string
     {
-        // استخدام الكلاس مباشرة أفضل من كتابة مساره كنص لضمان التتبع الآمن (Type Safety)
-        return $this->hasMany(MenuItem::class);
+        $locale = app()->getLocale();
+        return $this->name[$locale] ?? $this->name['ar'] ?? $this->name['en'] ?? '';
+    }
+
+    /**
+     * استرجاع الوصف حسب لغة المستخدم الحالية
+     */
+    public function getLocalizedDescriptionAttribute(): ?string
+    {
+        $locale = app()->getLocale();
+        return $this->description[$locale] ?? $this->description['ar'] ?? $this->description['en'] ?? null;
+    }
+
+    /**
+     * علاقة الأصناف التابعة لهذا القسم
+     */
+    public function menuItems(): HasMany
+    {
+        return $this->hasMany(MenuItem::class, 'menu_category_id');
     }
 }
+

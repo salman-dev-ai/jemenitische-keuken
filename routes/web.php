@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Http\Controllers\LanguageController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,4 +20,8 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 
-require __DIR__.'/auth.php';
+
+
+// التوثيق الرسمي يفرض ربط الاسم بالشكل التالي:
+// Route::get('lang/switch', [LanguageController::class, 'switch'])->name('lang.switch');
+Route::get('lang/switch', [LanguageController::class, 'switch'])->name('lang.switch');
