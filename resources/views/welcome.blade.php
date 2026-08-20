@@ -28,4 +28,16 @@
         </div>
     </section>
 
+        <section id="reservation" class="py-20">
+        <div class="max-w-5xl mx-auto px-4">
+            <livewire:contact-section />
+        </div>
+    </section>
+
+        <section id="reservation" class="py-20">
+        <div class="max-w-5xl mx-auto px-4">
+            <livewire:customer-reviews-marquee/>
+        </div>
+    </section>
+
 </x-layouts.app>

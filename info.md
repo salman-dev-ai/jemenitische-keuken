@@ -10,6 +10,7 @@ php artisan lang:publish
 
 
 If you’d like to save time, Filament can automatically generate the form and table for you, based on your model’s database columns, using --generate:
+
 php artisan make:filament-resource Customer --generate
 
 
