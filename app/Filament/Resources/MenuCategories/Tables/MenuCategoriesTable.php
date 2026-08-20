@@ -25,7 +25,7 @@ class MenuCategoriesTable
                 // TextColumn::make('sort_order')
                 //     ->numeric()
                 //     ->sortable(),
-                // IconColumn::make('is_active')
+                // IconColumn::make('is_available')
                 //     ->boolean(),
                 // TextColumn::make('created_at')
                 //     ->dateTime()
@@ -48,7 +48,7 @@ class MenuCategoriesTable
                     ->color('gray')
                     ->limit(20),
 
-                ToggleColumn::make('is_active')
+                ToggleColumn::make('is_available')
                     ->label('مفعل')
                     ->sortable(),
 

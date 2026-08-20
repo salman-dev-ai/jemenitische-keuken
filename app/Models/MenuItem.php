@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Translatable\HasTranslations;
+
 /**
  * Responsibility: Represents a specific dish or drink, handling pricing, translations, and category association.
  */
@@ -75,5 +76,20 @@ class MenuItem extends Model
     public function scopeFeatured(Builder $query): void
     {
         $query->where('is_featured', true);
+    }
+
+
+    public function getLocalizedNameAttribute(): string
+    {
+        $locale = app()->getLocale();
+
+        return $this->name[$locale] ?? $this->name['ar'] ?? $this->name['en'] ?? '';
+    }
+
+    public function getLocalizedDescriptionAttribute(): ?string
+    {
+        $locale = app()->getLocale();
+
+        return $this->description[$locale] ?? $this->description['ar'] ?? $this->description['en'] ?? null;
     }
 }

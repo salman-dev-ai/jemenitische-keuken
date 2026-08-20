@@ -35,15 +35,15 @@
                     </button>
 
                     <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-40 rounded-2xl bg-[#260C0A] border border-white/15 shadow-2xl py-1 z-50 text-xs">
-                        <a href="{{ route('lang.switch', 'ar') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513] transition-colors">
+                        <a href="{{ route('lang.switch', 'ar') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513] transition-colors" wire:navigate>
                             <span>🇾🇪</span> <span>العربية</span>
                         </a>
-                        <a href="{{ route('lang.switch', 'nl') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513] transition-colors">
+                        <a href="{{ route('lang.switch', 'nl') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513] transition-colors"  wire:navigate>
                             <span>🇳🇱</span> <span>Nederlands</span>
                         </a>
-                        <a href="{{ route('lang.switch', 'en') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513] transition-colors">
+                        <a href="{{ route('lang.switch', 'en') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513] transition-colors" wire:navigate>
                             <span>🇬🇧</span> <span>English</span>
-                            
+
                         </a>
                     </div>
                 </div>
@@ -61,12 +61,12 @@
             <!-- المنطقة الثالثة (اليمين): 3 أزرار تنقل + زر الحجز المباشر -->
             <div class="flex items-center gap-4 lg:gap-6 flex-1 justify-end">
                 <nav class="hidden lg:flex items-center gap-6 font-bold text-sm text-stone-200">
-                    <a href="#gallery" class="hover:text-[#E07513] transition-colors">{{ __('messages.nav.gallery') }}</a>
-                    <a href="#contact" class="hover:text-[#E07513] transition-colors">{{ __('messages.nav.contact') }}</a>
-                    <a href="#reservation" class="text-amber-400 hover:text-white transition-colors">{{ __('messages.nav.reservation') }}</a>
+                    <a href="#gallery" class="hover:text-[#E07513] transition-colors"  wire:navigate>{{ __('messages.nav.gallery') }}</a>
+                    <a href="#contact" class="hover:text-[#E07513] transition-colors" wire:navigate>{{ __('messages.nav.contact') }}</a>
+                    <a href="#reservation" class="text-amber-400 hover:text-white transition-colors" wire:navigate>{{ __('messages.nav.reservation') }}</a>
                 </nav>
 
-                <a href="#reservation" class="bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#9a4504] text-white px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-lg shadow-[#E07513]/25 hover:shadow-xl hover:-translate-y-0.5">
+                <a href="#reservation" class="bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#9a4504] text-white px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-lg shadow-[#E07513]/25 hover:shadow-xl hover:-translate-y-0.5" wire:navigate>
                     {{ __('messages.nav.bookTableBtn') }}
                 </a>
             </div>
@@ -116,25 +116,16 @@
                 </ul>
             </div>
 
-            <div>
-                <h4 class="text-white text-sm font-extrabold uppercase mb-4 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-[#E07513]"></span>
-                    <span>{{ __('messages.contact.hoursTitle') }}</span>
-                </h4>
-                <p class="text-xs text-stone-400">{{ __('messages.contact.hoursValue') }}</p>
-                <span class="text-[11px] text-amber-300 bg-amber-400/10 px-2.5 py-1 rounded-md inline-block mt-3">
-                    خدمة الضيافة والشاي العدني مجاناً
-                </span>
-            </div>
 
-            <div>
+
+            {{-- <div>
                 <h4 class="text-white text-sm font-extrabold uppercase mb-4 flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-[#E07513]"></span>
                     <span>{{ __('messages.contact.addressTitle') }}</span>
                 </h4>
                 <p class="text-xs text-stone-400">{{ __('messages.contact.addressValue') }}</p>
                 <p class="text-xs font-mono font-bold text-stone-200 mt-2" dir="ltr">{{ __('messages.contact.phoneValue') }}</p>
-            </div>
+            </div> --}}
 
         </div>
 

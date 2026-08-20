@@ -34,7 +34,7 @@ class TableFactory extends Factory
         'table_number'=> 'T-'.str_pad((string) self::$tableCounter++,2,'0',STR_PAD_LEFT),
         'capacity'=>$this ->faker->randomElement([2,4,6,8,10]),
         'location_zone' => $this ->faker->randomElement(['Main Hall','Terrace','Family Section','VIP Area']),
-        'is_active'=>true,
+        'is_available'=>true,
         ];
     }
 }

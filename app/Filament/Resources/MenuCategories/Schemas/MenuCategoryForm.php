@@ -44,7 +44,7 @@ class MenuCategoryForm
                     ->required()
                     ->numeric()
                     ->default(0),
-                Toggle::make('is_active')
+                Toggle::make('is_available')
                     ->label('الحالة')
 
                     ->onColor('success')

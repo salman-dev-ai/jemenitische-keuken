@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\MenuItems\Schemas;
 
+use App\Models\MenuCategory;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
@@ -123,15 +124,33 @@ class MenuItemForm
                     ->icon('heroicon-o-tag')
                     ->schema([
 
+                        // Select::make('menu_category_id')
+                        //     ->label('قسم المنيو')
+                        //     ->relationship(
+                        //         'category',
+                        //         'name'
+                        //     )
+                        //     ->required()
+                        //     ->searchable()
+                        //     ->preload(),
+
                         Select::make('menu_category_id')
-                            ->label('قسم المنيو')
-                            ->relationship(
-                                'category',
-                                'name'
+                            ->label('تصنيف القائمة')
+                            ->options(
+                               MenuCategory::query()
+                                    ->get()
+                                    ->mapWithKeys(function ($category) {
+                                        return [
+                                            $category->id => $category->localized_name,
+
+                                            
+                                        ];
+                                    })
+                                    ->toArray()
                             )
-                            ->required()
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->required(),
 
                         TextInput::make('price')
                             ->label('السعر')

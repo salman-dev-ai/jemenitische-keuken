@@ -47,7 +47,7 @@ class TablesTable
 
 
 
-                ToggleColumn::make('is_active')
+                ToggleColumn::make('is_available')
                     ->label('متاحة')
                     ->sortable(),
 

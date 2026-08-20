@@ -160,7 +160,7 @@
                             </span>
                         </div>
                         <div class="text-[11px] text-stone-500 pt-1 border-t border-stone-100 flex justify-between">
-                            <span>{{ $table->location ?? 'الصالة الرئيسية' }}</span>
+                            <span>{{ $table->location_zone ?? 'الصالة الرئيسية' }}</span>
                             <span class="text-[#D47716] font-semibold">تأكيد فوري</span>
                         </div>
                     </div>

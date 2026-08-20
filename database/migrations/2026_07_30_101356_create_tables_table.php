@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('table_number')->unique(); // e.g. "T-01", "T-02"
             $table->integer('capacity'); // Guests count
             $table->string('location_zone')->nullable(); // e.g. "Family Section", "Main Hall"
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_available')->default(true);
 
             $table->timestamps();
         });

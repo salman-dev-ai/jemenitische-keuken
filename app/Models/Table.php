@@ -18,14 +18,14 @@ class Table extends Model
         'table_number',
         'capacity',
         'location_zone',
-        'is_active',
+        'is_available',
     ];
 
     protected function casts(): array
     {
         return [
             'capacity' => 'integer',
-            'is_active' => 'boolean',
+            'is_available' => 'boolean',
         ];
     }
 
@@ -44,7 +44,7 @@ class Table extends Model
 
     public function scopeActive(Builder $query): void
     {
-        $query->where('is_active', true);
+        $query->where('is_available', true);
     }
 
 

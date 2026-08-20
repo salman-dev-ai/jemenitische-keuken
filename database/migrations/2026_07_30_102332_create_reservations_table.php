@@ -20,9 +20,9 @@ return new class extends Migration
             $table->foreignId('table_id')->nullable()->nullOnDelete();
 
             // Customer Information
-            $table->string('guest_name'); 
-            $table->string('guest_email');
-            $table->string('guest_phone');
+            $table->string('customer_name');
+            $table->string('customer_email');
+            $table->string('customer_phone');
 
             // Details
             $table->integer('party_size');
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Index for fast daily lookup
-            $table->index(['reservation_date', 'status']);
+            $table->index(['table_id','reservation_date', 'status'] ,'idx_reservation_lookup');
         });
     }
 

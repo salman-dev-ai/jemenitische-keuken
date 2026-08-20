@@ -1,43 +1,33 @@
 <x-layouts.app>
 
-        <section id="reservation" class="py-20">
-        <div class="max-w-5xl mx-auto px-4">
-            <livewire:home-page/>
-        </div>
+    <section id="home" class="py-20">
+        <livewire:home-page />
+    </section>
+ 
+    <section id="reservation" class="py-20">
+        <livewire:reservation-form />
     </section>
 
-    <!-- محتوى الموقع -->
+
+    <section id="menu" class="py-20">
+        <livewire:menu-categories />
+    </section>
+
+
+    <section id="gallery" class="py-20">
+        <livewire:gallery-section />
+    </section>
 
     <section id="reservation" class="py-20">
-        <div class="max-w-5xl mx-auto px-4">
-            <livewire:reservation-form />
-        </div>
+
+        <livewire:contact-section />
+
     </section>
 
+    <section id="customer_reviews" class="py-20">
 
-      <section id="reservation" class="py-20">
-        <div class="max-w-5xl mx-auto px-4">
-            <livewire:menu-categories />
-        </div>
-    </section>
+        <livewire:customer-reviews-marquee />
 
-
-          <section id="reservation" class="py-20">
-        <div class="max-w-5xl mx-auto px-4">
-            <livewire:gallery-section />
-        </div>
-    </section>
-
-        <section id="reservation" class="py-20">
-        <div class="max-w-5xl mx-auto px-4">
-            <livewire:contact-section />
-        </div>
-    </section>
-
-        <section id="reservation" class="py-20">
-        <div class="max-w-5xl mx-auto px-4">
-            <livewire:customer-reviews-marquee/>
-        </div>
     </section>
 
 </x-layouts.app>

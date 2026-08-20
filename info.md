@@ -34,10 +34,12 @@ php artisan make:filament-resource Customer --generate
             
             
           
-          php artisan route:clear
+php artisan route:clear
+
 php artisan route:cache
 
 
 php artisan make:livewire MenuCategories
 
- 
+ طريقة تشغيل الهجرة في بيئة العمل
+php artisan migrate

@@ -33,7 +33,7 @@ class OrderService
             foreach ($items as $item) {
                 $menuItem = MenuItem::findOrFail($item['menu_item_id']);
 
-                if (! $menuItem->is_active) {
+                if (! $menuItem->is_available) {
                     throw new Exception("الطبق ({$menuItem->name}) غير متاح للطلب حالياً.");
                 }
 

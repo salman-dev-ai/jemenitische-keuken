@@ -43,7 +43,7 @@ class GalleryItemForm
     //                 ->default(0),
     //             Toggle::make('is_featured')
     //                 ->required(),
-    //             Toggle::make('is_active')
+    //             Toggle::make('is_available')
     //                 ->required(),
     //             TextInput::make('views_count')
     //                 ->required()
@@ -197,7 +197,7 @@ class GalleryItemForm
                         ->dehydrated(false)
                         ->helperText('يتم احتسابه تلقائياً عند فتح الزوار للصورة في الموقع.'),
 
-                    Toggle::make('is_active')
+                    Toggle::make('is_available')
                         ->label('تفعيل الصورة (تظهر في الموقع مباشرة)')
                         ->default(true)
                         ->onColor('success')

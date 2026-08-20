@@ -16,8 +16,8 @@ class HomePage extends Component
     public function signatureDishes()
     {
         return MenuItem::query()
-            ->where('is_active', true)
-            ->where('is_chef_special', true)
+            ->where('is_available', true)
+            ->where('is_featured', true)
             ->with('category')
             ->take(3)
             ->get();

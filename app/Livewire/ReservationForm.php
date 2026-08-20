@@ -51,7 +51,7 @@ class ReservationForm extends Component
     public function getAvailableTablesProperty()
     {
         return Table::query()
-            ->where('is_active', true)
+            ->where('is_available', true)
             ->where('capacity', '>=', $this->party_size)
             ->orderBy('capacity', 'asc')
             ->get();
@@ -78,5 +78,14 @@ class ReservationForm extends Component
     public function render()
     {
         return view('livewire.reservation-form');
+    }
+
+
+    public function availableTables(){
+        return Table::query()
+        ->where('is_available',true)
+        ->where('capacity','>=',$this->party_size)
+        ->orderBy('capacity','asc')->get();
+
     }
 }

@@ -23,7 +23,7 @@
                     <span>{{ __('messages.home.heroTitle') ?? 'المذاق الملكي للمندي اليماني' }}</span>
                     <br />
                     <span class="bg-gradient-to-r from-[#E07513] via-[#F6AA58] to-[#E07513] bg-clip-text text-transparent drop-shadow-sm font-extrabold">
-                        {{ __('messages.brand.slogan') ?? 'The Origin Of Mandi | أصل المندي' }}
+                        {{ __('messages.brand.slogan') ?? 'The Origin Of Mandi  ' }}
                     </span>
                 </h1>
             </div>
@@ -58,19 +58,19 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 max-w-4xl mx-auto text-stone-200">
                 <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
                     <div class="text-2xl sm:text-3xl font-black text-[#E07513]">+25</div>
-                    <div class="text-[11px] text-stone-300 font-medium mt-1">عاماً من الخبرة في المندي</div>
+                    <div class="text-[11px] text-stone-300 font-medium mt-1" > <span>{{ __('messages.home.stats.years.label') ?? 'A year’s experience in Al-Mandi'}}</span></div>
                 </div>
                 <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
                     <div class="text-2xl sm:text-3xl font-black text-[#E07513]">100%</div>
-                    <div class="text-[11px] text-stone-300 font-medium mt-1">لحوم بلدية حلال طازجة يومياً</div>
+                    <div class="text-[11px] text-stone-300 font-medium mt-1"><span>{{ __('messages.home.stats.halal.label') ?? 'Fresh, halal meat from the local council, delivered daily'}}</span></div>
                 </div>
                 <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
                     <div class="text-2xl sm:text-3xl font-black text-[#E07513]">+18</div>
-                    <div class="text-[11px] text-stone-300 font-medium mt-1">نوع بهار يماني نادر ومميز</div>
+                    <div class="text-[11px] text-stone-300 font-medium mt-1"><span>{{ __('messages.home.stats.halal.label') ?? 'A rare and distinctive Yemeni spice'}}</span> </div>
                 </div>
                 <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
                     <div class="text-2xl sm:text-3xl font-black text-[#E07513]">4.9★</div>
-                    <div class="text-[11px] text-stone-300 font-medium mt-1">تقييم رضا الضيوف والزوار</div>
+                    <div class="text-[11px] text-stone-300 font-medium mt-1"><span>{{ __('messages.home.stats.rating.label') ?? 'Guest and visitor satisfaction survey'}}</span></div>
                 </div>
             </div>
 
@@ -84,11 +84,11 @@
             <div class="text-center max-w-3xl mx-auto space-y-3 mb-14">
                 <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#E07513]/10 text-[#E07513] text-xs font-bold">
                     <span>🔥</span>
-                    <span>أركان الأصالة اليمانية في مطعمنا</span>
+                    <span>{{ __('messages.home.pillars.badge') ?? 'The essence of Yemeni authenticity at our restaurant'}}</span>
                 </div>
 
                 <h2 class="text-2xl sm:text-4xl font-extrabold text-[#2C0D0A]">
-                    سر النكهة التي لا تُنسى في المطبخ اليمني
+                                       <span>{{ __('messages.home.pillars.badge') ?? 'The essence of Yemeni authenticity at our restaurant'}}</span>
                 </h2>
 
                 <p class="text-stone-600 text-xs sm:text-sm">
@@ -103,104 +103,20 @@
                         🪵
                     </div>
                     <h3 class="text-base font-extrabold text-[#2C0D0A] group-hover:text-[#E07513] transition-colors">
-                        براميل الحطب تحت الأرض
+                        <span>{{ __('messages.home.pillars.items.wood.title') ?? 'Underground wood-fired barrels'}}</span>
                     </h3>
                     <p class="text-xs text-stone-600 leading-relaxed">
-                        طهي بطيء للحوم والأرز داخل براميل طينية محكمة الإغلاق لأكثر من 4 ساعات لتذوب اللحوم بنكهة مدخنة ساحرة.
+                        <span>{{ __('messages.home.pillars.items.wood.title') ?? 'Slow-cooking meat and rice in airtight clay barrels for over 4 hours, until the meat is tenderised and infused with a delightful smoky flavour.'}}</span>
                     </p>
                 </div>
 
-                {{-- ركن 2: المقلى الصنعاني --}}
-                <div class="bg-white rounded-3xl p-6 border border-[#E8DFD3] hover:border-[#E07513]/40 shadow-xs hover:shadow-xl transition-all duration-300 space-y-4 group">
-                    <div class="w-14 h-14 rounded-2xl bg-[#FAF4ED] text-[#E07513] border border-[#E07513]/20 flex items-center justify-center text-2xl group-hover:bg-[#E07513] group-hover:text-white transition-colors">
-                        🍲
-                    </div>
-                    <h3 class="text-base font-extrabold text-[#2C0D0A] group-hover:text-[#E07513] transition-colors">
-                        فخاريات المقلى الصنعاني
-                    </h3>
-                    <p class="text-xs text-stone-600 leading-relaxed">
-                        أوانٍ منحوتة من الحجر البركاني تحتفظ بالحرارة الشديدة لتقدم الفحسة والسلتة وهي تغلي أمامك مع رغوة الحلبة.
-                    </p>
-                </div>
 
-                {{-- ركن 3: المظبي على الصوان --}}
-                <div class="bg-white rounded-3xl p-6 border border-[#E8DFD3] hover:border-[#E07513]/40 shadow-xs hover:shadow-xl transition-all duration-300 space-y-4 group">
-                    <div class="w-14 h-14 rounded-2xl bg-[#FAF4ED] text-[#E07513] border border-[#E07513]/20 flex items-center justify-center text-2xl group-hover:bg-[#E07513] group-hover:text-white transition-colors">
-                        🔥
-                    </div>
-                    <h3 class="text-base font-extrabold text-[#2C0D0A] group-hover:text-[#E07513] transition-colors">
-                        أحجار الصوان للمظبي
-                    </h3>
-                    <p class="text-xs text-stone-600 leading-relaxed">
-                        شواء الدجاج واللحوم فوق حجارة الصوان البركانية الملتهبة على الجمر للحصول على قرمشة ونكهة لا مثيل لها.
-                    </p>
-                </div>
 
-                {{-- ركن 4: البن والعسل --}}
-                <div class="bg-white rounded-3xl p-6 border border-[#E8DFD3] hover:border-[#E07513]/40 shadow-xs hover:shadow-xl transition-all duration-300 space-y-4 group">
-                    <div class="w-14 h-14 rounded-2xl bg-[#FAF4ED] text-[#E07513] border border-[#E07513]/20 flex items-center justify-center text-2xl group-hover:bg-[#E07513] group-hover:text-white transition-colors">
-                        🍯
-                    </div>
-                    <h3 class="text-base font-extrabold text-[#2C0D0A] group-hover:text-[#E07513] transition-colors">
-                        البن والعسل الدوعني
-                    </h3>
-                    <p class="text-xs text-stone-600 leading-relaxed">
-                        نستورد العسل الدوعني الصافي والبن الخولاني اليافعي مباشرة من مزارع اليمن العريقة لتقديم أرقى الحلويات والمشروبات.
-                    </p>
-                </div>
             </div>
 
         </div>
     </section>
 
-    {{-- 3. MAJLIS SECTION: الديوان اليماني والخصوصية --}}
-    <section class="py-20 bg-gradient-to-br from-[#2E0F0B] via-[#240B08] to-[#1A0604] text-white relative overflow-hidden border-b border-[#E07513]/25">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
-            <div class="lg:col-span-6 space-y-6">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 text-amber-300 text-xs font-bold border border-white/15">
-                    <span>👥</span>
-                    <span>الضيافة والخصوصية العائلية</span>
-                </div>
-
-                <h2 class="text-2xl sm:text-4xl font-extrabold leading-tight text-white">
-                    أجواء تجمع بين الديوان اليماني والأناقة الأوروبية
-                </h2>
-
-                <p class="text-stone-300 text-sm leading-relaxed">
-                    اختر الجلسة التي تناسبك: جلسات ديوان تراثية أرضية فاخرة بالمساند المطرزة، أو طاولات ملكية راقية للعائلات والمناسبات.
-                </p>
-
-                <div class="space-y-3 pt-2">
-                    <div class="flex items-start gap-3 bg-white/5 p-3.5 rounded-2xl border border-white/10 text-xs font-semibold">
-                        <span class="text-[#E07513]">✓</span>
-                        <span>جلسات ديوان أرضية منعزلة للعائلات مع خصوصية تامة.</span>
-                    </div>
-                    <div class="flex items-start gap-3 bg-white/5 p-3.5 rounded-2xl border border-white/10 text-xs font-semibold">
-                        <span class="text-[#E07513]">✓</span>
-                        <span>طاولات ملكية فسيحة مجهزة للمناسبات والاجتماعات الراقية.</span>
-                    </div>
-                    <div class="flex items-start gap-3 bg-white/5 p-3.5 rounded-2xl border border-white/10 text-xs font-semibold">
-                        <span class="text-[#E07513]">✓</span>
-                        <span>تعطير وتبخير باللبان والعود اليمني بعد كل وجبة مجاناً.</span>
-                    </div>
-                </div>
-
-                <div class="pt-2">
-                    <a href="#reservation" class="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#E07513] hover:bg-[#c2620a] text-white font-bold rounded-2xl text-xs sm:text-sm shadow-xl shadow-[#E07513]/25 transition-all">
-                        <span>احجز جلستك المفضلة مسبقاً ←</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="lg:col-span-6">
-                <div class="bg-gradient-to-tr from-[#1B0705] to-[#34110C] p-6 sm:p-8 rounded-3xl border border-[#E07513]/30 shadow-2xl text-center space-y-4">
-                    <h3 class="text-xl font-bold text-[#E07513]">المطبخ اليمني - Jemenitische Keuken</h3>
-                    <p class="text-xs text-amber-200 italic">"الضيافة في اليمن ليست مجرد طعام، بل ميثاق كرم ومحبة يتوارثه الأبناء عن الأجداد"</p>
-                </div>
-            </div>
-
-        </div>
-    </section>
 
 </div>

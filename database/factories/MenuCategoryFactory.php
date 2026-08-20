@@ -40,7 +40,7 @@ class MenuCategoryFactory extends Factory
                 'ar' => 'وصف تجريبي للقسم باللغة العربية.',
                 'nl' => 'Korte beschrijving in het Nederlands.',
             ],
-            'is_active' => true,
+            'is_available' => true,
             'sort_order' => $this->faker->numberBetween(1, 10),
 
         ];

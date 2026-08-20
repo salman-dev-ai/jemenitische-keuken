@@ -26,7 +26,7 @@ class MenuCategories extends Component
     {
         return MenuCategory::active()
             ->withCount(['menuItems' => function ($query) {
-                $query->where('is_active', true);
+                $query->where('is_available', true);
             }])
             ->get();
     }
@@ -37,7 +37,7 @@ class MenuCategories extends Component
     #[Computed]
     public function filteredItems()
     {
-        $query = MenuItem::query()->where('is_active', true);
+        $query = MenuItem::query()->where('is_available', true);
 
         if ($this->selectedCategorySlug !== 'all') {
             $query->whereHas('category', function ($q) {

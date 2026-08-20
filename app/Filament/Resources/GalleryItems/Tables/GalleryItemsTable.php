@@ -33,7 +33,7 @@ class GalleryItemsTable
     //                 ->sortable(),
     //             IconColumn::make('is_featured')
     //                 ->boolean(),
-    //             IconColumn::make('is_active')
+    //             IconColumn::make('is_available')
     //                 ->boolean(),
     //             TextColumn::make('views_count')
     //                 ->numeric()
@@ -75,7 +75,7 @@ class GalleryItemsTable
             ImageColumn::make('image_path')
                 ->label('معاينة الصورة')
                 ->circular()
-               
+
                 ,
 
             // 2. عنوان الصورة التراثية بالعربي (مع الإنجليزي بالأسفل)
@@ -117,7 +117,7 @@ class GalleryItemsTable
                 ->toggleable(),
 
             // 5. زر تبديل العرض المباشر (تفعيل / إخفاء)
-            ToggleColumn::make('is_active')
+            ToggleColumn::make('is_available')
                 ->label('معروض في الموقع')
                 ->onColor('success')
                 ->offColor('danger')

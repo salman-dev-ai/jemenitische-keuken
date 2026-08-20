@@ -23,7 +23,7 @@ class GalleryItem extends Model
         'alt_text',
         'sort_order',
         'is_featured',
-        'is_active',
+        'is_available',
         'views_count',
     ];
 
@@ -33,7 +33,7 @@ class GalleryItem extends Model
         'badge' => 'array',
         'alt_text' => 'array',
         'is_featured' => 'boolean',
-        'is_active' => 'boolean',
+        'is_available' => 'boolean',
         'sort_order' => 'integer',
         'views_count' => 'integer',
     ];
@@ -85,7 +85,7 @@ class GalleryItem extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_available', true);
     }
 
     public function scopeFeatured($query)

@@ -36,7 +36,7 @@ class GalleryItemResource extends Resource
      */
     public static function getNavigationBadge(): ?string
     {
-        return (string) static::getModel()::where('is_active', true)->count();
+        return (string) static::getModel()::where('is_available', true)->count();
     }
 
     public static function getNavigationBadgeColor(): ?string

@@ -24,4 +24,4 @@ Route::middleware(['auth'])->group(function () {
 
 // التوثيق الرسمي يفرض ربط الاسم بالشكل التالي:
 // Route::get('lang/switch', [LanguageController::class, 'switch'])->name('lang.switch');
-Route::get('lang/switch', [LanguageController::class, 'switch'])->name('lang.switch');
+Route::get('lang/switch/{locale}', [LanguageController::class, 'switch'])->name('lang.switch');

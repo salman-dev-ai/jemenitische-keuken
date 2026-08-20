@@ -54,7 +54,7 @@ class TableForm
                 Section::make('حالة الطاولة')
                     ->icon('heroicon-o-check-badge')
                     ->schema([
-                        Toggle::make('is_active')
+                        Toggle::make('is_available')
                             ->label('متاحة للحجز')
                             ->default(true)
                             ->inline(false)

@@ -23,7 +23,7 @@ return new class extends Migration
             // UI & Display Control
             $table->string('image_path')->nullable();
             $table->integer('sort_order')->default(0);
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_available')->default(true);
 
             $table->timestamps();
         });

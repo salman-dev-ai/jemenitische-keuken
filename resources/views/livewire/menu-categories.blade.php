@@ -95,8 +95,8 @@
                         <div class="flex items-start justify-between gap-3 mb-2.5">
                             <div class="space-y-0.5">
                                 <h4 class="text-base font-extrabold text-[#2C0D0A] flex items-center gap-1.5">
-                                    <span>{{ $item->localized_name }}</span>
-                                    @if($item->is_chef_special)
+                                    <span>{{ $item->name }}</span>
+                                    @if($item->is_featured)
                                         <span title="طبق الشيف الملكي">⭐</span>
                                     @endif
                                 </h4>
@@ -124,7 +124,7 @@
                 </div>
             @empty
                 <div class="col-span-full text-center py-12 text-stone-500">
-                    لا توجد أطباق متاحة حالياً في هذا القسم.
+                            {{ __('messages.menu.empty') }} 
                 </div>
             @endforelse
         </div>

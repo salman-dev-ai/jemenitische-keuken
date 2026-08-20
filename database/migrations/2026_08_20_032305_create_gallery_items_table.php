@@ -36,7 +36,7 @@ return new class extends Migration
             // خصائص التحكم من لوحة الإدارة (Admin Controls)
             $table->integer('sort_order')->default(0)->index(); // ترتيب العرض
             $table->boolean('is_featured')->default(false)->index(); // مميز في الصفحة الرئيسية
-            $table->boolean('is_active')->default(true)->index(); // مفعّل / معطّل
+            $table->boolean('is_available')->default(true)->index(); // مفعّل / معطّل
             $table->unsignedBigInteger('views_count')->default(0); // عدد المشاهدات والنقرات
 
             // التواريخ والحذف الناعم
