@@ -37,7 +37,7 @@ class OrdersTable
                 TextColumn::make('customer_email')
                     ->searchable(),
 
-            TextColumn::make('type')
+                TextColumn::make('type')
                     ->label('النوع')
                     ->badge()
                     ->sortable(),
@@ -47,9 +47,7 @@ class OrdersTable
                     ->badge()
                     ->sortable(),
 
-
-
-        TextColumn::make('payment_status')
+                TextColumn::make('payment_status')
                     ->label('الدفع')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -59,7 +57,7 @@ class OrdersTable
                         default => 'gray',
                     }),
 
-              TextColumn::make('total')
+                TextColumn::make('total')
                     ->label('الإجمالي')
                     ->money('EUR')
                     ->sortable()

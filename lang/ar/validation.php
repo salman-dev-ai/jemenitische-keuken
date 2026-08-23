@@ -11,6 +11,6 @@ return [
         'string' => 'يجب ألا يقل :attribute عن :min أحرف.',
     ],
 
-    'unique' =>'  :attribute مستخدم بالفعل . '
+    'unique' => '  :attribute مستخدم بالفعل . ',
 
 ];

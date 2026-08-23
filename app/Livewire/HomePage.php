@@ -3,10 +3,11 @@
 namespace App\Livewire;
 
 use App\Models\MenuItem;
-use App\Models\MenuCategory;
-use Livewire\Component;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Lazy;
+use Livewire\Component;
 
+#[Lazy]
 class HomePage extends Component
 {
     /**
@@ -25,8 +26,10 @@ class HomePage extends Component
 
     public function render()
     {
-        return view('livewire.home-page', [
-            'signatureDishes' => $this->signatureDishes,
-        ]);
+        return view('livewire.home-page');
+        //  [
+        //     'signatureDishes' => $this->signatureDishes,
+        // ]
+
     }
 }

@@ -22,13 +22,17 @@ class GalleryItemResource extends Resource
     protected static ?string $model = GalleryItem::class;
 
     // 1. الأيقونة الاحترافية لمعرض الصور في القائمة الجانبية
-    protected static string|BackedEnum|null $navigationIcon =Heroicon::OutlinedCamera ;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCamera;
 
     // 2. التسميات العربية لمدير المطعم
     protected static string|UnitEnum|null $navigationGroup = 'إدارة المحتوى والوسائط';
+
     protected static ?string $navigationLabel = 'معرض الصور التراثي';
+
     protected static ?string $modelLabel = 'صورة في المعرض';
+
     protected static ?string $pluralModelLabel = 'معرض الصور الملكي';
+
     protected static ?int $navigationSort = 3;
 
     /**

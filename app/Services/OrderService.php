@@ -5,39 +5,49 @@ namespace App\Services;
 use App\Enums\OrderStatus;
 use App\Models\MenuItem;
 use App\Models\Order;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Exception;
 
 class OrderService
 {
-    /**
-     * نسبة ضريبة المبيعات الهولندية (BTW 9% للوجبات والمشروبات    )
-     */
     protected float $vatRate = 0.09;
 
-    /**
-     * إنشاء طلب جديد ومعالجة عناصره داخل المعاملة
-     */
     public function createOrder(array $orderData, array $items): Order
     {
         if (empty($items)) {
-            throw new Exception("لا يمكن إنشاء طلب بدون أطباق.");
+            throw new Exception(__('messages.errors.empty_cart', default: 'لا يمكن إنشاء طلب بدون أطباق.'));
         }
 
         return DB::transaction(function () use ($orderData, $items) {
+            $menuItemIds = collect($items)->pluck('menu_item_id')->all();
+
+            // ✅ استعلام واحد لجلب جميع الأطباق مرة واحدة
+            $menuItems = MenuItem::query()
+                ->whereIn('id', $menuItemIds)
+                ->available()
+                ->keyBy('id')
+                ->get();
+
             $subtotal = 0.0;
             $preparedItems = [];
 
-            // 1. حساب الأسعار والمجموع الفرعي استناداً لأحدث أسعار المنيو في قاعدة البيانات
             foreach ($items as $item) {
-                $menuItem = MenuItem::findOrFail($item['menu_item_id']);
+                $menuItemId = $item['menu_item_id'];
 
-                if (! $menuItem->is_available) {
-                    throw new Exception("الطبق ({$menuItem->name}) غير متاح للطلب حالياً.");
+                if (! $menuItems->has($menuItemId)) {
+                    throw new Exception(
+                        sprintf(__('messages.errors.menu_item_unavailable', default: 'الطبق المطلوب غير متاح حالياً.'), $menuItemId)
+                    );
                 }
 
+                $menuItem = $menuItems->get($menuItemId);
+
                 $quantity = (int) $item['quantity'];
+                if ($quantity < 1) {
+                    continue;
+                }
+
                 $unitPrice = (float) $menuItem->price;
                 $itemTotal = round($unitPrice * $quantity, 2);
 
@@ -51,18 +61,19 @@ class OrderService
                 ];
             }
 
-            // 2. حساب الضريبة والإجمالي النهائي
+            if (empty($preparedItems)) {
+                throw new Exception(__('messages.errors.empty_cart', default: 'السلة فارغة.'));
+            }
+
             $tax = round($subtotal * $this->vatRate, 2);
             $total = round($subtotal + $tax, 2);
 
-            // 3. تجهيز بيانات الطلب
             $orderData['order_number'] = $this->generateOrderNumber();
             $orderData['subtotal'] = $subtotal;
             $orderData['tax'] = $tax;
             $orderData['total'] = $total;
             $orderData['status'] = $orderData['status'] ?? OrderStatus::PENDING;
 
-            // 4. حفظ الطلب والعناصر
             $order = Order::create($orderData);
             $order->items()->createMany($preparedItems);
 
@@ -70,13 +81,10 @@ class OrderService
         });
     }
 
-    /**
-     * توليد رقم طلب فريد ومرتب
-     */
     protected function generateOrderNumber(): string
     {
         do {
-            $number = 'ORD-' . now()->format('Ymd') . '-' . strtoupper(Str::random(5));
+            $number = 'ORD-'.now()->format('Ymd').'-'.strtoupper(Str::random(5));
         } while (Order::where('order_number', $number)->exists());
 
         return $number;

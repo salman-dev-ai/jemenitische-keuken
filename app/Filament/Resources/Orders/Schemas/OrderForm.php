@@ -7,8 +7,8 @@ use App\Enums\OrderType;
 use App\Models\MenuItem;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
@@ -23,7 +23,7 @@ class OrderForm
             ->components([
                 Grid::make([
                     'default' => 1,
-                    'lg' => 12
+                    'lg' => 12,
                 ])->schema([
 
                     // العمود الرئيسي: العميل وعناصر الطلب
@@ -177,7 +177,6 @@ class OrderForm
                                     ->prefix('€')
                                     ->required(),
                             ]),
-
 
                     ])->columnSpan(['default' => 1, 'lg' => 4])->columnSpanFull(),
 

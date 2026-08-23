@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\RestaurantSettings\Tables;
 
-
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -26,8 +25,7 @@ class RestaurantSettingsTable
                 IconColumn::make('accepts_reservations')
                     ->label('الحجوزات')
 
-                    ->boolean(), //return value true or false
-
+                    ->boolean(), // return value true or false
 
                 IconColumn::make('accepts_online_orders')
                     ->label('الطلبات')
@@ -36,16 +34,13 @@ class RestaurantSettingsTable
                     ->label('آخر تحديث')
                     ->dateTime('d/m/Y H:i'),
 
-
             ])
 
             ->recordActions([
                 EditAction::make()->label('تعديل'),
             ])
-            ->paginated(false)
+            ->paginated(false);
 
-            // ->toolbarActions([])
-
-        ;
+        // ->toolbarActions([])
     }
 }

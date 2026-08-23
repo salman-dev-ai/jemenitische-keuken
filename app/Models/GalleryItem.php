@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
 
 class GalleryItem extends Model
@@ -42,11 +42,11 @@ class GalleryItem extends Model
      * الفئات التراثية المعتمدة
      */
     public const CATEGORIES = [
-        'mandi'   => ['ar' => 'المندي والمظبي 👑', 'en' => 'Mandi & Madhbi', 'nl' => 'Mandi & Madhbi'],
-        'pots'    => ['ar' => 'الفخاريات الصنعانية 🔥', 'en' => 'Sizzling Pots', 'nl' => 'Sanani Steenpotten'],
-        'majlis'  => ['ar' => 'الديوان والجلسات 🛋️', 'en' => 'Heritage Majlis', 'nl' => 'Traditionele Majlis'],
-        'coffee'  => ['ar' => 'الضيافة والحلويات ☕', 'en' => 'Hospitality & Desserts', 'nl' => 'Gastvrijheid & Desserts'],
-        'bread'   => ['ar' => 'المخبوزات والملوح 🫓', 'en' => 'Yemeni Breads', 'nl' => 'Ambachtelijk Brood'],
+        'mandi' => ['ar' => 'المندي والمظبي 👑', 'en' => 'Mandi & Madhbi', 'nl' => 'Mandi & Madhbi'],
+        'pots' => ['ar' => 'الفخاريات الصنعانية 🔥', 'en' => 'Sizzling Pots', 'nl' => 'Sanani Steenpotten'],
+        'majlis' => ['ar' => 'الديوان والجلسات 🛋️', 'en' => 'Heritage Majlis', 'nl' => 'Traditionele Majlis'],
+        'coffee' => ['ar' => 'الضيافة والحلويات ☕', 'en' => 'Hospitality & Desserts', 'nl' => 'Gastvrijheid & Desserts'],
+        'bread' => ['ar' => 'المخبوزات والملوح 🫓', 'en' => 'Yemeni Breads', 'nl' => 'Ambachtelijk Brood'],
     ];
 
     /* =========================================================================
@@ -56,18 +56,21 @@ class GalleryItem extends Model
     public function getTranslatedTitleAttribute(): string
     {
         $locale = app()->getLocale();
+
         return $this->title[$locale] ?? $this->title['ar'] ?? $this->title['en'] ?? '';
     }
 
     public function getTranslatedDescAttribute(): string
     {
         $locale = app()->getLocale();
+
         return $this->description[$locale] ?? $this->description['ar'] ?? $this->description['en'] ?? '';
     }
 
     public function getTranslatedBadgeAttribute(): string
     {
         $locale = app()->getLocale();
+
         return $this->badge[$locale] ?? $this->badge['ar'] ?? '';
     }
 
@@ -76,6 +79,7 @@ class GalleryItem extends Model
         if (str_starts_with($this->image_path, 'http')) {
             return $this->image_path;
         }
+
         return Storage::url($this->image_path);
     }
 
@@ -98,6 +102,7 @@ class GalleryItem extends Model
         if ($category && $category !== 'all') {
             return $query->where('category', $category);
         }
+
         return $query;
     }
 

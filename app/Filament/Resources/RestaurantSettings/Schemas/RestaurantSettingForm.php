@@ -1,5 +1,5 @@
 <?php
- 
+
 namespace App\Filament\Resources\RestaurantSettings\Schemas;
 
 use Filament\Forms\Components\KeyValue;
@@ -30,7 +30,6 @@ class RestaurantSettingForm
                             ->schema([
                                 TextInput::make('name')->label('name restaurant')->required()->maxLength(255),
 
-
                                 TextInput::make('phone')
                                     ->label('رقم الهاتف')
                                     ->tel()
@@ -48,8 +47,6 @@ class RestaurantSettingForm
                                     ->required()
                                     ->maxLength(255),
                             ])->columns(2),
-
-
 
                         /*
                         |--------------------------------------------------------------------------
@@ -83,7 +80,6 @@ class RestaurantSettingForm
                             ])
                             ->columns(3),
 
-
                         /*
                         |--------------------------------------------------------------------------
                         | 3. Operations
@@ -113,10 +109,9 @@ class RestaurantSettingForm
                                     ->valuePlaceholder('مثال: 12:00 - 22:00')
                                     ->columnSpanFull(),
                             ])
-                            ->columns(2)
+                            ->columns(2),
 
                     ])->columnSpanFull(),
-
 
             ]);
     }

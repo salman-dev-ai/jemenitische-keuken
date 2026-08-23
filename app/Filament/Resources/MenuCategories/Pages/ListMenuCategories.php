@@ -11,6 +11,7 @@ use LaraZeus\SpatieTranslatable\Resources\Pages\ListRecords\Concerns\Translatabl
 class ListMenuCategories extends ListRecords
 {
     use Translatable;
+
     protected static string $resource = MenuCategoryResource::class;
 
     protected function getHeaderActions(): array

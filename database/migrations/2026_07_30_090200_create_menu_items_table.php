@@ -31,12 +31,12 @@ return new class extends Migration
             $table->boolean('is_available')->default(true);
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_spicy')->default(false);
-            
+
             $table->integer('sort_order')->default(0);
 
             $table->timestamps();
-        // : يحفظ الوجبات أو العناصر بحيث إذا تم حذف عنصر
-        //  لا يختفي نهائياً ويمكن استرجاعه.
+            // : يحفظ الوجبات أو العناصر بحيث إذا تم حذف عنصر
+            //  لا يختفي نهائياً ويمكن استرجاعه.
             $table->softDeletes();
 
             // هذا السطر يقوم بإنشاء فهرس مركب (Composite Index)

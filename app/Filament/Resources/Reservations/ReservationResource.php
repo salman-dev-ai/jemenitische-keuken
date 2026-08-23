@@ -20,13 +20,18 @@ class ReservationResource extends Resource
     protected static ?string $model = Reservation::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
+
     protected static ?string $navigationLabel = 'إدارة الحجوزات';
+
     protected static ?string $modelLabel = 'حجز';
+
     protected static ?string $pluralModelLabel = 'الحجوزات';
 
     // 🏆 تجميع المورد تحت تصنيف العمليات اليومية
     protected static string|UnitEnum|null $navigationGroup = 'العمليات اليومية';
+
     protected static ?int $navigationSort = 1;
+
     public static function form(Schema $schema): Schema
     {
         return ReservationForm::configure($schema);

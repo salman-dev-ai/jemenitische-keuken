@@ -3,14 +3,17 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Illuminate\Support\Facades\Mail;
 
 class ContactForm extends Component
 {
     public string $name = '';
+
     public string $email = '';
+
     public string $phone = '';
+
     public string $subject = 'inquiry';
+
     public string $message = '';
 
     protected $rules = [

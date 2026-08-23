@@ -5,8 +5,8 @@ namespace App\Filament\Resources\Reservations\Schemas;
 use App\Enums\ReservationStatus;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
@@ -18,27 +18,29 @@ class ReservationForm
     {
         return $schema
             ->components([
-                Grid::make(4)->schema([
+                Grid::make([
+                    'default' => 1,
+                    'lg' => 4,
+                ])->schema([
 
-                    // العمود الرئيسي: بيانات العميل والموعد
                     Grid::make(1)->schema([
                         Section::make('بيانات العميل')
                             ->description('معلومات التواصل مع صاحب الحجز')
                             ->icon('heroicon-o-user')
                             ->schema([
-                                TextInput::make('guest_name')
+                                TextInput::make('customer_name') // ✅ الاسم الصحيح
                                     ->label('اسم العميل')
                                     ->required()
                                     ->maxLength(255),
 
                                 Grid::make(2)->schema([
-                                    TextInput::make('guest_phone')
+                                    TextInput::make('customer_phone') // ✅
                                         ->label('رقم الهاتف')
                                         ->tel()
                                         ->required()
                                         ->maxLength(255),
 
-                                    TextInput::make('guest_email')
+                                    TextInput::make('customer_email') // ✅
                                         ->label('البريد الإلكتروني')
                                         ->email()
                                         ->maxLength(255),
@@ -52,45 +54,31 @@ class ReservationForm
                                     DatePicker::make('reservation_date')
                                         ->label('تاريخ الحجز')
                                         ->required()
-                                        ->native(false) // استخدام واجهة تقويم حديثة بدلاً من واجهة المتصفح الافتراضية
+                                        ->native(false)
                                         ->displayFormat('Y-m-d'),
 
                                     TimePicker::make('reservation_time')
                                         ->label('وقت الحجز')
                                         ->required()
-                                        ->seconds(false) // إخفاء الثواني لتسهيل الإدخال
+                                        ->seconds(false)
                                         ->datalist([
-                                            '12:00',
-                                            '13:00',
-                                            '14:00',
-                                            '18:00',
-                                            '19:00',
-                                            '20:00',
-                                            '21:00'
+                                            '12:00', '13:00', '14:00',
+                                            '18:00', '19:00', '20:00', '21:00',
                                         ]),
                                 ]),
 
                                 Textarea::make('special_requests')
                                     ->label('طلبات خاصة (اختياري)')
-                                    ->placeholder('مثال: كرسي أطفال، احتفال بعيد  ...')
+                                    ->placeholder('مثال: كرسي أطفال، احتفال بعيد ميلاد...')
                                     ->rows(3)
                                     ->columnSpanFull(),
                             ]),
-                    ])->columnSpan(2),
+                    ])->columnSpan(['default' => 1, 'lg' => 2]),
 
-                    // العمود الجانبي: الطاولة وحالة الحجز
                     Grid::make(1)->schema([
                         Section::make('التخصيص والحالة')
                             ->icon('heroicon-o-clipboard-document-check')
                             ->schema([
-                                Select::make('table_id')
-                                    ->label('الطاولة المخصصة')
-                                    ->relationship('table', 'table_number')
-                                    ->required()
-                                    ->searchable()
-                                    ->preload()
-                                    ->helperText('اختر طاولة تتناسب مع عدد الأشخاص.'),
-
                                 TextInput::make('party_size')
                                     ->label('عدد الأشخاص')
                                     ->numeric()
@@ -100,12 +88,10 @@ class ReservationForm
 
                                 Select::make('status')
                                     ->label('حالة الحجز')
-                                    // 🏆  : ربط الـ Enum مباشرة بالقائمة المنسدلة
                                     ->options(ReservationStatus::class)
                                     ->required()
                                     ->default(ReservationStatus::PENDING),
 
-                                // حقل كود المرجع (يظهر فقط في وضع التعديل لأن النظام يولده تلقائياً)
                                 TextInput::make('reference_code')
                                     ->label('رقم المرجع')
                                     ->disabled()
@@ -113,9 +99,9 @@ class ReservationForm
                                     ->visibleOn('edit')
                                     ->helperText('تم توليده تلقائياً من قبل النظام.'),
                             ]),
-                    ])->columnSpan(2),
+                    ])->columnSpan(['default' => 1, 'lg' => 2]),
 
-                ]),
+                ])->columnSpanFull(),
             ]);
     }
 }

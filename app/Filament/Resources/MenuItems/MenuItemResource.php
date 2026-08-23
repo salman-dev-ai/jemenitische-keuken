@@ -20,17 +20,21 @@ use UnitEnum;
 
 class MenuItemResource extends Resource
 {
+    use Translatable;
 
-use Translatable;
     protected static ?string $model = MenuItem::class;
 
     // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSparkles;
-    protected static string|BackedEnum|null $navigationIcon ='lucide-utensils-crossed' ;
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-utensils-crossed';
 
     protected static ?string $navigationLabel = 'الأطباق';
+
     protected static ?string $modelLabel = 'طبق';
+
     protected static ?string $pluralModelLabel = 'الأطباق والوجبات';
+
     protected static string|UnitEnum|null $navigationGroup = 'إدارة المنيو';
+
     public static function form(Schema $schema): Schema
     {
         return MenuItemForm::configure($schema);

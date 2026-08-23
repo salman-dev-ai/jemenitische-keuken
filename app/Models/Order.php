@@ -4,19 +4,15 @@ namespace App\Models;
 
 use App\Enums\OrderStatus;
 use App\Enums\OrderType;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Order extends Model
 {
-
-use HasFactory;
-    /**
-     * Responsibility: Manages different types of orders (e.g., dine-in, takeout).
-     */
+    use HasFactory;
 
     protected $fillable = [
         'order_number',
@@ -44,33 +40,25 @@ use HasFactory;
         ];
     }
 
-    /**
-     *   Auto-generate unique order number
-     */
     protected static function booted(): void
     {
-        static::creating(function (Order $order) {
+        static::creating(function (Order $order): void {
             if (empty($order->order_number)) {
-
-                $order->order_number = 'ORD-' . strtoupper(Str::random(5));
+                $order->order_number = 'ORD-'.strtoupper(Str::random(5));
             }
         });
     }
 
-    /**
-     * Relationship: An order has many items.
-     */
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
-
-    /**
-     * Scope: للحصول على الطلبات غير المكتملة (التي تحتاج إلى تحضير)
-     */
-    public function scopeActive(Builder $query): void
+    public function scopeActive(Builder $query): Builder
     {
-        $query -> whereIn('status', [OrderStatus::PENDING, OrderStatus::PROCESSING]);
+        return $query->whereIn('status', [
+            OrderStatus::PENDING,
+            OrderStatus::PROCESSING,
+        ]);
     }
 }

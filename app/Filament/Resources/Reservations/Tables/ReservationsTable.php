@@ -26,19 +26,15 @@ class ReservationsTable
                     ->weight('bold')
                     ->color('primary'),
 
-                TextColumn::make('guest_name')
+                TextColumn::make('customer_name')
+
                     ->label('العميل')
                     ->searchable(),
 
-                TextColumn::make('guest_phone')
+                TextColumn::make('customer_phone')
+
                     ->label('الهاتف')
                     ->searchable(),
-
-                TextColumn::make('table.table_number')
-                    ->label('الطاولة')
-                    ->sortable()
-                    ->badge()
-                    ->color('gray'),
 
                 TextColumn::make('reservation_date')
                     ->label('التاريخ')
@@ -53,34 +49,37 @@ class ReservationsTable
                 TextColumn::make('party_size')
                     ->label('الأشخاص')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->badge(),
 
                 TextColumn::make('status')
-                    ->label('تصفية حسب الحالة')
+                    ->label('الحالة')
                     ->badge()
-                    // الألوان تُجلب تلقائياً من الـ sReservationStatus Enum إذا طبقنا واجهة HasColor عليه
                     ->sortable(),
-            ])->defaultSort('created_at','desc') // ترتيب الحجوزات افتراضياً من الأحدث إلى الأقدم (حسب تاريخ الإدخال)
+            ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 SelectFilter::make('status')
-                ->label('تصفية حسب الحالة')
-                         ->options(ReservationStatus::class),
-
+                    ->label('تصفية حسب الحالة')
+                    ->options(ReservationStatus::class),
             ])
-
-
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
 
                 Action::make('confirm')
-                ->label('تأكيد')
+                    ->label('تأكيد')
                     ->icon('heroicon-m-check-circle')
                     ->color('success')
                     ->requiresConfirmation()
-                    ->hidden(fn (Reservation $record )=> $record->status===ReservationStatus::CONFIRMED)
-                    ->action(fn (Reservation $record )=> $record->update(['status'=>ReservationStatus::CONFIRMED]))
-
+                    ->hidden(
+                        fn (Reservation $record) => $record->status === ReservationStatus::CONFIRMED
+                    )
+                    ->action(
+                        fn (Reservation $record) => $record->update(
+                            ['status' => ReservationStatus::CONFIRMED]
+                        )
+                    ),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

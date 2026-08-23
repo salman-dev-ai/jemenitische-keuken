@@ -29,7 +29,7 @@ class OrderFactory extends Factory
         $total = $subtotal + $tax;
 
         return [
-            //ginreat number order aotmtic from model
+            // ginreat number order aotmtic from model
             'customer_name' => $this->faker->name(),
             'customer_phone' => $this->faker->phoneNumber(),
             'customer_email' => $this->faker->safeEmail(),

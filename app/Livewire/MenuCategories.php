@@ -4,10 +4,12 @@ namespace App\Livewire;
 
 use App\Models\MenuCategory;
 use App\Models\MenuItem;
-use Livewire\Component;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Url;
+use Livewire\Component;
 
+#[Lazy]
 class MenuCategories extends Component
 {
     #[Url(as: 'category')]
@@ -18,41 +20,33 @@ class MenuCategories extends Component
         $this->selectedCategorySlug = $slug;
     }
 
-    /**
-     * الأقسام المفعلة مع حساب عدد الأطباق في كل قسم
-     */
     #[Computed]
     public function categories()
     {
         return MenuCategory::active()
-            ->withCount(['menuItems' => function ($query) {
-                $query->where('is_available', true);
-            }])
+            ->withCount(['menuItems' => fn ($q) => $q->available()])
             ->get();
     }
 
-    /**
-     * الأطباق المفلترة حسب القسم النشط
-     */
     #[Computed]
     public function filteredItems()
     {
-        $query = MenuItem::query()->where('is_available', true);
-
-        if ($this->selectedCategorySlug !== 'all') {
-            $query->whereHas('category', function ($q) {
-                $q->where('slug', $this->selectedCategorySlug);
-            });
-        }
-
-        return $query->orderBy('sort_order', 'asc')->get();
+        return MenuItem::query()
+            ->available()
+            ->with('category') // ✅ التحميل الحريص صحيح في المستوى العلوي
+            ->when(
+                $this->selectedCategorySlug !== 'all',
+                fn ($q) => $q->whereHas(
+                    'category',
+                    fn ($c) => $c->where('slug', $this->selectedCategorySlug)
+                )
+            )
+            ->orderBy('sort_order', 'asc')
+            ->get();
     }
 
     public function render()
     {
-        return view('livewire.menu-categories', [
-            'categories' => $this->categories,
-            'items' => $this->filteredItems,
-        ]);
+        return view('livewire.menu-categories');
     }
 }

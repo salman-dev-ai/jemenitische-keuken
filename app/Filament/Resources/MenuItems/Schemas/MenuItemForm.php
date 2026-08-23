@@ -6,13 +6,13 @@ use App\Models\MenuCategory;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use OpenSpout\Common\Entity\Style\Border;
+use Illuminate\Database\Eloquent\Builder;
 
 class MenuItemForm
 {
@@ -136,17 +136,13 @@ class MenuItemForm
 
                         Select::make('menu_category_id')
                             ->label('تصنيف القائمة')
-                            ->options(
-                               MenuCategory::query()
-                                    ->get()
-                                    ->mapWithKeys(function ($category) {
-                                        return [
-                                            $category->id => $category->localized_name,
-
-                                            
-                                        ];
-                                    })
-                                    ->toArray()
+                            ->relationship(
+                                name: 'category',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn (Builder $query) => $query->orderBy('sort_order'),
+                            )
+                            ->getOptionLabelFromRecordUsing(
+                                fn (MenuCategory $record) => $record->localized_name
                             )
                             ->searchable()
                             ->preload()
@@ -232,12 +228,8 @@ class MenuItemForm
                                 'مثال: Gluten, Lactose, Nuts'
                             ),
 
-
-
                     ])
                     ->columns(2),
-
-
 
             ]);
     }

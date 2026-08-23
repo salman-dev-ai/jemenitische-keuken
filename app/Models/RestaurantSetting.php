@@ -2,36 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
-
-
-
-/**
- * Responsibility: Manages the core settings, location, and global toggles for the   restaurant  .
- */
 class RestaurantSetting extends Model
 {
+    use HasFactory, HasTranslations;
 
-    use HasTranslations;
+    public array $translatable = ['name', 'address'];
 
-    /** The attributes that are translatable.
-     *
-     * @var array< string>
-     */
-    public array $translatable = ['name'];
-
-    /** The attributes that are mass assignable
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'phone',
         'whatsapp',
         'email',
-         'address',
+        'address',
         'city',
         'postal_code',
         'google_maps_link',
@@ -40,19 +26,29 @@ class RestaurantSetting extends Model
         'accepts_online_orders',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-
     protected function casts(): array
     {
-
         return [
             'opening_hours' => 'array',
             'accepts_reservations' => 'boolean',
-            'accepts_online_orders' => 'boolean'
+            'accepts_online_orders' => 'boolean',
         ];
+    }
+
+    public function getLocalizedNameAttribute(): string
+    {
+        $locale = app()->getLocale();
+
+        return $this->name[$locale] ?? $this->name['en'] ?? $this->name['ar'] ?? '';
+    }
+
+    public function getLocalizedAddressAttribute(): ?string
+    {
+        if (! is_array($this->address)) {
+            return $this->address;
+        }
+        $locale = app()->getLocale();
+
+        return $this->address[$locale] ?? $this->address['ar'] ?? $this->address['en'] ?? null;
     }
 }

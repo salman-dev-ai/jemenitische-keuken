@@ -90,12 +90,12 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" wire:loading.class="opacity-60 transition-opacity">
             @forelse($this->filteredItems as $item)
                 <div wire:key="item-{{ $item->id }}"
-                     class="bg-white rounded-3xl p-6 border transition-all duration-300 flex flex-col justify-between text-right relative hover:shadow-xl {{ $item->is_chef_special ? 'border-[#E07513]/40 ring-1 ring-[#E07513]/25 shadow-sm' : 'border-stone-200 hover:border-[#E07513]/30 shadow-xs' }}">
+                     class="bg-white rounded-3xl p-6 border transition-all duration-300 flex flex-col justify-between text-right relative hover:shadow-xl {{ $item->is_featured ? 'border-[#E07513]/40 ring-1 ring-[#E07513]/25 shadow-sm' : 'border-stone-200 hover:border-[#E07513]/30 shadow-xs' }}">
                     <div>
                         <div class="flex items-start justify-between gap-3 mb-2.5">
                             <div class="space-y-0.5">
                                 <h4 class="text-base font-extrabold text-[#2C0D0A] flex items-center gap-1.5">
-                                    <span>{{ $item->name }}</span>
+                                    <span>{{ $item->localized_name }}</span>
                                     @if($item->is_featured)
                                         <span title="طبق الشيف الملكي">⭐</span>
                                     @endif
@@ -124,7 +124,7 @@
                 </div>
             @empty
                 <div class="col-span-full text-center py-12 text-stone-500">
-                            {{ __('messages.menu.empty') }} 
+                            {{ __('messages.menu.empty') }}
                 </div>
             @endforelse
         </div>

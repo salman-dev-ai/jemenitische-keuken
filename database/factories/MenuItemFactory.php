@@ -14,7 +14,7 @@ class MenuItemFactory extends Factory
     public function definition(): array
     {
         // create 3 word random and unique
-        $nameEn = $this ->faker->unique()->words(3, true);
+        $nameEn = $this->faker->unique()->words(3, true);
 
         return [
             // إذا لم نمرر قسم محدد، سيقوم المصنع بإنشاء قسم جديد تلقائياً
@@ -22,13 +22,13 @@ class MenuItemFactory extends Factory
             'name' => [
                 // make char fist upper
                 'en' => ucfirst($nameEn),
-                'ar' => 'وجبة ' . $this->faker->word(),
-                'nl' => 'Gerecht ' . $this->faker->word(),
+                'ar' => 'وجبة '.$this->faker->word(),
+                'nl' => 'Gerecht '.$this->faker->word(),
             ],
             // حول الاسم الإنجليزي إلى رابط صديق لمحركات البحث (مثال: chicken-tikka-masala)
             'slug' => Str::slug($nameEn),
             'description' => [
-                // genreat 6 word 
+                // genreat 6 word
                 'en' => $this->faker->sentence(6),
                 'ar' => 'وصف لذيذ لهذه الوجبة اليمنية الرائعة.',
             ],

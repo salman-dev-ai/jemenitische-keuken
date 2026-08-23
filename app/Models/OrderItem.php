@@ -6,13 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Responsibility: Pivot details representing individual dishes purchased within an order.
- */
 class OrderItem extends Model
 {
+    use HasFactory;
 
-use HasFactory;
     protected $fillable = [
         'order_id',
         'menu_item_id',
@@ -28,21 +25,15 @@ use HasFactory;
             'quantity' => 'integer',
             'unit_price' => 'decimal:2',
             'total_price' => 'decimal:2',
-            'options' => 'array', // Casting JSON column to PHP Array seamlessly
+            'options' => 'array',
         ];
     }
 
-    /**
-     * Relationship: Belongs to the parent Order
-     */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
-    /**
-     * Relationship: Links to the original Menu Item
-     */
     public function menuItem(): BelongsTo
     {
         return $this->belongsTo(MenuItem::class);

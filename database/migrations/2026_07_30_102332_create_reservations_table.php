@@ -15,13 +15,12 @@ return new class extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->string('reference_code')->unique(); // Public reference (e.g., RES-8X29B)
-            /// NULL تعيين قيمة الحقل إلى
+            // / NULL تعيين قيمة الحقل إلى
             //  تلقائياً إذا تم حذف السجل الأساسي المرتبط به في الجدول الآخر بدلاً من حذف السجل الحالي
-            $table->foreignId('table_id')->nullable()->nullOnDelete();
 
             // Customer Information
             $table->string('customer_name');
-            $table->string('customer_email');
+            $table->string('customer_email')->nullable();
             $table->string('customer_phone');
 
             // Details
@@ -36,7 +35,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Index for fast daily lookup
-            $table->index(['table_id','reservation_date', 'status'] ,'idx_reservation_lookup');
+            $table->index(['reservation_date', 'status'], 'idx_reservation_lookup');
         });
     }
 

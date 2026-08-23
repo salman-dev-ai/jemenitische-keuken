@@ -6,7 +6,6 @@ use App\Models\MenuCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-
 /**
  * Responsibility: Generates dummy menu categories with translations.
  */
@@ -27,11 +26,10 @@ class MenuCategoryFactory extends Factory
 
         return [
 
-
             'name' => [
                 'en' => ucfirst($nameEn),
-                'ar' => 'قسم' . $this->faker->word(),
-                'nl' => 'Categorie' . $this->faker->word(),
+                'ar' => 'قسم'.$this->faker->word(),
+                'nl' => 'Categorie'.$this->faker->word(),
 
             ],
             'slug' => Str::slug($nameEn),

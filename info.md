@@ -5,6 +5,12 @@ password:
 
 username:salman
 
+
+Create a user
+You can create a new user account with the following command:
+php artisan make:filament-user
+
+
 create file language
 php artisan lang:publish
 
@@ -31,8 +37,6 @@ php artisan make:filament-resource Customer --generate
 
 
           
-            
-            
           
 php artisan route:clear
 
@@ -43,3 +47,13 @@ php artisan make:livewire MenuCategories
 
  طريقة تشغيل الهجرة في بيئة العمل
 php artisan migrate
+
+
+Creating class-based components
+php artisan make:livewire CreatePost --class
+
+
+حديث قاعدة البيانات بتشغيل هذا الأمر في الطرفية (Terminal):
+
+ 
+php artisan migrate:fresh

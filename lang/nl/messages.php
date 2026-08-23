@@ -179,7 +179,7 @@ return [
         'time_conflict' => 'De tafel is op dit tijdstip al gereserveerd of binnen een periode van twee uur daaromheen. Kies een ander tijdstip of een andere tafel.',
     ],
 
-     // ===== contact =====
+    // ===== contact =====
 
     'contact' => [
 
@@ -226,6 +226,25 @@ return [
 
             'hoursValue' => 'Dagelijks van 12:00 tot 23:30',
 
+        ],
+    ],
+    'enums' => [
+        'order_status' => [
+            'pending' => 'In behandeling',
+            'processing' => 'Wordt bereid',
+            'completed' => 'Voltooid',
+            'cancelled' => 'Geannuleerd',
+        ],
+        'order_type' => [
+            'pickup' => 'Afhalen',
+            'dine_in' => 'Ter plaatse eten',
+        ],
+        'reservation_status' => [
+            'pending' => 'Wachten op bevestiging',
+            'confirmed' => 'Bevestigd',
+            'seated' => 'Gasten aanwezig',
+            'cancelled' => 'Geannuleerd',
+            'no_show' => 'Niet verschenen',
         ],
     ],
 ];

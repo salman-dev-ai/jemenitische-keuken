@@ -6,8 +6,6 @@ use App\Models\MenuCategory;
 use App\Models\MenuItem;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Reservation;
-use App\Models\Table;
 use Illuminate\Database\Seeder;
 
 /**
@@ -15,8 +13,6 @@ use Illuminate\Database\Seeder;
  */
 class DatabaseSeeder extends Seeder
 {
-
-
     /**
      * Seed the application's database.
      */
@@ -28,19 +24,10 @@ class DatabaseSeeder extends Seeder
         // 2. زرع 5 أقسام منيو، وكل قسم يحتوي على 6 أطباق
         MenuCategory::factory(5)
             // لكل MenuCategory يتم إنشاؤه，has
-            //  أنشئ 6 MenuItem من خلال العلاقة المسماة items.
+            //  أنشئ 6 MenuItem من خلال العلاقة المسماة menuItems.
             //
-            ->has(MenuItem::factory()->count(6), 'items')
+            ->has(MenuItem::factory()->count(6), 'menuItems')
             ->create();
-
-        // 3. زرع 8 طاولات سعة مختلفة داخل المطعم
-        $tables = Table::factory(8)->create();
-
-        // 4. زرع 16=8*2 حجزاً مرتبطاً بالطاولات المنشأة
-        foreach ($tables as $table) {
-            // كل طاولة، أنشئ حجزين مرتبطين بها  ث
-            Reservation::factory(2)->create(['table_id' => $table->id]);
-        }
 
         // 5. زرع 10 طلبات تجريبية مع عناصرها
         Order::factory(10)->create()->each(function (Order $order) {

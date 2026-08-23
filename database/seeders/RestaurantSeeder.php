@@ -7,17 +7,17 @@ use Illuminate\Database\Seeder;
 
 class RestaurantSeeder extends Seeder
 {
-  /**
+    /**
      * Run the database seeds.
      * Responsibility: Seeds the initial real-world configuration .
      */
     public function run(): void
     {
         RestaurantSetting::create([
-            'name'=>[
-                'ar'=>'المطبخ اليمني ',
-                'nl'=>'Jemenitische Keuken',
-                'en'=>'Yemeni Kitchen',
+            'name' => [
+                'ar' => 'المطبخ اليمني ',
+                'nl' => 'Jemenitische Keuken',
+                'en' => 'Yemeni Kitchen',
             ],
             'phone' => '+31 6 1234 5678',
             'whatsapp' => '+31 6 1234 5678',

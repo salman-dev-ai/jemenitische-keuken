@@ -4,101 +4,69 @@ namespace App\Services;
 
 use App\Enums\ReservationStatus;
 use App\Models\Reservation;
-use App\Models\Table;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Exception;
+use Illuminate\Support\Str;
 
 class ReservationService
 {
-
-    /**
-     * مدة الحجز الافتراضية بالدقائق لتحديد التعارضات الزمانية
-     */
     protected int $defaultDurationMinutes = 90;
-
-    /**
-     * إنشاء حجز جديد مع التحقق الكامل من القيود
-     */
 
     public function createReservation(array $data): Reservation
     {
-        $table = Table::findOrFail($data['table_id']);
-
-        // 1. التحقق من سعة الطاولة
-        if ($table->capacity < $data['party_size']) {
-            throw new Exception("الطاولة رقم ({$table->table_number}) لا تتسع لـ {$data['party_size']} أشخاص. الحد الأقصى لها هو {$table->capacity}.");
-        }
-        // 2. التحقق من تفعيل الطاولة
-        if (! $table->is_available) {
-            throw new Exception("الطاولة المختارة غير متاحة للحجز حالياً.");
+        // 1. التحقق من الحد الأدنى للبيانات
+        if (empty($data['customer_name']) || empty($data['customer_phone'])) {
+            throw new Exception(__('messages.errors.missing_customer_data', default: 'يرجى إدخال الاسم ورقم الهاتف.'));
         }
 
-        // 3. التحقق من عدم وجود تعارض زمني
-        if ($this->hasTimeConflict($data['table_id'],
-         $data['reservation_date'],
-         $data['reservation_time'])) {
-            throw new Exception("الطاولة محجوزة بالفعل في هذا الوقت أو في نطاق ساعتين منه. يرجى اختيار وقت آخر أو طاولة مختلفة.");
+        $date = $data['reservation_date'];
+        $time = $data['reservation_time'];
+        $partySize = (int) ($data['party_size'] ?? 1);
+
+        if ($partySize < 1 || $partySize > 20) {
+            throw new Exception(__('messages.errors.invalid_party_size', default: 'عدد الأشخاص غير صالح.'));
         }
 
+        $reservationDate = Carbon::parse($date);
+        if ($reservationDate->isPast() && ! $reservationDate->isToday()) {
+            throw new Exception(__('messages.errors.past_date', default: 'لا يمكن الحجز في تاريخ ماضي.'));
+        }
 
+        // 2. ✅ التحقق من عدم وجود تعارض زمني
+        if ($this->hasTimeConflict($date, $time, $data['id'] ?? null)) {
+            throw new Exception(__('messages.errors.time_conflict', default: 'عذراً، هذا الوقت محجوز بالكامل. يرجى اختيار وقت آخر.'));
+        }
 
-        // 4. إعداد البيانات وتوليد رقم المرجع
+        // 3. تجهيز البيانات
         $data['reference_code'] = $this->generateReferenceCode();
         $data['status'] = $data['status'] ?? ReservationStatus::PENDING;
+        $data['party_size'] = $partySize;
 
         return Reservation::create($data);
     }
 
-    /**
-     * التحقق من وجود تعارض في وقت الحجز لنفس الطاولة
-     */
-    // public function hasTimeConflict(int $tableId, string $date, string $time, ?int $ignoreReservationId = null): bool
-    // {
-    //     $requestedStart = Carbon::parse("{$date} {$time}");
-    //     $requestedEnd = (clone $requestedStart)->addMinutes($this->defaultDurationMinutes);
+    public function hasTimeConflict(string $date, string $time, ?int $ignoreReservationId = null): bool
+    {
+        $requestedStart = Carbon::parse("{$date} {$time}");
+        $requestedEnd = (clone $requestedStart)->addMinutes($this->defaultDurationMinutes);
+        $bufferStart = (clone $requestedStart)->subMinutes($this->defaultDurationMinutes);
 
-    //     return Reservation::query()
-    //         ->where('table_id', $tableId)
-    //         ->where('reservation_date', $date)
-    //         ->whereIn('status', [ReservationStatus::PENDING, ReservationStatus::CONFIRMED])
-    //         ->when($ignoreReservationId, fn($query) => $query->where('id', '!=', $ignoreReservationId))
-    //         ->get()
-    //         ->filter(function (Reservation $reservation) use ($requestedStart, $requestedEnd) {
-    //             $existingStart = Carbon::parse("{$reservation->reservation_date} {$reservation->reservation_time}");
-    //             $existingEnd = (clone $existingStart)->addMinutes($this->defaultDurationMinutes);
+        return Reservation::query()
+            ->where('reservation_date', $date)
+            ->whereIn('status', [ReservationStatus::PENDING, ReservationStatus::CONFIRMED, ReservationStatus::SEATED])
+            ->when($ignoreReservationId, fn ($q) => $q->where('id', '!=', $ignoreReservationId))
+            ->where(function ($query) use ($bufferStart, $requestedEnd) {
+                $query->whereRaw('TIME(reservation_time) < ?', [$requestedEnd->format('H:i:s')])
+                    ->whereRaw('TIME(reservation_time) > ?', [$bufferStart->format('H:i:s')]);
+            })
+            ->limit(1) // تحسين الأداء: لا حاجة لجلب أكثر من صف واحد
+            ->exists();
+    }
 
-    //             // فحص التداخل بين النطاقين الزمنيّين
-    //             return $requestedStart->lt($existingEnd) && $requestedEnd->gt($existingStart);
-    //         })
-    //         ->isNotEmpty();
-    // }
-
-    public function hasTimeConflict(int $tableId, string $date, string $time, ?int $ignoreReservationId = null): bool
-{
-    $requestedStart = Carbon::parse("{$date} {$time}");
-    $requestedEnd = (clone $requestedStart)->addMinutes($this->defaultDurationMinutes);
-
-    return Reservation::query()
-        ->where('table_id', $tableId)
-        ->where('reservation_date', $date)
-        ->whereIn('status', [ReservationStatus::PENDING, ReservationStatus::CONFIRMED])
-        ->when($ignoreReservationId, fn ($query) => $query->where('id', '!=', $ignoreReservationId))
-        ->where(function ($query) use ($requestedStart, $requestedEnd) {
-            $query->whereRaw('TIME(reservation_time) < ?', [$requestedEnd->format('H:i:s')])
-                  ->whereRaw('TIME(reservation_time) > ?', [$requestedStart->subMinutes($this->defaultDurationMinutes)->format('H:i:s')]);
-        })
-        ->exists();
-}
-
-
-    /**
-     * توليد كود مرجعي فريد للحجز
-     */
     protected function generateReferenceCode(): string
     {
         do {
-            $code = 'RES-' . now()->format('Ymd') . '-' . strtoupper(Str::random(4));
+            $code = 'RES-'.now()->format('Ymd').'-'.strtoupper(Str::random(4));
         } while (Reservation::where('reference_code', $code)->exists());
 
         return $code;

@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
 use UnitEnum;
 
@@ -22,26 +23,25 @@ class RestaurantSettingResource extends Resource
     protected static ?string $model = RestaurantSetting::class;
 
     protected static string|BackedEnum|null $navigationIcon =
-    Heroicon::OutlinedCog6Tooth;
+        Heroicon::OutlinedCog6Tooth;
 
     protected static ?string $navigationLabel =
-    'إعدادات المطعم';
+        'إعدادات المطعم';
 
     protected static ?string $modelLabel =
-    'إعداد المطعم';
+        'إعداد المطعم';
 
     // This is the plural label for the model, used in the navigation
     //  and other places where multiple records are displayed and title
     protected static ?string $pluralModelLabel =
-    'إعدادات المطعم';
+        'إعدادات المطعم';
 
     protected static string|UnitEnum|null $navigationGroup =
-    'النظام';
+        'النظام';
 
     // This is the order of the resource in the navigation,
     // lower numbers are displayed first
     protected static ?int $navigationSort = 1;
-
 
     // This resource represents singleton restaurant settings.
     // Creating another settings record is not allowed.
@@ -58,7 +58,6 @@ class RestaurantSettingResource extends Resource
     {
         return RestaurantSettingsTable::configure($table);
     }
-
 
     public static function getRelations(): array
     {
@@ -86,7 +85,7 @@ class RestaurantSettingResource extends Resource
     /**
      * Restaurant settings should never be deleted from the panel.
      */
-    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    public static function canDelete(Model $record): bool
     {
         return false;
     }

@@ -14,13 +14,7 @@
             <p class="text-stone-500 text-sm mt-1">اختر عدد الضيوف والوقت والموقع المفضل وسنجهز لك الطاولة المثالية.</p>
         </div>
 
-        {{-- مؤشر عدد الطاولات المتاحة الحية --}}
-        <div class="flex items-center gap-2 bg-[#FAF6F0] px-4 py-2 rounded-2xl border border-[#E8DFD3] shrink-0 self-start md:self-auto">
-            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
-            <span class="text-xs font-bold text-[#3E1F15]">
-                {{ count($this->availableTables) }} طاولة متاحة في هذا التوقيت
-            </span>
-        </div>
+
     </div>
 
     {{-- بطاقة النجاح الفندقية الرقمية --}}
@@ -55,10 +49,7 @@
                     <span class="text-stone-400 block text-[11px]">عدد الضيوف</span>
                     <span class="font-bold text-white text-sm">{{ $party_size }} أشخاص</span>
                 </div>
-                <div>
-                    <span class="text-stone-400 block text-[11px]">رقم الطاولة</span>
-                    <span class="font-bold text-white text-sm">طاولة #{{ $this->selectedTable?->table_number ?? $table_id }}</span>
-                </div>
+
             </div>
         </div>
     @endif
@@ -130,50 +121,9 @@
             </div>
         </div>
 
-        {{-- الخطوة 2: اختيار الطاولة التفاعلي عبر بطاقات بصرية --}}
-        <div class="space-y-3">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-[#3E1F15]">
-                    <span class="w-5 h-5 rounded-full bg-[#3E1F15] text-white flex items-center justify-center text-[10px]">2</span>
-                    <span>اختيار الطاولة وموقع الجلوس</span>
-                </div>
-            </div>
 
-            {{-- شبكة بطاقات الطاولات البصرية --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 bg-[#FAF6F0] p-4 rounded-2xl border border-[#E8DFD3]">
-                @forelse($this->availableTables as $table)
-                    <div wire:key="table-{{ $table->id }}"
-                         wire:click="$set('table_id', {{ $table->id }})"
-                         class="p-3.5 rounded-xl border transition-all cursor-pointer select-none relative {{ $table_id == $table->id ? 'bg-[#FFFDF9] border-[#D47716] ring-2 ring-[#D47716]/30 shadow-md' : 'bg-white border-stone-200 hover:border-[#D47716]/50 shadow-xs' }}">
-                        <div class="flex items-start justify-between gap-2 mb-1.5">
-                            <div class="flex items-center gap-2">
-                                <span class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs {{ $table_id == $table->id ? 'bg-[#D47716] text-white' : 'bg-[#3E1F15] text-white' }}">
-                                    #{{ $table->table_number }}
-                                </span>
-                                <div>
-                                    <h5 class="font-bold text-xs text-[#3E1F15]">طاولة {{ $table->table_number }}</h5>
-                                    <span class="text-[11px] text-stone-500">سعة: {{ $table->capacity }} أشخاص</span>
-                                </div>
-                            </div>
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full {{ $table_id == $table->id ? 'bg-[#D47716] text-white' : 'bg-emerald-50 text-emerald-700 border border-emerald-200' }}">
-                                {{ $table_id == $table->id ? 'مختارة ✓' : 'متاحة' }}
-                            </span>
-                        </div>
-                        <div class="text-[11px] text-stone-500 pt-1 border-t border-stone-100 flex justify-between">
-                            <span>{{ $table->location_zone ?? 'الصالة الرئيسية' }}</span>
-                            <span class="text-[#D47716] font-semibold">تأكيد فوري</span>
-                        </div>
-                    </div>
-                @empty
-                    <div class="col-span-full text-center py-6 text-stone-500 text-sm">
-                        لا توجد طاولات شاغرة لعدد {{ $party_size }} أشخاص في هذا الوقت. جرب وقتاً أو تاريخاً آخر.
-                    </div>
-                @endforelse
-            </div>
-            @error('table_id') <span class="text-xs text-rose-500 block">{{ $message }}</span> @enderror
-        </div>
 
-        {{-- الخطوة 3: بيانات العميل والطلبات الخاصة --}}
+        {{-- الخطوة 2: بيانات العميل والطلبات الخاصة --}}
         <div class="space-y-4 pt-4 border-t border-stone-100">
             <div class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-[#3E1F15]">
                 <span class="w-5 h-5 rounded-full bg-[#3E1F15] text-white flex items-center justify-center text-[10px]">3</span>
@@ -203,20 +153,20 @@
             </div>
         </div>
 
-        {{-- زر الإرسال مع مؤشر التحميل المتفاعل --}}
+        {{-- زر الإرسال مع مؤشر التحميل   --}}
         <div class="pt-2">
             <button type="submit" wire:loading.attr="disabled"
                     class="w-full bg-gradient-to-r from-[#D47716] via-[#DE8325] to-[#B8630F] hover:from-[#c2680e] hover:to-[#9a4f08] text-white font-extrabold py-4 px-6 rounded-2xl shadow-xl shadow-[#D47716]/20 hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50">
                 <span wire:loading.remove class="flex items-center gap-2">
                     <span>✨</span>
-                    <span>إرسال وتأكيد الحجز التفاعلي</span>
+                    <span>إرسال وتأكيد الحجز </span>
                 </span>
                 <span wire:loading class="flex items-center gap-2">
                     <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24" fill="none">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                     </svg>
-                    <span>جاري معالجة الحجز والتحقق من التوفر...</span>
+                    <span>  جاري معالجة الحجز      ...</span>
                 </span>
             </button>
         </div>

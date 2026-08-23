@@ -19,11 +19,8 @@ class ListRestaurantSettings extends ListRecords
         return [
             // add locale switcher to the list page
             LocaleSwitcher::make(),
-         
+
         ];
 
     }
 }
-
-
-

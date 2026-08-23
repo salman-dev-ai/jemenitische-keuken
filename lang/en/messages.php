@@ -179,7 +179,7 @@ return [
         'time_conflict' => 'The table is already reserved at this time or within a two-hour window. Please choose another time or a different table.',
     ],
 
-  // ===== Contact Messages =====
+    // ===== Contact Messages =====
     'contact' => [
 
         'badge' => 'Get in touch with us – our hospitality awaits you',
@@ -225,6 +225,26 @@ return [
 
             'hoursValue' => 'Daily from 12:00 to 23:30',
 
+        ],
+    ],
+
+    'enums' => [
+        'order_status' => [
+            'pending' => 'Pending',
+            'processing' => 'Processing',
+            'completed' => 'Completed',
+            'cancelled' => 'Cancelled',
+        ],
+        'order_type' => [
+            'pickup' => 'Pickup (Takeaway)',
+            'dine_in' => 'Dine-in',
+        ],
+        'reservation_status' => [
+            'pending' => 'Pending Confirmation',
+            'confirmed' => 'Confirmed',
+            'seated' => 'Guests Seated',
+            'cancelled' => 'Cancelled',
+            'no_show' => 'No Show',
         ],
     ],
 

@@ -10,6 +10,7 @@ use LaraZeus\SpatieTranslatable\Resources\Pages\CreateRecord\Concerns\Translatab
 class CreateMenuCategory extends CreateRecord
 {
     use Translatable;
+
     protected static string $resource = MenuCategoryResource::class;
 
     protected function getHeaderActions(): array

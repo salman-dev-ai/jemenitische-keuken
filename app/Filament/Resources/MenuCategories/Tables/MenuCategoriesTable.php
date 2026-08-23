@@ -36,7 +36,6 @@ class MenuCategoriesTable
                 //     ->sortable()
                 //     ->toggleable(isToggledHiddenByDefault: true),
 
-
                 TextColumn::make('name')
                     ->label('الاسم')
                     ->searchable()
@@ -72,12 +71,11 @@ class MenuCategoriesTable
                     DeleteBulkAction::make(),
                 ]),
 
-
             ])
 
             //  Enable drag-and-drop sorting directly from the table
             ->reorderable('sort_order')
 
-            ->defaultSort('sort_order', 'asc');;
+            ->defaultSort('sort_order', 'asc');
     }
 }
