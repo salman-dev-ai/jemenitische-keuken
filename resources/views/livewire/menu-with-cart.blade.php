@@ -249,7 +249,6 @@
                                         </button>
                                     @else
                                         <div
-
                                             class="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-xl p-1">
 
                                             <button type="button" wire:click="updateQuantity({{ $item->id }}, -1)"
@@ -348,132 +347,202 @@
     @endif
 
     {{-- 5. نافذة السلة وتأكيد الحجز الفعلي (Cart Drawer / Checkout Modal) --}}
+    {{-- 5. نافذة السلة وتأكيد الحجز الفعلي (Cart Drawer / Checkout Modal) --}}
     @if ($isCartModalOpen)
         <div class="fixed inset-0 z-50 overflow-hidden" dir="rtl">
-            <div class="absolute inset-0 bg-black/70 backdrop-blur-xs" wire:click="$set('isCartModalOpen', false)">
-            </div>
+            {{-- خلفية معتمة --}}
+            <div class="absolute inset-0 bg-stone-900/70 backdrop-blur-sm transition-opacity"
+                wire:click="$set('isCartModalOpen', false)"></div>
 
             <div class="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
                 <div
-                    class="w-screen max-w-md md:max-w-lg bg-[#FAF6F0] text-[#2C1810] shadow-2xl flex flex-col justify-between border-l border-[#E8DFD3]">
+                    class="w-screen max-w-md md:max-w-lg bg-[#FAF6F0] text-[#2C1810] shadow-2xl flex flex-col justify-between border-l border-[#E8DFD3] animate-slide-in-right">
 
                     {{-- رأس النافذة --}}
                     <div
-                        class="p-5 bg-gradient-to-r from-[#2A0D0A] to-[#1A0604] text-white flex items-center justify-between border-b border-[#E07513]/30">
-                        <div class="flex items-center gap-2.5">
-                            <span class="text-2xl">👑</span>
+                        class="p-5 bg-gradient-to-r from-[#2A0D0A] to-[#1A0604] text-white flex items-center justify-between border-b border-[#E07513]/30 shrink-0">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-xl">
+                                👑</div>
                             <div>
                                 <h3 class="font-black text-base text-white">سلة الأطباق وتثبيت الحجز</h3>
                                 <p class="text-xs text-amber-200">{{ $this->totalCartCount }} أصناف مختارة</p>
                             </div>
                         </div>
                         <button wire:click="$set('isCartModalOpen', false)"
-                            class="text-white hover:text-amber-300 text-xl font-bold cursor-pointer">✕</button>
+                            class="text-stone-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
                     </div>
 
-                    {{-- نموذج الحجز والطلب الفعلي --}}
-                    <div class="flex-1 overflow-y-auto p-5 space-y-4 text-right">
-                        <h4 class="font-bold text-xs text-stone-600 border-b pb-2">الأطباق المختارة للوليمة:</h4>
+                    {{-- محتوى النافذة (قابل للتمرير) --}}
+                    <div class="flex-1 overflow-y-auto p-5 space-y-5">
 
-                        <div class="space-y-2">
-                            @foreach ($cart as $id => $cartItem)
-                                <div
-                                    class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between shadow-xs">
-                                    <div>
-                                        <div class="font-bold text-xs text-[#2C0D0A]">{{ $cartItem['name'] }}</div>
-                                        <div class="text-xs font-black text-[#E07513]">
-                                            €{{ number_format($cartItem['price'] * $cartItem['quantity'], 2) }}</div>
+                        {{-- قائمة الأطباق --}}
+                        <div>
+                            <h4
+                                class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                                <span>🍽️</span> الأطباق المختارة للوليمة
+                            </h4>
+                            <div class="space-y-3">
+                                @foreach ($cart as $id => $cartItem)
+                                    <div
+                                        class="bg-white p-3 rounded-xl border border-stone-200 flex items-center justify-between shadow-sm group hover:border-amber-200 transition-colors">
+                                        <div class="flex-1 min-w-0">
+                                            <div class="font-bold text-xs text-[#2C0D0A] truncate">
+                                                {{ $cartItem['name'] }}</div>
+                                            <div class="text-xs font-black text-[#E07513] mt-0.5">
+                                                €{{ number_format($cartItem['price'] * $cartItem['quantity'], 2) }}
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="flex items-center gap-2 bg-stone-50 p-1 rounded-lg border border-stone-200">
+                                            {{-- زر الحذف السريع --}}
+                                            <button type="button" wire:click="removeFromCart({{ $id }})"
+                                                wire:loading.attr="disabled"
+                                                wire:target="removeFromCart({{ $id }})"
+                                                class="w-7 h-7 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+                                                title="حذف الطبق">
+                                                <span wire:loading.remove
+                                                    wire:target="removeFromCart({{ $id }})">🗑️</span>
+                                                <span wire:loading wire:target="removeFromCart({{ $id }})"
+                                                    class="w-3 h-3 border border-red-500 border-t-transparent rounded-full animate-spin"></span>
+                                            </button>
+
+                                            <div class="w-px h-5 bg-stone-300"></div>
+
+                                            <button type="button"
+                                                wire:click="updateQuantity({{ $id }}, -1)"
+                                                wire:loading.attr="disabled"
+                                                wire:target="updateQuantity({{ $id }})"
+                                                class="w-7 h-7 bg-white rounded text-stone-900 hover:bg-red-50 hover:text-red-600 flex items-center justify-center font-bold text-sm shadow-sm transition-colors disabled:opacity-50">−</button>
+
+                                            <span class="w-5 text-center text-xs font-black text-[#2C0D0A]">
+                                                <span wire:loading.remove
+                                                    wire:target="updateQuantity({{ $id }}), removeFromCart({{ $id }})">{{ $cartItem['quantity'] }}</span>
+                                                <span wire:loading
+                                                    wire:target="updateQuantity({{ $id }}), removeFromCart({{ $id }})"
+                                                    class="w-3 h-3 border-2 border-amber-500/30 border-t-amber-600 rounded-full animate-spin inline-block"></span>
+                                            </span>
+
+                                            <button type="button"
+                                                wire:click="updateQuantity({{ $id }}, 1)"
+                                                wire:loading.attr="disabled"
+                                                wire:target="updateQuantity({{ $id }})"
+                                                class="w-7 h-7 bg-[#E07513] text-white rounded hover:bg-amber-600 flex items-center justify-center font-bold text-sm shadow-sm transition-colors disabled:opacity-50">+</button>
+                                        </div>
                                     </div>
-                                    <div class="flex items-center gap-1.5 bg-[#FAF6F0] p-1 rounded-xl">
-                                        <button type="button" wire:click="updateQuantity({{ $id }}, -1)"
-                                            class="w-6 h-6 bg-white rounded text-xs font-bold shadow-xs cursor-pointer">-</button>
-                                        <span
-                                            class="w-5 text-center text-xs font-bold">{{ $cartItem['quantity'] }}</span>
-                                        <button type="button" wire:click="updateQuantity({{ $id }}, 1)"
-                                            class="w-6 h-6 bg-[#E07513] text-white rounded text-xs font-bold shadow-xs cursor-pointer">+</button>
-                                    </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
 
-                        <form wire:submit="checkout" class="space-y-3 pt-4 border-t border-stone-200">
-                            <div>
-                                <label class="block text-xs font-bold text-stone-700 mb-1">الاسم الكريم *</label>
-                                <input type="text" wire:model="customer_name" required
-                                    placeholder="مثال: صالح اليافعي"
-                                    class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513]">
-                            </div>
+                        {{-- نموذج بيانات الحجز --}}
+                        <form wire:submit="checkout" class="space-y-4 pt-4 border-t border-stone-200">
+                            <h4
+                                class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-1 flex items-center gap-2">
+                                <span>📋</span> بيانات الحجز والتواصل
+                            </h4>
 
-                            <div>
-                                <label class="block text-xs font-bold text-stone-700 mb-1">رقم الهاتف / الواتساب
-                                    *</label>
-                                <input type="tel" wire:model="customer_phone" required
-                                    placeholder="+31 6 1234 5678"
-                                    class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513]">
-                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="sm:col-span-2">
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">الاسم الكريم *</label>
+                                    <input type="text" wire:model="customer_name" required
+                                        placeholder="مثال: صالح اليافعي"
+                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                </div>
 
-                            <div>
-                                <label class="block text-xs font-bold text-stone-700 mb-1">البريد الإلكتروني *</label>
-                                <input type="email" wire:model="customer_email" required
-                                    placeholder="example@domain.com"
-                                    class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513]">
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1">تاريخ الحضور *</label>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">رقم الهاتف / واتساب
+                                        *</label>
+                                    <input type="tel" wire:model="customer_phone" required
+                                        placeholder="+31 6 1234 5678"
+                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">البريد الإلكتروني
+                                        *</label>
+                                    <input type="email" wire:model="customer_email" required
+                                        placeholder="example@domain.com"
+                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">تاريخ الحضور *</label>
                                     <input type="date" wire:model="reservation_date" required
-                                        class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513]">
+                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1">وقت الحضور *</label>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">وقت الحضور *</label>
                                     <input type="time" wire:model="reservation_time" required
-                                        class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513]">
+                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">نوع الخدمة</label>
+                                    <select wire:model="order_type"
+                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all appearance-none">
+                                        <option value="dine_in">تناول داخلي (ديوان / طاولة)</option>
+                                        <option value="takeaway">استلام سفري (Takeaway)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">عدد الأشخاص *</label>
+                                    <input type="number" wire:model="party_size" min="1" max="50"
+                                        required
+                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-stone-700 mb-1">نوع الطلب</label>
-                                <select wire:model="order_type"
-                                    class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513]">
-                                    <option value="dine_in">تناول داخل المطعم (جلسة ديوان / طاولة عائلية)</option>
-                                    <option value="takeaway">استلام سفري ساخن</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-stone-700 mb-1">ملاحظات خاصة للشيف</label>
+                                <label class="block text-xs font-bold text-stone-700 mb-1.5">ملاحظات خاصة للشيف
+                                    (اختياري)</label>
                                 <textarea wire:model="special_requests" rows="2"
-                                    placeholder="مثال: نرجو تجهيز شاي عدني مع الوجبة وتقديم المندي ساخناً..."
-                                    class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513] resize-none"></textarea>
+                                    placeholder="مثال: نرجو تجهيز شاي عدني، أو وجود حساسية من المكسرات..."
+                                    class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all resize-none"></textarea>
                             </div>
 
-                            <div>
-                                <label class="block text-xs font-bold text-stone-700 mb-1">عدد الأشخاص *</label>
-                                <input type="number" wire:model="party_size" label="عدد الأشخاص" min="1"
-                                    max="20" required
-                                    class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513]">
+                            {{-- ملخص السعر وزر الإرسال --}}
+                            {{-- ملخص السعر وزر الإرسال المحدث لـ Livewire 4 --}}
+                            <div class="pt-4 border-t border-stone-200 mt-6 space-y-4">
+                                <div
+                                    class="bg-[#FAF4ED] p-4 rounded-xl border border-[#E07513]/25 flex justify-between items-center">
+                                    <span class="text-sm font-bold text-stone-700">المجموع الإجمالي للطلب:</span>
+                                    <span
+                                        class="text-xl font-black text-[#E07513]">€{{ number_format($this->totalCartAmount, 2) }}</span>
+                                </div>
+
+                                {{-- زر الإرسال المحدث بالتأثيرات الذكية التلقائية أثناء معالجة طلب الـ Cloud API --}}
+                                <button type="submit" wire:loading.attr="disabled"
+                                    class="w-full py-4 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-xl text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+
+                                    {{-- حالة العرض العادية --}}
+                                    <span wire:loading.remove>تأكيد الحجز وتلقي الإشعار عبر واتساب 👑</span>
+
+                                    {{-- حالة معالجة الطلب والإرسال الخلفي لـ Meta --}}
+                                    <span wire:loading
+                                        class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                                    <span wire:loading>جاري تسجيل الحجز وإرسال تفاصيل واتساب...</span>
+                                </button>
                             </div>
 
-
-
-                            <div
-                                class="bg-[#FAF4ED] p-3 rounded-xl border border-[#E07513]/25 flex justify-between font-black text-sm text-[#2C0D0A]">
-                                <span>المجموع الإجمالي:</span>
-                                <span class="text-[#E07513]">€{{ number_format($this->totalCartAmount, 2) }}</span>
-                            </div>
-
-                            <button type="submit"
-                                class="w-full py-3.5 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-xl text-sm shadow-md transition-all cursor-pointer">
-                                تأكيد الحجز وتثبيت الطلب الآن 👑
-                            </button>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
+
+
     @endif
 
-    </div>
+
 </section>

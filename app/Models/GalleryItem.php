@@ -1,13 +1,16 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
-class GalleryItem extends Model
+final class GalleryItem extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -27,87 +30,134 @@ class GalleryItem extends Model
         'views_count',
     ];
 
-    protected $casts = [
-        'title' => 'array',
-        'description' => 'array',
-        'badge' => 'array',
-        'alt_text' => 'array',
-        'is_featured' => 'boolean',
-        'is_available' => 'boolean',
-        'sort_order' => 'integer',
-        'views_count' => 'integer',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'title' => 'array',
+            'description' => 'array',
+            'badge' => 'array',
+            'alt_text' => 'array',
+            'is_featured' => 'boolean',
+            'is_available' => 'boolean',
+            'sort_order' => 'integer',
+            'views_count' => 'integer',
+        ];
+    }
 
     /**
-     * الفئات التراثية المعتمدة
+     * @var array<string, array<string, string>>
      */
-    public const CATEGORIES = [
-        'mandi' => ['ar' => 'المندي والمظبي 👑', 'en' => 'Mandi & Madhbi', 'nl' => 'Mandi & Madhbi'],
-        'pots' => ['ar' => 'الفخاريات الصنعانية 🔥', 'en' => 'Sizzling Pots', 'nl' => 'Sanani Steenpotten'],
-        'majlis' => ['ar' => 'الديوان والجلسات 🛋️', 'en' => 'Heritage Majlis', 'nl' => 'Traditionele Majlis'],
-        'coffee' => ['ar' => 'الضيافة والحلويات ☕', 'en' => 'Hospitality & Desserts', 'nl' => 'Gastvrijheid & Desserts'],
-        'bread' => ['ar' => 'المخبوزات والملوح 🫓', 'en' => 'Yemeni Breads', 'nl' => 'Ambachtelijk Brood'],
+    public const   CATEGORIES = [
+        'mandi' => ['ar' => 'المندي والمظبي', 'en' => 'Mandi & Madhbi', 'nl' => 'Mandi & Madhbi'],
+        'pots' => ['ar' => 'الفخاريات الصنعانية', 'en' => 'Sizzling Pots', 'nl' => 'Sanani Steenpotten'],
+        'majlis' => ['ar' => 'الديوان والجلسات', 'en' => 'Heritage Majlis', 'nl' => 'Traditionele Majlis'],
+        'coffee' => ['ar' => 'الضيافة والحلويات', 'en' => 'Hospitality & Desserts', 'nl' => 'Gastvrijheid & Desserts'],
+        'bread' => ['ar' => 'المخبوزات والملوح', 'en' => 'Yemeni Breads', 'nl' => 'Ambachtelijk Brood'],
     ];
 
-    /* =========================================================================
-       ACCESSORS: الترجمة التلقائية الفورية بحسب لغة الموقع الحالية (AR/EN/NL)
-    ========================================================================= */
-
-    public function getTranslatedTitleAttribute(): string
+    protected function localizedName(): Attribute
     {
-        $locale = app()->getLocale();
-
-        return $this->title[$locale] ?? $this->title['ar'] ?? $this->title['en'] ?? '';
+        return Attribute::make(
+            get: fn (): string => $this->localizedValue($this->title),
+        );
     }
 
-    public function getTranslatedDescAttribute(): string
+    protected function localizedDescription(): Attribute
     {
-        $locale = app()->getLocale();
-
-        return $this->description[$locale] ?? $this->description['ar'] ?? $this->description['en'] ?? '';
+        return Attribute::make(
+            get: fn (): string => $this->localizedValue($this->description),
+        );
     }
 
-    public function getTranslatedBadgeAttribute(): string
+    protected function localizedBadge(): Attribute
     {
-        $locale = app()->getLocale();
-
-        return $this->badge[$locale] ?? $this->badge['ar'] ?? '';
+        return Attribute::make(
+            get: fn (): string => $this->localizedValue($this->badge),
+        );
     }
 
-    public function getImageUrlAttribute(): string
+    protected function localizedAlt(): Attribute
     {
-        if (str_starts_with($this->image_path, 'http')) {
-            return $this->image_path;
-        }
-
-        return Storage::url($this->image_path);
+        return Attribute::make(
+            get: fn (): string => $this->localizedValue($this->alt_text)
+                ?: $this->localizedValue($this->title),
+        );
     }
 
-    /* =========================================================================
-       SCOPES: نطاقات الاستعلام
-    ========================================================================= */
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: function (): string {
+                $path = trim((string) $this->image_path);
 
-    public function scopeActive($query)
+                if ($path === '') {
+                    return '';
+                }
+
+                return str_starts_with($path, 'http://') || str_starts_with($path, 'https://')
+                    ? $path
+                    : Storage::url($path);
+            },
+        );
+    }
+
+    /**
+     * Backward-compatible aliases for existing callers.
+     */
+    protected function translatedTitle(): Attribute
+    {
+        return Attribute::make(get: fn (): string => $this->localized_name);
+    }
+
+    protected function translatedDesc(): Attribute
+    {
+        return Attribute::make(get: fn (): string => $this->localized_description);
+    }
+
+    protected function translatedBadge(): Attribute
+    {
+        return Attribute::make(get: fn (): string => $this->localized_badge);
+    }
+
+    private function localizedValue(?array $translations): string
+    {
+        $translations ??= [];
+        $locale = (string) app()->getLocale();
+        $fallbackLocale = (string) config('app.fallback_locale', 'en');
+
+        $value = $translations[$locale]
+            ?? $translations[$fallbackLocale]
+            ?? $translations['en']
+            ?? $translations['ar']
+            ?? '';
+
+        return is_scalar($value) ? (string) $value : '';
+    }
+
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_available', true);
     }
 
-    public function scopeFeatured($query)
+    public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
     }
 
-    public function scopeByCategory($query, ?string $category)
+    public function scopeByCategory(Builder $query, ?string $category): Builder
     {
-        if ($category && $category !== 'all') {
-            return $query->where('category', $category);
-        }
-
-        return $query;
+        return $category && $category !== 'all'
+            ? $query->where('category', $category)
+            : $query;
     }
 
-    public function scopeOrdered($query)
+    public function scopeOrdered(Builder $query): Builder
     {
-        return $query->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
+        return $query
+            ->orderBy('sort_order')
+            ->latest('created_at');
     }
 }
