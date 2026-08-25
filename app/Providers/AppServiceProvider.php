@@ -16,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+
         RateLimiter::for('reservation-submit', function (Request $request) {
             return Limit::perHour(3)->by($request->ip())->response(
                 fn () => response()->json(['message' => 'لقد تجاوزت الحد الأقصى للمحاولات. جرب بعد ساعة.'], 429)

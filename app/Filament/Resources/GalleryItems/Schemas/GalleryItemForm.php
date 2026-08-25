@@ -113,12 +113,12 @@ class GalleryItemForm
                         FileUpload::make('image_path')
                             ->label('صورة المعرض بجودة عالية *')
                             ->image()
-                            // ->directory('gallery')
-                            // ->disk('public')
-                            // ->imageEditor()
+                            ->directory('gallery')
+                            ->disk('public')
+                            ->imageEditor()
                             ->required()
                             ->helperText('يفضل استخدام صور أفقية بدقة لا تقل عن 1200x800 بكسل.'),
-
+                       
                         TextInput::make('thumbnail_path')
                             ->label('مسار الصورة المصغرة (اختياري)')
                             ->placeholder('يتم إنشاؤه تلقائياً في حال تركه فارغاً')

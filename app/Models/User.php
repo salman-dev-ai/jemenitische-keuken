@@ -58,4 +58,11 @@ class User extends Authenticatable // implements MustVerifyEmail
             ->map(fn (string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
     }
+
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // افحص ما إذا كان البريد هو بريدك أو استبدل بشرط أدمن (مثلاً: $this->is_admin)
+        return str_ends_with($this->email, 'salman@gmail.com') || $this->role === 'user';
+    }
 }

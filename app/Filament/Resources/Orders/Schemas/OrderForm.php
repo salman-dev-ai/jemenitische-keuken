@@ -14,6 +14,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class OrderForm
 {
@@ -62,19 +63,22 @@ class OrderForm
                                     ->relationship('items')
                                     ->schema([
                                         Select::make('menu_item_id')
-                                            ->label('الطبق')
-                                            ->options(MenuItem::query()->pluck('name', 'id'))
+                                            ->label('اختيار الطبق')
+                                            ->relationship(
+                                                name: 'menuItem',
+                                                titleAttribute: 'name',
+                                                modifyQueryUsing: fn (Builder $query) => $query->available()->orderBy('name->ar'),
+                                            )
+                                            ->getOptionLabelFromRecordUsing(
+                                                fn (MenuItem $record) => sprintf(
+                                                    '%s (€%.2f)',
+                                                    $record->localized_name,
+                                                    $record->price
+                                                )
+                                            )
+                                            ->searchable(['name->ar', 'name->en', 'name->nl'])
+                                            ->preload()
                                             ->required()
-                                            ->searchable()
-                                            ->reactive()
-                                            //   التفاعل الفوري: عند اختيار طبق يتم جلب السعر الافتراضي وتعبئته
-                                            ->afterStateUpdated(function ($state, Set $set, Get $get) {
-                                                if ($item = MenuItem::find($state)) {
-                                                    $set('unit_price', $item->price);
-                                                    $quantity = (int) ($get('quantity') ?? 1);
-                                                    $set('total_price', round($item->price * $quantity, 2));
-                                                }
-                                            })
                                             ->columnSpan(4),
 
                                         TextInput::make('quantity')

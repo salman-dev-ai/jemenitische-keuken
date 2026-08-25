@@ -31,6 +31,7 @@ class MenuItemFactory extends Factory
                 // genreat 6 word
                 'en' => $this->faker->sentence(6),
                 'ar' => 'وصف لذيذ لهذه الوجبة اليمنية الرائعة.',
+                'nl' => 'Lekker Jemenitisch gerecht.',
             ],
             // توليد حساسية عشوائية لبعض الأطباق (متطلب قانوني أوروبي)
             'allergens' => $this->faker->randomElements(['Gluten', 'Nuts', 'Lactose'], $this->faker->numberBetween(0, 2)),

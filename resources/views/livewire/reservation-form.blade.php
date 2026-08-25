@@ -10,7 +10,7 @@
                 <span class="w-8 h-8 rounded-lg bg-[#D47716]/10 text-[#D47716] flex items-center justify-center font-bold text-sm">🍽️</span>
                 <span class="text-xs font-bold text-[#D47716] tracking-wider uppercase">حجز إلكتروني فوري ومباشر</span>
             </div>
-            <h2 class="text-2xl md:text-3xl font-extrabold text-[#3E1F15] tracking-tight">احجز طاولتك التفاعلية</h2>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-[#3E1F15] tracking-tight">احجز طاولتك الان!!</h2>
             <p class="text-stone-500 text-sm mt-1">اختر عدد الضيوف والوقت والموقع المفضل وسنجهز لك الطاولة المثالية.</p>
         </div>
 

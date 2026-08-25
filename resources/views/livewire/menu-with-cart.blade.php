@@ -95,7 +95,6 @@
         {{-- 3. شبكة الأطباق مع زر "أضف إلى السلة" الذكي --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             wire:loading.class="opacity-60 transition-opacity" wire:target="selectCategory, addToCart, updateQuantity">
-        </div>
         @forelse($this->filteredItems as $item)
             @php
                 $inCart = isset($cart[$item->id]);
@@ -126,7 +125,7 @@
                     </p>
                 </div>
 
-                {{-- زر السلة الذكي: إما إضافة أو زيادة ونقصان --}}
+                {{-- زر السلة  : إما إضافة أو زيادة ونقصان --}}
                 <div class="pt-4 mt-4 border-t border-stone-100 flex items-center justify-between gap-2">
                     <span class="text-[11px] font-bold text-[#E07513] bg-[#E07513]/10 px-2.5 py-1 rounded-lg">
                         {{ $item->category?->localized_name }}
@@ -161,9 +160,10 @@
                 {{ __('messages.menu.empty') ?? 'لا توجد أطباق متاحة حالياً' }}
             </div>
         @endforelse
+            </div>
     </div>
 
-    {{-- 4. الشريط العائمف) --}}
+    {{-- 4. الشريط العائم: سلة الأطباق     --}}
     @if (count($cart) > 0)
         <div
             class="fixed bottom-5 inset-x-4 sm:inset-x-auto sm:right-6 sm:left-6 max-w-2xl mx-auto z-40 animate-fade-in">
@@ -297,6 +297,20 @@
                                     placeholder="مثال: نرجو تجهيز شاي عدني مع الوجبة وتقديم المندي ساخناً..."
                                     class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513] resize-none"></textarea>
                             </div>
+
+                                                     <div>
+                                <label class="block text-xs font-bold text-stone-700 mb-1">عدد الأشخاص *</label>
+                                <input    type="number" 
+    wire:model="party_size" 
+    label="عدد الأشخاص" 
+    min="1" 
+    max="20"
+    required
+                                   
+                                    class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513]">
+                            </div>
+
+ 
 
                             <div
                                 class="bg-[#FAF4ED] p-3 rounded-xl border border-[#E07513]/25 flex justify-between font-black text-sm text-[#2C0D0A]">

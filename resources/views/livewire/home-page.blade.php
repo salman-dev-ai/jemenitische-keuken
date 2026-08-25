@@ -40,7 +40,7 @@
                     <span>{{ __('messages.home.ctaReserve') ?? 'احجز طاولتك التفاعلية' }}</span>
                 </a>
 
-                <a href="#menu" class="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/15 text-white font-bold rounded-2xl border border-white/25 hover:border-white/45 transition-all flex items-center justify-center gap-3 text-base backdrop-blur-md">
+                <a href="#menu_with_cart" class="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/15 text-white font-bold rounded-2xl border border-white/25 hover:border-white/45 transition-all flex items-center justify-center gap-3 text-base backdrop-blur-md">
                     <span>🍽️</span>
                     <span>{{ __('messages.home.ctaMenu') ?? 'استعرض القائمة الملكية' }}</span>
                 </a>

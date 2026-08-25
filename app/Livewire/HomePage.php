@@ -17,9 +17,10 @@ class HomePage extends Component
     public function signatureDishes()
     {
         return MenuItem::query()
-            ->where('is_available', true)
-            ->where('is_featured', true)
+            ->available()       // ✅ تستخدم الـ Scope الموجود
+            ->featured()        // ✅ تستخدم الـ Scope الموجود
             ->with('category')
+            ->orderBy('sort_order')
             ->take(3)
             ->get();
     }
@@ -27,9 +28,5 @@ class HomePage extends Component
     public function render()
     {
         return view('livewire.home-page');
-        //  [
-        //     'signatureDishes' => $this->signatureDishes,
-        // ]
-
     }
 }

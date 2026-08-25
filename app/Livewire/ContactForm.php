@@ -2,36 +2,45 @@
 
 namespace App\Livewire;
 
+use App\Models\ContactMessage;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class ContactForm extends Component
 {
+    #[Validate('required|string|min:3|max:100')]
     public string $name = '';
 
+    #[Validate('required|email|max:150')]
     public string $email = '';
 
+    #[Validate('nullable|string|max:30')]
     public string $phone = '';
 
+    #[Validate('required|string')]
     public string $subject = 'inquiry';
 
+    #[Validate('required|string|min:10|max:2000')]
     public string $message = '';
-
-    protected $rules = [
-        'name' => 'required|min:3|max:100',
-        'email' => 'required|email|max:150',
-        'phone' => 'nullable|string|max:30',
-        'subject' => 'required|string',
-        'message' => 'required|min:10|max:2000',
-    ];
 
     public function submitMessage(): void
     {
-        $validatedData = $this->validate();
+        // ✅ 1. التحقق من القيود
+        $validated = $this->validate();
 
-        // إشعار فوري لخدمة العملاء
-        session()->flash('contact_success', __('messages.contact.successMsg') ?? 'شكراً لتواصلك معنا! استلمنا رسالتك وسيتواصل معك فريق الضيافة في أقرب وقت.');
+        // ✅ 2. الحفظ الفعلي في قاعدة البيانات
+        ContactMessage::create($validated);
 
-        $this->reset(['name', 'email', 'phone', 'message']);
+        // ✅ 3. إشعار نجاح
+        session()->flash(
+            'contact_success',
+            __('messages.contact.successMsg')
+                ?? 'شكراً لتواصلك معنا! استلمنا رسالتك وسيتواصل معك فريق الضيافة خلال 24 ساعة.'
+        );
+
+        // ✅ 4. إعادة تهيئة الحقول
+        $this->reset(['name', 'email', 'phone', 'subject', 'message']);
+        $this->subject = 'inquiry';
     }
 
     public function render()

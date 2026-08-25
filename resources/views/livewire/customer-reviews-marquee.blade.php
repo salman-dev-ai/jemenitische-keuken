@@ -33,29 +33,29 @@
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center text-amber-400 text-xs">⭐⭐⭐⭐⭐</div>
-                            <span class="text-[11px] text-stone-400">{{ $rev['date'] }}</span>
+                            <span class="text-[11px] text-stone-400">{{ $rev['date'] ?? ''}}</span>
                         </div>
 
                         <div class="mb-3">
                             <span class="text-[10px] font-bold text-amber-300 bg-[#E07513]/25 px-2.5 py-0.5 rounded-md border border-[#E07513]/40">
-                                الطلب المفضل: {{ $rev['dish'] }}
+                                الطلب المفضل: {{ $rev['dish'] ?? ''}}
                             </span>
                         </div>
 
-                        <p class="text-xs sm:text-sm text-stone-200 leading-relaxed font-normal">
-                            "{{ $rev['comment'] }}"
-                        </p>
+                        {{-- <p class="text-xs sm:text-sm text-stone-200 leading-relaxed font-normal">
+                            "{{ $rev['comment'] ?? ' ' }}"
+                        </p> --}}
                     </div>
 
                     <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-9 h-9 rounded-full bg-[#E07513] text-white font-black text-xs flex items-center justify-center">
+                            {{-- <div class="w-9 h-9 rounded-full bg-[#E07513] text-white font-black text-xs flex items-center justify-center">
                                 {{ mb_substr($rev['name'], 0, 1) }}
-                            </div>
-                            <div class="text-right">
+                            </div> --}}
+                            {{-- <div class="text-right">
                                 <h4 class="text-xs font-extrabold text-white">{{ $rev['name'] }}</h4>
-                                <p class="text-[10px] text-stone-400">{{ $rev['location'] }}</p>
-                            </div>
+                                {{-- <p class="text-[10px] text-stone-400">{{ $rev['location'] }}</p> --}}
+                            {{-- </div> --}} --
                         </div>
 
                         <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30">

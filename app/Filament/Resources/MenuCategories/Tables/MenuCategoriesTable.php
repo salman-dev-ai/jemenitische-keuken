@@ -2,14 +2,14 @@
 
 namespace App\Filament\Resources\MenuCategories\Tables;
 
+use App\Models\GalleryItem;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class MenuCategoriesTable
@@ -18,23 +18,6 @@ class MenuCategoriesTable
     {
         return $table
             ->columns([
-                // TextColumn::make('slug')
-                //     ->searchable(),
-
-                // ImageColumn::make('image_path'),
-                // TextColumn::make('sort_order')
-                //     ->numeric()
-                //     ->sortable(),
-                // IconColumn::make('is_available')
-                //     ->boolean(),
-                // TextColumn::make('created_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
-                // TextColumn::make('updated_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('name')
                     ->label('الاسم')
@@ -59,9 +42,16 @@ class MenuCategoriesTable
                     ->color('info'),
 
             ])
-            ->filters([
-                //
-            ])
+      ->filters([
+    // فلتر الحالة (متاح / غير متاح)
+    SelectFilter::make('is_available')
+        ->label('حالة التفعيل')
+        ->options([
+            true => 'مفعل',
+            false => 'غير مفعل',
+        ])
+        ->default(true),
+])
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),

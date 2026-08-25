@@ -26,53 +26,48 @@ class MenuCategory extends Model
         'is_available',
     ];
 
-    protected $casts = [
-        'sort_order' => 'integer',
-        'is_available' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'sort_order' => 'integer',
+            'is_available' => 'boolean',
+        ];
+    }
 
-    /**
-     * نطاق لجلب الأقسام المفعلة فقط
-     * مرتبة حسب أولوية العرض.
-     */
     public function scopeActive(Builder $query): Builder
     {
-        return $query
-            ->where('is_available', true)
-            ->orderBy('sort_order', 'asc');
+        return $query->where('is_available', true);
     }
 
-    /**
-     * استرجاع الاسم حسب لغة المستخدم الحالية.
-     */
-    public function getLocalizedNameAttribute(): string
+    public function scopeOrdered(Builder $query): Builder
     {
-        $locale = app()->getLocale();
-
-        return $this->name[$locale]
-            ?? $this->name['ar']
-            ?? $this->name['en']
-            ?? '';
+        return $query->orderBy('sort_order');
     }
 
-    /**
-     * استرجاع الوصف حسب لغة المستخدم الحالية.
-     */
-    public function getLocalizedDescriptionAttribute(): ?string
-    {
-        $locale = app()->getLocale();
-
-        return $this->description[$locale]
-            ?? $this->description['ar']
-            ?? $this->description['en']
-            ?? null;
-    }
-
-    /**
-     * علاقة الأصناف التابعة لهذا القسم.
-     */
     public function menuItems(): HasMany
     {
         return $this->hasMany(MenuItem::class, 'menu_category_id');
+    }
+
+    public function getLocalizedNameAttribute(): string
+    {
+        return $this->getTranslation(
+            'name',
+            app()->getLocale(),
+            true,
+        ) ?: '—';
+    }
+
+    public function getLocalizedDescriptionAttribute(): ?string
+    {
+        if (blank($this->getRawOriginal('description'))) {
+            return null;
+        }
+
+        return $this->getTranslation(
+            'description',
+            app()->getLocale(),
+            true,
+        ) ?: null;
     }
 }

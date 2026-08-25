@@ -44,12 +44,7 @@ class MenuCategoryResource extends Resource
         return MenuCategoriesTable::configure($table);
     }
 
-    public static function getHeaderAction(): array
-    {
-        return [
-            //
-        ];
-    }
+   
 
     public static function getPages(): array
     {

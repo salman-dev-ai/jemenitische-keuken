@@ -24,10 +24,11 @@ class OrderService
 
             // ✅ استعلام واحد لجلب جميع الأطباق مرة واحدة
             $menuItems = MenuItem::query()
+
                 ->whereIn('id', $menuItemIds)
                 ->available()
-                ->keyBy('id')
-                ->get();
+                ->get()
+                ->keyBy('id');
 
             $subtotal = 0.0;
             $preparedItems = [];
@@ -84,7 +85,7 @@ class OrderService
     protected function generateOrderNumber(): string
     {
         do {
-            $number = 'ORD-'.now()->format('Ymd').'-'.strtoupper(Str::random(5));
+            $number = 'ORD-' . now()->format('Ymd') . '-' . strtoupper(Str::random(5));
         } while (Order::where('order_number', $number)->exists());
 
         return $number;

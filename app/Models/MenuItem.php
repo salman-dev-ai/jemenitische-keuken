@@ -13,7 +13,11 @@ class MenuItem extends Model
 {
     use HasFactory, HasTranslations, SoftDeletes;
 
-    public array $translatable = ['name', 'description', 'allergens'];
+    public array $translatable = [
+        'name',
+        'description',
+        'allergens',
+    ];
 
     protected $fillable = [
         'menu_category_id',
@@ -45,13 +49,11 @@ class MenuItem extends Model
         return $this->belongsTo(MenuCategory::class, 'menu_category_id');
     }
 
-    // ✅ تعديل نوع الـ return إلى Builder بدلاً من void
     public function scopeAvailable(Builder $query): Builder
     {
         return $query->where('is_available', true);
     }
 
-    // ✅ تعديل نوع الـ return إلى Builder بدلاً من void
     public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
@@ -59,15 +61,19 @@ class MenuItem extends Model
 
     public function getLocalizedNameAttribute(): string
     {
-        $locale = app()->getLocale();
-
-        return $this->name[$locale] ?? $this->name['ar'] ?? $this->name['en'] ?? '';
+        return $this->getTranslation(
+            'name',
+            app()->getLocale(),
+            true,
+        ) ?: '—';
     }
 
     public function getLocalizedDescriptionAttribute(): ?string
     {
-        $locale = app()->getLocale();
-
-        return $this->description[$locale] ?? $this->description['ar'] ?? $this->description['en'] ?? null;
+        return $this->getTranslation(
+            'description',
+            app()->getLocale(),
+            true,
+        ) ?: null;
     }
 }

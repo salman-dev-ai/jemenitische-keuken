@@ -13,6 +13,8 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
+use Filament\Forms\Set;
 
 class MenuItemForm
 {
@@ -56,20 +58,8 @@ class MenuItemForm
 
                                     ])->columnSpanFull(),
 
-                                /*
-                                        |--------------------------------------------------------------------------
-                                        | Slug
-                                        |--------------------------------------------------------------------------
-                                        */
 
-                                TextInput::make('slug')
-                                    ->label('الرابط الثابت')
-                                    ->required()
-                                    ->unique(ignoreRecord: true)
-                                    ->maxLength(255)
-                                    ->helperText(
-                                        'يستخدم لإنشاء رابط فريد للطبق.'
-                                    ),
+
 
                                 /*
                                         |--------------------------------------------------------------------------
@@ -124,15 +114,18 @@ class MenuItemForm
                     ->icon('heroicon-o-tag')
                     ->schema([
 
-                        // Select::make('menu_category_id')
-                        //     ->label('قسم المنيو')
-                        //     ->relationship(
-                        //         'category',
-                        //         'name'
-                        //     )
-                        //     ->required()
-                        //     ->searchable()
-                        //     ->preload(),
+                        TextInput::make('slug')
+                            ->label('الرابط الثابت')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(255)
+    // ✅ توليد تلقائي من الاسم العربي
+                            ->afterStateUpdated(function (Set $set, ?string $state, ?string $old) {
+                                if ($state && $state !== $old) {
+                                    $set('slug', Str::slug($state));
+                                }
+                            })
+                            ->helperText('يستخدم لإنشاء رابط فريد للطبق - يُولّد تلقائياً.'),
 
                         Select::make('menu_category_id')
                             ->label('تصنيف القائمة')

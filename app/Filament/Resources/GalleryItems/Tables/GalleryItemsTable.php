@@ -23,8 +23,16 @@ class GalleryItemsTable
             ->columns([
                 // 1. معاينة الصورة المصغرة بجودة عالية
                 ImageColumn::make('image_path')
-                    ->label('معاينة الصورة')
-                    ->circular(),
+                    ->label('الصورة')
+                    ->disk('public')
+                    ->visibility('public')
+
+                    ->circular()
+                    ->extraImgAttributes([
+                        'class' => 'object-cover',
+                        'loading' => 'lazy',
+                    ])->circular()
+                    ->defaultImageUrl(url('/images/1 (2).jpg')),
 
                 // 2. عنوان الصورة التراثية بالعربي (مع الإنجليزي بالأسفل)
                 TextColumn::make('title.ar')
@@ -32,19 +40,19 @@ class GalleryItemsTable
                     ->searchable()
                     ->sortable()
                     ->weight('bold')
-                    ->description(fn ($record): string => $record->title['en'] ?? ''),
+                    ->description(fn($record): string => $record->title['en'] ?? ''),
 
                 // 3. القسم التراثي مع شارات ملونة وأيقونات
                 TextColumn::make('category')
                     ->label('القسم التراثي')
                     ->badge()
                     ->formatStateUsing(
-                        fn (string $state): string => GalleryItem::CATEGORIES[$state][app()->getLocale()]
-                              ?? GalleryItem::CATEGORIES[$state]['en']
-                              ?? $state
+                        fn(string $state): string => GalleryItem::CATEGORIES[$state][app()->getLocale()]
+                            ?? GalleryItem::CATEGORIES[$state]['en']
+                            ?? $state
                     )
                     ->color(
-                        fn (string $state): string => match ($state) {
+                        fn(string $state): string => match ($state) {
                             'mandi' => 'warning',
                             'pots' => 'danger',
                             'majlis' => 'success',
@@ -116,8 +124,8 @@ class GalleryItemsTable
             ])
             ->defaultSort('sort_order', 'asc')
             ->filters([
-            // تصفية حسب القسم
-            SelectFilter::make('category')
+                // تصفية حسب القسم
+                SelectFilter::make('category')
                     ->label('تصفية حسب القسم التراثي')
                     ->options([
                         'mandi' => '👑 المندي والمظبي الملكي',
@@ -127,24 +135,24 @@ class GalleryItemsTable
                         'bread' => '🫓 المخبوزات والملوح',
                     ]),
 
-            // سلة المحذوفات
-            TrashedFilter::make()
+                // سلة المحذوفات
+                TrashedFilter::make()
                     ->label('سلة المحذوفات'),
-        ])
+            ])
             ->recordActions([
-            EditAction::make()
+                EditAction::make()
                     ->label('تعديل'),
-        ])
+            ])
             ->toolbarActions([
-            BulkActionGroup::make([
+                BulkActionGroup::make([
                     DeleteBulkAction::make()
                         ->label('حذف المحدد'),
                     ForceDeleteBulkAction::make()
                         ->label('حذف نهائي'),
                     RestoreBulkAction::make()
                         ->label('استعادة المحذوف'),
-            ])->label('إجراءات جماعية'),
-        ])
+                ])->label('إجراءات جماعية'),
+            ])
             ->emptyStateHeading('لا توجد صور في المعرض حالياً')
             ->emptyStateDescription('اضغط على زر "إضافة صورة جديدة" لبدء إضافة صور الأطباق والجلسات.')
             ->emptyStateIcon('heroicon-o-camera');

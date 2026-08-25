@@ -39,6 +39,9 @@ class MenuWithCart extends Component
     #[Validate('nullable|string|max:500')]
     public string $special_requests = '';
 
+    #[Validate('required|integer|min:1|max:20')]
+    public int $party_size = 2;
+
     public function mount(): void
     {
         $this->reservation_date = now()->format('Y-m-d');
@@ -166,7 +169,7 @@ class MenuWithCart extends Component
             'customer_name' => $validated['customer_name'],
             'customer_phone' => $validated['customer_phone'],
             'customer_email' => $validated['customer_email'],
-            'party_size' => 2,
+            'party_size' => $this->party_size,
             'reservation_date' => $validated['reservation_date'],
             'reservation_time' => $validated['reservation_time'],
             'special_requests' => $combinedNotes,
