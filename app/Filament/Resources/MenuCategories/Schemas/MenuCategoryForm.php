@@ -7,6 +7,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
@@ -60,35 +61,50 @@ class MenuCategoryForm
                     ])
                     ->columnSpanFull(),
 
-                TextInput::make('slug')
-                    ->label('الرابط الثابت (Slug)')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(255)
-                    ->helperText('يُستخدم في روابط الموقع، يتم توليده تلقائياً.'),
+                Section::make('البيانات الأساسية والوسائط')
+                    ->description('إعدادات الرابط الثابت، صورة القسم، وحالة النشر')
+                    ->icon('heroicon-o-photo')
+                    ->columns(4)
+                    ->schema([
 
-                Grid::make(2)->schema([
-                    FileUpload::make('image_path')
-                        ->image()
-                        ->label('صورة القسم')
-                        ->directory('menu-categories')
-                        ->disk('public')
-                        ->imageEditor(),
+                         TextInput::make('slug')
+                            ->label('الرابط الثابت (Slug)')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(255)
+                            ->alphaDash() // يضمن أن يحتوي فقط على أحرف وأرقام وشرطات
+                            ->columnSpan(2) // يأخذ نصف عرض القسم
+                            ->helperText('يُستخدم في روابط الموقع، ويتم توليده تلقائياً من الاسم.'),
 
-                    Grid::make(2)->schema([
+                        // 2. ترتيب الظهور
                         TextInput::make('sort_order')
-                            ->label('ترتيب الفرز')
+                            ->label('ترتيب الظهور')
                             ->required()
                             ->numeric()
-                            ->default(0),
+                            ->default(0)
+                            ->minValue(0)
+                            ->columnSpan(1)
+                            ->helperText('الأرقام الأصغر تظهر أولاً.'),
 
+                        // 3. حالة التوفر (تم تصحيح المسمى ليبدو احترافياً)
                         Toggle::make('is_available')
-                            ->label('القسم مفعّل')
+                            ->label('حالة القسم')
+                            ->default(true)
                             ->onColor('success')
                             ->offColor('danger')
-                            ->default(true),
-                    ]),
-                ]),
+                            ->columnSpan(1)
+                            ->helperText('تفعيل أو إخفاء القسم من الموقع'),
+
+                        // 4. صورة القسم (تأخذ العرض الكامل لتبدو واضحة وجذابة)
+                        FileUpload::make('image_path')
+                            ->label('صورة القسم')
+                            ->image()
+                            ->imageEditor()
+                            ->directory('menu-categories')
+                            ->disk('public')
+                            ->columnSpanFull() // تأخذ عرضاً كاملاً لسهولة السحب والإفلات والمعاينة
+                    ])->columnSpanFull(),
+
             ]);
     }
 }

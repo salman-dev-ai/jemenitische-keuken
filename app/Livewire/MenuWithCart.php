@@ -92,6 +92,14 @@ class MenuWithCart extends Component
         $this->dispatch('cart-updated');
     }
 
+    public function removeFromCart($itemId)
+{
+     if (isset($this->cart[$itemId])) {
+        unset($this->cart[$itemId]);
+
+         session()->put('yemeni_cart', $this->cart);
+    }
+}
     public function clearCart(): void
     {
         $this->cart = [];

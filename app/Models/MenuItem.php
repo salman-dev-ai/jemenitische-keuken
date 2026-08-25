@@ -61,19 +61,53 @@ class MenuItem extends Model
 
     public function getLocalizedNameAttribute(): string
     {
-        return $this->getTranslation(
-            'name',
-            app()->getLocale(),
-            true,
-        ) ?: '—';
+        // return $this->getTranslation(
+        //     'name',
+        //     app()->getLocale(),
+        //     true,
+        // ) ?: '—';
+
+             $locale = app()->getLocale();
+
+        // استخدام getTranslation من Spatie لجلب النص بلغة محددة
+        $translation = $this->getTranslation('description', $locale, false);
+
+        // إذا وجدت الترجمة باللغة الحالية
+        if (!empty($translation) && is_string($translation)) {
+            return $translation;
+        }
+
+        // Fallback: جرب الإنجليزية
+        $englishTranslation = $this->getTranslation('description', 'en', false);
+        if (!empty($englishTranslation) && is_string($englishTranslation)) {
+            return $englishTranslation;
+        }
+ return 'غير محدد';
     }
 
     public function getLocalizedDescriptionAttribute(): ?string
     {
-        return $this->getTranslation(
-            'description',
-            app()->getLocale(),
-            true,
-        ) ?: null;
+        // return $this->getTranslation(
+        //     'description',
+        //     app()->getLocale(),
+        //     true,
+        // ) ?: null;
+           $locale = app()->getLocale();
+
+        // استخدام getTranslation من Spatie لجلب النص بلغة محددة
+        $translation = $this->getTranslation('name', $locale, false);
+
+        // إذا وجدت الترجمة باللغة الحالية
+        if (!empty($translation) && is_string($translation)) {
+            return $translation;
+        }
+
+        // Fallback: جرب الإنجليزية
+        $englishTranslation = $this->getTranslation('name', 'en', false);
+        if (!empty($englishTranslation) && is_string($englishTranslation)) {
+            return $englishTranslation;
+        }
+ return 'غير محدد';
+
     }
 }

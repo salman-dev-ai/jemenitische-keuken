@@ -14,7 +14,9 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
-use Filament\Forms\Set;
+
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Utilities\Set as UtilitiesSet;
 
 class MenuItemForm
 {
@@ -40,48 +42,51 @@ class MenuItemForm
                                 Grid::make(3)
                                     ->schema([
 
-                                        TextInput::make('name.ar')
-                                            ->label('اسم الطبق بالعربية')
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->live(onBlur: true),
 
-                                        TextInput::make('name.en')
-                                            ->label('اسم الطبق بالإنجليزية')
-                                            ->required()
-                                            ->maxLength(255),
+                                        Tabs::make('محتوى اللغات')
+                                            ->columnSpanFull()
+                                            ->tabs([
+                                                Tabs\Tab::make('العربية 🇸🇦')
+                                                    ->icon('heroicon-o-language')
+                                                    ->schema([
+                                                        TextInput::make('name.ar')
+                                                            ->label('اسم الطبق')
+                                                            ->required()
+                                                            ->maxLength(255)
+                                                         ,
 
-                                        TextInput::make('name.nl')
-                                            ->label('اسم الطبق بالهولندية')
-                                            ->required()
-                                            ->maxLength(255),
+                                                        Textarea::make('description.ar')
+                                                            ->label('وصف الطبق')
+                                                            ->rows(3)
+                                                            ->helperText('اكتب وصفاً جذاباً للطبق باللغة العربية.'),
+                                                    ]),
 
-                                    ])->columnSpanFull(),
+                                                Tabs\Tab::make('English 🇬🇧')
+                                                    ->icon('heroicon-o-language')
+                                                    ->schema([
+                                                        TextInput::make('name.en')
+                                                            ->label('Dish Name')
+                                                            ->required()
+                                                            ->maxLength(255),
 
+                                                        Textarea::make('description.en')
+                                                            ->label('Description')
+                                                            ->rows(3),
+                                                    ]),
 
+                                                Tabs\Tab::make('Nederlands 🇳🇱')
+                                                    ->icon('heroicon-o-language')
+                                                    ->schema([
+                                                        TextInput::make('name.nl')
+                                                            ->label('Gerechtnaam')
+                                                            ->required()
+                                                            ->maxLength(255),
 
-
-                                /*
-                                        |--------------------------------------------------------------------------
-                                        | الوصف
-                                        |--------------------------------------------------------------------------
-                                        */
-
-                                Grid::make(3)
-                                    ->schema([
-
-                                        Textarea::make('description.ar')
-                                            ->label('الوصف بالعربية')
-                                            ->rows(2),
-
-                                        Textarea::make('description.en')
-                                            ->label('الوصف بالإنجليزية')
-                                            ->rows(2),
-
-                                        Textarea::make('description.nl')
-                                            ->label('الوصف بالهولندية')
-                                            ->rows(2),
-
+                                                        Textarea::make('description.nl')
+                                                            ->label('Beschrijving')
+                                                            ->rows(3),
+                                                    ]),
+                                            ]),
                                     ]),
 
                                 /*
@@ -119,8 +124,8 @@ class MenuItemForm
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255)
-    // ✅ توليد تلقائي من الاسم العربي
-                            ->afterStateUpdated(function (Set $set, ?string $state, ?string $old) {
+                            // ✅ توليد تلقائي من الاسم العربي
+                            ->afterStateUpdated(function (UtilitiesSet $set, ?string $state, ?string $old) {
                                 if ($state && $state !== $old) {
                                     $set('slug', Str::slug($state));
                                 }
@@ -132,10 +137,10 @@ class MenuItemForm
                             ->relationship(
                                 name: 'category',
                                 titleAttribute: 'name',
-                                modifyQueryUsing: fn (Builder $query) => $query->orderBy('sort_order'),
+                                modifyQueryUsing: fn(Builder $query) => $query->orderBy('sort_order'),
                             )
                             ->getOptionLabelFromRecordUsing(
-                                fn (MenuCategory $record) => $record->localized_name
+                                fn(MenuCategory $record) => $record->localized_name
                             )
                             ->searchable()
                             ->preload()

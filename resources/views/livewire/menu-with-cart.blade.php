@@ -1,166 +1,316 @@
-<section id="menu" class="py-20 bg-[#FAF6F0] text-[#2C1810] relative overflow-hidden border-b border-[#E8DFD3]"
+<section id="menu" class="py-10 bg-[#FAF6F0] text-[#2C1810] relative overflow-hidden border-b border-[#E8DFD3]"
     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {{-- رأس القسم --}}
-        <div class="text-center max-w-3xl mx-auto space-y-3 mb-12">
+    <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
+        {{-- 1. رأس القسم وبطاقات الأقسام البصرية --}}
+        <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
             <div
-                class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#E07513]/10 text-[#E07513] text-xs font-bold">
+                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-700 text-xs font-bold border border-amber-500/20">
                 <span>✨</span>
                 <span>{{ __('messages.menu.badge') ?? 'الأصناف الملكية' }}</span>
             </div>
-
-            <h2 class="text-2xl sm:text-4xl font-extrabold text-[#2C0D0A]">
+            <h2 class="text-3xl sm:text-5xl font-black text-stone-900 tracking-tight">
                 {{ __('messages.menu.title') ?? 'أقسام المأكولات اليمنية التراثية' }}
             </h2>
-
-            <p class="text-stone-600 text-xs sm:text-sm">
-                {{ __('messages.menu.subtitle') ?? 'قائمة غنية مصنفة بعناية وفق أعلى معايير الجودة والمذاق اليماني الأصيل' }}
+            <p class="text-stone-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+                {{ __('messages.menu.subtitle') ?? 'قائمة غنية مصنفة بعناية وفق أعلى معايير الجودة، لتمنحك مذاقاً يمنياً أصيلاً بلمسة عصرية في قلب هولندا' }}
             </p>
         </div>
 
-        {{-- 1. بطاقات الأقسام البصرية --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
+        {{-- بطاقات الأقسام --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
             @foreach ($this->categories as $category)
-                @php
-                    $isSelected = $selectedCategorySlug === $category->slug;
-                @endphp
+                @php $isSelected = $selectedCategorySlug === $category->slug; @endphp
+
                 <div wire:key="cat-card-{{ $category->id }}"
                     wire:click="selectCategory('{{ $isSelected ? 'all' : $category->slug }}')"
-                    class="group relative rounded-3xl p-5 cursor-pointer transition-all duration-300 overflow-hidden flex flex-col justify-between select-none border {{ $isSelected ? 'bg-gradient-to-b from-[#2E0F0B] to-[#1F0906] text-white border-[#E07513] ring-2 ring-[#E07513]/30 shadow-xl transform -translate-y-1' : 'bg-white hover:bg-[#FFFDF9] text-[#2C1810] border-stone-200 hover:border-[#E07513]/40 shadow-xs hover:shadow-md' }}">
+                    class="group relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 border-2 {{ $isSelected ? 'border-amber-500 shadow-xl shadow-amber-500/20 scale-[1.02]' : 'border-transparent hover:border-stone-200 shadow-md hover:shadow-xl' }}">
 
-                    @if ($category->image_path)
-                        <div class="absolute inset-0 bg-cover bg-center transition-opacity duration-300 {{ $isSelected ? 'opacity-20' : 'opacity-10 group-hover:opacity-15' }}"
-                            style="background-image: url('{{ asset($category->image_path) }}');"></div>
-                    @endif
-
-                    <div class="relative z-10 space-y-3">
-                        <div class="flex items-center justify-between gap-2">
+                    {{-- صورة القسم --}}
+                    <div class="aspect-[4/3] overflow-hidden bg-stone-200">
+                        @if ($category->image_path)
+                            <img src="{{ Storage::url($category->image_path) }}" alt="{{ $category->localized_name }}"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        @else
                             <div
-                                class="w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-lg {{ $isSelected ? 'bg-[#E07513] text-white shadow-md' : 'bg-[#FAF4ED] text-[#E07513] border border-[#E07513]/20' }}">
-                                🍽️
+                                class="w-full h-full flex items-center justify-center bg-stone-100 text-stone-400 text-4xl">
+                                🍽️</div>
+                        @endif
+                        {{-- تدرج لوني لضمان قراءة النص --}}
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/40 to-transparent">
+                        </div>
+                    </div>
+
+                    {{-- محتوى البطاقة --}}
+                    <div class="absolute bottom-0 inset-x-0 p-4 text-white">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-bold text-sm sm:text-base leading-tight">{{ $category->localized_name }}
+                            </h3>
+                            <span
+                                class="text-[10px] font-bold px-2 py-0.5 rounded-full {{ $isSelected ? 'bg-amber-500 text-white' : 'bg-white/20 text-amber-100' }}">
+                                {{ $category->menu_items_count }}
+                            </span>
+                        </div>
+                        @if ($category->localized_description)
+                            <p
+                                class="text-[11px] text-stone-300 line-clamp-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                {{ $category->localized_description }}
+                            </p>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        {{-- حاوية التخطيط الرئيسية: تقسيم الشاشة إلى قائمة جانبية ومحتوى --}}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+            {{-- ========================================================= --}}
+            {{-- 1. القائمة الجانبية العمودية (تظهر على الشاشات الكبيرة) --}}
+            {{-- ========================================================= --}}
+            <aside class="hidden lg:block lg:col-span-3  mt-20">
+                <div class="sticky  top-24 bg-white rounded-2xl border border-stone-200 shadow-sm p-2 space-y-1">
+
+                    {{-- زر "جميع الأصناف" --}}
+                    <button wire:click="selectCategory('all')"
+                        class="w-full text-right flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-300 group
+                {{ $selectedCategorySlug === 'all'
+                    ? 'bg-[#2C0D0A] text-white shadow-md'
+                    : 'text-stone-600 hover:bg-stone-50 hover:text-[#2C0D0A]' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="text-lg">{{ $selectedCategorySlug === 'all' ? '👑' : '🍽️' }}</span>
+                            <span class="font-bold text-sm">{{ __('messages.menu.all') ?? 'جميع الأصناف' }}</span>
+                        </div>
+                    </button>
+
+                    <div class="h-px bg-stone-100 my-1"></div>
+
+                    {{-- أزرار الأقسام --}}
+                    @foreach ($this->categories as $cat)
+                        @php $isSelected = $selectedCategorySlug === $cat->slug; @endphp
+
+                        <button wire:key="tab-btn-{{ $cat->id }}"
+                            wire:click="selectCategory('{{ $cat->slug }}')"
+                            class="w-full text-right flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-300 group
+                    {{ $isSelected
+                        ? 'bg-[#E07513] text-white shadow-md shadow-amber-500/20'
+                        : 'text-stone-600 hover:bg-stone-50 hover:text-[#2C0D0A]' }}">
+
+                            <div class="flex items-center gap-3">
+                                <span class="text-lg">{{ $isSelected ? '✨' : '🔸' }}</span>
+                                <span class="font-bold text-sm">{{ $cat->localized_name }}</span>
                             </div>
 
+                            {{-- شارة عدد الأطباق --}}
                             <span
-                                class="text-[10px] font-extrabold px-2.5 py-1 rounded-full {{ $isSelected ? 'bg-white/20 text-amber-200' : 'bg-stone-100 text-stone-600' }}">
-                                {{ $category->menu_items_count }} {{ __('messages.menu.dishes') ?? 'أطباق' }}
+                                class="text-[10px] font-black px-2 py-1 rounded-lg transition-colors
+                        {{ $isSelected ? 'bg-white/20 text-white' : 'bg-stone-100 text-stone-500 group-hover:bg-stone-200' }}">
+                                {{ $cat->menu_items_count }}
                             </span>
-                        </div>
-
-                        <div>
-                            <h3
-                                class="font-black text-sm sm:text-base leading-snug tracking-tight {{ $isSelected ? 'text-white' : 'text-[#2C0D0A] group-hover:text-[#E07513]' }}">
-                                {{ $category->localized_name }}
-                            </h3>
-                            @if ($category->localized_description)
-                                <p
-                                    class="text-[11px] leading-relaxed mt-1 line-clamp-2 {{ $isSelected ? 'text-stone-300' : 'text-stone-500' }}">
-                                    {{ $category->localized_description }}
-                                </p>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div
-                        class="relative z-10 pt-3 mt-3 border-t border-stone-200/50 flex items-center justify-between text-[10px] font-bold">
-                        <span class="{{ $isSelected ? 'text-amber-300' : 'text-[#E07513]' }}">
-                            {{ $isSelected ? '✓ محدد' : 'استعراض الأطباق' }}
-                        </span>
-                        <span class="font-mono text-stone-400">#{{ $category->sort_order }}</span>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        {{-- 2. شريط التبويبات الفوري --}}
-        <div
-            class="flex flex-wrap items-center justify-center gap-2 mb-8 bg-[#EFE8DC] p-1.5 rounded-2xl max-w-4xl mx-auto border border-[#DFD5C6]">
-            <button wire:click="selectCategory('all')"
-                class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer {{ $selectedCategorySlug === 'all' ? 'bg-[#2C0D0A] text-white shadow-sm' : 'text-stone-700 hover:text-stone-900 hover:bg-white/60' }}">
-                <span>{{ __('messages.menu.all') ?? 'جميع الأصناف' }}</span>
-            </button>
-
-            @foreach ($this->categories as $cat)
-                <button wire:key="tab-btn-{{ $cat->id }}" wire:click="selectCategory('{{ $cat->slug }}')"
-                    class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer {{ $selectedCategorySlug === $cat->slug ? 'bg-[#E07513] text-white shadow-sm' : 'text-stone-700 hover:text-stone-900 hover:bg-white/60' }}">
-                    <span>{{ $cat->localized_name }}</span>
-                    <span
-                        class="text-[10px] px-1.5 py-0.2 rounded-full {{ $selectedCategorySlug === $cat->slug ? 'bg-black/25 text-white' : 'bg-stone-200 text-stone-700' }}">
-                        {{ $cat->menu_items_count }}
-                    </span>
-                </button>
-            @endforeach
-        </div>
-
-        {{-- 3. شبكة الأطباق مع زر "أضف إلى السلة" الذكي --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            wire:loading.class="opacity-60 transition-opacity" wire:target="selectCategory, addToCart, updateQuantity">
-        @forelse($this->filteredItems as $item)
-            @php
-                $inCart = isset($cart[$item->id]);
-                $cartQty = $inCart ? $cart[$item->id]['quantity'] : 0;
-            @endphp
-            <div wire:key="item-{{ $item->id }}"
-                class="bg-white rounded-3xl p-6 border transition-all duration-300 flex flex-col justify-between text-right relative hover:shadow-xl {{ $item->is_featured ? 'border-[#E07513]/40 ring-1 ring-[#E07513]/25 shadow-sm' : 'border-stone-200 hover:border-[#E07513]/30 shadow-xs' }}">
-                <div>
-                    <div class="flex items-start justify-between gap-3 mb-2.5">
-                        <div class="space-y-0.5">
-                            <h4 class="text-base font-extrabold text-[#2C0D0A] flex items-center gap-1.5">
-                                <span>{{ $item->localized_name }}</span>
-                                @if ($item->is_featured)
-                                    <span title="طبق الشيف الملكي">⭐</span>
-                                @endif
-                            </h4>
-                        </div>
-
-                        <div
-                            class="bg-[#FAF4ED] px-3.5 py-1.5 rounded-2xl border border-[#E07513]/25 text-center shrink-0">
-                            <span
-                                class="text-base font-black text-[#E07513]">€{{ number_format($item->price, 2) }}</span>
-                        </div>
-                    </div>
-
-                    <p class="text-xs text-stone-600 leading-relaxed mt-2 line-clamp-3">
-                        {{ $item->localized_description }}
-                    </p>
-                </div>
-
-                {{-- زر السلة  : إما إضافة أو زيادة ونقصان --}}
-                <div class="pt-4 mt-4 border-t border-stone-100 flex items-center justify-between gap-2">
-                    <span class="text-[11px] font-bold text-[#E07513] bg-[#E07513]/10 px-2.5 py-1 rounded-lg">
-                        {{ $item->category?->localized_name }}
-                    </span>
-
-                    @if (!$inCart)
-                        <button type="button" wire:click="addToCart({{ $item->id }})"
-                            class="px-3.5 py-2 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-extrabold rounded-xl text-xs shadow-xs hover:shadow-md transition-all flex items-center gap-1.5 cursor-pointer">
-                            <span>🛒</span>
-                            <span>{{ __('messages.menu.addToCart') ?? 'أضف إلى السلة' }}</span>
                         </button>
-                        
-                    @else
-                        <div class="flex items-center gap-1.5 bg-[#FAF4ED] p-1 rounded-xl border border-[#E07513]/30">
-                            <button type="button" wire:click="updateQuantity({{ $item->id }}, -1)"
-                                class="w-6 h-6 rounded-lg bg-white text-[#2C0D0A] hover:bg-stone-200 flex items-center justify-center font-bold text-xs shadow-xs cursor-pointer">
-                                -
-                            </button>
-                            <span class="w-5 text-center font-black text-xs text-[#2C0D0A]">
-                                {{ $cartQty }}
+                    @endforeach
+                </div>
+            </aside>
+
+            {{-- ========================================================= --}}
+            {{-- 2. شريط التمرير الأفقي (يظهر فقط على الجوال) --}}
+            {{-- ========================================================= --}}
+            <div class="lg:hidden col-span-1 overflow-x-auto pb-2 -mx-4 px-4 no-scrollbar">
+                <div class="flex items-center gap-2 min-w-max">
+                    <button wire:click="selectCategory('all')"
+                        class="px-4 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all
+                {{ $selectedCategorySlug === 'all'
+                    ? 'bg-[#2C0D0A] text-white shadow-md'
+                    : 'bg-white text-stone-600 border border-stone-200' }}">
+                        {{ __('messages.menu.all') ?? 'الكل' }}
+                    </button>
+
+                    @foreach ($this->categories as $cat)
+                        @php $isSelected = $selectedCategorySlug === $cat->slug; @endphp
+                        <button wire:key="mobile-tab-{{ $cat->id }}"
+                            wire:click="selectCategory('{{ $cat->slug }}')"
+                            class="px-4 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all flex items-center gap-2
+                    {{ $isSelected
+                        ? 'bg-[#E07513] text-white shadow-md shadow-amber-500/20'
+                        : 'bg-white text-stone-600 border border-stone-200' }}">
+                            <span>{{ $cat->localized_name }}</span>
+                            <span
+                                class="text-[10px] px-1.5 py-0.5 rounded-full {{ $isSelected ? 'bg-black/20 text-white' : 'bg-stone-100 text-stone-600' }}">
+                                {{ $cat->menu_items_count }}
                             </span>
-                            <button type="button" wire:click="updateQuantity({{ $item->id }}, 1)"
-                                class="w-6 h-6 rounded-lg bg-[#E07513] text-white hover:bg-[#c2620a] flex items-center justify-center font-bold text-xs shadow-xs cursor-pointer">
-                                +
-                            </button>
-                        </div>
-                    @endif
+                        </button>
+                    @endforeach
                 </div>
             </div>
-        @empty
-            <div class="col-span-full text-center py-12 text-stone-500">
-                {{ __('messages.menu.empty') ?? 'لا توجد أطباق متاحة حالياً' }}
-            </div>
-        @endforelse
-            </div>
+
+            {{-- ========================================================= --}}
+            {{-- 3. شبكة الأطباق (تأخذ المساحة المتبقية) --}}
+            {{-- ========================================================= --}}
+            <main class="col-span-1 lg:col-span-9">
+
+                {{-- عنوان القسم الحالي (يظهر فقط على الشاشات الكبيرة للتوضيح) --}}
+                <div class="hidden lg:flex items-center justify-between mb-6 pb-4 border-b border-stone-200">
+                    <h3 class="text-xl font-black text-[#2C0D0A] flex items-center gap-2">
+                        @if ($selectedCategorySlug === 'all')
+                            <span>👑</span> جميع الأطباق
+                        @else
+                            <span>🍽️</span>
+                            {{ $this->categories->firstWhere('slug', $selectedCategorySlug)?->localized_name ?? 'الأطباق' }}
+                        @endif
+                    </h3>
+                    <span class="text-xs font-bold text-stone-500 bg-stone-100 px-3 py-1 rounded-full">
+                        {{ $this->filteredItems->count() }} طبق متاح
+                    </span>
+                </div>
+
+
+                {{-- 2. شبكة الأطباق --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                    wire:loading.class="opacity-50 pointer-events-none" wire:target="selectCategory">
+
+                    @forelse($this->filteredItems as $item)
+                        @php
+                            $inCart = isset($cart[$item->id]);
+                            $cartQty = $inCart ? $cart[$item->id]['quantity'] : 0;
+                        @endphp
+
+                        <div wire:key="item-{{ $item->id }}"
+                            class="group bg-white rounded-3xl overflow-hidden border border-stone-100 shadow-sm hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-300 flex flex-col">
+
+                            {{-- صورة الطبق --}}
+                            <div class="relative aspect-[4/3] overflow-hidden bg-stone-100">
+                                @if ($item->image_path)
+                                    <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->localized_name }}"
+                                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                @else
+                                    <div
+                                        class="w-full h-full flex items-center justify-center bg-stone-50 text-stone-300 text-5xl">
+                                        🍲</div>
+                                @endif
+
+                                {{-- شارات الطبق --}}
+                                <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                    @if ($item->is_featured)
+                                        <span
+                                            class="px-2.5 py-1 bg-amber-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
+                                            ⭐ مميز
+                                        </span>
+                                    @endif
+                                    @if ($item->is_spicy)
+                                        <span
+                                            class="px-2.5 py-1 bg-red-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
+                                            🌶️ حار
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {{-- السعر يطفو فوق الصورة --}}
+                                <div
+                                    class="absolute bottom-3 right-3 px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-stone-100">
+                                    <span
+                                        class="text-sm font-black text-stone-900">€{{ number_format($item->price, 2) }}</span>
+                                </div>
+                            </div>
+
+                            {{-- تفاصيل الطبق --}}
+                            <div class="p-5 flex flex-col flex-1">
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-black text-stone-900 mb-1.5 leading-snug">
+                                        {{ $item->localized_name }}
+                                    </h4>
+                                    <p class="text-xs text-stone-500 leading-relaxed line-clamp-2 mb-3">
+                                        {{ $item->localized_description }}
+                                    </p>
+
+                                    {{-- مسببات الحساسية --}}
+                                    @if (!empty($item->allergens))
+                                        <div class="flex flex-wrap gap-1 mb-3">
+                                            @foreach (is_array($item->allergens) ? $item->allergens : json_decode($item->allergens, true) as $allergen)
+                                                <span
+                                                    class="text-[9px] font-bold px-2 py-0.5 bg-stone-100 text-stone-600 rounded-md border border-stone-200">
+                                                    {{ $allergen }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+
+                                {{-- زر السلة الذكي --}}
+                                <div class="pt-4 border-t border-stone-100 mt-auto">
+                                    @if (!$inCart)
+                                        <span wire:loading wire:target="addToCart({{ $item->id }})"
+                                            class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+
+                                        <button type="button" wire:click="addToCart({{ $item->id }})"
+                                            class="w-full py-3 bg-stone-900 hover:bg-amber-600 text-white font-bold rounded-xl text-sm transition-all duration-300 flex items-center justify-center gap-2 group-hover:shadow-lg">
+
+                                            <span>🛒</span>
+                                            <span>{{ __('messages.menu.addToCart') ?? 'أضف إلى السلة' }}</span>
+                                        </button>
+                                    @else
+                                        <div
+
+                                            class="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-xl p-1">
+
+                                            <button type="button" wire:click="updateQuantity({{ $item->id }}, -1)"
+                                                class="w-9 h-9 rounded-lg bg-white text-stone-900 hover:bg-red-50 hover:text-red-600 flex items-center justify-center font-bold text-lg shadow-sm transition-colors">
+                                                −
+                                            </button>
+
+
+                                            {{-- 1. زر الحذف الكامل من السلة --}}
+                                            <button type="button" wire:click="removeFromCart({{ $item->id }})"
+                                                wire:loading.attr="disabled"
+                                                wire:target="removeFromCart({{ $item->id }})"
+                                                class="w-9 h-9 rounded-lg bg-white text-red-500 hover:bg-red-100 hover:text-red-600 flex items-center justify-center shadow-sm transition-all disabled:opacity-50 disabled:cursor-wait"
+                                                title="حذف الطبق نهائياً من السلة">
+
+                                                <span wire:loading.remove
+                                                    wire:target="removeFromCart({{ $item->id }})">🗑️</span>
+                                                <span wire:loading wire:target="removeFromCart({{ $item->id }})"
+                                                    class="w-4 h-4 border-2 border-red-500/30 border-t-red-600 rounded-full animate-spin"></span>
+                                            </button>
+                                            <span
+                                                class="font-black text-stone-900 text-base w-8 text-center">{{ $cartQty }}</span>
+                                            <button type="button" wire:click="updateQuantity({{ $item->id }}, 1)"
+                                                class="w-9 h-9 rounded-lg bg-amber-500 text-white hover:bg-amber-600 flex items-center justify-center font-bold text-lg shadow-sm transition-colors">
+                                                +
+                                            </button>
+                                        </div>
+                                    @endif
+                                </div>
+                                {{-- زر السلة الذكي مع تحميل مخصص لكل زر على حدة --}}
+
+
+                            </div>
+                        </div>
+                    @empty
+                        <div
+                            class="col-span-full text-center py-16 bg-stone-50 rounded-3xl border border-dashed border-stone-300">
+                            <div class="text-5xl mb-3">🍽️</div>
+                            <h3 class="text-lg font-bold text-stone-700">لا توجد أطباق في هذا القسم حالياً</h3>
+                            <p class="text-sm text-stone-500">يرجى اختيار قسم آخر أو العودة لاحقاً</p>
+                        </div>
+                    @endforelse
+                </div>
+
+
+            </main>
+        </div>
+
+        إضافة CSS لإخفاء شريط التمرير في الجوال مع الحفاظ على وظيفته
+        <style>
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .no-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        </style>
+
+
     </div>
 
     {{-- 4. الشريط العائم: سلة الأطباق     --}}
@@ -298,19 +448,14 @@
                                     class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513] resize-none"></textarea>
                             </div>
 
-                                                     <div>
+                            <div>
                                 <label class="block text-xs font-bold text-stone-700 mb-1">عدد الأشخاص *</label>
-                                <input    type="number" 
-    wire:model="party_size" 
-    label="عدد الأشخاص" 
-    min="1" 
-    max="20"
-    required
-                                   
+                                <input type="number" wire:model="party_size" label="عدد الأشخاص" min="1"
+                                    max="20" required
                                     class="w-full px-3 py-2 rounded-xl bg-white border border-stone-200 text-xs outline-hidden focus:border-[#E07513]">
                             </div>
 
- 
+
 
                             <div
                                 class="bg-[#FAF4ED] p-3 rounded-xl border border-[#E07513]/25 flex justify-between font-black text-sm text-[#2C0D0A]">
