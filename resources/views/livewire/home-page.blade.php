@@ -1,10 +1,11 @@
 {{-- resources/views/livewire/home-page.blade.php --}}
 <div class="space-y-0 text-right font-['Tajawal',sans-serif]" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 
-    {{-- 1. HERO SECTION: الترحيب بالضيافة اليمانية وأصالة المندي الملكي --}}
+    {{-- 1. HERO SECTION--}}
     <section id="home" class="relative min-h-[92vh] flex items-center justify-center bg-gradient-to-b from-[#240B08] via-[#1D0806] to-[#2B0E0A] text-white py-20 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-[#E07513]/30">
 
         {{-- خلفية جمالية ونقوش إسلامية --}}
+
         <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#E07513_1.5px,transparent_1.5px)] [background-size:24px_24px] pointer-events-none"></div>
         <div class="absolute top-1/4 -right-24 w-96 h-96 bg-[#E07513]/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute bottom-12 -left-24 w-96 h-96 bg-[#B85709]/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -13,44 +14,44 @@
 
             {{-- بادج الترحيب التراثي --}}
             <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/10 backdrop-blur-md border border-[#E07513]/40 text-amber-300 text-xs sm:text-sm font-bold shadow-xl">
-                <span>✨</span>
-                <span>{{ __('messages.home.greetingBadge') ?? 'حياكم الله وبياكم في دار الكرم والأصالة' }}</span>
+                  <x-lucide-sparkles class="w-4 h-4 text-amber-300" />
+                <span>{{ __('messages.home.greetingBadge') }}</span>
             </div>
 
             {{-- العنوان الملكي البارز --}}
             <div class="space-y-2">
                 <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight sm:leading-none text-white drop-shadow-lg">
-                    <span>{{ __('messages.home.heroTitle') ?? 'المذاق الملكي للمندي اليماني' }}</span>
+                    <span>{{ __('messages.home.heroTitle') }}</span>
                     <br />
                     <span class="bg-gradient-to-r from-[#E07513] via-[#F6AA58] to-[#E07513] bg-clip-text text-transparent drop-shadow-sm font-extrabold">
-                        {{ __('messages.brand.slogan') ?? 'The Origin Of Mandi  ' }}
+                        {{ __('messages.brand.slogan')  }}
                     </span>
                 </h1>
             </div>
 
-            {{-- النص الوصفي التراثي --}}
+            {{-- النص الوصفي   --}}
             <p class="text-stone-300 text-sm sm:text-lg max-w-3xl mx-auto leading-relaxed font-normal">
-                {{ __('messages.home.heroSubtitle') ?? 'على نار حطب السمر وبأسرار البهارات اليافعية والحضرمية المتوارثة منذ مئات السنين.. نقدم لكم في قلب أمستردام تجربة طعام استثنائية تأسر الحواس.' }}
+                {{ __('messages.home.heroSubtitle') }}
             </p>
 
             {{-- أزرار الإجراءات السريعة (CTA) --}}
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
                 <a href="#reservation" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#E07513] via-[#E87E1C] to-[#B85709] hover:from-[#cb660a] hover:to-[#994303] text-white font-extrabold rounded-2xl shadow-xl shadow-[#E07513]/30 hover:shadow-2xl hover:shadow-[#E07513]/45 transition-all flex items-center justify-center gap-3 text-base hover:-translate-y-0.5">
-                    <span>📅</span>
-                    <span>{{ __('messages.home.ctaReserve') ?? 'احجز طاولتك التفاعلية' }}</span>
+                      <x-lucide-calendar-check class="w-5 h-5" />
+                    <span>{{ __('messages.home.ctaReserve')  }}</span>
                 </a>
 
                 <a href="#menu_with_cart" class="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/15 text-white font-bold rounded-2xl border border-white/25 hover:border-white/45 transition-all flex items-center justify-center gap-3 text-base backdrop-blur-md">
-                    <span>🍽️</span>
-                    <span>{{ __('messages.home.ctaMenu') ?? 'استعرض القائمة الملكية' }}</span>
+                    <x-lucide-utensils class="w-5 h-5" />
+                    <span>{{ __('messages.home.ctaMenu')  }}</span>
                 </a>
             </div>
 
             {{-- شريط الضيافة المجانية --}}
             <div class="pt-4 max-w-xl mx-auto">
                 <div class="bg-[#E07513]/15 border border-[#E07513]/30 rounded-2xl py-2.5 px-4 flex items-center justify-center gap-2.5 text-xs text-amber-200 font-semibold shadow-inner">
-                    <span>☕</span>
-                    <span>{{ __('messages.home.hospitalityNote') ?? 'خدمة الضيافة والشاي العدني مجاناً لجميع الضيوف' }}</span>
+                      <x-lucide-flame class="w-4 h-4" />
+                    <span>{{ __('messages.home.hospitalityNote')   }}</span>
                 </div>
             </div>
 
@@ -58,64 +59,25 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 max-w-4xl mx-auto text-stone-200">
                 <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
                     <div class="text-2xl sm:text-3xl font-black text-[#E07513]">+25</div>
-                    <div class="text-[11px] text-stone-300 font-medium mt-1" > <span>{{ __('messages.home.stats.years.label') ?? 'A year’s experience in Al-Mandi'}}</span></div>
+                    <div class="text-[11px] text-stone-300 font-medium mt-1" > <span>{{ __('messages.home.stats.years.label')  }}</span></div>
                 </div>
                 <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
                     <div class="text-2xl sm:text-3xl font-black text-[#E07513]">100%</div>
-                    <div class="text-[11px] text-stone-300 font-medium mt-1"><span>{{ __('messages.home.stats.halal.label') ?? 'Fresh, halal meat from the local council, delivered daily'}}</span></div>
+                    <div class="text-[11px] text-stone-300 font-medium mt-1"><span>{{ __('messages.home.stats.halal.label')  }}</span></div>
                 </div>
                 <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
                     <div class="text-2xl sm:text-3xl font-black text-[#E07513]">+18</div>
-                    <div class="text-[11px] text-stone-300 font-medium mt-1"><span>{{ __('messages.home.stats.halal.label') ?? 'A rare and distinctive Yemeni spice'}}</span> </div>
+                    <div class="text-[11px] text-stone-300 font-medium mt-1"><span>{{ __('messages.home.stats.halal.label') }}</span> </div>
                 </div>
                 <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
                     <div class="text-2xl sm:text-3xl font-black text-[#E07513]">4.9★</div>
-                    <div class="text-[11px] text-stone-300 font-medium mt-1"><span>{{ __('messages.home.stats.rating.label') ?? 'Guest and visitor satisfaction survey'}}</span></div>
+                    <div class="text-[11px] text-stone-300 font-medium mt-1"><span>{{ __('messages.home.stats.rating.label')  }}</span></div>
                 </div>
             </div>
 
         </div>
     </section>
 
-    {{-- 2. PILLARS SECTION: أركان الأصالة اليمانية الأربعة --}}
-    <section class="py-20 bg-[#FDFBF7] text-[#2C1810] relative overflow-hidden border-b border-[#E8DFD3]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="text-center max-w-3xl mx-auto space-y-3 mb-14">
-                <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#E07513]/10 text-[#E07513] text-xs font-bold">
-                    <span>🔥</span>
-                    <span>{{ __('messages.home.pillars.badge') ?? 'The essence of Yemeni authenticity at our restaurant'}}</span>
-                </div>
-
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-[#2C0D0A]">
-                                       <span>{{ __('messages.home.pillars.badge') ?? 'The essence of Yemeni authenticity at our restaurant'}}</span>
-                </h2>
-
-                <p class="text-stone-600 text-xs sm:text-sm">
-                    نلتزم بأدق تفاصيل الطهي التقليدي دون أي مساومة على الجودة والنكهة
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {{-- ركن 1: براميل الحطب --}}
-                <div class="bg-white rounded-3xl p-6 border border-[#E8DFD3] hover:border-[#E07513]/40 shadow-xs hover:shadow-xl transition-all duration-300 space-y-4 group">
-                    <div class="w-14 h-14 rounded-2xl bg-[#FAF4ED] text-[#E07513] border border-[#E07513]/20 flex items-center justify-center text-2xl group-hover:bg-[#E07513] group-hover:text-white transition-colors">
-                        🪵
-                    </div>
-                    <h3 class="text-base font-extrabold text-[#2C0D0A] group-hover:text-[#E07513] transition-colors">
-                        <span>{{ __('messages.home.pillars.items.wood.title') ?? 'Underground wood-fired barrels'}}</span>
-                    </h3>
-                    <p class="text-xs text-stone-600 leading-relaxed">
-                        <span>{{ __('messages.home.pillars.items.wood.title') ?? 'Slow-cooking meat and rice in airtight clay barrels for over 4 hours, until the meat is tenderised and infused with a delightful smoky flavour.'}}</span>
-                    </p>
-                </div>
-
-
-
-            </div>
-
-        </div>
-    </section>
 
 
 

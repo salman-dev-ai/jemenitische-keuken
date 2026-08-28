@@ -5,8 +5,7 @@
         <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
             <div
                 class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-700 text-xs font-bold border border-amber-500/20">
-                <span>✨</span>
-                <span>{{ __('messages.menu.badge') ?? 'الأصناف الملكية' }}</span>
+                <x-lucide-sparkles class="w-4 h-4" /> <span>{{ __('messages.menu.badge') ?? 'الأصناف الملكية' }}</span>
             </div>
             <h2 class="text-3xl sm:text-5xl font-black text-stone-900 tracking-tight">
                 {{ __('messages.menu.title') ?? 'أقسام المأكولات اليمنية التراثية' }}
@@ -33,7 +32,8 @@
                         @else
                             <div
                                 class="w-full h-full flex items-center justify-center bg-stone-100 text-stone-400 text-4xl">
-                                🍽️</div>
+                                <x-lucide-utensils class="w-8 h-8 text-stone-400" />
+                            </div>
                         @endif
                         {{-- تدرج لوني لضمان قراءة النص --}}
                         <div
@@ -78,9 +78,18 @@
                     ? 'bg-[#2C0D0A] text-white shadow-md'
                     : 'text-stone-600 hover:bg-stone-50 hover:text-[#2C0D0A]' }}">
                         <div class="flex items-center gap-3">
-                            <span class="text-lg">{{ $selectedCategorySlug === 'all' ? '👑' : '🍽️' }}</span>
-                            <span class="font-bold text-sm">{{ __('messages.menu.all') ?? 'جميع الأصناف' }}</span>
+                            @if ($selectedCategorySlug === 'all')
+                                <x-lucide-layout-grid class="h-5 w-5" />
+                            @else
+                                <x-lucide-circle class="h-2 w-2 fill-current" />
+                            @endif
+
+                            <span class="text-sm font-bold">
+                                {{ __('messages.menu.all') }}
+                            </span>
                         </div>
+
+
                     </button>
 
                     <div class="h-px bg-stone-100 my-1"></div>
@@ -97,8 +106,12 @@
                         : 'text-stone-600 hover:bg-stone-50 hover:text-[#2C0D0A]' }}">
 
                             <div class="flex items-center gap-3">
-                                <span class="text-lg">{{ $isSelected ? '✨' : '🔸' }}</span>
-                                <span class="font-bold text-sm">{{ $cat->localized_name }}</span>
+                                @if ($isSelected)
+                                    <x-lucide-check class="h-4 w-4" />
+                                @else
+                                    <x-lucide-circle class="h-2 w-2 fill-current" />
+                                @endif <span
+                                    class="font-bold text-sm">{{ $cat->localized_name }}</span>
                             </div>
 
                             {{-- شارة عدد الأطباق --}}
@@ -152,9 +165,9 @@
                 <div class="hidden lg:flex items-center justify-between mb-6 pb-4 border-b border-stone-200">
                     <h3 class="text-xl font-black text-[#2C0D0A] flex items-center gap-2">
                         @if ($selectedCategorySlug === 'all')
-                            <span>👑</span> جميع الأطباق
+                            <x-lucide-crown class="w-5 h-5" />جميع الأطباق
                         @else
-                            <span>🍽️</span>
+                           <x-lucide-utensils class="w-5 h-5" />
                             {{ $this->categories->firstWhere('slug', $selectedCategorySlug)?->localized_name ?? 'الأطباق' }}
                         @endif
                     </h3>
@@ -185,7 +198,7 @@
                                 @else
                                     <div
                                         class="w-full h-full flex items-center justify-center bg-stone-50 text-stone-300 text-5xl">
-                                        🍲</div>
+                                        <x-lucide-soup class="w-10 h-10 text-stone-300" /></div>
                                 @endif
 
                                 {{-- شارات الطبق --}}
@@ -193,13 +206,13 @@
                                     @if ($item->is_featured)
                                         <span
                                             class="px-2.5 py-1 bg-amber-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
-                                            ⭐ مميز
+                                            	<x-lucide-star class="w-3 h-3 fill-white" /> مميز
                                         </span>
                                     @endif
                                     @if ($item->is_spicy)
                                         <span
                                             class="px-2.5 py-1 bg-red-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
-                                            🌶️ حار
+                                            <x-lucide-flame class="w-3 h-3" /> حار
                                         </span>
                                     @endif
                                 </div>
@@ -244,7 +257,7 @@
                                         <button type="button" wire:click="addToCart({{ $item->id }})"
                                             class="w-full py-3 bg-stone-900 hover:bg-amber-600 text-white font-bold rounded-xl text-sm transition-all duration-300 flex items-center justify-center gap-2 group-hover:shadow-lg">
 
-                                            <span>🛒</span>
+                                            <x-lucide-shopping-cart class="w-4 h-4" />
                                             <span>{{ __('messages.menu.addToCart') ?? 'أضف إلى السلة' }}</span>
                                         </button>
                                     @else
@@ -265,7 +278,7 @@
                                                 title="حذف الطبق نهائياً من السلة">
 
                                                 <span wire:loading.remove
-                                                    wire:target="removeFromCart({{ $item->id }})">🗑️</span>
+                                                    wire:target="removeFromCart({{ $item->id }})"><x-lucide-trash-2 class="w-4 h-4" /></span>
                                                 <span wire:loading wire:target="removeFromCart({{ $item->id }})"
                                                     class="w-4 h-4 border-2 border-red-500/30 border-t-red-600 rounded-full animate-spin"></span>
                                             </button>
@@ -286,7 +299,7 @@
                     @empty
                         <div
                             class="col-span-full text-center py-16 bg-stone-50 rounded-3xl border border-dashed border-stone-300">
-                            <div class="text-5xl mb-3">🍽️</div>
+                            <div class="text-5xl mb-3">	<x-lucide-utensils class="w-4 h-4" /></div>
                             <h3 class="text-lg font-bold text-stone-700">لا توجد أطباق في هذا القسم حالياً</h3>
                             <p class="text-sm text-stone-500">يرجى اختيار قسم آخر أو العودة لاحقاً</p>
                         </div>
@@ -297,7 +310,6 @@
             </main>
         </div>
 
-        إضافة CSS لإخفاء شريط التمرير في الجوال مع الحفاظ على وظيفته
         <style>
             .no-scrollbar::-webkit-scrollbar {
                 display: none;
@@ -322,7 +334,7 @@
                     <div class="relative">
                         <div
                             class="w-11 h-11 rounded-2xl bg-[#E07513] text-white flex items-center justify-center font-bold shadow-md text-lg">
-                            🛒
+                          <x-lucide-shopping-bag class="w-6 h-6" />
                         </div>
                         <span
                             class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber-400 text-stone-950 text-[11px] font-black flex items-center justify-center">
@@ -347,7 +359,6 @@
     @endif
 
     {{-- 5. نافذة السلة وتأكيد الحجز الفعلي (Cart Drawer / Checkout Modal) --}}
-    {{-- 5. نافذة السلة وتأكيد الحجز الفعلي (Cart Drawer / Checkout Modal) --}}
     @if ($isCartModalOpen)
         <div class="fixed inset-0 z-50 overflow-hidden" dir="rtl">
             {{-- خلفية معتمة --}}
@@ -364,7 +375,7 @@
                         <div class="flex items-center gap-3">
                             <div
                                 class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-xl">
-                                👑</div>
+                                <x-lucide-crown class="w-5 h-5" /></div>
                             <div>
                                 <h3 class="font-black text-base text-white">سلة الأطباق وتثبيت الحجز</h3>
                                 <p class="text-xs text-amber-200">{{ $this->totalCartCount }} أصناف مختارة</p>
@@ -386,7 +397,7 @@
                         <div>
                             <h4
                                 class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                <span>🍽️</span> الأطباق المختارة للوليمة
+                                <span><x-lucide-utensils class="w-4 h-4" /></span> الأطباق المختارة للوليمة
                             </h4>
                             <div class="space-y-3">
                                 @foreach ($cart as $id => $cartItem)
@@ -409,7 +420,7 @@
                                                 class="w-7 h-7 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
                                                 title="حذف الطبق">
                                                 <span wire:loading.remove
-                                                    wire:target="removeFromCart({{ $id }})">🗑️</span>
+                                                    wire:target="removeFromCart({{ $id }})"><x-lucide-trash-2 class="w-3 h-3" /></span>
                                                 <span wire:loading wire:target="removeFromCart({{ $id }})"
                                                     class="w-3 h-3 border border-red-500 border-t-transparent rounded-full animate-spin"></span>
                                             </button>
@@ -445,7 +456,7 @@
                         <form wire:submit="checkout" class="space-y-4 pt-4 border-t border-stone-200">
                             <h4
                                 class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-1 flex items-center gap-2">
-                                <span>📋</span> بيانات الحجز والتواصل
+                                <span>	<x-lucide-clipboard-list class="w-4 h-4" /></span> بيانات الحجز والتواصل
                             </h4>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -466,8 +477,8 @@
 
                                 <div>
                                     <label class="block text-xs font-bold text-stone-700 mb-1.5">البريد الإلكتروني
-                                        *</label>
-                                    <input type="email" wire:model="customer_email" required
+                                        </label>
+                                    <input type="email" wire:model="customer_email"
                                         placeholder="example@domain.com"
                                         class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
                                 </div>
@@ -496,7 +507,7 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">عدد الأشخاص *</label>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">عدد الأشخاص  </label>
                                     <input type="number" wire:model="party_size" min="1" max="50"
                                         required
                                         class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
@@ -526,7 +537,7 @@
                                     class="w-full py-4 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-xl text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
 
                                     {{-- حالة العرض العادية --}}
-                                    <span wire:loading.remove>تأكيد الحجز وتلقي الإشعار عبر واتساب 👑</span>
+                                    <span wire:loading.remove>تأكيد الحجز وتلقي الإشعار عبر واتساب <x-lucide-crown class="w-5 h-5" /></span>
 
                                     {{-- حالة معالجة الطلب والإرسال الخلفي لـ Meta --}}
                                     <span wire:loading
