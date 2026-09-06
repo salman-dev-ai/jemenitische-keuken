@@ -19,7 +19,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. زرع الإعدادات العامة للمطعم
-        $this->call(RestaurantSeeder::class);
+        $this->call([
+            RestaurantSeeder::class,
+            RolesAndPermissionsSeeder::class
+        ]);
 
         // 2. زرع 5 أقسام منيو، وكل قسم يحتوي على 6 أطباق
         MenuCategory::factory(5)
@@ -48,5 +51,9 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         });
+
+
+
+
     }
 }

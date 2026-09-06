@@ -66,10 +66,10 @@ class User extends Authenticatable // implements MustVerifyEmail
     {
         return  $this->hasAnyRole([
 
-            'super-admin',
+            'super_admin',
             'admin',
-            'manager',
-            'admin',
+            'content_manager',
+
 
         ]);
     }
