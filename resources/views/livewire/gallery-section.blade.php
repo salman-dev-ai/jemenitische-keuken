@@ -42,7 +42,7 @@
         <div class="mx-auto mb-10 max-w-3xl space-y-3 text-center">
             <div
                 class="inline-flex items-center gap-2 rounded-full border border-[#E07513]/40 bg-[#E07513]/20 px-4 py-1.5 text-xs font-bold text-amber-300">
-                <span aria-hidden="true">📸</span>
+                <span aria-hidden="true"><x-lucide-camera class="w-4 h-4" /></span>
                 <span>{{ __('messages.gallery.badge') }}</span>
             </div>
 

@@ -7,7 +7,7 @@
         <div class="text-center max-w-3xl mx-auto space-y-3 mb-14">
             <div
                 class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E07513]/10 text-[#E07513] text-xs font-bold">
-                <span>✨</span>
+                <span><x-lucide-send class="w-4 h-4" /></span>
                 <span>{{ __('messages.contact.badge') ?? 'Get in touch – we look forward to welcoming you' }}</span>
             </div>
 
@@ -61,10 +61,23 @@
                             class="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 text-xs resize-none"></textarea>
                     </div>
 
-                    <button type="submit"
-                        class="w-full py-3.5 bg-gradient-to-r from-[#E07513] to-[#B85709] text-white font-extrabold rounded-xl text-xs sm:text-sm shadow-md">
-                        <span>{{ __('messages.contact.form.submit') }}</span>
+                    <button type="submit" wire:loading.attr="disabled" class="... disabled:opacity-60">
+                        <span wire:loading.remove class="flex items-center justify-center gap-2">
+                            <x-lucide-send class="w-4 h-4" />
+                            <span>{{ __('messages.contact.form.submit') }}</span>
+                        </span>
+                        <wire:loading class="flex items-center justify-center gap-1">
+                            <svg class="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                <circle class="opacity-25"
+                                    stroke-width="2" />
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+
+                            </svg>
+                            <span>جاري الإرسال...</span>
+                        </wire:loading>
+
                     </button>
+
                 </form>
             </div>
 
@@ -74,13 +87,16 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="bg-white p-5 rounded-3xl border border-[#E8DFD3] shadow-xs space-y-2">
                         <h4 class="font-extrabold text-sm text-[#2C0D0A]">
-                            <span>{{ __('messages.contact.details.address') }}</span></h4>
+                            <span>{{ __('messages.contact.details.address') }}</span>
+                        </h4>
                         <p class="text-xs text-stone-600">
-                            <span>{{ __('messages.contact.details.addressValue') }}</span></p>
+                            <span>{{ __('messages.contact.details.addressValue') }}</span>
+                        </p>
                     </div>
                     <div class="bg-white p-5 rounded-3xl border border-[#E8DFD3] shadow-xs space-y-2">
                         <h4 class="font-extrabold text-sm text-[#2C0D0A]">
-                            <span>{{ __('messages.contact.details.hours') }}</span></h4>
+                            <span>{{ __('messages.contact.details.hours') }}</span>
+                        </h4>
                         <p class="text-xs text-stone-600">{{ __('messages.contact.details.hoursValue') }}</p>
                     </div>
                 </div>

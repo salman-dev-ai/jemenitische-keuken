@@ -339,14 +339,14 @@ $apiUrl = "https://facebook.com";
 $cleanPhone = preg_replace('/[^0-9]/', '', $validated['customer_phone']);
 
 // ضرب الـ API الرسمي لشركة Meta خلف الكواليس
-\Illuminate\Support\Facades\Http::withToken($token)->post($apiUrl, [
-    'messaging_product' => 'whatsapp',
-    'to' => $cleanPhone,
-    'type' => 'text',
-    'text' => [
-        'body' => $whatsappMessage
-    ]
-]);
+// \Illuminate\Support\Facades\Http::withToken($token)->post($apiUrl, [
+//     'messaging_product' => 'whatsapp',
+//     'to' => $cleanPhone,
+//     'type' => 'text',
+//     'text' => [
+//         'body' => $whatsappMessage
+//     ]
+// ]);
     // 5. تنظيف حالة السلة وإغلاق الـ Modal وتثبيت رسالة النجاح لمعايير Livewire 4
     $this->clearCart();
     $this->isCartModalOpen = false;

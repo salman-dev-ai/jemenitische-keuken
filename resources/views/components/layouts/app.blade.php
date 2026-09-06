@@ -18,9 +18,8 @@
 </head>
 <body class="font-['Tajawal'] bg-[#FDFBF7] text-[#2C1810] antialiased selection:bg-[#E07513] selection:text-white">
 
-    <!-- شريط الملاحة الرئيسي الفاخر (الشعار في المنتصف) -->
-    {{-- resources/views/components/navigation.blade.php --}}
-<header
+    <!-- شريط   الرئيسي الفاخر (الشعار في المنتصف) -->
+ <header
     x-data="{
         mobileOpen: false,
         languageOpen: false,
@@ -47,7 +46,6 @@
                 <nav class="hidden items-center gap-5 text-sm font-bold text-stone-200 lg:flex xl:gap-6" aria-label="{{ __('messages.nav.primary') }}">
                     <a href="#home" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.home') }}</a>
                     <a href="#about" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.about') }}</a>
-                    <a href="#menu" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.menu') }}</a>
                 </nav>
 
                    <!-- زر تبديل اللغات (العربية / English / Nederlands) -->
@@ -89,7 +87,9 @@
             <div class="flex min-w-0 items-center justify-end gap-2 sm:gap-3 lg:gap-6">
                 <nav class="hidden items-center gap-5 text-sm font-bold text-stone-200 lg:flex xl:gap-6" aria-label="{{ __('messages.nav.secondary') }}">
                     <a href="#gallery" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.gallery') }}</a>
-                    <a href="#contact" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.contact') }}</a>
+                    <a href="#menu" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.menu') }}</a>
+
+                    {{-- <a href="#contact" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.contact') }}</a> --}}
                 </nav>
 
                 <a
@@ -321,14 +321,14 @@
     </div>
 
     {{-- Watermark kept decorative and hidden on narrow screens to avoid visual noise. --}}
-    <img
-        src="{{ asset('images/logo.jpg') }}"
-        alt=""
-        aria-hidden="true"
-        width="550"
-        height="550"
-        class="pointer-events-none absolute -bottom-24 start-1/2 -z-10 hidden w-[34rem] max-w-none -translate-x-1/2 select-none opacity-[0.035] grayscale invert lg:block"
-    >
+ <img
+    src="{{ asset('images/logo.jpg') }}"
+    alt=""
+    aria-hidden="true"
+    width="550"
+    height="550"
+    class="pointer-events-none absolute -bottom-24 start-1/2 -z-10 block w-[24rem] max-w-none -translate-x-1/2 select-none opacity-[0.035] grayscale invert sm:w-[28rem] lg:w-[34rem]"
+>
 </footer>
 
 

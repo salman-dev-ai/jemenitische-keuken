@@ -75,7 +75,7 @@ Use the `casts()` method (or `$casts` property following project convention) for
 protected function casts(): array
 {
     return [
-        'is_available' => 'boolean',
+        'is_active' => 'boolean',
         'metadata' => 'array',
         'total' => 'decimal:2',
     ];

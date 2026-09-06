@@ -7,10 +7,11 @@
     <div class="mb-8 border-b border-stone-100 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <div class="flex items-center gap-2 mb-1.5">
-                <span class="w-8 h-8 rounded-lg bg-[#D47716]/10 text-[#D47716] flex items-center justify-center font-bold text-sm">🍽️</span>
+                <span class="w-8 h-8 rounded-lg bg-[#D47716]/10 text-[#D47716] flex items-center justify-center font-bold text-sm"><x-lucide-calendar-days class="w-5 h-5" /></span>
                 <span class="text-xs font-bold text-[#D47716] tracking-wider uppercase">حجز إلكتروني فوري ومباشر</span>
             </div>
-            <h2 class="text-2xl md:text-3xl font-extrabold text-[#3E1F15] tracking-tight">احجز طاولتك الان!!</h2>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-[#3E1F15] tracking-tight">احجز طاولتك الآن</h2>
+
             <p class="text-stone-500 text-sm mt-1">اختر عدد الضيوف والوقت والموقع المفضل وسنجهز لك الطاولة المثالية.</p>
         </div>
 
@@ -22,7 +23,7 @@
         <div class="bg-gradient-to-br from-[#3E1F15] to-[#24110B] text-white rounded-3xl p-6 md:p-8 shadow-2xl mb-8 relative overflow-hidden">
             <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/10">
                 <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-2xl font-bold shadow-lg">✓</div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-2xl font-bold shadow-lg">	<x-lucide-check-circle class="w-8 h-8" /></div>
                     <div>
                         <h4 class="font-extrabold text-lg text-white">{{ $successMessage }}</h4>
                         <p class="text-xs text-stone-300">أهلاً بك يا <strong>{{ $customer_name }}</strong>، تم تأكيد حجزك بنجاح.</p>
@@ -57,7 +58,7 @@
     {{-- رسالة التنبيه في حالة وجود خطأ --}}
     @if ($errorMessage)
         <div class="bg-rose-50 border-r-4 border-rose-500 p-4 rounded-2xl mb-6 text-rose-800 text-sm flex items-center gap-3">
-            <span class="text-rose-600 text-xl font-bold">⚠️</span>
+            <span class="text-rose-600 text-xl font-bold">	<x-lucide-triangle-alert class="w-5 h-5" /></span>
             <div>
                 <strong class="font-bold block">تنبيه في إدخال البيانات</strong>
                 <span>{{ $errorMessage }}</span>
@@ -126,7 +127,7 @@
         {{-- الخطوة 2: بيانات العميل والطلبات الخاصة --}}
         <div class="space-y-4 pt-4 border-t border-stone-100">
             <div class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-[#3E1F15]">
-                <span class="w-5 h-5 rounded-full bg-[#3E1F15] text-white flex items-center justify-center text-[10px]">3</span>
+                <span class="w-5 h-5 rounded-full bg-[#3E1F15] text-white flex items-center justify-center text-[10px]">2</span>
                 <span>بيانات التواصل والطلبات الخاصة</span>
             </div>
 
@@ -158,7 +159,7 @@
             <button type="submit" wire:loading.attr="disabled"
                     class="w-full bg-gradient-to-r from-[#D47716] via-[#DE8325] to-[#B8630F] hover:from-[#c2680e] hover:to-[#9a4f08] text-white font-extrabold py-4 px-6 rounded-2xl shadow-xl shadow-[#D47716]/20 hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50">
                 <span wire:loading.remove class="flex items-center gap-2">
-                    <span>✨</span>
+                    <span>	<x-lucide-send class="w-4 h-4" /></span>
                     <span>إرسال وتأكيد الحجز </span>
                 </span>
                 <span wire:loading class="flex items-center gap-2">

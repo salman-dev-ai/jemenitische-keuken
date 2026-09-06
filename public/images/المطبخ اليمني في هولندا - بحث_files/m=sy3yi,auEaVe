@@ -1,0 +1,10 @@
+//# allFunctionsCalledOnLoad
+loaded_h_0(function(_){var window=this;
+_.PHh=_.y("auEaVe",[]);
+_.v("auEaVe");
+var VHh=class{constructor(){this.scrollTop=0}},WHh=class extends _.Ms{constructor(a){super(a.La);this.ka=this.onScroll=null;this.wa();this.oa()}Zj(a){this.notify("DYAlVd",a);this.trigger("frjz1d",a)}IY(){return this.getRoot().el().scrollTop}rEa(){var a=this.getRoot().el().getBoundingClientRect();a.height-=_.RHh(_.xn(this.getRoot().el(),"--jHHhxe"));return a}async scrollTo(a,b){this.getRoot().el().scrollTo({top:a,behavior:b?"smooth":"auto"})}dispose(){super.dispose();this.onScroll&&this.getRoot().el().removeEventListener("scroll",
+this.onScroll);this.ka&&window.removeEventListener("resize",this.ka)}wa(){var a=_.Ts(this,VHh).measure(b=>{b.scrollTop=this.getRoot().el().scrollTop}).Fc(b=>{this.Zj(b.scrollTop)}).Pq().build();this.onScroll=()=>a(new VHh);this.getRoot().el().addEventListener("scroll",this.onScroll);a(new VHh)}oa(){this.ka=_.Yn(()=>{this.notify("agoMJf")},100);window.addEventListener("resize",this.ka)}};WHh.prototype.$wa$Gnv6pb=function(){return this.oa};WHh.prototype.$wa$L68nL=function(){return this.wa};
+WHh.prototype.$wa$A5GSIb=function(){return this.dispose};WHh.prototype.$wa$uAM5ec=function(){return this.scrollTo};WHh.prototype.$wa$AJQ09b=function(){return this.rEa};WHh.prototype.$wa$AkCrjc=function(){return this.IY};_.Os(_.PHh,WHh);
+_.x();
+});
+// Google Inc.

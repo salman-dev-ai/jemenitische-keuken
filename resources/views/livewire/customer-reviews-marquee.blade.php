@@ -6,8 +6,8 @@
         {{-- رأس القسم --}}
         <div class="text-center max-w-3xl mx-auto space-y-3 mb-12">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-amber-300 text-xs font-bold shadow-md">
-                <span>⭐</span>
-                <span>{{ __('messages.reviews.badge') ?? 'آراء وشهادات الضيوف' }}</span>
+                <span><x-lucide-star class="w-4 h-4 fill-amber-400 text-amber-400" /></span>
+                <span>{{ __('messages.                     .badge')  }}</span>
             </div>
 
             <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
@@ -28,42 +28,42 @@
         <div class="absolute top-0 bottom-0 right-0 w-24 sm:w-40 bg-gradient-to-l from-[#250B08] to-transparent z-10 pointer-events-none"></div>
 
         <div class="flex gap-6 w-max animate-marquee hover:[animation-play-state:paused]">
-            @foreach($reviews ?? [] as $rev)
+            {{-- @foreach($reviews ?? [] as $rev) --}}
                 <div class="w-80 sm:w-96 bg-[#32110D]/90 backdrop-blur-md p-6 rounded-3xl border border-[#E07513]/30 shadow-xl flex flex-col justify-between text-right shrink-0 hover:border-[#FFD700] hover:scale-102 transition-all duration-300 select-none">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center text-amber-400 text-xs">⭐⭐⭐⭐⭐</div>
-                            <span class="text-[11px] text-stone-400">{{ $rev['date'] ?? ''}}</span>
+                            {{-- <span class="text-[11px] text-stone-400">{{ $rev['date'] ?? ''}}</span> --}}
                         </div>
 
                         <div class="mb-3">
                             <span class="text-[10px] font-bold text-amber-300 bg-[#E07513]/25 px-2.5 py-0.5 rounded-md border border-[#E07513]/40">
-                                الطلب المفضل: {{ $rev['dish'] ?? ''}}
+                                {{-- الطلب المفضل: {{ $rev['dish'] ?? ''}} --}}
                             </span>
                         </div>
 
-                        {{-- <p class="text-xs sm:text-sm text-stone-200 leading-relaxed font-normal">
-                            "{{ $rev['comment'] ?? ' ' }}"
-                        </p> --}}
+                        <p class="text-xs sm:text-sm text-stone-200 leading-relaxed font-normal">
+                            {{-- "{{ $rev['comment'] ?? ' ' }}" --}}
+                        </p>
                     </div>
 
                     <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
                         <div class="flex items-center gap-2.5">
-                            {{-- <div class="w-9 h-9 rounded-full bg-[#E07513] text-white font-black text-xs flex items-center justify-center">
-                                {{ mb_substr($rev['name'], 0, 1) }}
-                            </div> --}}
-                            {{-- <div class="text-right">
-                                <h4 class="text-xs font-extrabold text-white">{{ $rev['name'] }}</h4>
+                            <div class="w-9 h-9 rounded-full bg-[#E07513] text-white font-black text-xs flex items-center justify-center">
+                                {{-- {{ mb_substr($rev['name'], 0, 1) }} --}}
+                            </div>
+                             <div class="text-right">
+                                {{-- <h4 class="text-xs font-extrabold text-white">{{ $rev['name'] }}</h4> --}}
                                 {{-- <p class="text-[10px] text-stone-400">{{ $rev['location'] }}</p> --}}
-                            {{-- </div> --}} --
+                          </div>
                         </div>
 
                         <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                            ضيف موثق ✓
+                            ضيف موثق <x-lucide-badge-check class="w-3 h-3" />
                         </span>
                     </div>
                 </div>
-            @endforeach
+            {{-- @endforeach --}}
         </div>
     </div>
 </section>

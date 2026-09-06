@@ -8,22 +8,18 @@
         <livewire:reservation-form />
     </section>
 
-{{--
-    <section id="menu" class="py-20">
-        <livewire:menu-categories />
-    </section> --}}
+
 
 
     <section id="gallery" class="py-10">
         <livewire:gallery-section />
     </section>
-
+{{-- 
     <section id="contact_section" class="py-20">
 
-        {{-- <livewire:contact-section /> --}}
-        <livewire:contact-section />
+         <livewire:contact-section />
 
-    </section>
+    </section> --}}
 
     <section id="customer_reviews" class="py-20">
 
