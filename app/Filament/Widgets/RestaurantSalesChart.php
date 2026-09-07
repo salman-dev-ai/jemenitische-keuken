@@ -16,10 +16,11 @@ class RestaurantSalesChart extends ChartWidget
     use HasFiltersSchema;
 
     protected ?string $heading = 'المبيعات';
+    protected static ?int $sort = 2;
 
     protected int|string|array $columnSpan = [
         'default' => 1,
-        'lg' => 2,
+        'lg' => 1,
     ];
 
     // 2. بناء الهيكل الخارجي للفلتر باستخدام مكونات Filament
