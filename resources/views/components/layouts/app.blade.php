@@ -45,7 +45,6 @@
             <div class="flex min-w-0 items-center justify-start gap-2 sm:gap-3 lg:gap-6">
                 <nav class="hidden items-center gap-5 text-sm font-bold text-stone-200 lg:flex xl:gap-6" aria-label="{{ __('messages.nav.primary') }}">
                     <a href="#home" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.home') }}</a>
-                    <a href="#about" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.about') }}</a>
                 </nav>
 
                    <!-- زر تبديل اللغات (العربية / English / Nederlands) -->
@@ -56,15 +55,14 @@
                     </button>
 
                     <div x-show="open" @click.away="open = false" x-cloak class="absolute  mt-2 w-40 rounded-2xl bg-[#260C0A] border border-white/15 shadow-2xl py-1 z-50 text-xs">
-                        <a href="{{ route('lang.switch', 'ar') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20  rounded-2xl  rou hover:text-[#E07513] transition-colors" wire:navigate>
+                        <a href="{{ route('lang.switch', 'ar') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20  rounded-2xl  rou hover:text-[#E07513] transition-colors">
                             <span>🇾🇪</span> <span>العربية</span>
                         </a>
-                        <a href="{{ route('lang.switch', 'nl') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20  rounded-2xl hover:text-[#E07513] transition-colors"  wire:navigate>
+                        <a href="{{ route('lang.switch', 'nl') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20  rounded-2xl hover:text-[#E07513] transition-colors">
                             <span>🇳🇱</span> <span>Nederlands</span>
                         </a>
-                        <a href="{{ route('lang.switch', 'en') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20  rounded-2xl hover:text-[#E07513] transition-colors" wire:navigate>
+                        <a href="{{ route('lang.switch', 'en') }}" class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20  rounded-2xl hover:text-[#E07513] transition-colors">
                             <span>🇬🇧</span> <span>English</span>
-
                         </a>
                     </div>
                 </div>
@@ -102,7 +100,7 @@
                 <button
                     type="button"
                     @click="toggleMobile()"
-                    :aria-expanded="mobileOpen.toString()"
+                    :aria-expanded="mobileOpen"
                     aria-controls="mobile-navigation"
                     class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-black/30 text-white transition-colors hover:bg-[#E07513]/20 focus:outline-none focus:ring-2 focus:ring-[#FFD700] lg:hidden"
                     aria-label="{{ __('messages.nav.toggleMenu') }}"
@@ -125,10 +123,9 @@
         >
             <nav class="grid grid-cols-1 gap-1 sm:grid-cols-2" aria-label="{{ __('messages.nav.mobile') }}">
                 <a href="#home" @click="closeMenus()" class="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold text-stone-200 transition-colors hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.home') }}</a>
-                <a href="#about" @click="closeMenus()" class="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold text-stone-200 transition-colors hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.about') }}</a>
                 <a href="#menu" @click="closeMenus()" class="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold text-stone-200 transition-colors hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.menu') }}</a>
                 <a href="#gallery" @click="closeMenus()" class="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold text-stone-200 transition-colors hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.gallery') }}</a>
-                <a href="#contact" @click="closeMenus()" class="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold text-stone-200 transition-colors hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.contact') }}</a>
+                <a href="#reservation" @click="closeMenus()" class="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold text-stone-200 transition-colors hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.reservation') }}</a>
             </nav>
         </div>
     </div>
@@ -193,24 +190,23 @@
                 </a>
 
                 <p class="mt-6 max-w-sm text-sm leading-7 text-stone-400">
-                    {{ $translate('messages.brand.description', 'نكهات يمنية أصيلة، وضيافة تترك أثراً لا يُنسى.') }}
+                    {{ __('messages.brand.description') ?: 'نكهات يمنية أصيلة، وضيافة تترك أثراً لا يُنسى.' }}
                 </p>
 
                 <div class="mt-6 inline-flex items-center gap-2 rounded-full border border-[#E07513]/25 bg-[#E07513]/10 px-3 py-2 text-xs font-bold text-amber-200">
                     <span class="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]" aria-hidden="true"></span>
-                    <span>{{ $translate('messages.footer.welcome', 'نرحب بكم يومياً') }}</span>
+                    <span>{{ __('messages.footer.welcome') }}</span>
                 </div>
             </div>
 
             {{-- Quick links --}}
             <div>
-                <h2 class="flex items-center gap-3 text-sm font-black tracking-wide text-white">
+                <h3 class="flex items-center gap-3 text-sm font-black tracking-wide text-white">
                     <span class="h-2 w-2 rounded-full bg-[#E07513] shadow-[0_0_12px_rgba(224,117,19,0.8)]" aria-hidden="true"></span>
-                    {{ $translate('messages.footer.quickLinks', 'روابط سريعة') }}
-                </h2>
+                    {{ __('messages.footer.quickLinks') }}
+                </h3>
                 <ul class="mt-5 space-y-3 text-sm">
                     <li><a href="#home" class="inline-flex min-h-8 items-center transition-colors hover:text-[#E07513] focus:text-[#E07513] focus:outline-none">{{ __('messages.nav.home') }}</a></li>
-                    <li><a href="#about" class="inline-flex min-h-8 items-center transition-colors hover:text-[#E07513] focus:text-[#E07513] focus:outline-none">{{ __('messages.nav.about') }}</a></li>
                     <li><a href="#menu" class="inline-flex min-h-8 items-center transition-colors hover:text-[#E07513] focus:text-[#E07513] focus:outline-none">{{ __('messages.nav.menu') }}</a></li>
                     <li><a href="#gallery" class="inline-flex min-h-8 items-center transition-colors hover:text-[#E07513] focus:text-[#E07513] focus:outline-none">{{ __('messages.nav.gallery') }}</a></li>
                     <li><a href="#reservation" class="inline-flex min-h-8 items-center font-bold text-amber-300 transition-colors hover:text-[#FFD700] focus:text-[#FFD700] focus:outline-none">{{ __('messages.nav.reservation') }}</a></li>
@@ -219,10 +215,10 @@
 
             {{-- Contact --}}
             <div>
-                <h2 class="flex items-center gap-3 text-sm font-black tracking-wide text-white">
+                <h3 class="flex items-center gap-3 text-sm font-black tracking-wide text-white">
                     <span class="h-2 w-2 rounded-full bg-[#E07513] shadow-[0_0_12px_rgba(224,117,19,0.8)]" aria-hidden="true"></span>
                     {{ $translate('messages.footer.contact', 'تواصل معنا') }}
-                </h2>
+                </h3>
 
                 <ul class="mt-5 space-y-4 text-sm">
                     @if($address || $city || $postalCode)
@@ -262,10 +258,10 @@
 
             {{-- Hours and action --}}
             <div>
-                <h2 class="flex items-center gap-3 text-sm font-black tracking-wide text-white">
+                <h3 class="flex items-center gap-3 text-sm font-black tracking-wide text-white">
                     <span class="h-2 w-2 rounded-full bg-[#E07513] shadow-[0_0_12px_rgba(224,117,19,0.8)]" aria-hidden="true"></span>
                     {{ $translate('messages.footer.hours', 'ساعات العمل') }}
-                </h2>
+                </h3>
 
                 @if($openingHours)
                     <dl class="mt-5 max-h-44 space-y-2 overflow-y-auto pe-2 text-xs">

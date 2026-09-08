@@ -26,6 +26,19 @@
     --color-accent: var(--color-neutral-800);
     --color-accent-content: var(--color-neutral-800);
     --color-accent-foreground: var(--color-white);
+
+    --animate-marquee: marquee 35s linear infinite;
+    --animate-marquee-rtl: marquee-rtl 35s linear infinite;
+
+    @keyframes marquee {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(calc(-50% - 0.75rem)); }
+    }
+    
+    @keyframes marquee-rtl {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(calc(50% + 0.75rem)); }
+    }
 }
 
 @layer theme {

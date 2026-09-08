@@ -128,7 +128,7 @@
             {{-- ========================================================= --}}
             {{-- 2. شريط التمرير الأفقي (يظهر فقط على الجوال) --}}
             {{-- ========================================================= --}}
-            <div class="lg:hidden col-span-1 overflow-x-auto pb-2 -mx-4 px-4 no-scrollbar">
+            <div class="lg:hidden col-span-1 overflow-x-auto pb-2 -mx-4 px-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 <div class="flex items-center gap-2 min-w-max">
                     <button wire:click="selectCategory('all')"
                         class="px-4 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all
@@ -159,20 +159,20 @@
             {{-- ========================================================= --}}
             {{-- 3. شبكة الأطباق (تأخذ المساحة المتبقية) --}}
             {{-- ========================================================= --}}
-            <main class="col-span-1 lg:col-span-9">
+            <div class="col-span-1 lg:col-span-9">
 
                 {{-- عنوان القسم الحالي (يظهر فقط على الشاشات الكبيرة للتوضيح) --}}
                 <div class="hidden lg:flex items-center justify-between mb-6 pb-4 border-b border-stone-200">
                     <h3 class="text-xl font-black text-[#2C0D0A] flex items-center gap-2">
                         @if ($selectedCategorySlug === 'all')
-                            <x-lucide-crown class="w-5 h-5" />جميع الأطباق
+                            <x-lucide-crown class="w-5 h-5" />{{ __('messages.menu.all') }}
                         @else
                            <x-lucide-utensils class="w-5 h-5" />
-                            {{ $this->categories->firstWhere('slug', $selectedCategorySlug)?->localized_name ?? 'الأطباق' }}
+                            {{ $this->categories->firstWhere('slug', $selectedCategorySlug)?->localized_name ?: __('messages.menu.dishes') }}
                         @endif
                     </h3>
                     <span class="text-xs font-bold text-stone-500 bg-stone-100 px-3 py-1 rounded-full">
-                        {{ $this->filteredItems->count() }} طبق متاح
+                        {{ $this->filteredItems->count() }} {{ trans_choice('messages.menu.dishes', $this->filteredItems->count()) }}
                     </span>
                 </div>
 
@@ -194,6 +194,7 @@
                             <div class="relative aspect-[4/3] overflow-hidden bg-stone-100">
                                 @if ($item->image_path)
                                     <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->localized_name }}"
+                                        loading="lazy"
                                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                                 @else
                                     <div
@@ -202,24 +203,24 @@
                                 @endif
 
                                 {{-- شارات الطبق --}}
-                                <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                <div class="absolute top-3 start-3 flex flex-col gap-2">
                                     @if ($item->is_featured)
                                         <span
                                             class="px-2.5 py-1 bg-amber-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
-                                            	<x-lucide-star class="w-3 h-3 fill-white" /> مميز
+                                            	<x-lucide-star class="w-3 h-3 fill-white" aria-hidden="true" /> مميز
                                         </span>
                                     @endif
                                     @if ($item->is_spicy)
                                         <span
                                             class="px-2.5 py-1 bg-red-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
-                                            <x-lucide-flame class="w-3 h-3" /> حار
+                                            <x-lucide-flame class="w-3 h-3" aria-hidden="true" /> حار
                                         </span>
                                     @endif
                                 </div>
 
                                 {{-- السعر يطفو فوق الصورة --}}
                                 <div
-                                    class="absolute bottom-3 right-3 px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-stone-100">
+                                    class="absolute bottom-3 end-3 px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-stone-100">
                                     <span
                                         class="text-sm font-black text-stone-900">€{{ number_format($item->price, 2) }}</span>
                                 </div>
@@ -300,27 +301,14 @@
                         <div
                             class="col-span-full text-center py-16 bg-stone-50 rounded-3xl border border-dashed border-stone-300">
                             <div class="text-5xl mb-3">	<x-lucide-utensils class="w-4 h-4" /></div>
-                            <h3 class="text-lg font-bold text-stone-700">لا توجد أطباق في هذا القسم حالياً</h3>
-                            <p class="text-sm text-stone-500">يرجى اختيار قسم آخر أو العودة لاحقاً</p>
+                            <h3 class="text-lg font-bold text-stone-700">{{ __('messages.menu.empty') }}</h3>
                         </div>
                     @endforelse
                 </div>
 
 
-            </main>
+            </div>
         </div>
-
-        <style>
-            .no-scrollbar::-webkit-scrollbar {
-                display: none;
-            }
-
-            .no-scrollbar {
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-            }
-        </style>
-
 
     </div>
 
@@ -342,17 +330,17 @@
                         </span>
                     </div>
                     <div class="text-right">
-                        <span class="text-xs text-amber-200 font-bold block">سلة الأطباق الملكية جاهزة</span>
+                        <span class="text-xs text-amber-200 font-bold block">{{ __('messages.menu.cartReady') ?? 'سلة الأطباق الملكية جاهزة' }}</span>
                         <span class="text-sm sm:text-base font-black text-white">
-                            المجموع: €{{ number_format($this->totalCartAmount, 2) }}
+                            {{ __('messages.menu.total') ?? 'المجموع' }}: €{{ number_format($this->totalCartAmount, 2) }}
                         </span>
                     </div>
                 </div>
 
                 <button type="button" wire:click="$set('isCartModalOpen', true)"
-                    class="px-5 py-2.5 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-2xl text-xs sm:text-sm shadow-md transition-all flex items-center gap-2 cursor-pointer shrink-0">
-                    <span>إتمام الطلب والحجز الآن</span>
-                    <span>←</span>
+                    class="px-5 py-2.5 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-2xl text-xs sm:text-sm shadow-md transition-all flex items-center gap-2 cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD700]">
+                    <span>{{ __('messages.menu.checkout') ?: 'إتمام الطلب والحجز الآن' }}</span>
+                    <x-lucide-arrow-left class="w-4 h-4 rtl:rotate-0 ltr:rotate-180" aria-hidden="true" />
                 </button>
             </div>
         </div>
@@ -360,10 +348,12 @@
 
     {{-- 5. نافذة السلة وتأكيد الحجز الفعلي (Cart Drawer / Checkout Modal) --}}
     @if ($isCartModalOpen)
-        <div class="fixed inset-0 z-50 overflow-hidden" dir="rtl">
+        <div class="fixed inset-0 z-50 overflow-hidden" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}"
+             role="dialog" aria-modal="true" aria-labelledby="cart-modal-title"
+             x-data @keydown.window.escape="$wire.set('isCartModalOpen', false)">
             {{-- خلفية معتمة --}}
             <div class="absolute inset-0 bg-stone-900/70 backdrop-blur-sm transition-opacity"
-                wire:click="$set('isCartModalOpen', false)"></div>
+                wire:click="$set('isCartModalOpen', false)" aria-hidden="true"></div>
 
             <div class="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
                 <div
@@ -377,8 +367,8 @@
                                 class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-xl">
                                 <x-lucide-crown class="w-5 h-5" /></div>
                             <div>
-                                <h3 class="font-black text-base text-white">سلة الأطباق وتثبيت الحجز</h3>
-                                <p class="text-xs text-amber-200">{{ $this->totalCartCount }} أصناف مختارة</p>
+                                <h3 class="font-black text-base text-white">{{ __('messages.menu.cart') ?? 'سلة الأطباق وتثبيت الحجز' }}</h3>
+                                <p class="text-xs text-amber-200">{{ $this->totalCartCount }} {{ __('messages.menu.items') ?? 'أصناف مختارة' }}</p>
                             </div>
                         </div>
                         <button wire:click="$set('isCartModalOpen', false)"
@@ -397,7 +387,7 @@
                         <div>
                             <h4
                                 class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                <span><x-lucide-utensils class="w-4 h-4" /></span> الأطباق المختارة للوليمة
+                                <span><x-lucide-utensils class="w-4 h-4" /></span> {{ __('messages.menu.selectedDishes') ?? 'الأطباق المختارة للوليمة' }}
                             </h4>
                             <div class="space-y-3">
                                 @foreach ($cart as $id => $cartItem)
@@ -507,8 +497,10 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">عدد الأشخاص  </label>
-                                    <input type="number" wire:model="party_size" min="1" max="50"
+                                    <label for="cart-party-size" class="block text-xs font-bold text-stone-700 mb-1.5">
+                                        {{ __('messages.reservation.partySize') }}
+                                    </label>
+                                    <input id="cart-party-size" type="number" wire:model="party_size" min="1" max="20"
                                         required
                                         class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
                                 </div>

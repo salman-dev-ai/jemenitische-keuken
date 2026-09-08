@@ -13,6 +13,8 @@ class CustomerReviewsMarquee extends Component
         [
             'name' => ['ar' => 'أحمد الصبيحي', 'en' => 'Ahmed Al-Subaihi', 'nl' => 'Ahmed'],
             'rating' => 5,
+            'date' => ['ar' => 'منذ يومين', 'en' => '2 days ago', 'nl' => '2 dagen geleden'],
+            'dish' => ['ar' => 'مندي لحم', 'en' => 'Meat Mandi', 'nl' => 'Vlees Mandi'],
             'comment' => [
                 'ar' => 'أطيب مندي جربته في حياتي! لحم ذائب وأرز معطر بجميع الإحساس اليمني الأصيل.',
                 'en' => 'Best Mandi I have ever tasted! Tender meat and fragrant rice.',
@@ -23,6 +25,8 @@ class CustomerReviewsMarquee extends Component
         [
             'name' => ['ar' => 'سارة المطيري', 'en' => 'Sara Almutairi', 'nl' => 'Sara'],
             'rating' => 5,
+            'date' => ['ar' => 'منذ أسبوع', 'en' => '1 week ago', 'nl' => '1 week geleden'],
+            'dish' => ['ar' => 'عقدة دجاج', 'en' => 'Chicken Aqda', 'nl' => 'Kip Aqda'],
             'comment' => [
                 'ar' => 'الأجواء الساحرة والديوان التراثي يأخذك إلى صنعاء في ثوانٍ. طعام يليق بالضيافة اليمنية الحقيقية.',
                 'en' => 'The heritage Majlis atmosphere takes you to Sanaa instantly. Royal Yemeni hospitality!',
@@ -33,6 +37,8 @@ class CustomerReviewsMarquee extends Component
         [
             'name' => ['ar' => 'يوسف الحكمي', 'en' => 'Yousef Alhakimi', 'nl' => 'Yousef'],
             'rating' => 5,
+            'date' => ['ar' => 'منذ شهر', 'en' => '1 month ago', 'nl' => '1 maand geleden'],
+            'dish' => ['ar' => 'شفوت ولحوح', 'en' => 'Shafut & Lahoh', 'nl' => 'Shafut & Lahoh'],
             'comment' => [
                 'ar' => 'سلطة الفطيرة واللحن الأصيل يذكرني بالبيت. شكراً لكم على حفظ التراث.',
                 'en' => 'Fattah and Lahoh remind me of home. Thank you for preserving our culture.',
@@ -43,6 +49,8 @@ class CustomerReviewsMarquee extends Component
         [
             'name' => ['ar' => 'ماريا فان دير بيرغ', 'en' => 'Maria van den Berg', 'nl' => 'Maria van den Berg'],
             'rating' => 5,
+            'date' => ['ar' => 'منذ شهرين', 'en' => '2 months ago', 'nl' => '2 maanden geleden'],
+            'dish' => ['ar' => 'زربيان عدني', 'en' => 'Adeni Zurbian', 'nl' => 'Adeni Zurbian'],
             'comment' => [
                 'ar' => 'تجربة gastronomique استثنائية! كل طبق كان معجزة نكهات. سأعود مراراً وتكراراً.',
                 'en' => 'Exceptional culinary experience! Every dish was perfectly balanced.',

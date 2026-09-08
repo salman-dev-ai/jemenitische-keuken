@@ -10,6 +10,10 @@ return [
         'reservation' => 'Tafel reserveren',
         'contact' => 'Neem contact met ons op',
         'bookTableBtn' => 'Reserveer nu uw tafel',
+        'primary' => 'Primaire navigatie',
+        'secondary' => 'Secundaire navigatie',
+        'mobile' => 'Mobiel menu',
+        'toggleMenu' => 'Menu openen of sluiten',
     ],
 
     // ===== Merk =====
@@ -112,6 +116,7 @@ return [
         'orderNow' => 'Reserveer om dit te proeven',
         'empty' => 'Er zijn momenteel geen beschikbare gerechten in deze categorie.',
         'chefSpecial' => 'Koninklijke specialiteit van de chef',
+        'addToCart' => 'In winkelmandje',
     ],
 
     // ===== Reservering =====
@@ -164,12 +169,31 @@ return [
         'badge' => 'Traditionele erfgoedgalerij',
         'title' => 'Authentieke momenten, gevuld met de geur van houtvuur en kruiden',
         'subtitle' => 'Ontdek onze gastvrijheid, traditionele Mandi- en Muthbi-bereiding en authentieke Jemenitische zitplaatsen',
+        'categories' => 'Galerijcategorieën',
+        'loading' => 'Afbeeldingen laden...',
+        'empty' => 'Nog geen afbeeldingen in deze categorie.',
+    ],
+
+    // ===== Recensies =====
+    'reviews' => [
+        'badge' => 'Gastenbeoordelingen',
+        'title' => 'Wat liefhebbers van Jemenitische smaak in Europa zeggen',
+        'stats' => 'Uitstekend beoordeeld met 4.9 uit 5 op basis van 1.450+ geverifieerde beoordelingen',
+        'verified' => 'Geverifieerde Gast',
+        'favorite' => 'Favoriete gerecht',
     ],
 
     // ===== Footer =====
     'footer' => [
         'quickLinks' => 'Snelle links',
-        'rights' => 'Alle rechten voorbehouden aan Jemenitische Keuken - Jemenitische Keuken',
+        'rights' => 'Alle rechten voorbehouden aan Jemenitische Keuken',
+        'contact' => 'Neem contact met ons op',
+        'welcome' => 'Wij heten u dagelijks welkom',
+        'hours' => 'Openingstijden',
+        'hoursUnavailable' => 'Neem contact met ons op voor de openingstijden.',
+        'reserveNow' => 'Reserveer nu uw tafel',
+        'whatsapp' => 'Contact via WhatsApp',
+        'viewMap' => 'Bekijk locatie op de kaart',
     ],
 
     // ===== Foutmeldingen =====

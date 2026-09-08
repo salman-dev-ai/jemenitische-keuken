@@ -112,6 +112,7 @@ return [
         'orderNow' => 'Book to Taste It',
         'empty' => 'There are currently no available dishes in this category.',
         'chefSpecial' => "Chef's Royal Special",
+        'addToCart' => 'Add to Cart',
     ],
 
     // ===== Reservation =====
@@ -164,12 +165,31 @@ return [
         'badge' => 'Traditional Heritage Gallery',
         'title' => 'Authentic Moments Filled with the Aroma of Wood Fire and Spices',
         'subtitle' => 'Discover our hospitality, traditional Mandi and Muthbi cooking, and authentic Yemeni seating experiences',
+        'categories' => 'Gallery Categories',
+        'loading' => 'Loading images...',
+        'empty' => 'No images available in this category yet.',
+    ],
+
+    // ===== Reviews =====
+    'reviews' => [
+        'badge' => 'Guest Reviews',
+        'title' => 'What Lovers of Yemeni Taste in Europe Say',
+        'stats' => 'Excellent 4.9 out of 5 rating based on over 1,450 verified reviews',
+        'verified' => 'Verified Guest',
+        'favorite' => 'Favorite Dish',
     ],
 
     // ===== Footer =====
     'footer' => [
         'quickLinks' => 'Quick Links',
-        'rights' => 'All rights reserved to Yemeni Kitchen - Jemenitische Keuken',
+        'rights' => 'All rights reserved to Yemeni Kitchen',
+        'contact' => 'Contact Us',
+        'welcome' => 'We welcome you daily',
+        'hours' => 'Opening Hours',
+        'hoursUnavailable' => 'Please contact us for opening hours.',
+        'reserveNow' => 'Book Your Table Now',
+        'whatsapp' => 'Contact via WhatsApp',
+        'viewMap' => 'View Location on Map',
     ],
 
     // ===== Error Messages =====
