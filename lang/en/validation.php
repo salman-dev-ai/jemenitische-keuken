@@ -195,6 +195,20 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'customer_name' => 'Name',
+        'customer_phone' => 'Phone Number',
+        'customer_email' => 'Email Address',
+        'reservation_date' => 'Reservation Date',
+        'reservation_time' => 'Reservation Time',
+        'party_size' => 'Party Size',
+        'special_requests' => 'Special Requests',
+        'order_type' => 'Service Type',
+        'name' => 'Name',
+        'email' => 'Email Address',
+        'phone' => 'Phone Number',
+        'subject' => 'Subject',
+        'message' => 'Message',
+    ],
 
 ];

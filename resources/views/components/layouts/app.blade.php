@@ -91,6 +91,16 @@
                 </nav>
 
                 <a
+                    href="https://www.thuisbezorgd.nl/menu/jemenitische-keuken-restaurant#pre"
+                    target="_blank" rel="noopener noreferrer"
+                    class="inline-flex min-h-10 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-[#E07513]/50 bg-black/40 px-2.5 py-2 text-[10px] font-bold text-[#E07513] shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#E07513]/10 hover:text-[#F08A25] hover:border-[#E07513] focus:outline-none focus:ring-2 focus:ring-[#FFD700] sm:px-4 sm:text-sm"
+                    title="Bestel via Thuisbezorgd.nl"
+                >
+                    <x-lucide-shopping-bag class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <span class="hidden sm:inline">Thuisbezorgd</span>
+                </a>
+
+                <a
                     href="#reservation"
                     class="inline-flex min-h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-gradient-to-r from-[#E07513] to-[#B85709] px-2.5 py-2 text-[10px] font-bold text-white shadow-lg shadow-[#E07513]/25 transition-all hover:-translate-y-0.5 hover:from-[#c2620a] hover:to-[#9a4504] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#FFD700] sm:px-5 sm:text-sm"
                 >

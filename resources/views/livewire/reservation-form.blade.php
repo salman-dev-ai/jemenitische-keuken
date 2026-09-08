@@ -1,215 +1,326 @@
-<div
-    class="bg-white rounded-3xl p-6 md:p-10 shadow-2xl border border-[#D47716]/15 relative overflow-hidden font-sans"
-    dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}"
-    style="{{ app()->isLocale('ar') ? 'text-align: right;' : 'text-align: left;' }}"
->
-
-    {{-- الشريط الجمالي العلوي --}}
-    <div class="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-l from-[#D47716] via-[#E9963F] to-[#3E1F15]"></div>
-
-    {{-- رأس النموذج والترحيب ومؤشر الطاولات المتوفرة --}}
-    <div class="mb-8 border-b border-stone-100 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-            <div class="flex items-center gap-2 mb-1.5">
-                <span class="w-8 h-8 rounded-lg bg-[#D47716]/10 text-[#D47716] flex items-center justify-center font-bold text-sm">
-                    <x-lucide-calendar-days class="w-5 h-5" aria-hidden="true" />
-                </span>
-                <span class="text-xs font-bold text-[#D47716] tracking-wider uppercase">
-                    {{ __('messages.reservation.badge') }}
-                </span>
+<section class="relative overflow-hidden bg-[#FAF4ED] py-12 font-['Tajawal',sans-serif] sm:py-16 lg:py-20"
+    dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {{-- رأس القسم --}}
+        <div class="mb-10 space-y-3 text-center sm:mb-12">
+            <div
+                class="inline-flex items-center gap-2 rounded-full border border-[#6B1F2B]/10 bg-white/70 px-4 py-2 text-xs font-bold text-[#6B1F2B] shadow-sm">
+                <x-lucide-calendar-days class="h-4 w-4" aria-hidden="true" />
+                <span>{{ __('messages.reservation.badge') }}</span>
             </div>
-            <h2 class="text-2xl md:text-3xl font-extrabold text-[#3E1F15] tracking-tight">
+
+            <h2 class="mx-auto max-w-2xl text-3xl font-black tracking-tight text-[#32151C] sm:text-4xl">
                 {{ __('messages.reservation.title') }}
             </h2>
-            <p class="text-stone-500 text-sm mt-1">{{ __('messages.reservation.subtitle') }}</p>
-        </div>
-    </div>
 
-    {{-- بطاقة النجاح الفندقية الرقمية --}}
-    @if ($successMessage)
-        <div class="bg-gradient-to-br from-[#3E1F15] to-[#24110B] text-white rounded-3xl p-6 md:p-8 shadow-2xl mb-8 relative overflow-hidden">
-            <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/10">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-2xl font-bold shadow-lg">
-                        <x-lucide-check-circle class="w-8 h-8" aria-hidden="true" />
+            <p class="mx-auto max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
+                {{ __('messages.reservation.subtitle') }}
+            </p>
+        </div>
+
+        {{-- بطاقة النجاح --}}
+        @if ($successMessage)
+            <div class="mb-8 rounded-3xl bg-gradient-to-br from-[#6B1F2B] to-[#3E1F15] p-6 text-white shadow-xl sm:p-8">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500 shadow-lg">
+                            <x-lucide-check-circle class="h-7 w-7" aria-hidden="true" />
+                        </div>
+                        <div>
+                            <h4 class="font-black">{{ $successMessage }}</h4>
+                            <p class="mt-1 text-xs text-stone-300">
+                                {{ __('messages.reservation.welcome', ['name' => $customer_name]) }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="rounded-xl border border-white/15 bg-white/10 px-4 py-2 backdrop-blur-md">
+                        <div class="text-[10px] text-stone-300">{{ __('messages.reservation.referenceCode') }}</div>
+                        <div class="font-mono text-base font-black tracking-widest text-amber-300">{{ $referenceCode }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 pt-5 text-xs text-stone-200 sm:grid-cols-4">
+                    <div>
+                        <span class="block text-[11px] text-stone-400">{{ __('messages.reservation.date') }}</span>
+                        <span class="text-sm font-bold text-white">{{ $reservation_date }}</span>
                     </div>
                     <div>
-                        <h4 class="font-extrabold text-lg text-white">{{ $successMessage }}</h4>
-                        <p class="text-xs text-stone-300">
-                            {{ __('messages.reservation.welcome', ['name' => $customer_name]) }}
-                        </p>
+                        <span class="block text-[11px] text-stone-400">{{ __('messages.reservation.time') }}</span>
+                        <span class="text-sm font-bold text-white">{{ $reservation_time }}</span>
                     </div>
-                </div>
-
-                {{-- الكود المرجعي للحجز --}}
-                <div class="bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/15">
-                    <div class="text-[10px] text-stone-300">{{ __('messages.reservation.referenceCode') }}</div>
-                    <div class="font-mono text-base font-black text-amber-300 tracking-widest">{{ $referenceCode }}</div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 text-stone-200 text-xs">
-                <div>
-                    <span class="text-stone-400 block text-[11px]">{{ __('messages.reservation.date') }}</span>
-                    <span class="font-bold text-white text-sm">{{ $reservation_date }}</span>
-                </div>
-                <div>
-                    <span class="text-stone-400 block text-[11px]">{{ __('messages.reservation.time') }}</span>
-                    <span class="font-bold text-white text-sm">{{ $reservation_time }}</span>
-                </div>
-                <div>
-                    <span class="text-stone-400 block text-[11px]">{{ __('messages.reservation.guests') }}</span>
-                    <span class="font-bold text-white text-sm">
-                        {{ __('messages.reservation.guestsCount', ['count' => $party_size]) }}
-                    </span>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    {{-- رسالة التنبيه في حالة وجود خطأ --}}
-    @if ($errorMessage)
-        <div class="bg-rose-50 border-s-4 border-rose-500 p-4 rounded-2xl mb-6 text-rose-800 text-sm flex items-center gap-3" role="alert">
-            <span class="text-rose-600 text-xl font-bold">
-                <x-lucide-triangle-alert class="w-5 h-5" aria-hidden="true" />
-            </span>
-            <div>
-                <strong class="font-bold block">{{ __('messages.reservation.errorTitle') }}</strong>
-                <span>{{ $errorMessage }}</span>
-            </div>
-        </div>
-    @endif
-
-    {{-- نموذج الحجز التفاعلي --}}
-    <form wire:submit.prevent="submitReservation" class="space-y-8">
-
-        {{-- الخطوة 1: الأشخاص والوقت --}}
-        <div class="space-y-3">
-            <div class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-[#3E1F15]">
-                <span class="w-5 h-5 rounded-full bg-[#3E1F15] text-white flex items-center justify-center text-[10px]" aria-hidden="true">1</span>
-                <span>{{ __('messages.reservation.step1') }}</span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {{-- عدد الضيوف مع أزرار سريعة --}}
-                <div class="bg-[#FAF7F2] p-4 rounded-2xl border border-stone-200 space-y-2">
-                    <div class="flex justify-between items-center text-xs font-bold text-stone-700">
-                        <label for="party-size-input">{{ __('messages.reservation.partySize') }}</label>
-                        <span class="text-[#D47716] font-black">
+                    <div>
+                        <span class="block text-[11px] text-stone-400">{{ __('messages.reservation.guests') }}</span>
+                        <span class="text-sm font-bold text-white">
                             {{ __('messages.reservation.guestsCount', ['count' => $party_size]) }}
                         </span>
                     </div>
+                </div>
+            </div>
+        @endif
 
-                    <div class="flex items-center gap-1" role="group" aria-label="{{ __('messages.reservation.partySize') }}">
-                        @foreach([1, 2, 4, 6, 8] as $size)
-                            <button type="button"
-                                    wire:click="$set('party_size', {{ $size }})"
-                                    aria-pressed="{{ $party_size == $size ? 'true' : 'false' }}"
-                                    class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D47716] {{ $party_size == $size ? 'bg-[#D47716] text-white shadow-xs' : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200' }}">
-                                {{ $size }}
-                            </button>
-                        @endforeach
+        <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-10">
+            {{-- بطاقة النموذج --}}
+            <div class="relative overflow-visible rounded-3xl border border-stone-100 bg-white p-6 shadow-sm sm:p-8">
+                <div
+                    class="absolute inset-x-0 top-0 h-1.5 rounded-t-3xl bg-gradient-to-l from-[#6B1F2B] via-[#E07513] to-[#F3C892]">
+                </div>
+
+                @if ($errorMessage)
+                    <div class="mb-6 flex items-start gap-3 rounded-2xl border-s-4 border-rose-500 bg-rose-50 p-4 text-sm text-rose-800"
+                        role="alert">
+                        <x-lucide-triangle-alert class="mt-0.5 h-5 w-5 shrink-0 text-rose-600" aria-hidden="true" />
+                        <div>
+                            <strong class="block font-bold">{{ __('messages.reservation.errorTitle') }}</strong>
+                            <span>{{ $errorMessage }}</span>
+                        </div>
+                    </div>
+                @endif
+
+                <form wire:submit.prevent="submitReservation" class="space-y-7">
+                    {{-- مؤشرات الخطوات --}}
+                    <div class="flex items-center gap-3" aria-label="Reservation steps">
+                        <div class="h-1.5 flex-1 rounded-full bg-[#6B1F2B]"></div>
+                        <div class="h-1.5 flex-1 rounded-full bg-[#E07513]"></div>
+                        <div class="h-1.5 flex-1 rounded-full bg-stone-100"></div>
                     </div>
 
-                    <input id="party-size-input" type="number" wire:model.live.debounce.300ms="party_size" min="1" max="20"
-                           class="w-full bg-white rounded-xl border-stone-200 text-sm font-semibold focus:border-[#D47716] focus:ring-2 focus:ring-[#D47716]/20">
-                    @error('party_size') <span class="text-xs text-rose-500 block">{{ $message }}</span> @enderror
+                    {{-- الأشخاص والتاريخ والوقت --}}
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#32151C]">
+                            <span
+                                class="flex h-6 w-6 items-center justify-center rounded-full bg-[#6B1F2B] text-[10px] text-white">1</span>
+                            <span>{{ __('messages.reservation.step1') }}</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            {{-- قائمة عدد الأشخاص المخصصة --}}
+                            <div x-data="{ open: false }" @keydown.escape.window="open = false"
+                                class="relative z-30 sm:col-span-2">
+                                <div class="mb-2 flex items-center justify-between">
+                                    <label class="block text-sm font-bold text-stone-700">
+                                        {{ __('messages.reservation.partySize') }}
+                                    </label>
+                                    <span class="text-xs font-black text-[#E07513]">
+                                        {{ __('messages.reservation.guestsCount', ['count' => $party_size]) }}
+                                    </span>
+                                </div>
+
+                                <button type="button" @click="open = !open" :aria-expanded="open.toString()"
+                                    class="flex h-12 w-full items-center justify-between rounded-xl border border-stone-200 bg-[#FAF7F2] px-4 text-sm font-semibold text-stone-800 transition hover:border-[#E07513] focus:border-[#E07513] focus:outline-none focus:ring-4 focus:ring-[#E07513]/10">
+                                    <span class="flex items-center gap-2">
+                                        <x-lucide-users class="h-4 w-4 text-[#6B1F2B]" aria-hidden="true" />
+                                        <span>{{ __('messages.reservation.guestsCount', ['count' => $party_size]) }}</span>
+                                    </span>
+                                    <x-lucide-chevron-down
+                                        class="h-4 w-4 text-[#6B1F2B] transition-transform duration-200"
+                                        ::class="{ 'rotate-180': open }" aria-hidden="true" />
+                                </button>
+
+                                <div x-cloak x-show="open" x-transition:enter="transition ease-out duration-150"
+                                    x-transition:enter-start="translate-y-1 opacity-0"
+                                    x-transition:enter-end="translate-y-0 opacity-100"
+                                    x-transition:leave="transition ease-in duration-100"
+                                    x-transition:leave-start="translate-y-0 opacity-100"
+                                    x-transition:leave-end="translate-y-1 opacity-0" @click.outside="open = false"
+                                    class="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl border border-stone-200 bg-white p-1.5 shadow-xl shadow-stone-900/10">
+                                    @foreach ([1, 2, 4, 6, 8, 10, 12] as $size)
+                                        <button type="button" wire:click="$set('party_size', {{ $size }})"
+                                            @click="open = false"
+                                            class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-right text-sm transition {{ $party_size == $size ? 'bg-[#6B1F2B] font-bold text-white' : 'text-stone-700 hover:bg-[#FAF0E8] hover:text-[#6B1F2B]' }}">
+                                            <span>{{ __('messages.reservation.guestsCount', ['count' => $size]) }}</span>
+                                            @if ($party_size == $size)
+                                                <x-lucide-check class="h-4 w-4" aria-hidden="true" />
+                                            @endif
+                                        </button>
+                                    @endforeach
+                                </div>
+
+                                <input id="party-size-input" type="number" wire:model.live.debounce.300ms="party_size"
+                                    min="1" max="20"
+                                    class="mt-3 h-11 w-full rounded-xl border-stone-200 bg-white text-sm font-semibold focus:border-[#E07513] focus:ring-4 focus:ring-[#E07513]/10  p-3" />
+                                @error('party_size')
+                                    <span class="mt-1 block text-xs text-rose-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- التاريخ --}}
+                            <div>
+                                <label for="reservation-date-input" class="mb-2 block text-sm font-bold text-stone-700">
+                                    {{ __('messages.reservation.reservationDate') }}
+                                </label>
+                                <div class="relative">
+                                    <x-lucide-calendar-days
+                                        class="pointer-events-none absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6B1F2B]  p-3"
+                                        aria-hidden="true" />
+                                    <input id="reservation-date-input" type="date" wire:model.live="reservation_date"
+                                        min="{{ now()->toDateString() }}"
+                                        class="h-12 w-full rounded-xl border-stone-200 bg-[#FAF7F2] ps-11 text-sm font-semibold focus:border-[#E07513] focus:ring-4 focus:ring-[#E07513]/10  p-3" />
+                                </div>
+
+                                <div class="mt-2 flex gap-2 text-[11px]">
+                                    <button type="button"
+                                        wire:click="$set('reservation_date', '{{ now()->toDateString() }}')"
+                                        class="flex-1 rounded-lg border border-stone-200 bg-white py-1.5 text-stone-600 transition hover:border-[#E07513] hover:text-[#6B1F2B]">{{ __('messages.reservation.today') }}</button>
+                                    <button type="button"
+                                        wire:click="$set('reservation_date', '{{ now()->addDay()->toDateString() }}')"
+                                        class="flex-1 rounded-lg border border-stone-200 bg-white py-1.5 text-stone-600 transition hover:border-[#E07513] hover:text-[#6B1F2B]">{{ __('messages.reservation.tomorrow') }}</button>
+                                </div>
+                                @error('reservation_date')
+                                    <span class="mt-1 block text-xs text-rose-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- الوقت --}}
+                            <div>
+                                <label for="reservation-time-input"
+                                    class="mb-2 block text-sm font-bold text-stone-700">
+                                    {{ __('messages.reservation.preferredTime') }}
+                                </label>
+                                <div class="relative">
+                                    <x-lucide-clock
+                                        class="pointer-events-none absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6B1F2B]  p-3"
+                                        aria-hidden="true" />
+                                    <input id="reservation-time-input" type="time"
+                                        wire:model.live="reservation_time"
+                                        class="h-12 w-full rounded-xl border-stone-200 bg-[#FAF7F2] ps-11 text-sm font-semibold focus:border-[#E07513] focus:ring-4 focus:ring-[#E07513]/10 p-3" />
+                                </div>
+                                <span
+                                    class="mt-2 block text-[11px] text-stone-500">{{ __('messages.reservation.sessionDuration') }}</span>
+                                @error('reservation_time')
+                                    <span class="mt-1 block text-xs text-rose-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-stone-100"></div>
+
+                    {{-- بيانات العميل --}}
+                    <div class="space-y-4">
+
+                        <div
+                            class="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#32151C]">
+                            <span
+                                class="flex h-6 w-6 items-center justify-center rounded-full bg-[#6B1F2B] text-[10px] text-white">2</span>
+                            <span>{{ __('messages.reservation.step3') }}</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                            <div>
+                                <label for="customer-name-input" class="mb-2 block text-sm font-bold text-stone-700">
+                                    {{ __('messages.reservation.fullName') }} <span class="text-rose-500"
+                                        aria-hidden="true">*</span>
+                                </label>
+                                <input id="customer-name-input" type="text" wire:model="customer_name"
+                                    placeholder="{{ __('messages.reservation.fullNamePlaceholder') }}"
+                                    autocomplete="name"
+                                    class="h-12 w-full rounded-xl border-stone-200 bg-[#FAF7F2] text-sm focus:border-[#E07513] focus:ring-4 focus:ring-[#E07513]/10 p-3" />
+                                @error('customer_name')
+                                    <span class="mt-1 block text-xs text-rose-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="grid grid-cols-1    ">
+                                <div>
+                                    <label for="customer-phone-input"
+                                        class="mb-2 block text-sm font-bold text-stone-700">
+                                        {{ __('messages.reservation.phone') }} <span class="text-rose-500"
+                                            aria-hidden="true">*</span>
+                                    </label>
+                                    <input id="customer-phone-input" type="tel" wire:model="customer_phone"
+                                        placeholder="+31 6 12 34 56 78" dir="ltr" autocomplete="tel"
+                                        class="h-12 w-full rounded-xl border-stone-200 bg-[#FAF7F2] text-sm font-mono focus:border-[#E07513] focus:ring-4 focus:ring-[#E07513]/10 p-3" />
+                                    @error('customer_phone')
+                                        <span class="mt-1 block text-xs text-rose-500">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="special-requests-input" class="mb-2 block text-sm font-bold text-stone-700">
+                                {{ __('messages.reservation.specialRequests') }}
+                            </label>
+                            <textarea id="special-requests-input" wire:model="special_requests" rows="3"
+                                placeholder="{{ __('messages.reservation.specialRequestsPlaceholder') }}"
+                                class="w-full rounded-xl border-stone-200 bg-[#FAF7F2] text-sm focus:border-[#E07513] focus:ring-4 focus:ring-[#E07513]/10"></textarea>
+                        </div>
+                    </div>
+
+                    {{-- زر الإرسال --}}
+                    <button type="submit" wire:loading.attr="disabled"
+                        class="flex w-full items-center justify-center gap-3 rounded-2xl bg-[#6B1F2B] px-6 py-4 font-black text-white shadow-lg shadow-[#6B1F2B]/15 transition hover:bg-[#541721] hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-[#6B1F2B]/20 disabled:cursor-not-allowed disabled:opacity-50">
+                        <span wire:loading.remove class="flex items-center gap-2">
+                            <x-lucide-send class="h-4 w-4" aria-hidden="true" />
+                            <span>{{ __('messages.reservation.submit') }}</span>
+                        </span>
+                        <span wire:loading class="flex items-center gap-2">
+                            <svg class="h-5 w-5 animate-spin text-white" viewBox="0 0 24 24" fill="none"
+                                aria-hidden="true">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                            <span>{{ __('messages.reservation.processing') }}</span>
+                        </span>
+                    </button>
+                </form>
+            </div>
+
+            {{-- لوحة المعلومات --}}
+            <div class="space-y-6 lg:pt-2">
+                <div class="rounded-3xl border border-[#6B1F2B]/10 bg-[#F3E7DC] p-6 sm:p-8">
+                    <span
+                        class="mb-4 inline-flex rounded-full bg-white px-3 py-1 text-xs font-bold text-[#6B1F2B] shadow-sm">
+                        {{ __('messages.reservation.badge') }}
+                    </span>
+                    <h3 class="text-2xl font-black leading-relaxed text-[#32151C] sm:text-3xl">
+                        {{ __('messages.reservation.title') }}
+                    </h3>
+                    <p class="mt-3 text-sm leading-7 text-stone-700">
+                        {{ __('messages.reservation.subtitle') }}
+                    </p>
                 </div>
 
-                {{-- التاريخ مع أزرار اختيار سريعة --}}
-                <div class="bg-[#FAF7F2] p-4 rounded-2xl border border-stone-200 space-y-2">
-                    <label for="reservation-date-input" class="block text-xs font-bold text-stone-700">
-                        {{ __('messages.reservation.reservationDate') }}
-                    </label>
-                    <input id="reservation-date-input" type="date" wire:model.live="reservation_date"
-                           min="{{ now()->toDateString() }}"
-                           class="w-full bg-white rounded-xl border-stone-200 text-sm font-semibold focus:border-[#D47716] focus:ring-2 focus:ring-[#D47716]/20">
-                    @error('reservation_date') <span class="text-xs text-rose-500 block">{{ $message }}</span> @enderror
+                <div class="rounded-3xl bg-[#6B1F2B] p-6 text-white shadow-xl sm:p-8">
+                    <div class="mb-4 flex items-center gap-3">
+                        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
+                            <x-lucide-info class="h-5 w-5 text-amber-300" aria-hidden="true" />
+                        </div>
+                        <h3 class="font-black text-amber-200">{{ __('messages.reservation.step1') }}</h3>
+                    </div>
+                    <p class="text-sm leading-7 text-stone-100">
+                        {{ __('messages.reservation.sessionDuration') }}
+                    </p>
+                </div>
 
-                    <div class="flex gap-1 text-[11px] pt-1">
-                        <button type="button" wire:click="$set('reservation_date', '{{ now()->toDateString() }}')"
-                                class="flex-1 py-0.5 bg-white border rounded text-stone-600 hover:bg-stone-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D47716]">
-                            {{ __('messages.reservation.today') }}
-                        </button>
-                        <button type="button" wire:click="$set('reservation_date', '{{ now()->addDay()->toDateString() }}')"
-                                class="flex-1 py-0.5 bg-white border rounded text-stone-600 hover:bg-stone-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D47716]">
-                            {{ __('messages.reservation.tomorrow') }}
-                        </button>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
+                    <div class="flex items-start gap-4 rounded-2xl border border-stone-100 bg-white p-5 shadow-sm">
+                        <div
+                            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#FAF0E8] text-[#6B1F2B]">
+                            <x-lucide-calendar-check class="h-5 w-5" aria-hidden="true" />
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[#32151C]">{{ __('messages.reservation.reservationDate') }}</h4>
+                            <p class="mt-1 text-sm leading-6 text-stone-500">{{ __('messages.reservation.today') }} /
+                                {{ __('messages.reservation.tomorrow') }}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 rounded-2xl border border-stone-100 bg-white p-5 shadow-sm">
+                        <div
+                            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#FAF0E8] text-[#6B1F2B]">
+                            <x-lucide-users class="h-5 w-5" aria-hidden="true" />
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[#32151C]">{{ __('messages.reservation.guests') }}</h4>
+                            <p class="mt-1 text-sm leading-6 text-stone-500">
+                                {{ __('messages.reservation.guestsCount', ['count' => $party_size]) }}</p>
+                        </div>
                     </div>
                 </div>
-
-                {{-- وقت الحضور --}}
-                <div class="bg-[#FAF7F2] p-4 rounded-2xl border border-stone-200 space-y-2">
-                    <label for="reservation-time-input" class="block text-xs font-bold text-stone-700">
-                        {{ __('messages.reservation.preferredTime') }}
-                    </label>
-                    <input id="reservation-time-input" type="time" wire:model.live="reservation_time"
-                           class="w-full bg-white rounded-xl border-stone-200 text-sm font-semibold focus:border-[#D47716] focus:ring-2 focus:ring-[#D47716]/20">
-                    @error('reservation_time') <span class="text-xs text-rose-500 block">{{ $message }}</span> @enderror
-                    <span class="text-[11px] text-stone-500 block">{{ __('messages.reservation.sessionDuration') }}</span>
-                </div>
             </div>
         </div>
-
-        {{-- الخطوة 2: بيانات العميل والطلبات الخاصة --}}
-        <div class="space-y-4 pt-4 border-t border-stone-100">
-            <div class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-[#3E1F15]">
-                <span class="w-5 h-5 rounded-full bg-[#3E1F15] text-white flex items-center justify-center text-[10px]" aria-hidden="true">2</span>
-                <span>{{ __('messages.reservation.step3') }}</span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label for="customer-name-input" class="block text-xs font-bold text-stone-700 mb-1.5">
-                        {{ __('messages.reservation.fullName') }} <span class="text-rose-500" aria-hidden="true">*</span>
-                    </label>
-                    <input id="customer-name-input" type="text" wire:model="customer_name"
-                           placeholder="{{ __('messages.reservation.fullNamePlaceholder') }}"
-                           autocomplete="name"
-                           class="w-full bg-white rounded-xl border-stone-200 text-sm focus:border-[#D47716] focus:ring-2 focus:ring-[#D47716]/20">
-                    @error('customer_name') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
-                </div>
-
-                <div>
-                    <label for="customer-phone-input" class="block text-xs font-bold text-stone-700 mb-1.5">
-                        {{ __('messages.reservation.phone') }} <span class="text-rose-500" aria-hidden="true">*</span>
-                    </label>
-                    <input id="customer-phone-input" type="tel" wire:model="customer_phone"
-                           placeholder="+31 6 12 34 56 78"
-                           dir="ltr"
-                           autocomplete="tel"
-                           class="w-full bg-white rounded-xl border-stone-200 text-sm font-mono focus:border-[#D47716] focus:ring-2 focus:ring-[#D47716]/20">
-                    @error('customer_phone') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
-                </div>
-            </div>
-
-            <div>
-                <label for="special-requests-input" class="block text-xs font-bold text-stone-700 mb-1.5">
-                    {{ __('messages.reservation.specialRequests') }}
-                </label>
-                <textarea id="special-requests-input" wire:model="special_requests" rows="2"
-                          placeholder="{{ __('messages.reservation.specialRequestsPlaceholder') }}"
-                          class="w-full bg-white rounded-xl border-stone-200 text-sm focus:border-[#D47716] focus:ring-2 focus:ring-[#D47716]/20"></textarea>
-            </div>
-        </div>
-
-        {{-- زر الإرسال مع مؤشر التحميل --}}
-        <div class="pt-2">
-            <button type="submit" wire:loading.attr="disabled"
-                    class="w-full bg-gradient-to-r from-[#D47716] via-[#DE8325] to-[#B8630F] hover:from-[#c2680e] hover:to-[#9a4f08] text-white font-extrabold py-4 px-6 rounded-2xl shadow-xl shadow-[#D47716]/20 hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD700]">
-                <span wire:loading.remove class="flex items-center gap-2">
-                    <x-lucide-send class="w-4 h-4" aria-hidden="true" />
-                    <span>{{ __('messages.reservation.submit') }}</span>
-                </span>
-                <span wire:loading class="flex items-center gap-2">
-                    <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                    </svg>
-                    <span>{{ __('messages.reservation.processing') }}</span>
-                </span>
-            </button>
-        </div>
-
-    </form>
-</div>
+    </div>
+</section>
