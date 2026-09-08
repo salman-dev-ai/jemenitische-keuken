@@ -117,6 +117,14 @@ return [
         'empty' => 'Er zijn momenteel geen beschikbare gerechten in deze categorie.',
         'chefSpecial' => 'Koninklijke specialiteit van de chef',
         'addToCart' => 'In winkelmandje',
+        'cartReady' => 'Uw koninklijke winkelwagen is klaar',
+        'total' => 'Totaal',
+        'checkout' => 'Afrekenen & Nu boeken',
+        'cart' => 'Uw winkelwagen & Reservering',
+        'items' => 'geselecteerde items',
+        'emptyText' => 'U heeft nog geen gerechten aan uw feestmaal toegevoegd.',
+        'browseMenu' => 'Menu nu bekijken',
+        'selectedDishes' => 'Geselecteerde gerechten voor het feestmaal',
     ],
 
     // ===== Reservering =====
@@ -162,6 +170,15 @@ return [
         'specialRequestsPlaceholder' => 'Heeft u een speciale gelegenheid, kinderstoelen of bepaalde wensen?',
         'submit' => 'Verstuur & bevestig reservering',
         'processing' => 'Uw reservering wordt verwerkt en de beschikbaarheid wordt gecontroleerd...',
+        'contactDetails' => 'Reservering & Contactgegevens',
+        'serviceType' => 'Soort service',
+        'dineIn' => 'Dine-in (Tafel / Majlis)',
+        'takeaway' => 'Afhalen',
+        'orderTotal' => 'Totaal orderbedrag:',
+        'confirmReservation' => 'Bevestig reservering & Ontvang WhatsApp-melding',
+        'processingReservation' => 'Reservering registreren en WhatsApp-gegevens verzenden...',
+        'smsNotice' => 'Een kopie van uw bestelling wordt voor bevestiging naar uw WhatsApp verzonden',
+        'requestsPlaceholderMenu' => 'Voorbeeld: Bereid alsjeblieft Adeni-thee, of er is een notenallergie...',
     ],
 
     // ===== Galerij =====

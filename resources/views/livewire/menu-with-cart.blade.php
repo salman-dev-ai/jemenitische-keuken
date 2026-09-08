@@ -330,16 +330,17 @@
                         </span>
                     </div>
                     <div class="text-right">
-                        <span class="text-xs text-amber-200 font-bold block">{{ __('messages.menu.cartReady') ?? 'سلة الأطباق الملكية جاهزة' }}</span>
+                        <span class="text-xs text-amber-200 font-bold block">{{ __('messages.menu.cartReady')  }}</span>
                         <span class="text-sm sm:text-base font-black text-white">
-                            {{ __('messages.menu.total') ?? 'المجموع' }}: €{{ number_format($this->totalCartAmount, 2) }}
+                            {{ __('messages.menu.total')  }}: €{{ number_format($this->totalCartAmount, 2) }}
                         </span>
                     </div>
                 </div>
 
                 <button type="button" wire:click="$set('isCartModalOpen', true)"
                     class="px-5 py-2.5 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-2xl text-xs sm:text-sm shadow-md transition-all flex items-center gap-2 cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD700]">
-                    <span>{{ __('messages.menu.checkout') ?: 'إتمام الطلب والحجز الآن' }}</span>
+{{--  'إتمام الطلب والحجز الآن' --}}
+                    <span>{{ __('messages.menu.checkout')  }}</span>
                     <x-lucide-arrow-left class="w-4 h-4 rtl:rotate-0 ltr:rotate-180" aria-hidden="true" />
                 </button>
             </div>
@@ -384,63 +385,76 @@
                     <div class="flex-1 overflow-y-auto p-5 space-y-5">
 
                         {{-- قائمة الأطباق --}}
-                        <div>
-                            <h4
-                                class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                <span><x-lucide-utensils class="w-4 h-4" /></span> {{ __('messages.menu.selectedDishes') ?? 'الأطباق المختارة للوليمة' }}
-                            </h4>
-                            <div class="space-y-3">
-                                @foreach ($cart as $id => $cartItem)
-                                    <div
-                                        class="bg-white p-3 rounded-xl border border-stone-200 flex items-center justify-between shadow-sm group hover:border-amber-200 transition-colors">
-                                        <div class="flex-1 min-w-0">
-                                            <div class="font-bold text-xs text-[#2C0D0A] truncate">
-                                                {{ $cartItem['name'] }}</div>
-                                            <div class="text-xs font-black text-[#E07513] mt-0.5">
-                                                €{{ number_format($cartItem['price'] * $cartItem['quantity'], 2) }}
+                        @if(count($cart) === 0)
+                            <div class="flex flex-col items-center justify-center py-12 text-center">
+                                <div class="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mb-4 border-2 border-stone-200">
+                                    <x-lucide-shopping-cart class="w-10 h-10 text-stone-300" />
+                                </div>
+                                <h3 class="text-sm font-black text-stone-700 mb-2">{{ __('messages.menu.empty') ?? 'السلة فارغة' }}</h3>
+                                <p class="text-xs text-stone-500 max-w-[200px] mb-6">لم تقم بإضافة أي أطباق لوليمتك حتى الآن.</p>
+                                <button type="button" @click="$wire.set('isCartModalOpen', false)"
+                                    class="px-5 py-2.5 bg-stone-900 text-white font-bold rounded-xl text-xs hover:bg-stone-800 transition-colors">
+                                    تصفح المنيو الآن
+                                </button>
+                            </div>
+                        @else
+                            <div>
+                                <h4
+                                    class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                                    <span><x-lucide-utensils class="w-4 h-4" /></span> {{ __('messages.menu.selectedDishes') ?? 'الأطباق المختارة للوليمة' }}
+                                </h4>
+                                <div class="space-y-3">
+                                    @foreach ($cart as $id => $cartItem)
+                                        <div
+                                            class="bg-white p-3 rounded-xl border border-stone-200 flex items-center justify-between shadow-sm group hover:border-amber-200 transition-colors">
+                                            <div class="flex-1 min-w-0">
+                                                <div class="font-bold text-xs text-[#2C0D0A] truncate">
+                                                    {{ $cartItem['name'] }}</div>
+                                                <div class="text-xs font-black text-[#E07513] mt-0.5">
+                                                    €{{ number_format($cartItem['price'] * $cartItem['quantity'], 2) }}
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                class="flex items-center gap-2 bg-stone-50 p-1 rounded-lg border border-stone-200">
+                                                {{-- زر الحذف السريع --}}
+                                                <button type="button" wire:click="removeFromCart({{ $id }})"
+                                                    wire:loading.attr="disabled"
+                                                    wire:target="removeFromCart({{ $id }})"
+                                                    class="w-7 h-7 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors disabled:opacity-50"
+                                                    title="حذف الطبق">
+                                                    <span wire:loading.remove
+                                                        wire:target="removeFromCart({{ $id }})"><x-lucide-trash-2 class="w-3 h-3" /></span>
+                                                    <span wire:loading wire:target="removeFromCart({{ $id }})"
+                                                        class="w-3 h-3 border border-red-500 border-t-transparent rounded-full animate-spin"></span>
+                                                </button>
+
+                                                <div class="w-px h-5 bg-stone-300"></div>
+
+                                                <button type="button"
+                                                    wire:click="updateQuantity({{ $id }}, -1)"
+                                                    wire:loading.attr="disabled"
+                                                    wire:target="updateQuantity({{ $id }})"
+                                                    class="w-7 h-7 bg-white rounded text-stone-900 hover:bg-red-50 hover:text-red-600 flex items-center justify-center font-bold text-sm shadow-sm transition-colors disabled:opacity-50">−</button>
+
+                                                <span class="w-5 text-center text-xs font-black text-[#2C0D0A]">
+                                                    <span wire:loading.remove
+                                                        wire:target="updateQuantity({{ $id }}), removeFromCart({{ $id }})">{{ $cartItem['quantity'] }}</span>
+                                                    <span wire:loading
+                                                        wire:target="updateQuantity({{ $id }}), removeFromCart({{ $id }})"
+                                                        class="w-3 h-3 border-2 border-amber-500/30 border-t-amber-600 rounded-full animate-spin inline-block"></span>
+                                                </span>
+
+                                                <button type="button"
+                                                    wire:click="updateQuantity({{ $id }}, 1)"
+                                                    wire:loading.attr="disabled"
+                                                    wire:target="updateQuantity({{ $id }})"
+                                                    class="w-7 h-7 bg-[#E07513] text-white rounded hover:bg-amber-600 flex items-center justify-center font-bold text-sm shadow-sm transition-colors disabled:opacity-50">+</button>
                                             </div>
                                         </div>
-
-                                        <div
-                                            class="flex items-center gap-2 bg-stone-50 p-1 rounded-lg border border-stone-200">
-                                            {{-- زر الحذف السريع --}}
-                                            <button type="button" wire:click="removeFromCart({{ $id }})"
-                                                wire:loading.attr="disabled"
-                                                wire:target="removeFromCart({{ $id }})"
-                                                class="w-7 h-7 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
-                                                title="حذف الطبق">
-                                                <span wire:loading.remove
-                                                    wire:target="removeFromCart({{ $id }})"><x-lucide-trash-2 class="w-3 h-3" /></span>
-                                                <span wire:loading wire:target="removeFromCart({{ $id }})"
-                                                    class="w-3 h-3 border border-red-500 border-t-transparent rounded-full animate-spin"></span>
-                                            </button>
-
-                                            <div class="w-px h-5 bg-stone-300"></div>
-
-                                            <button type="button"
-                                                wire:click="updateQuantity({{ $id }}, -1)"
-                                                wire:loading.attr="disabled"
-                                                wire:target="updateQuantity({{ $id }})"
-                                                class="w-7 h-7 bg-white rounded text-stone-900 hover:bg-red-50 hover:text-red-600 flex items-center justify-center font-bold text-sm shadow-sm transition-colors disabled:opacity-50">−</button>
-
-                                            <span class="w-5 text-center text-xs font-black text-[#2C0D0A]">
-                                                <span wire:loading.remove
-                                                    wire:target="updateQuantity({{ $id }}), removeFromCart({{ $id }})">{{ $cartItem['quantity'] }}</span>
-                                                <span wire:loading
-                                                    wire:target="updateQuantity({{ $id }}), removeFromCart({{ $id }})"
-                                                    class="w-3 h-3 border-2 border-amber-500/30 border-t-amber-600 rounded-full animate-spin inline-block"></span>
-                                            </span>
-
-                                            <button type="button"
-                                                wire:click="updateQuantity({{ $id }}, 1)"
-                                                wire:loading.attr="disabled"
-                                                wire:target="updateQuantity({{ $id }})"
-                                                class="w-7 h-7 bg-[#E07513] text-white rounded hover:bg-amber-600 flex items-center justify-center font-bold text-sm shadow-sm transition-colors disabled:opacity-50">+</button>
-                                        </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
 
                         {{-- نموذج بيانات الحجز --}}
                         <form wire:submit="checkout" class="space-y-4 pt-4 border-t border-stone-200">
@@ -539,6 +553,7 @@
                             </div>
 
                         </form>
+                        @endif
                     </div>
                 </div>
             </div>

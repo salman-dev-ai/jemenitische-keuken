@@ -7,6 +7,7 @@ use App\Models\MenuCategory;
 use App\Models\MenuItem;
 use App\Services\OrderService;
 use App\Services\ReservationService;
+use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -92,14 +93,14 @@ class MenuWithCart extends Component
         $this->dispatch('cart-updated');
     }
 
-    public function removeFromCart($itemId)
-{
-     if (isset($this->cart[$itemId])) {
-        unset($this->cart[$itemId]);
-
-         session()->put('yemeni_cart', $this->cart);
+    public function removeFromCart(int $itemId)
+    {
+        if (isset($this->cart[$itemId])) {
+            unset($this->cart[$itemId]);
+            session()->put('yemeni_cart', $this->cart);
+        }
     }
-}
+
     public function clearCart(): void
     {
         $this->cart = [];
@@ -145,227 +146,130 @@ class MenuWithCart extends Component
             ->get();
     }
 
-    // public function checkout(
-    //     ReservationService $reservationService,
-    //     OrderService $orderService
-    // ): void {
-    //     if (empty($this->cart)) {
-    //         session()->flash('error', __('messages.menu.empty'));
-
-    //         return;
-    //     }
-
-    //     $validated = $this->validate();
-
-    //     $dishesSummary = collect($this->cart)->map(function ($item) {
-    //         return sprintf(
-    //             '%dx %s (€%.2f)',
-    //             $item['quantity'],
-    //             $item['name'],
-    //             $item['price'] * $item['quantity']
-    //         );
-    //     })->implode(', ');
-
-    //     $combinedNotes = trim(sprintf(
-    //         'Pre-order Dishes: [%s] | Pre-order Total: €%.2f | Customer Notes: %s',
-    //         $dishesSummary,
-    //         $this->totalCartAmount,
-    //         $this->special_requests
-    //     ));
-
-    //     $reservation = $reservationService->createReservation([
-    //         'customer_name' => $validated['customer_name'],
-    //         'customer_phone' => $validated['customer_phone'],
-    //         'customer_email' => $validated['customer_email'],
-    //         'party_size' => $this->party_size,
-    //         'reservation_date' => $validated['reservation_date'],
-    //         'reservation_time' => $validated['reservation_time'],
-    //         'special_requests' => $combinedNotes,
-    //     ]);
-
-    //     $orderItems = collect($this->cart)->map(
-    //         fn ($item) => [
-    //             'menu_item_id' => $item['id'],
-    //             'quantity' => $item['quantity'],
-    //         ]
-    //     )->all();
-
-    //     $order = $orderService->createOrder([
-    //         'customer_name' => $validated['customer_name'],
-    //         'customer_phone' => $validated['customer_phone'],
-    //         'customer_email' => $validated['customer_email'],
-    //         'type' => OrderType::tryFrom($this->order_type) ?? OrderType::DINE_IN,
-    //         'notes' => "Linked to Reservation: {$reservation->reference_code}",
-    //     ], $orderItems);
-
-
-
-
-    //  $whatsappMessage = "👑 *طلب وحجز جديد - مطعم يمني  * \n\n";
-    // $whatsappMessage .= "📌 *رقم الحجز:* {$reservation->reference_code}\n";
-    // $whatsappMessage .= "📌 *رقم الطلب:* {$order->order_number}\n\n";
-    // $whatsappMessage .= "👤 *الاسم:* {$validated['customer_name']}\n";
-    // $whatsappMessage .= "📱 *الهاتف:* {$validated['customer_phone']}\n";
-    // $whatsappMessage .= "👥 *عدد الأشخاص:* {$this->party_size}\n";
-    // $whatsappMessage .= "📅 *التاريخ:* {$validated['reservation_date']} | ⏰ *الوقت:* {$validated['reservation_time']}\n";
-    // $whatsappMessage .= "🍽️ *نوع الطلب:* " . ($this->order_type === 'dine_in' ? 'تناول داخلي' : 'استلام سفري') . "\n\n";
-
-    // $whatsappMessage .= "🛒 *تفاصيل الأطباق:* \n";
-    // foreach ($this->cart as $item) {
-    //     $itemTotal = $item['price'] * $item['quantity'];
-    //     $whatsappMessage .= "• {$item['name']} (x{$item['quantity']}) - €" . number_format($itemTotal, 2) . "\n";
-    // }
-
-    // $whatsappMessage .= "\n💰 *المجموع الإجمالي:* €" . number_format($this->totalCartAmount, 2) . "\n";
-
-    // if (!empty($this->special_requests)) {
-    //     $whatsappMessage .= "📝 *ملاحظات العميل:* {$this->special_requests}\n";
-    // }
-
-    // // 4. تجهيز الرابط (تأكد من إضافة RESTAURANT_WHATSAPP_NUMBER في ملف .env)
-    // $restaurantPhone = env('RESTAURANT_WHATSAPP_NUMBER', '771924870');
-    // $encodedMessage = urlencode($whatsappMessage);
-    // $whatsappUrl = "https://wa.me/{$restaurantPhone}?text={$encodedMessage}";
-
-    // // 5. تنظيف الحالة
-
-
-
-
-    //     $this->clearCart();
-    //     $this->isCartModalOpen = false;
-
-    //     session()->flash(
-    //         'success',
-    //         sprintf(
-    //             '%s Reservation: %s | Order: %s',
-    //             __('messages.reservation.success'),
-    //             $reservation->reference_code,
-    //             $order->order_number
-    //         )
-    //     );
-
-    //     $this->dispatch(
-    //         'order-confirmed',
-    //         ['ref' => $reservation->reference_code]
-    //     );
-    // }
-
     public function checkout(
-   ReservationService $reservationService,
+        ReservationService $reservationService,
         OrderService $orderService
-): void {
-    if (empty($this->cart)) {
-        session()->flash('error', __('messages.menu.empty'));
-        return;
-    }
+    ): void {
+        if (empty($this->cart)) {
+            session()->flash('error', __('messages.menu.empty'));
 
-    $validated = $this->validate();
+            return;
+        }
 
-    $dishesSummary = collect($this->cart)->map(function ($item) {
-        return sprintf(
-            '%dx %s (€%.2f)',
-            $item['quantity'],
-            $item['name'],
-            $item['price'] * $item['quantity']
+        $validated = $this->validate();
+
+        $dishesSummary = collect($this->cart)->map(function ($item) {
+            return sprintf(
+                '%dx %s (€%.2f)',
+                $item['quantity'],
+                $item['name'],
+                $item['price'] * $item['quantity']
+            );
+        })->implode(', ');
+
+        $combinedNotes = trim(sprintf(
+            'Pre-order Dishes: [%s] | Pre-order Total: €%.2f | Customer Notes: %s',
+            $dishesSummary,
+            $this->totalCartAmount,
+            $this->special_requests
+        ));
+
+        // 1. إنشاء الحجز
+        $reservation = $reservationService->createReservation([
+            'customer_name' => $validated['customer_name'],
+            'customer_phone' => $validated['customer_phone'],
+            'customer_email' => $validated['customer_email'],
+            'party_size' => $this->party_size,
+            'reservation_date' => $validated['reservation_date'],
+            'reservation_time' => $validated['reservation_time'],
+            'special_requests' => $combinedNotes,
+        ]);
+
+        $orderItems = collect($this->cart)->map(
+            fn ($item) => [
+                'menu_item_id' => $item['id'],
+                'quantity' => $item['quantity'],
+            ]
+        )->all();
+
+        // 2. إنشاء الطلب المربوط بالحجز
+        $order = $orderService->createOrder([
+            'customer_name' => $validated['customer_name'],
+            'customer_phone' => $validated['customer_phone'],
+            'customer_email' => $validated['customer_email'],
+            'type' => OrderType::tryFrom($this->order_type) ?? OrderType::DINE_IN,
+            'notes' => "Linked to Reservation: {$reservation->reference_code}",
+        ], $orderItems);
+
+        // 3. رسالة الواتساب
+        $whatsappMessage = "👑 *طلب وحجز جديد - مطعم يمني* \n\n";
+        $whatsappMessage .= "📌 *رقم الحجز:* {$reservation->reference_code}\n";
+        $whatsappMessage .= "📌 *رقم الطلب:* {$order->order_number}\n\n";
+        $whatsappMessage .= "👤 *الاسم:* {$validated['customer_name']}\n";
+        $whatsappMessage .= "📱 *الهاتف:* {$validated['customer_phone']}\n";
+        $whatsappMessage .= "👥 *عدد الأشخاص:* {$this->party_size}\n";
+        $whatsappMessage .= "📅 *التاريخ:* {$validated['reservation_date']} | ⏰ *الوقت:* {$validated['reservation_time']}\n";
+        $whatsappMessage .= '🍽️ *نوع الطلب:* '.($this->order_type === 'dine_in' ? 'تناول داخلي' : 'استلام سفري')."\n\n";
+
+        $whatsappMessage .= "🛒 *تفاصيل الأطباق:* \n";
+        foreach ($this->cart as $item) {
+            $itemTotal = $item['price'] * $item['quantity'];
+            $whatsappMessage .= "• {$item['name']} (x{$item['quantity']}) - €".number_format($itemTotal, 2)."\n";
+        }
+
+        $whatsappMessage .= "\n💰 *المجموع الإجمالي:* €".number_format($this->totalCartAmount, 2)."\n";
+
+        if (! empty($this->special_requests)) {
+            $whatsappMessage .= "📝 *ملاحظات العميل:* {$this->special_requests}\n";
+        }
+
+        // 4. إرسال الواتساب
+        $token = env('WHATSAPP_TOKEN');
+        $phoneId = env('WHATSAPP_PHONE_NUMBER_ID');
+        $version = env('WHATSAPP_VERSION', 'v21.0');
+
+        $apiUrl = "https://graph.facebook.com/{$version}/{$phoneId}/messages";
+
+        $cleanPhone = preg_replace('/[^0-9]/', '', $validated['customer_phone']);
+
+        if ($token && $phoneId) {
+            Http::withToken($token)->post($apiUrl, [
+                'messaging_product' => 'whatsapp',
+                'to' => $cleanPhone,
+                'type' => 'text',
+                'text' => [
+                    'body' => $whatsappMessage,
+                ],
+            ]);
+        }
+
+        // 5. تنظيف حالة السلة والحجز
+        $this->clearCart();
+        $this->isCartModalOpen = false;
+
+        $this->reset([
+            'customer_name',
+            'customer_phone',
+            'customer_email',
+            'special_requests',
+            'party_size',
+        ]);
+
+        session()->flash(
+            'success',
+            sprintf(
+                '%s Reservation: %s | Order: %s',
+                __('messages.reservation.success'),
+                $reservation->reference_code,
+                $order->order_number
+            )
         );
-    })->implode(', ');
 
-    $combinedNotes = trim(sprintf(
-        'Pre-order Dishes: [%s] | Pre-order Total: €%.2f | Customer Notes: %s',
-        $dishesSummary,
-        $this->totalCartAmount,
-        $this->special_requests
-    ));
-
-    // 1. إنشاء الحجز عبر الخدمة الخاصة بك
-    $reservation = $reservationService->createReservation([
-        'customer_name' => $validated['customer_name'],
-        'customer_phone' => $validated['customer_phone'],
-        'customer_email' => $validated['customer_email'],
-        'party_size' => $this->party_size,
-        'reservation_date' => $validated['reservation_date'],
-        'reservation_time' => $validated['reservation_time'],
-        'special_requests' => $combinedNotes,
-    ]);
-
-    $orderItems = collect($this->cart)->map(
-        fn ($item) => [
-            'menu_item_id' => $item['id'],
-            'quantity' => $item['quantity'],
-        ]
-    )->all();
-
-    // 2. إنشاء الطلب المربوط بالحجز
-    $order = $orderService->createOrder([
-        'customer_name' => $validated['customer_name'],
-        'customer_phone' => $validated['customer_phone'],
-        'customer_email' => $validated['customer_email'],
-        'type' => \App\Enums\OrderType::tryFrom($this->order_type) ?? \App\Enums\OrderType::DINE_IN,
-        'notes' => "Linked to Reservation: {$reservation->reference_code}",
-    ], $orderItems);
-
-    // 3. بناء نص الرسالة الاحترافية الموجهة للعميل والمطعم بالتنسيق الجميل
-    $whatsappMessage = "👑 *طلب وحجز جديد - مطعم يمني* \n\n";
-    $whatsappMessage .= "📌 *رقم الحجز:* {$reservation->reference_code}\n";
-    $whatsappMessage .= "📌 *رقم الطلب:* {$order->order_number}\n\n";
-    $whatsappMessage .= "👤 *الاسم:* {$validated['customer_name']}\n";
-    $whatsappMessage .= "📱 *الهاتف:* {$validated['customer_phone']}\n";
-    $whatsappMessage .= "👥 *عدد الأشخاص:* {$this->party_size}\n";
-    $whatsappMessage .= "📅 *التاريخ:* {$validated['reservation_date']} | ⏰ *الوقت:* {$validated['reservation_time']}\n";
-    $whatsappMessage .= "🍽️ *نوع الطلب:* " . ($this->order_type === 'dine_in' ? 'تناول داخلي' : 'استلام سفري') . "\n\n";
-
-    $whatsappMessage .= "🛒 *تفاصيل الأطباق:* \n";
-    foreach ($this->cart as $item) {
-        $itemTotal = $item['price'] * $item['quantity'];
-        $whatsappMessage .= "• {$item['name']} (x{$item['quantity']}) - €" . number_format($itemTotal, 2) . "\n";
+        $this->dispatch(
+            'order-confirmed',
+            ['ref' => $reservation->reference_code]
+        );
     }
-
-    $whatsappMessage .= "\n💰 *المجموع الإجمالي:* €" . number_format($this->totalCartAmount, 2) . "\n";
-
-    if (!empty($this->special_requests)) {
-        $whatsappMessage .= "📝 *ملاحظات العميل:* {$this->special_requests}\n";
-    }
-
-    // 4. الإرسال الفوري التلقائي للخادم عبر إدخال حزمة الـ HTTP والاتصال بـ Meta Cloud API
-    $token = env('WHATSAPP_TOKEN');
-    $phoneId = env('WHATSAPP_PHONE_NUMBER_ID');
-    $version = env('WHATSAPP_VERSION', 'v21.0');
-    // $apiUrl = "https://facebook.com{$version}/{$phoneId}/messages";
-
-$apiUrl = "https://facebook.com";
-
-// تنظيف رقم العميل لضمان خلوه من الرموز الزائدة مثل (+) أو الفراغات المتسببة بالفشل
-$cleanPhone = preg_replace('/[^0-9]/', '', $validated['customer_phone']);
-
-// ضرب الـ API الرسمي لشركة Meta خلف الكواليس
-// \Illuminate\Support\Facades\Http::withToken($token)->post($apiUrl, [
-//     'messaging_product' => 'whatsapp',
-//     'to' => $cleanPhone,
-//     'type' => 'text',
-//     'text' => [
-//         'body' => $whatsappMessage
-//     ]
-// ]);
-    // 5. تنظيف حالة السلة وإغلاق الـ Modal وتثبيت رسالة النجاح لمعايير Livewire 4
-    $this->clearCart();
-    $this->isCartModalOpen = false;
-
-    session()->flash(
-        'success',
-        sprintf(
-            '%s Reservation: %s | Order: %s',
-            __('messages.reservation.success'),
-            $reservation->reference_code,
-            $order->order_number
-        )
-    );
-
-    $this->dispatch(
-        'order-confirmed',
-        ['ref' => $reservation->reference_code]
-    );
-}
 
     public function render()
     {
