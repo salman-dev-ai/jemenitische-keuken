@@ -8,10 +8,13 @@ use App\Models\MenuItem;
 use App\Services\OrderService;
 use App\Services\ReservationService;
 use Illuminate\Support\Facades\Http;
+use Illuminate\View\View;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+#[Lazy]
 class MenuWithCart extends Component
 {
     public string $selectedCategorySlug = 'all';
@@ -271,7 +274,12 @@ class MenuWithCart extends Component
         );
     }
 
-    public function render()
+    public function placeholder(): View
+    {
+        return view('livewire.placeholders.menu-with-cart');
+    }
+
+    public function render(): View
     {
         return view('livewire.menu-with-cart');
     }

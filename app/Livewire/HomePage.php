@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\MenuItem;
+use Illuminate\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
@@ -17,15 +18,20 @@ class HomePage extends Component
     public function signatureDishes()
     {
         return MenuItem::query()
-            ->available()       // ✅ تستخدم الـ Scope الموجود
-            ->featured()        // ✅ تستخدم الـ Scope الموجود
+            ->available()
+            ->featured()
             ->with('category')
             ->orderBy('sort_order')
             ->take(3)
             ->get();
     }
 
-    public function render()
+    public function placeholder(): View
+    {
+        return view('livewire.placeholders.home-page');
+    }
+
+    public function render(): View
     {
         return view('livewire.home-page');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Illuminate\View\View;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
@@ -70,7 +71,12 @@ class CustomerReviewsMarquee extends Component
         return $value;
     }
 
-    public function render()
+    public function placeholder(): View
+    {
+        return view('livewire.placeholders.customer-reviews-marquee');
+    }
+
+    public function render(): View
     {
         return view('livewire.customer-reviews-marquee');
     }

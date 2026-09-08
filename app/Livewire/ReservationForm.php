@@ -5,9 +5,12 @@ namespace App\Livewire;
 use App\Services\ReservationService;
 use Exception;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\View\View;
+use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+#[Lazy]
 class ReservationForm extends Component
 {
     #[Validate('required|integer|min:1|max:20')]
@@ -90,7 +93,12 @@ class ReservationForm extends Component
         }
     }
 
-    public function render()
+    public function placeholder(): View
+    {
+        return view('livewire.placeholders.reservation-form');
+    }
+
+    public function render(): View
     {
         return view('livewire.reservation-form');
     }
