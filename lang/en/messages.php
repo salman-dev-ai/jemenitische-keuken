@@ -293,4 +293,12 @@ return [
         'loading' => 'Loading...',
         'scrollToTop' => 'Scroll to top',
     ],
+
+    // ===== Success Notifications (Toast) =====
+    'notifications' => [
+        'reservation_title' => '🎉 Reservation Confirmed!',
+        'reservation_message' => 'We will contact you shortly to confirm your booking.',
+        'order_title' => '👑 Order Received!',
+        'order_message' => 'Your feast details have been sent via WhatsApp.',
+    ],
 ];

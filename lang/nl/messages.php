@@ -302,4 +302,12 @@ return [
         'loading' => 'Laden...',
         'scrollToTop' => 'Terug naar boven',
     ],
+
+    // ===== Succesmeldingen (Toast) =====
+    'notifications' => [
+        'reservation_title' => '🎉 Reservering bevestigd!',
+        'reservation_message' => 'We nemen binnenkort contact met u op om uw reservering te bevestigen.',
+        'order_title' => '👑 Bestelling ontvangen!',
+        'order_message' => 'De details van uw maaltijd zijn verzonden via WhatsApp.',
+    ],
 ];

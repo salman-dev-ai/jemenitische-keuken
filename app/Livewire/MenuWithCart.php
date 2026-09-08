@@ -258,19 +258,10 @@ class MenuWithCart extends Component
             'party_size',
         ]);
 
-        session()->flash(
-            'success',
-            sprintf(
-                '%s Reservation: %s | Order: %s',
-                __('messages.reservation.success'),
-                $reservation->reference_code,
-                $order->order_number
-            )
-        );
-
-        $this->dispatch(
-            'order-confirmed',
-            ['ref' => $reservation->reference_code]
+        // إطلاق إشعار Toast الأنيق (Livewire v4: named parameters)
+        $this->dispatch('notify',
+            title: __('messages.notifications.order_title'),
+            message: __('messages.notifications.order_message'),
         );
     }
 

@@ -257,4 +257,12 @@ return [
         'loading' => 'جاري التحميل...',
         'scrollToTop' => 'العودة للأعلى',
     ],
+
+    // ===== إشعارات النجاح (Toast) =====
+    'notifications' => [
+        'reservation_title' => '🎉 تم الحجز بنجاح!',
+        'reservation_message' => 'سنتواصل معك لتأكيد حجزك قريباً.',
+        'order_title' => '👑 تم استلام طلبك!',
+        'order_message' => 'تم إرسال تفاصيل وليمتك عبر واتساب.',
+    ],
 ];

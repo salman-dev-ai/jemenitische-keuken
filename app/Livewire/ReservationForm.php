@@ -77,8 +77,11 @@ class ReservationForm extends Component
             $this->referenceCode = $reservation->reference_code;
             $this->successMessage = __('messages.reservation.success');
 
-            // استخدام session()->flash() لتوحيد الواجهة وتجربة المستخدم
-            session()->flash('success', $this->successMessage);
+            // إطلاق إشعار Toast الأنيق (Livewire v4: named parameters)
+            $this->dispatch('notify',
+                title: __('messages.notifications.reservation_title'),
+                message: __('messages.notifications.reservation_message'),
+            );
 
             $this->reset([
                 'customer_name',
