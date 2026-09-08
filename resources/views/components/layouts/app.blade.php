@@ -41,157 +41,85 @@
         }
     }" @keydown.escape.window="closeMenus()"
         class="sticky top-0 z-50 w-full overflow-x-clip border-b border-[#E07513]/20 bg-[#250B08]/90 text-white shadow-xl backdrop-blur-md">
-        <div class="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
-            <div
-                class="grid min-h-20 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-2 py-2 sm:min-h-24 sm:gap-x-4 sm:py-3 lg:gap-x-6 lg:py-0">
-                {{-- الجانب الأول: روابط سطح المكتب + اللغة --}}
-                <div class="flex min-w-0 items-center justify-start gap-2 sm:gap-3 lg:gap-6">
-                    <nav class="hidden items-center gap-5 text-sm font-bold text-stone-200 lg:flex xl:gap-6"
-                        aria-label="{{ __('messages.nav.primary') }}">
-                        <a href="#home"
-                            class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.home') }}</a>
-                    </nav>
 
-                    <!-- زر تبديل اللغات (العربية / English / Nederlands) -->
-                    <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" type="button"
-                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/40 hover:bg-black/60 border border-white/15 text-xs font-bold text-white transition-all">
-                            <span>{{ app()->getLocale() == 'ar' ? '🇾🇪 العربية' : (app()->getLocale() == 'nl' ? '🇳🇱 Nederlands' : '🇬🇧 English') }}</span>
-                            <svg class="w-3.5 h-3.5 text-stone-300" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
+   <div class="w-full bg-[#260C0A] px-2 py-2 sm:px-4" dir="ltr">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-1.5 sm:gap-3">
 
-                        <div x-show="open" @click.away="open = false" x-cloak
-                            class="absolute  mt-2 w-40 rounded-2xl bg-[#260C0A] border border-white/15 shadow-2xl py-1 z-50 text-xs">
-                            <a href="{{ route('lang.switch', 'ar') }}"
-                                class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20  rounded-2xl  rou hover:text-[#E07513] transition-colors">
-                                <span>🇾🇪</span> <span>العربية</span>
-                            </a>
-                            <a href="{{ route('lang.switch', 'nl') }}"
-                                class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20  rounded-2xl hover:text-[#E07513] transition-colors">
-                                <span>🇳🇱</span> <span>Nederlands</span>
-                            </a>
-                            <a href="{{ route('lang.switch', 'en') }}"
-                                class="flex items-center gap-2 px-3 py-2 text-stone-200 hover:bg-[#E07513]/20  rounded-2xl hover:text-[#E07513] transition-colors">
-                                <span>🇬🇧</span> <span>English</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+        {{-- 1. زر تبديل اللغة --}}
+        <div class="relative shrink-0" x-data="{ open: false }">
+            <button @click="open = !open" 
+                    @keydown.escape.window="open = false" 
+                    type="button"
+                    class="flex items-center gap-1 rounded-full border border-stone-600/60 bg-black/40 px-2.5 py-1.5 text-[11px] font-bold text-white transition-all hover:bg-black/70 sm:px-3 sm:text-xs">
+                <span>{{ app()->getLocale() == 'ar' ? 'العربية' : (app()->getLocale() == 'nl' ? 'Nederlands' : 'English') }}</span>
+                <svg class="h-3 w-3 text-stone-300 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
 
-                {{-- الشعار: العمود الأوسط يبقى ثابتاً في كل المقاسات --}}
-                <a href="#home"
-                    class="group flex min-w-0 max-w-[6.5rem] flex-col items-center text-center sm:max-w-[9rem] lg:max-w-none"
-                    aria-label="المطبخ اليمني">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="المطبخ اليمني - Jemenitische Keuken" width="200"
-                        height="200"
-                        class="!h-10 w-auto max-w-full object-contain transition-transform group-hover:scale-105 sm:h-12  rounded-br-lg  rounded-tl-lg">
-                    {{-- <span class="mt-1 max-w-full truncate text-xs font-extrabold leading-none tracking-wide text-[#E07513] sm:text-base">المطبخ اليمني</span>
-                <span class="hidden max-w-full truncate font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest text-white sm:block">JEMENITISCHE KEUKEN</span> --}}
-                </a>
-
-                {{-- الجانب الثاني: روابط سطح المكتب + الحجز + زر قائمة الجوال --}}
-                <div class="flex min-w-0 items-center justify-end gap-2 sm:gap-3 lg:gap-6">
-                    <nav class="hidden items-center gap-5 text-sm font-bold text-stone-200 lg:flex xl:gap-6"
-                        aria-label="{{ __('messages.nav.secondary') }}">
-                        <a href="#gallery"
-                            class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.gallery') }}</a>
-                        <a href="#menu"
-                            class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.menu') }}</a>
-
-                        {{-- <a href="#contact" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.contact') }}</a> --}}
-                    </nav>
-
-                    {{-- <a href="https://www.thuisbezorgd.nl/menu/jemenitische-keuken-restaurant#pre" target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-flex min-h-10 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-[#E07513]/50 bg-black/40 px-2.5 py-2 text-[10px] font-bold text-[#E07513] shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#E07513]/10 hover:text-[#F08A25] hover:border-[#E07513] focus:outline-none focus:ring-2 focus:ring-[#FFD700] sm:px-4 sm:text-sm"
-                        title="Bestel via Thuisbezorgd.nl">
-                        <svg {{ $attributes }} xmlns="http://w3.org" viewBox="0 0 78 75" fill="none">
-                            <!-- شكل البيت البرتقالي الخلفي -->
-                            <path
-                                d="M39 0C25.4 0 0 13.9 0 28.5V67.3C0 71.5 3.4 74.9 7.6 74.9H70.4C74.6 74.9 78 71.5 78 67.3V28.5C78 13.9 52.6 0 39 0Z"
-                                fill="#FF8000" />
-
-                            <!-- السكين (أبيض بالداخل) -->
-                            <path
-                                d="M46.7 20.3C45.2 20.3 44 21.5 44 23V42C44 43.1 44.7 44 45.7 44.3V57.6C45.7 58.7 46.6 59.6 47.7 59.6C48.8 59.6 49.7 58.7 49.7 57.6V44.3C50.7 44 51.4 43.1 51.4 42V25C51.4 22.4 49.3 20.3 46.7 20.3Z"
-                                fill="white" />
-
-                            <!-- الشوكة (أبيض بالداخل) -->
-                            <path
-                                d="M31.2 20.3C28.6 20.3 26.5 22.4 26.5 25V33.9C26.5 35 27.2 35.9 28.2 36.2V57.6C28.2 58.7 29.1 59.6 30.2 59.6C31.3 59.6 32.2 58.7 32.2 57.6V36.2C33.2 35.9 33.9 35 33.9 33.9V25C33.9 23.9 33 23 31.9 23C30.8 23 29.9 23.9 29.9 25V31.5H29.1V25C29.1 23.9 28.2 23 27.1 23C26 23 25.1 23.9 25.1 25V33.9C25.1 36.3 26.8 38.3 29.1 38.8V57.6C29.1 58.7 30 59.6 31.1 59.6C32.2 59.6 33.1 58.7 33.1 57.6V38.8C35.4 38.3 37.1 36.3 37.1 33.9V25C37.1 22.4 35 20.3 32.4 20.3H31.2Z"
-                                fill="white" />
-                        </svg>
-                    </a> --}}
-
-                    <a href="https://www.thuisbezorgd.nl/menu/jemenitische-keuken-restaurant#pre" target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-flex min-h-10 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-[#E07513]/50 bg-black/40 px-2.5 py-2 text-[10px] font-bold text-[#E07513] shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#E07513]/10 hover:text-[#F08A25] hover:border-[#E07513] focus:outline-none focus:ring-2 focus:ring-[#FFD700] sm:px-4 sm:text-sm"
-                        title="Bestel via Thuisbezorgd.nl">
-
-                        <!-- الأيقونة الرسمية بعد ضبط المقاسات والرابط القياسي -->
-                        <svg xmlns="http://w3.org" viewBox="0 0 78 75" fill="none"
-                            class="w-5 h-5 sm:w-6 sm:h-6 shrink-0">
-                            <!-- شكل البيت البرتقالي الخلفي -->
-                            <path
-                                d="M39 0C25.4 0 0 13.9 0 28.5V67.3C0 71.5 3.4 74.9 7.6 74.9H70.4C74.6 74.9 78 71.5 78 67.3V28.5C78 13.9 52.6 0 39 0Z"
-                                fill="#FF8000" />
-
-                            <!-- السكين (أبيض بالداخل) -->
-                            <path
-                                d="M46.7 20.3C45.2 20.3 44 21.5 44 23V42C44 43.1 44.7 44 45.7 44.3V57.6C45.7 58.7 46.6 59.6 47.7 59.6C48.8 59.6 49.7 58.7 49.7 57.6V44.3C50.7 44 51.4 43.1 51.4 42V25C51.4 22.4 49.3 20.3 46.7 20.3Z"
-                                fill="white" />
-
-                            <!-- الشوكة (أبيض بالداخل) -->
-                            <path
-                                d="M31.2 20.3C28.6 20.3 26.5 22.4 26.5 25V33.9C26.5 35 27.2 35.9 28.2 36.2V57.6C28.2 58.7 29.1 59.6 30.2 59.6C31.3 59.6 32.2 58.7 32.2 57.6V36.2C33.2 35.9 33.9 35 33.9 33.9V25C33.9 23.9 33 23 31.9 23C30.8 23 29.9 23.9 29.9 25V31.5H29.1V25C29.1 23.9 28.2 23 27.1 23C26 23 25.1 23.9 25.1 25V33.9C25.1 36.3 26.8 38.3 29.1 38.8V57.6C29.1 58.7 30 59.6 31.1 59.6C32.2 59.6 33.1 58.7 33.1 57.6V38.8C35.4 38.3 37.1 36.3 37.1 33.9V25C37.1 22.4 35 20.3 32.4 20.3H31.2Z"
-                                fill="white" />
-                        </svg>
-
-                        <span>Thuisbezorgd.nl</span>
-                    </a>
-
-                    <a href="#reservation"
-                        class="inline-flex min-h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-gradient-to-r from-[#E07513] to-[#B85709] px-2.5 py-2 text-[10px] font-bold text-white shadow-lg shadow-[#E07513]/25 transition-all hover:-translate-y-0.5 hover:from-[#c2620a] hover:to-[#9a4504] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#FFD700] sm:px-5 sm:text-sm">
-                        {{ __('messages.nav.bookTableBtn') }}
-                    </a>
-
-                    <button type="button" @click="toggleMobile()" :aria-expanded="mobileOpen"
-                        aria-controls="mobile-navigation"
-                        class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-black/30 text-white transition-colors hover:bg-[#E07513]/20 focus:outline-none focus:ring-2 focus:ring-[#FFD700] lg:hidden"
-                        aria-label="{{ __('messages.nav.toggleMenu') }}">
-                        <svg class="hidden h-5 w-5" :class="{ 'block': !mobileOpen, 'hidden': mobileOpen }"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <svg class="hidden h-5 w-5" :class="{ 'block': mobileOpen, 'hidden': !mobileOpen }"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 6l12 12M18 6 6 18" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            {{-- قائمة الجوال: تظهر حتى lg ثم تختفي تلقائياً على سطح المكتب --}}
-            <div id="mobile-navigation" class="hidden border-t border-[#E07513]/20 pb-3 pt-2 lg:hidden"
-                :class="{ 'block': mobileOpen, 'hidden': !mobileOpen }">
-                <nav class="grid grid-cols-1 gap-1 sm:grid-cols-2" aria-label="{{ __('messages.nav.mobile') }}">
-                    <a href="#home" @click="closeMenus()"
-                        class="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold text-stone-200 transition-colors hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.home') }}</a>
-                    <a href="#menu" @click="closeMenus()"
-                        class="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold text-stone-200 transition-colors hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.menu') }}</a>
-                    <a href="#gallery" @click="closeMenus()"
-                        class="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold text-stone-200 transition-colors hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.gallery') }}</a>
-                    <a href="#reservation" @click="closeMenus()"
-                        class="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold text-stone-200 transition-colors hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.reservation') }}</a>
-                </nav>
+            <!-- القائمة المنسدلة للغات -->
+            <div x-show="open" 
+                 @click.away="open = false" 
+                 x-cloak
+                 class="absolute left-0 mt-2 w-28 rounded-xl border border-white/15 bg-[#260C0A] py-1 text-xs shadow-2xl z-50">
+                <a href="{{ route('lang.switch', 'ar') }}" class="block px-3 py-1.5 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">العربية</a>
+                <a href="{{ route('lang.switch', 'nl') }}" class="block px-3 py-1.5 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">Nederlands</a>
+                <a href="{{ route('lang.switch', 'en') }}" class="block px-3 py-1.5 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">English</a>
             </div>
         </div>
+
+        {{-- 2. زر Thuisbezorgd --}}
+        <a href="https://www.thuisbezorgd.nl/menu/jemenitische-keuken-restaurant#pre" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#E07513] bg-black/40 p-1.5 transition-transform hover:scale-105 sm:h-10 sm:w-10">
+            <img src="{{ asset('images/thuisbezorgd.png') }}" alt="Thuisbezorgd" class="h-full w-full object-contain" />
+        </a>
+
+        {{-- 3. الشعار --}}
+        <a href="#home" class="flex shrink-0 items-center justify-center">
+            <img src="{{ asset('images/logo.jpg') }}" 
+                 alt="المطبخ اليمني" 
+                 class="h-9 w-auto rounded-lg object-contain sm:h-12">
+        </a>
+
+        {{-- 4. زر الحجز الرئيسي --}}
+        <a href="#reservation"
+           class="inline-flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-gradient-to-r from-[#E07513] to-[#B85709] px-2.5 text-[10px] font-bold text-white shadow-md shadow-[#E07513]/20 transition-all hover:opacity-95 sm:px-4 sm:text-xs">
+            {{ __('messages.nav.bookTableBtn') }}
+        </a>
+
+        {{-- 5. زر قائمة الجوال (القائمة المنسدلة) --}}
+        <button type="button" 
+                @click="toggleMobile()" 
+                :aria-expanded="mobileOpen"
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-stone-600/60 bg-black/40 text-white transition-colors hover:bg-stone-800 sm:h-10 sm:w-10">
+            <svg class="h-5 w-5" :class="{ 'hidden': mobileOpen, 'block': !mobileOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg class="h-5 w-5" :class="{ 'block': mobileOpen, 'hidden': !mobileOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+    </div>
+
+    {{-- قائمة الجوال المنسدلة --}}
+    <div id="mobile-navigation" 
+         x-show="mobileOpen"
+         x-transition
+         dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
+         class="mt-2 w-full border-t border-[#E07513]/20 pt-2 lg:hidden"
+         style="display: none;">
+        <nav class="grid grid-cols-1 gap-1 sm:grid-cols-2">
+            <a href="#home" @click="closeMenus()" class="flex min-h-10 items-center rounded-xl px-3 py-2 text-xs font-bold text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.home') }}</a>
+            <a href="#menu" @click="closeMenus()" class="flex min-h-10 items-center rounded-xl px-3 py-2 text-xs font-bold text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.menu') }}</a>
+            <a href="#gallery" @click="closeMenus()" class="flex min-h-10 items-center rounded-xl px-3 py-2 text-xs font-bold text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.gallery') }}</a>
+            <a href="#reservation" @click="closeMenus()" class="flex min-h-10 items-center rounded-xl px-3 py-2 text-xs font-bold text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.reservation') }}</a>
+        </nav>
+    </div>
+</div>
+
     </header>
 
     <!-- محتوى الصفحة الفردية (Single Page Sections) -->
@@ -464,74 +392,66 @@
          نظام الإشعارات الأنيق (Toast Notifications)
          يستمع لأحداث Livewire ويعرض إشعاراً عند النجاح
     ======================== -->
-    <div
-        x-data="{
-            toasts: [],
-            add(toast) {
-                const id = Date.now();
-                this.toasts.push({ id, ...toast, visible: false });
-                this.$nextTick(() => {
-                    const t = this.toasts.find(t => t.id === id);
-                    if (t) t.visible = true;
-                });
-                setTimeout(() => this.remove(id), toast.duration ?? 6000);
-            },
-            remove(id) {
+    <div x-data="{
+        toasts: [],
+        add(toast) {
+            const id = Date.now();
+            this.toasts.push({ id, ...toast, visible: false });
+            this.$nextTick(() => {
                 const t = this.toasts.find(t => t.id === id);
-                if (t) {
-                    t.visible = false;
-                    setTimeout(() => {
-                        this.toasts = this.toasts.filter(t => t.id !== id);
-                    }, 500);
-                }
+                if (t) t.visible = true;
+            });
+            setTimeout(() => this.remove(id), toast.duration ?? 6000);
+        },
+        remove(id) {
+            const t = this.toasts.find(t => t.id === id);
+            if (t) {
+                t.visible = false;
+                setTimeout(() => {
+                    this.toasts = this.toasts.filter(t => t.id !== id);
+                }, 500);
             }
-        }"
-        @notify.window="add($event.detail)"
+        }
+    }" @notify.window="add($event.detail)"
         class="fixed bottom-6 {{ app()->getLocale() === 'ar' ? 'right-6' : 'left-6' }} z-[999] flex flex-col gap-3 pointer-events-none"
-        aria-live="polite"
-        aria-atomic="true"
-    >
+        aria-live="polite" aria-atomic="true">
         <template x-for="toast in toasts" :key="toast.id">
-            <div
-                x-show="toast.visible"
-                x-transition:enter="transition ease-out duration-500"
+            <div x-show="toast.visible" x-transition:enter="transition ease-out duration-500"
                 x-transition:enter-start="opacity-0 translate-y-6 scale-95"
                 x-transition:enter-end="opacity-100 translate-y-0 scale-100"
                 x-transition:leave="transition ease-in duration-400"
                 x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                 x-transition:leave-end="opacity-0 translate-y-4 scale-95"
                 class="pointer-events-auto flex items-start gap-3 min-w-[280px] max-w-sm w-full rounded-2xl border border-[#E07513]/30 bg-[#1C0705]/95 px-4 py-3.5 shadow-2xl shadow-black/50 backdrop-blur-md ring-1 ring-white/5"
-                role="alert"
-            >
+                role="alert">
                 {{-- أيقونة النجاح --}}
-                <div class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-500/30">
-                    <svg class="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <div
+                    class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-500/30">
+                    <svg class="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
 
                 {{-- المحتوى --}}
                 <div class="min-w-0 flex-1">
                     <p class="text-sm font-black text-white leading-snug" x-text="toast.title"></p>
-                    <p class="mt-0.5 text-xs text-stone-400 leading-relaxed" x-text="toast.message" x-show="toast.message"></p>
+                    <p class="mt-0.5 text-xs text-stone-400 leading-relaxed" x-text="toast.message"
+                        x-show="toast.message"></p>
 
                     {{-- شريط التقدم (Progress Bar) يختفي مع الوقت --}}
                     <div class="mt-2 h-0.5 w-full rounded-full bg-white/10 overflow-hidden">
-                        <div
-                            class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-[#E07513]"
-                            x-bind:style="`animation: shrink ${toast.duration ?? 6000}ms linear forwards`"
-                        ></div>
+                        <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-[#E07513]"
+                            x-bind:style="`animation: shrink ${toast.duration ?? 6000}ms linear forwards`"></div>
                     </div>
                 </div>
 
                 {{-- زر الإغلاق --}}
-                <button
-                    @click="remove(toast.id)"
-                    class="mt-0.5 shrink-0 text-stone-500 hover:text-stone-300 transition-colors"
-                    aria-label="Close"
-                >
+                <button @click="remove(toast.id)"
+                    class="mt-0.5 shrink-0 text-stone-500 hover:text-stone-300 transition-colors" aria-label="Close">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -541,8 +461,13 @@
     {{-- CSS: حركة شريط التقدم --}}
     <style>
         @keyframes shrink {
-            from { width: 100%; }
-            to { width: 0%; }
+            from {
+                width: 100%;
+            }
+
+            to {
+                width: 0%;
+            }
         }
     </style>
 
