@@ -249,6 +249,10 @@ return [
             'message' => 'Uw bericht of speciaal verzoek *',
 
             'submit' => 'Bericht nu versturen →',
+            'send' => 'Bericht versturen',
+            'sending' => 'Verzenden...',
+            'success' => 'Uw bericht is succesvol ontvangen! We nemen binnenkort contact met u op.',
+            'error' => 'Er is helaas een fout opgetreden bij het verzenden van uw bericht. Probeer het opnieuw.',
 
             'subjects' => [
 
@@ -285,11 +289,17 @@ return [
             'dine_in' => 'Ter plaatse eten',
         ],
         'reservation_status' => [
-            'pending' => 'Wachten op bevestiging',
+            'pending' => 'In afwachting van bevestiging',
             'confirmed' => 'Bevestigd',
             'seated' => 'Gasten aanwezig',
             'cancelled' => 'Geannuleerd',
-            'no_show' => 'Niet verschenen',
+            'no_show' => 'Niet komen opdagen',
         ],
+    ],
+
+    // ===== Toegankelijkheid & UI =====
+    'accessibility' => [
+        'loading' => 'Laden...',
+        'scrollToTop' => 'Terug naar boven',
     ],
 ];

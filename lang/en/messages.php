@@ -131,7 +131,6 @@ return [
         'badge' => 'Instant Online Reservation',
         'title' => 'Book Your Table',
         'subtitle' => 'Choose the number of guests, preferred time, and seating location, and we will prepare the perfect table for you.',
-        'tablesAvailable' => 'Table available at this time',
         'success' => 'Your reservation request has been successfully submitted! We will confirm it shortly.',
         'welcome' => 'Welcome, :name. Your reservation has been successfully confirmed.',
         'referenceCode' => 'Reservation Reference Code',
@@ -289,4 +288,9 @@ return [
         ],
     ],
 
+    // ===== Accessibility & UI =====
+    'accessibility' => [
+        'loading' => 'Loading...',
+        'scrollToTop' => 'Scroll to top',
+    ],
 ];

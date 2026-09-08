@@ -249,7 +249,7 @@
                                     @endif
                                 </div>
 
-                                {{-- زر السلة الذكي --}}
+                                {{-- زر السلة   --}}
                                 <div class="pt-4 border-t border-stone-100 mt-auto">
                                     @if (!$inCart)
                                         <span wire:loading wire:target="addToCart({{ $item->id }})"
@@ -330,7 +330,7 @@
                         </span>
                     </div>
                     <div class="text-right">
-                        <span class="text-xs text-amber-200 font-bold block">{{ __('messages.menu.cartReady')  }}</span>
+                        {{-- <span class="text-xs text-amber-200 font-bold block">{{ __('messages.menu.cartReady')  }}</span> --}}
                         <span class="text-sm sm:text-base font-black text-white">
                             {{ __('messages.menu.total')  }}: €{{ number_format($this->totalCartAmount, 2) }}
                         </span>
@@ -391,10 +391,10 @@
                                     <x-lucide-shopping-cart class="w-10 h-10 text-stone-300" />
                                 </div>
                                 <h3 class="text-sm font-black text-stone-700 mb-2">{{ __('messages.menu.empty') ?? 'السلة فارغة' }}</h3>
-                                <p class="text-xs text-stone-500 max-w-[200px] mb-6">لم تقم بإضافة أي أطباق لوليمتك حتى الآن.</p>
-                                <button type="button" @click="$wire.set('isCartModalOpen', false)"
-                                    class="px-5 py-2.5 bg-stone-900 text-white font-bold rounded-xl text-xs hover:bg-stone-800 transition-colors">
-                                    تصفح المنيو الآن
+                                <p class="text-xs text-stone-500 max-w-[200px] mb-6">{{ __('messages.menu.emptyText') }}</p>
+                                <button type="button" @click="$wire.isCartModalOpen = false"
+                                    class="w-full py-3 bg-[#2A0D0A] hover:bg-[#E07513] text-white font-bold rounded-xl text-sm transition-colors">
+                                    {{ __('messages.menu.browseMenu') }}
                                 </button>
                             </div>
                         @else
