@@ -207,13 +207,13 @@
                                     @if ($item->is_featured)
                                         <span
                                             class="px-2.5 py-1 bg-amber-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
-                                            	<x-lucide-star class="w-3 h-3 fill-white" aria-hidden="true" /> مميز
+                                            	<x-lucide-star class="w-3 h-3 fill-white" aria-hidden="true" /> {{ __('messages.menu.featured') }}
                                         </span>
                                     @endif
                                     @if ($item->is_spicy)
                                         <span
                                             class="px-2.5 py-1 bg-red-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
-                                            <x-lucide-flame class="w-3 h-3" aria-hidden="true" /> حار
+                                            <x-lucide-flame class="w-3 h-3" aria-hidden="true" /> {{ __('messages.menu.spicy') }}
                                         </span>
                                     @endif
                                 </div>
@@ -276,7 +276,7 @@
                                                 wire:loading.attr="disabled"
                                                 wire:target="removeFromCart({{ $item->id }})"
                                                 class="w-9 h-9 rounded-lg bg-white text-red-500 hover:bg-red-100 hover:text-red-600 flex items-center justify-center shadow-sm transition-all disabled:opacity-50 disabled:cursor-wait"
-                                                title="حذف الطبق نهائياً من السلة">
+                                                title="{{ __('messages.menu.removeFromCart') }}">
 
                                                 <span wire:loading.remove
                                                     wire:target="removeFromCart({{ $item->id }})"><x-lucide-trash-2 class="w-4 h-4" /></span>
@@ -422,7 +422,7 @@
                                                     wire:loading.attr="disabled"
                                                     wire:target="removeFromCart({{ $id }})"
                                                     class="w-7 h-7 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors disabled:opacity-50"
-                                                    title="حذف الطبق">
+                                                    title="{{ __('messages.menu.removeFromCart') }}">
                                                     <span wire:loading.remove
                                                         wire:target="removeFromCart({{ $id }})"><x-lucide-trash-2 class="w-3 h-3" /></span>
                                                     <span wire:loading wire:target="removeFromCart({{ $id }})"
@@ -460,54 +460,62 @@
                         <form wire:submit="checkout" class="space-y-4 pt-4 border-t border-stone-200">
                             <h4
                                 class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-1 flex items-center gap-2">
-                                <span>	<x-lucide-clipboard-list class="w-4 h-4" /></span> بيانات الحجز والتواصل
+                                <span>	<x-lucide-clipboard-list class="w-4 h-4" /></span> {{ __('messages.reservation.contactDetails') }}
                             </h4>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div class="sm:col-span-2">
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">الاسم الكريم *</label>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.fullName') }} <span class="text-rose-500" aria-hidden="true">*</span></label>
                                     <input type="text" wire:model="customer_name" required
-                                        placeholder="مثال: صالح اليافعي"
+                                        placeholder="{{ __('messages.reservation.fullNamePlaceholder') }}"
+                                        autocomplete="name"
                                         class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                    @error('customer_name') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">رقم الهاتف / واتساب
-                                        *</label>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.phone') }} <span class="text-rose-500" aria-hidden="true">*</span></label>
                                     <input type="tel" wire:model="customer_phone" required
                                         placeholder="+31 6 1234 5678"
+                                        dir="ltr"
+                                        autocomplete="tel"
                                         class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                    @error('customer_phone') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">البريد الإلكتروني
-                                        </label>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.email') ?? __('messages.contact.form.email') }}</label>
                                     <input type="email" wire:model="customer_email"
                                         placeholder="example@domain.com"
+                                        autocomplete="email"
                                         class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                    @error('customer_email') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">تاريخ الحضور *</label>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.reservationDate') }} <span class="text-rose-500" aria-hidden="true">*</span></label>
                                     <input type="date" wire:model="reservation_date" required
+                                        min="{{ now()->toDateString() }}"
                                         class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                    @error('reservation_date') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">وقت الحضور *</label>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.preferredTime') }} <span class="text-rose-500" aria-hidden="true">*</span></label>
                                     <input type="time" wire:model="reservation_time" required
                                         class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                    @error('reservation_time') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">نوع الخدمة</label>
+                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.serviceType') }}</label>
                                     <select wire:model="order_type"
                                         class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all appearance-none">
-                                        <option value="dine_in">تناول داخلي (ديوان / طاولة)</option>
-                                        <option value="takeaway">استلام سفري (Takeaway)</option>
+                                        <option value="dine_in">{{ __('messages.reservation.dineIn') }}</option>
+                                        <option value="takeaway">{{ __('messages.reservation.takeaway') }}</option>
                                     </select>
                                 </div>
                                 <div>
@@ -517,39 +525,40 @@
                                     <input id="cart-party-size" type="number" wire:model="party_size" min="1" max="20"
                                         required
                                         class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                    @error('party_size') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-stone-700 mb-1.5">ملاحظات خاصة للشيف
-                                    (اختياري)</label>
+                                <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.specialRequests') }}</label>
                                 <textarea wire:model="special_requests" rows="2"
-                                    placeholder="مثال: نرجو تجهيز شاي عدني، أو وجود حساسية من المكسرات..."
+                                    placeholder="{{ __('messages.reservation.requestsPlaceholderMenu') }}"
                                     class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all resize-none"></textarea>
                             </div>
 
                             {{-- ملخص السعر وزر الإرسال --}}
-                            {{-- ملخص السعر وزر الإرسال المحدث لـ Livewire 4 --}}
                             <div class="pt-4 border-t border-stone-200 mt-6 space-y-4">
                                 <div
                                     class="bg-[#FAF4ED] p-4 rounded-xl border border-[#E07513]/25 flex justify-between items-center">
-                                    <span class="text-sm font-bold text-stone-700">المجموع الإجمالي للطلب:</span>
+                                    <span class="text-sm font-bold text-stone-700">{{ __('messages.reservation.orderTotal') }}</span>
                                     <span
                                         class="text-xl font-black text-[#E07513]">€{{ number_format($this->totalCartAmount, 2) }}</span>
                                 </div>
 
-                                {{-- زر الإرسال المحدث بالتأثيرات الذكية التلقائية أثناء معالجة طلب الـ Cloud API --}}
                                 <button type="submit" wire:loading.attr="disabled"
                                     class="w-full py-4 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-xl text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
 
-                                    {{-- حالة العرض العادية --}}
-                                    <span wire:loading.remove>تأكيد الحجز وتلقي الإشعار عبر واتساب <x-lucide-crown class="w-5 h-5" /></span>
+                                    <span wire:loading.remove>{{ __('messages.reservation.confirmReservation') }} <x-lucide-crown class="w-5 h-5 inline-block" /></span>
 
-                                    {{-- حالة معالجة الطلب والإرسال الخلفي لـ Meta --}}
                                     <span wire:loading
                                         class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                                    <span wire:loading>جاري تسجيل الحجز وإرسال تفاصيل واتساب...</span>
+                                    <span wire:loading>{{ __('messages.reservation.processingReservation') }}</span>
                                 </button>
+
+                                <p class="text-[10px] text-center text-stone-400 flex items-center justify-center gap-1">
+                                    <x-lucide-shield-check class="w-3 h-3" />
+                                    <span>{{ __('messages.reservation.smsNotice') }}</span>
+                                </p>
                             </div>
 
                         </form>

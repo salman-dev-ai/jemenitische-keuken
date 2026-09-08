@@ -125,6 +125,9 @@ return [
         'emptyText' => 'U heeft nog geen gerechten aan uw feestmaal toegevoegd.',
         'browseMenu' => 'Menu nu bekijken',
         'selectedDishes' => 'Geselecteerde gerechten voor het feestmaal',
+        'featured' => 'Aanbevolen',
+        'spicy' => 'Pittig',
+        'removeFromCart' => 'Gerecht uit winkelwagen verwijderen',
     ],
 
     // ===== Reservering =====
@@ -143,7 +146,6 @@ return [
         'tableNumber' => 'Tafelnummer',
         'table' => 'Tafel',
         'errorTitle' => 'Controleer uw gegevens',
-
         'step1' => 'Gegevens over gasten & tijd',
         'partySize' => 'Aantal gasten',
         'guestsLabel' => 'Gasten',
@@ -151,6 +153,8 @@ return [
         'today' => 'Vandaag',
         'tomorrow' => 'Morgen',
         'preferredTime' => 'Gewenste aankomsttijd',
+        'email' => 'E-mailadres',
+        'rate_limit_exceeded' => 'Te veel pogingen. Probeer het over een ogenblik opnieuw.',
         'sessionDuration' => 'Beschikbare zitduur: 90 minuten',
 
         'step2' => 'Kies uw tafel & zitplaats',

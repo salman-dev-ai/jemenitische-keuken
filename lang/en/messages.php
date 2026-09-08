@@ -121,6 +121,9 @@ return [
         'emptyText' => 'You haven\'t added any dishes to your feast yet.',
         'browseMenu' => 'Browse Menu Now',
         'selectedDishes' => 'Selected Dishes for the Feast',
+        'featured' => 'Featured',
+        'spicy' => 'Spicy',
+        'removeFromCart' => 'Remove dish from cart',
     ],
 
     // ===== Reservation =====
@@ -139,7 +142,6 @@ return [
         'tableNumber' => 'Table Number',
         'table' => 'Table',
         'errorTitle' => 'Please Check Your Information',
-
         'step1' => 'Guest & Time Details',
         'partySize' => 'Number of Guests',
         'guestsLabel' => 'Guests',
@@ -147,6 +149,8 @@ return [
         'today' => 'Today',
         'tomorrow' => 'Tomorrow',
         'preferredTime' => 'Preferred Arrival Time',
+        'email' => 'Email Address',
+        'rate_limit_exceeded' => 'Too many attempts. Please try again in a moment.',
         'sessionDuration' => 'Available seating duration: 90 minutes',
 
         'step2' => 'Choose Your Table & Seating Location',
