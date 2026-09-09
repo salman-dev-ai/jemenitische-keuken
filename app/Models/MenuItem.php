@@ -61,53 +61,29 @@ class MenuItem extends Model
 
     public function getLocalizedNameAttribute(): string
     {
-        // return $this->getTranslation(
-        //     'name',
-        //     app()->getLocale(),
-        //     true,
-        // ) ?: '—';
+        $locale = app()->getLocale();
 
-             $locale = app()->getLocale();
-
-        // استخدام getTranslation من Spatie لجلب النص بلغة محددة
-        $translation = $this->getTranslation('description', $locale, false);
-
-        // إذا وجدت الترجمة باللغة الحالية
-        if (!empty($translation) && is_string($translation)) {
+        $translation = $this->getTranslation('name', $locale, false);
+        if (! empty($translation) && is_string($translation)) {
             return $translation;
         }
 
-        // Fallback: جرب الإنجليزية
-        $englishTranslation = $this->getTranslation('description', 'en', false);
-        if (!empty($englishTranslation) && is_string($englishTranslation)) {
-            return $englishTranslation;
-        }
- return 'غير محدد';
+        $fallback = $this->getTranslation('name', 'en', false);
+
+        return (! empty($fallback) && is_string($fallback)) ? $fallback : '—';
     }
 
     public function getLocalizedDescriptionAttribute(): ?string
     {
-        // return $this->getTranslation(
-        //     'description',
-        //     app()->getLocale(),
-        //     true,
-        // ) ?: null;
-           $locale = app()->getLocale();
+        $locale = app()->getLocale();
 
-        // استخدام getTranslation من Spatie لجلب النص بلغة محددة
-        $translation = $this->getTranslation('name', $locale, false);
-
-        // إذا وجدت الترجمة باللغة الحالية
-        if (!empty($translation) && is_string($translation)) {
+        $translation = $this->getTranslation('description', $locale, false);
+        if (! empty($translation) && is_string($translation)) {
             return $translation;
         }
 
-        // Fallback: جرب الإنجليزية
-        $englishTranslation = $this->getTranslation('name', 'en', false);
-        if (!empty($englishTranslation) && is_string($englishTranslation)) {
-            return $englishTranslation;
-        }
- return 'غير محدد';
+        $fallback = $this->getTranslation('description', 'en', false);
 
+        return (! empty($fallback) && is_string($fallback)) ? $fallback : null;
     }
 }

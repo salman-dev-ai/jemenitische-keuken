@@ -14,7 +14,7 @@ class HomePage extends Component
     /**
      * استرجاع روائع الأطباق الملكية المميزة (Signature Dishes)
      */
-    #[Computed]
+    #[Computed(persist: true)]
     public function signatureDishes()
     {
         return MenuItem::query()

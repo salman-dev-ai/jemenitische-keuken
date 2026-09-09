@@ -41,84 +41,109 @@
         }
     }" @keydown.escape.window="closeMenus()"
         class="sticky top-0 z-50 w-full overflow-x-clip border-b border-[#E07513]/20 bg-[#250B08]/90 text-white shadow-xl backdrop-blur-md">
+        
+      <header class="w-full bg-[#260C0A] text-stone-200 border-b border-[#E07513]/20 shadow-lg" dir="ltr">
+    <div class="mx-auto max-w-7xl px-3 py-2 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5 lg:gap-6">
+            
+            {{-- الصف الأول: الشعار + الأزرار (في الجوال) / الشعار فقط (في الكمبيوتر) --}}
+            <div class="flex items-center justify-between w-full lg:w-auto">
+                
+                {{-- الشعار البارز (Logo) --}}
+                <a href="#home" class="group flex shrink-0 items-center transition-transform hover:scale-105">
+                    <div class="relative p-1 rounded-2xl bg-black/50 border border-[#E07513]/50 shadow-lg shadow-[#E07513]/15 ring-1 ring-white/10">
+                        <img src="{{ asset('images/logo.jpg') }}" 
+                             alt="المطبخ اليمني" 
+                             class="h-11 sm:h-14 lg:h-16 w-auto object-contain rounded-xl">
+                    </div>
+                </a>
 
-   <div class="w-full bg-[#260C0A] px-2 py-2 sm:px-4" dir="ltr">
-    <div class="mx-auto flex max-w-7xl items-center justify-between gap-1.5 sm:gap-3">
+                {{-- أزرار التفاعل للجوال فقط (تظهر بجانب الشعار في السطر العلوي) --}}
+                <div class="flex items-center gap-1.5 sm:gap-2 lg:hidden">
+                    <!-- زر الطلب Thuisbezorgd -->
+                    <a href="https://www.thuisbezorgd.nl/menu/jemenitische-keuken-restaurant#pre" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#E07513] bg-black/40 p-1.5 shadow-sm transition-all hover:scale-105">
+                        <img src="{{ asset('images/thuisbezorgd.png') }}" alt="Thuisbezorgd" class="h-full w-full object-contain" />
+                    </a>
 
-        {{-- 1. زر تبديل اللغة --}}
-        <div class="relative shrink-0" x-data="{ open: false }">
-            <button @click="open = !open" 
-                    @keydown.escape.window="open = false" 
-                    type="button"
-                    class="flex items-center gap-1 rounded-full border border-stone-600/60 bg-black/40 px-2.5 py-1.5 text-[11px] font-bold text-white transition-all hover:bg-black/70 sm:px-3 sm:text-xs">
-                <span>{{ app()->getLocale() == 'ar' ? 'العربية' : (app()->getLocale() == 'nl' ? 'Nederlands' : 'English') }}</span>
-                <svg class="h-3 w-3 text-stone-300 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-            </button>
+                    <!-- زر الحجز -->
+                    <a href="#reservation"
+                       class="inline-flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-gradient-to-r from-[#E07513] to-[#B85709] px-3 text-[11px] font-bold text-white shadow-md shadow-[#E07513]/25 transition-all hover:brightness-110">
+                        {{ __('messages.nav.bookTableBtn') }}
+                    </a>
 
-            <!-- القائمة المنسدلة للغات -->
-            <div x-show="open" 
-                 @click.away="open = false" 
-                 x-cloak
-                 class="absolute left-0 mt-2 w-28 rounded-xl border border-white/15 bg-[#260C0A] py-1 text-xs shadow-2xl z-50">
-                <a href="{{ route('lang.switch', 'ar') }}" class="block px-3 py-1.5 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">العربية</a>
-                <a href="{{ route('lang.switch', 'nl') }}" class="block px-3 py-1.5 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">Nederlands</a>
-                <a href="{{ route('lang.switch', 'en') }}" class="block px-3 py-1.5 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">English</a>
+                    <!-- زر تبديل اللغة -->
+                    <div class="relative shrink-0" x-data="{ open: false }">
+                        <button @click="open = !open" @keydown.escape.window="open = false" type="button"
+                                class="flex h-9 items-center gap-1 rounded-xl border border-white/15 bg-black/40 px-2.5 text-[11px] font-bold text-white transition-all hover:bg-black/60">
+                            <span>{{ app()->getLocale() == 'ar' ? 'العربية' : (app()->getLocale() == 'nl' ? 'Nederlands' : 'English') }}</span>
+                            <svg class="h-3 w-3 text-stone-300 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div x-show="open" @click.away="open = false" x-cloak
+                             class="absolute right-0 mt-2 w-28 rounded-xl border border-white/15 bg-[#260C0A] py-1 text-xs shadow-2xl z-50">
+                            <a wire:navigate href="{{ route('lang.switch', 'ar') }}" class="block px-3 py-1.5 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">العربية</a>
+                            <a wire:navigate href="{{ route('lang.switch', 'nl') }}" class="block px-3 py-1.5 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">Nederlands</a>
+                            <a wire:navigate href="{{ route('lang.switch', 'en') }}" class="block px-3 py-1.5 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">English</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
+            {{-- الصف الثاني للجوال / المنتصف للكمبيوتر: روابط التنقل --}}
+            <nav class="w-full lg:w-auto border-t border-[#E07513]/20 pt-2 lg:border-t-0 lg:pt-0" aria-label="{{ __('messages.nav.primary') }}">
+                <ul class="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 text-xs sm:text-sm font-bold text-stone-200">
+                    <li><a href="#home" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.home') }}</a></li>
+                    <li><a href="#menu" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.menu') }}</a></li>
+                    <li><a href="#gallery" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.gallery') }}</a></li>
+                    <li><a href="#reservation" class="whitespace-nowrap transition-colors hover:text-[#E07513]">{{ __('messages.nav.reservation') }}</a></li>
+                </ul>
+            </nav>
+
+            {{-- الجانب الأيمن لسطح المكتب فقط: أزرار التفاعل --}}
+            <div class="hidden lg:flex items-center gap-3 shrink-0">
+                <!-- زر Thuisbezorgd -->
+                <a href="https://www.thuisbezorgd.nl/menu/jemenitische-keuken-restaurant#pre" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#E07513] bg-black/40 p-2 shadow-sm transition-all hover:scale-105 hover:bg-[#E07513]/10"
+                   title="Thuisbezorgd">
+                    <img src="{{ asset('images/thuisbezorgd.png') }}" alt="Thuisbezorgd" class="h-full w-full object-contain" />
+                </a>
+
+                <!-- زر الحجز -->
+                <a href="#reservation"
+                   class="inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-gradient-to-r from-[#E07513] to-[#B85709] px-5 text-sm font-bold text-white shadow-lg shadow-[#E07513]/25 transition-all hover:-translate-y-0.5 hover:from-[#c2620a] hover:to-[#9a4504]">
+                    {{ __('messages.nav.bookTableBtn') }}
+                </a>
+
+                <!-- زر تبديل اللغة -->
+                <div class="relative shrink-0" x-data="{ open: false }">
+                    <button @click="open = !open" @keydown.escape.window="open = false" type="button"
+                            class="flex h-10 items-center gap-1.5 rounded-xl border border-white/15 bg-black/40 px-3 text-xs font-bold text-white transition-all hover:bg-black/60">
+                        <span>{{ app()->getLocale() == 'ar' ? 'العربية' : (app()->getLocale() == 'nl' ? 'Nederlands' : 'English') }}</span>
+                        <svg class="h-3.5 w-3.5 text-stone-300 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div x-show="open" @click.away="open = false" x-cloak
+                         class="absolute right-0 mt-2 w-32 rounded-xl border border-white/15 bg-[#260C0A] py-1 text-xs shadow-2xl z-50">
+                        <a wire:navigate href="{{ route('lang.switch', 'ar') }}" class="block px-3 py-2 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">العربية</a>
+                        <a wire:navigate href="{{ route('lang.switch', 'nl') }}" class="block px-3 py-2 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">Nederlands</a>
+                        <a wire:navigate href="{{ route('lang.switch', 'en') }}" class="block px-3 py-2 text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">English</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        {{-- 2. زر Thuisbezorgd --}}
-        <a href="https://www.thuisbezorgd.nl/menu/jemenitische-keuken-restaurant#pre" 
-           target="_blank" 
-           rel="noopener noreferrer"
-           class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#E07513] bg-black/40 p-1.5 transition-transform hover:scale-105 sm:h-10 sm:w-10">
-            <img src="{{ asset('images/thuisbezorgd.png') }}" alt="Thuisbezorgd" class="h-full w-full object-contain" />
-        </a>
-
-        {{-- 3. الشعار --}}
-        <a href="#home" class="flex shrink-0 items-center justify-center">
-            <img src="{{ asset('images/logo.jpg') }}" 
-                 alt="المطبخ اليمني" 
-                 class="h-9 w-auto rounded-lg object-contain sm:h-12">
-        </a>
-
-        {{-- 4. زر الحجز الرئيسي --}}
-        <a href="#reservation"
-           class="inline-flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-gradient-to-r from-[#E07513] to-[#B85709] px-2.5 text-[10px] font-bold text-white shadow-md shadow-[#E07513]/20 transition-all hover:opacity-95 sm:px-4 sm:text-xs">
-            {{ __('messages.nav.bookTableBtn') }}
-        </a>
-
-        {{-- 5. زر قائمة الجوال (القائمة المنسدلة) --}}
-        <button type="button" 
-                @click="toggleMobile()" 
-                :aria-expanded="mobileOpen"
-                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-stone-600/60 bg-black/40 text-white transition-colors hover:bg-stone-800 sm:h-10 sm:w-10">
-            <svg class="h-5 w-5" :class="{ 'hidden': mobileOpen, 'block': !mobileOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <svg class="h-5 w-5" :class="{ 'block': mobileOpen, 'hidden': !mobileOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-
     </div>
-
-    {{-- قائمة الجوال المنسدلة --}}
-    <div id="mobile-navigation" 
-         x-show="mobileOpen"
-         x-transition
-         dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-         class="mt-2 w-full border-t border-[#E07513]/20 pt-2 lg:hidden"
-         style="display: none;">
-        <nav class="grid grid-cols-1 gap-1 sm:grid-cols-2">
-            <a href="#home" @click="closeMenus()" class="flex min-h-10 items-center rounded-xl px-3 py-2 text-xs font-bold text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.home') }}</a>
-            <a href="#menu" @click="closeMenus()" class="flex min-h-10 items-center rounded-xl px-3 py-2 text-xs font-bold text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.menu') }}</a>
-            <a href="#gallery" @click="closeMenus()" class="flex min-h-10 items-center rounded-xl px-3 py-2 text-xs font-bold text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.gallery') }}</a>
-            <a href="#reservation" @click="closeMenus()" class="flex min-h-10 items-center rounded-xl px-3 py-2 text-xs font-bold text-stone-200 hover:bg-[#E07513]/20 hover:text-[#E07513]">{{ __('messages.nav.reservation') }}</a>
-        </nav>
-    </div>
-</div>
+</header>
 
     </header>
 

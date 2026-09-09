@@ -51,4 +51,13 @@ class RestaurantSetting extends Model
 
         return $this->address[$locale] ?? $this->address['ar'] ?? $this->address['en'] ?? null;
     }
+
+    /**
+     * جلب إعدادات المطعم مع التخزين المؤقت (Cache) لمدة ساعة
+     * يُجنّب استعلام قاعدة البيانات في كل طلب
+     */
+    public static function getCached(): ?static
+    {
+        return cache()->remember('restaurant_settings', 3600, fn () => static::first());
+    }
 }

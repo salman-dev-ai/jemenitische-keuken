@@ -28,6 +28,7 @@
                     <div class="aspect-[4/3] overflow-hidden bg-stone-200">
                         @if ($category->image_path)
                             <img src="{{ Storage::url($category->image_path) }}" alt="{{ $category->localized_name }}"
+                                loading="lazy" width="400" height="300"
                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         @else
                             <div
@@ -194,7 +195,7 @@
                             <div class="relative aspect-[4/3] overflow-hidden bg-stone-100">
                                 @if ($item->image_path)
                                     <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->localized_name }}"
-                                        loading="lazy"
+                                        loading="lazy" width="600" height="450"
                                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                                 @else
                                     <div

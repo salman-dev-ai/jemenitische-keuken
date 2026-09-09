@@ -7,7 +7,6 @@ use App\Models\MenuCategory;
 use App\Models\MenuItem;
 use App\Services\OrderService;
 use App\Services\ReservationService;
-use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Lazy;
@@ -55,11 +54,13 @@ class MenuWithCart extends Component
     public function selectCategory(string $slug): void
     {
         $this->selectedCategorySlug = $slug;
+        unset($this->filteredItems);
     }
 
     public function addToCart(int $itemId): void
     {
-        $item = MenuItem::available()->find($itemId);
+        // استخدام البيانات المحمّلة في الـ Computed بدلاً من DB query جديدة
+        $item = $this->filteredItems->firstWhere('id', $itemId);
 
         if (! $item) {
             return;
@@ -124,7 +125,7 @@ class MenuWithCart extends Component
         );
     }
 
-    #[Computed]
+    #[Computed(persist: true)]
     public function categories()
     {
         return MenuCategory::active()
@@ -154,7 +155,10 @@ class MenuWithCart extends Component
         OrderService $orderService
     ): void {
         if (empty($this->cart)) {
-            session()->flash('error', __('messages.menu.empty'));
+            $this->dispatch('notify',
+                title: __('messages.menu.empty'),
+                message: '',
+            );
 
             return;
         }
@@ -171,7 +175,7 @@ class MenuWithCart extends Component
         })->implode(', ');
 
         $combinedNotes = trim(sprintf(
-            'Pre-order Dishes: [%s] | Pre-order Total: €%.2f | Customer Notes: %s',
+            'Pre-order: [%s] | Total: €%.2f | Notes: %s',
             $dishesSummary,
             $this->totalCartAmount,
             $this->special_requests
@@ -196,7 +200,7 @@ class MenuWithCart extends Component
         )->all();
 
         // 2. إنشاء الطلب المربوط بالحجز
-        $order = $orderService->createOrder([
+        $orderService->createOrder([
             'customer_name' => $validated['customer_name'],
             'customer_phone' => $validated['customer_phone'],
             'customer_email' => $validated['customer_email'],
@@ -204,61 +208,12 @@ class MenuWithCart extends Component
             'notes' => "Linked to Reservation: {$reservation->reference_code}",
         ], $orderItems);
 
-        // 3. رسالة الواتساب
-        $whatsappMessage = "👑 *طلب وحجز جديد - مطعم يمني* \n\n";
-        $whatsappMessage .= "📌 *رقم الحجز:* {$reservation->reference_code}\n";
-        $whatsappMessage .= "📌 *رقم الطلب:* {$order->order_number}\n\n";
-        $whatsappMessage .= "👤 *الاسم:* {$validated['customer_name']}\n";
-        $whatsappMessage .= "📱 *الهاتف:* {$validated['customer_phone']}\n";
-        $whatsappMessage .= "👥 *عدد الأشخاص:* {$this->party_size}\n";
-        $whatsappMessage .= "📅 *التاريخ:* {$validated['reservation_date']} | ⏰ *الوقت:* {$validated['reservation_time']}\n";
-        $whatsappMessage .= '🍽️ *نوع الطلب:* '.($this->order_type === 'dine_in' ? 'تناول داخلي' : 'استلام سفري')."\n\n";
-
-        $whatsappMessage .= "🛒 *تفاصيل الأطباق:* \n";
-        foreach ($this->cart as $item) {
-            $itemTotal = $item['price'] * $item['quantity'];
-            $whatsappMessage .= "• {$item['name']} (x{$item['quantity']}) - €".number_format($itemTotal, 2)."\n";
-        }
-
-        $whatsappMessage .= "\n💰 *المجموع الإجمالي:* €".number_format($this->totalCartAmount, 2)."\n";
-
-        if (! empty($this->special_requests)) {
-            $whatsappMessage .= "📝 *ملاحظات العميل:* {$this->special_requests}\n";
-        }
-
-        // 4. إرسال الواتساب
-        $token = env('WHATSAPP_TOKEN');
-        $phoneId = env('WHATSAPP_PHONE_NUMBER_ID');
-        $version = env('WHATSAPP_VERSION', 'v21.0');
-
-        $apiUrl = "https://graph.facebook.com/{$version}/{$phoneId}/messages";
-
-        $cleanPhone = preg_replace('/[^0-9]/', '', $validated['customer_phone']);
-
-        if ($token && $phoneId) {
-            Http::withToken($token)->post($apiUrl, [
-                'messaging_product' => 'whatsapp',
-                'to' => $cleanPhone,
-                'type' => 'text',
-                'text' => [
-                    'body' => $whatsappMessage,
-                ],
-            ]);
-        }
-
-        // 5. تنظيف حالة السلة والحجز
+        // 3. تنظيف حالة السلة وإغلاق النافذة
         $this->clearCart();
         $this->isCartModalOpen = false;
+        $this->reset(['customer_name', 'customer_phone', 'customer_email', 'special_requests', 'party_size']);
 
-        $this->reset([
-            'customer_name',
-            'customer_phone',
-            'customer_email',
-            'special_requests',
-            'party_size',
-        ]);
-
-        // إطلاق إشعار Toast الأنيق (Livewire v4: named parameters)
+        // 4. إشعار النجاح
         $this->dispatch('notify',
             title: __('messages.notifications.order_title'),
             message: __('messages.notifications.order_message'),
