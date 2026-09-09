@@ -33,7 +33,7 @@ class RestaurantSettingsTable
                     ->boolean(),
                 TextColumn::make('updated_at')
                     ->label('آخر تحديث')
-                    ->dateTime('d/m/Y H:i'),
+                     ->dateTime('d/m/Y H:i'),
 
             ])
 
