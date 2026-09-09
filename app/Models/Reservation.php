@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\OrderType;
 use App\Enums\ReservationStatus;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Reservation extends Model
@@ -52,5 +54,10 @@ class Reservation extends Model
     public function scopePending(Builder $query): Builder
     {
         return $query->where('status', ReservationStatus::PENDING);
+    }
+
+    public function preorder(): HasOne
+    {
+        return $this->hasOne(Order::class)->where('type', OrderType::PREORDER);
     }
 }

@@ -278,6 +278,7 @@ return [
         'order_type' => [
             'pickup' => 'Pickup (Takeaway)',
             'dine_in' => 'Dine-in',
+            'preorder' => 'Pre-order with Reservation',
         ],
         'reservation_status' => [
             'pending' => 'Pending Confirmation',
@@ -300,5 +301,171 @@ return [
         'reservation_message' => 'We will contact you shortly to confirm your booking.',
         'order_title' => '👑 Order Received!',
         'order_message' => 'Your feast details have been sent via WhatsApp.',
+        'preorder_title' => '🛒 Pre-order Added!',
+        'preorder_message' => 'We will prepare your dishes before you arrive.',
+    ],
+
+    // ===== Interactive Chatbot Assistant =====
+    'chatbot' => [
+        'ui' => [
+            'title' => 'Yemeni Kitchen Assistant',
+            'subtitle' => 'Reservation & menu expert ready to help',
+            'open_chat' => 'Open Assistant',
+            'close_chat' => 'Close',
+            'minimize' => 'Minimize',
+            'send' => 'Send',
+            'input_placeholder' => 'Type your message here...',
+            'typing' => 'Typing...',
+            'switch_lang' => 'Language',
+            'new_chat' => 'Start new conversation',
+        ],
+
+        'greeting' => [
+            'message' => '👋 Welcome to Yemeni Kitchen! I\'m your smart assistant. How can I help you today?',
+            'options_title' => 'Choose one of the quick options:',
+            'options' => [
+                'reserve' => '📅 Book a Table',
+                'menu' => '🍽️ View Menu',
+                'hours' => '⏰ Opening Hours',
+                'location' => '📍 Location & Address',
+                'contact' => '📞 Contact Us',
+            ],
+        ],
+
+        'reservation' => [
+            'start_intro' => 'Fantastic! Let\'s book your table step by step. 🪑',
+            'step_party_size' => 'Step 1️⃣: How many total guests? Choose an option or enter a number:',
+            'party_size_options' => [
+                'solo' => '👤 1-2 people',
+                'small' => '👨‍👩‍👧 3-5 people',
+                'medium' => '👨‍👩‍👧‍👦 6-10 people',
+                'large' => '👥 More than 10',
+            ],
+            'party_size_confirmed' => '✅ Perfect! Guests count: :count people.',
+            'party_size_too_large' => '😅 We have tables up to 20 guests. For larger events, please contact us directly.',
+            'party_size_invalid' => 'Please enter a valid number between 1 and 20.',
+
+            'step_date' => 'Step 2️⃣: What is your preferred date?',
+            'date_options' => [
+                'today' => 'Today',
+                'tomorrow' => 'Tomorrow',
+                'day_after' => 'Day after',
+                'pick' => '📅 Pick a date',
+            ],
+            'date_confirmed' => '✅ Date set: :date.',
+            'date_past' => '📅 This date has passed! We automatically chose today for you.',
+            'date_closed' => '🚫 Restaurant is closed on this day. Next available day: :date.',
+
+            'step_time' => 'Step 3️⃣: What is your preferred arrival time? (from :start to :end)',
+            'time_too_early' => '⏰ Earliest booking time is :time. Next available time right now: :available.',
+            'time_confirmed' => '✅ Time set: :time.',
+            'time_unavailable' => '⚠️ This time is not available. Nearby available times:',
+            'session_duration' => '⏱️ Seating duration: 90 minutes.',
+
+            'step_name' => 'Step 4️⃣: Please enter your full name:',
+            'name_confirmed' => '✅ Thank you :name!',
+            'name_invalid' => 'Please enter a valid name (3 chars minimum).',
+
+            'step_phone' => 'Step 5️⃣: Enter your phone number for confirmation (WhatsApp preferred):',
+            'phone_confirmed' => '✅ Phone number saved.',
+            'phone_invalid' => 'Invalid phone number. Example: +31 6 12345678',
+
+            'step_email' => '📧 (Optional) Would you like to add your email? (Type NO to skip)',
+            'email_confirmed' => '✅ Email saved: :email.',
+            'email_skipped' => '👌 Email skipped.',
+            'email_invalid' => 'Please enter a valid email or type "NO" to skip.',
+
+            'step_notes' => '📝 (Optional) Any special requests? E.g. high chair, special occasion, food allergies...',
+            'notes_confirmed' => '✅ Your notes saved: :notes.',
+            'notes_skipped' => '👌 No notes.',
+        ],
+
+        'summary' => [
+            'title' => '📋 Booking Summary - Final Review',
+            'confirm' => '✅ Confirm Reservation',
+            'add_preorder' => '🛒 Add Pre-order Dishes',
+            'edit' => '✏️ Edit',
+            'edit_field' => '🔄 Edit :field',
+            'editing_prompt' => 'Absolutely! Enter the new :field:',
+            'edit_saved' => '✅ :field updated successfully.',
+            'fields' => [
+                'name' => 'Name',
+                'phone' => 'Phone',
+                'email' => 'Email',
+                'date' => 'Date',
+                'time' => 'Time',
+                'party_size' => 'Guests',
+                'notes' => 'Notes',
+            ],
+        ],
+
+        'success' => [
+            'title' => '🎉 Congratulations! Your reservation has been confirmed',
+            'reference' => 'Booking Reference Code',
+            'copy_code' => 'Copy Code',
+            'code_copied' => '✅ Code Copied',
+            'next_question' => 'Would you like to pre-order your dishes so they are ready upon arrival? Saves you 15 minutes ⏱️',
+            'preorder_yes' => '🛒 Yes, choose dishes',
+            'preorder_no' => 'No, thank you',
+            'final_message' => 'Thank you for choosing Yemeni Kitchen! See you soon 👋',
+        ],
+
+        'preorder' => [
+            'intro' => '🛒 Great! Choose your favorite dishes from the categories below. Cart updates automatically:',
+            'categories' => 'Categories:',
+            'all' => 'All',
+            'featured' => '⭐ Most Popular',
+            'add' => '➕ Add',
+            'remove' => '➖ Remove',
+            'quantity' => 'Qty: :qty',
+            'cart' => '🛒 Pre-order Cart',
+            'cart_empty' => 'Cart is empty. Choose from the dishes above!',
+            'subtotal' => 'Subtotal',
+            'tax' => 'VAT (21%)',
+            'total' => 'Grand Total',
+            'confirm' => '✅ Confirm Pre-order with Reservation',
+            'skip' => '⏭️ Skip Pre-order',
+            'success' => '👑 Excellent! Your pre-order was successfully added to your reservation. Total: :total',
+        ],
+
+        'keyword_responses' => [
+            'menu_intro' => '🍽️ Here\'s a quick selection of our most popular traditional dishes. Scroll down or visit the full menu page:',
+            'menu_view_full' => '📖 View Full Menu',
+            'hours' => '⏰ Our opening hours are as follows: **:hours**\n\nWe are open all days of the week including public holidays. 🎉',
+            'location' => '📍 We are located at:\n\n**:address**\n\nRight on Damrak, opposite Central Station. Click the button to view location on map 🗺️',
+            'view_map' => '🗺️ Open Map',
+            'contact' => '📞 Ways to reach us:\n\n📱 WhatsApp: :whatsapp\n📧 Email: :email\n🕒 We usually respond within 15 minutes during opening hours.',
+            'whatsapp_cta' => '💬 WhatsApp Us',
+            'email_cta' => '✉️ Send Email',
+        ],
+
+        'fallback' => [
+            'message' => '🤔 Sorry, I didn\'t quite understand that. I can help you with one of the following options:',
+            'retry_prompt' => 'Or you can rephrase your question differently.',
+            'stuck_title' => '😅 Need direct help?',
+            'stuck_message' => 'You can call us or WhatsApp for an immediate reply:',
+            'options' => [
+                'reserve' => '📅 Book Table',
+                'menu' => '🍽️ Menu',
+                'hours' => '⏰ Hours',
+                'location' => '📍 Location',
+                'contact' => '📞 Contact',
+            ],
+        ],
+
+        'errors' => [
+            'rate_limit' => '⚠️ Too many attempts. Please wait 60 seconds and try again.',
+            'generic' => '❌ An unexpected error occurred. Please refresh the page and try again.',
+            'reservation_failed' => '⚠️ Could not register booking right now. Please try again or contact us directly.',
+        ],
+
+        'steps_indicator' => [
+            'party_size' => 'Guests',
+            'date' => 'Date',
+            'time' => 'Time',
+            'contact' => 'Your Info',
+            'summary' => 'Summary',
+            'done' => 'Done ✔',
+        ],
     ],
 ];

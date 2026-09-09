@@ -30,5 +30,7 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('checkout-submit', function (Request $request) {
             return Limit::perHour(2)->by($request->ip());
         });
+
+        $this->loadViewsFrom(__DIR__.'/../../resources/views/layouts', 'layouts');
     }
 }

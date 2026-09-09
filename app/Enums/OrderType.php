@@ -9,6 +9,7 @@ enum OrderType: string implements HasColor, HasLabel
 {
     case PICKUP = 'pickup';
     case DINE_IN = 'dine_in';
+    case PREORDER = 'preorder';
 
     public function getLabel(): ?string
     {
@@ -20,6 +21,7 @@ enum OrderType: string implements HasColor, HasLabel
         return match ($this) {
             self::PICKUP => 'info',
             self::DINE_IN => 'success',
+            self::PREORDER => 'warning',
         };
     }
 }

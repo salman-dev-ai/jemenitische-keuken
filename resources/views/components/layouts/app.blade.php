@@ -496,6 +496,9 @@
         }
     </style>
 
+    <!-- المساعد الذكي التفاعلي (Chatbot) - Frontend فقط لا يتأثر بـ Filament -->
+        <livewire:chatbot-assistant />
+
     @livewireScripts
 </body>
 
