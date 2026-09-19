@@ -1,7 +1,7 @@
 <x-layouts.app :settings="$settings">
 
     {{-- Home section --}}
-    <div id="home" class="py-0">
+    <div id="home" class="-mt-10">
         <livewire:home-page />
     </div>
 
