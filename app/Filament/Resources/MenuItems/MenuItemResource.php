@@ -24,8 +24,7 @@ class MenuItemResource extends Resource
 
     protected static ?string $model = MenuItem::class;
 
-    // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSparkles;
-    protected static string|BackedEnum|null $navigationIcon = 'lucide-utensils-crossed';
+     protected static string|BackedEnum|null $navigationIcon = 'lucide-utensils-crossed';
 
     protected static ?string $navigationLabel = 'الأطباق';
 

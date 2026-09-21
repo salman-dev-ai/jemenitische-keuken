@@ -1,128 +1,3 @@
-{{-- resources/views/livewire/home-page.blade.php --}}
-@php
-    $locale = app()->getLocale();
-    $isArabic = $locale === 'ar';
-    $isDutch = $locale === 'nl';
-
-
-    $content = $isDutch
-        ? [
-            'eyebrow' => 'EEN AUTHENTIEKE YEMENITISCHE SMAAKREIS',
-            'title' => "De smaak van\nHadramout\nin elke hap",
-            'subtitle' => 'Traditionele Yemenitische gerechten met eeuwenoude smaken, rechtstreeks uit het hart van Jemen.',
-            'orderTitle' => 'Bestel online',
-            'orderSubtitle' => 'Geniet eenvoudig van onze authentieke Yemenitische gerechten',
-            'delivery' => 'Bezorging',
-            'deliveryText' => 'Vers bij je thuis',
-            'pickup' => 'Afhalen',
-            'pickupText' => 'Klaar wanneer jij komt',
-            'dinein' => 'In het restaurant',
-            'dineinText' => 'Een unieke Yemenitische ervaring',
-        ]
-        : ($isArabic
-            ? [
-                'eyebrow' => 'رحلة نكهة يمنية أصيلة',
-                'title' => "مذاق حضرموت\nفي كل لقمة",
-                'subtitle' => 'أطباق يمنية تقليدية بنكهة عريقة، تأخذك إلى قلب اليمن.',
-                'orderTitle' => 'اطلب أونلاين',
-                'orderSubtitle' => 'استمتع بأشهى الأطباق اليمنية بكل سهولة',
-                'delivery' => 'توصيل',
-                'deliveryText' => 'نصل إليك أينما كنت',
-                'pickup' => 'استلام',
-                'pickupText' => 'جاهز عندك',
-                'dinein' => 'أكل في المطعم',
-                'dineinText' => 'تجربة يمنية لا تُنسى',
-            ]
-            : [
-                'eyebrow' => 'AN AUTHENTIC YEMENI FLAVOUR JOURNEY',
-                'title' => "The taste of\nHadramout\nin every bite",
-                'subtitle' => 'Traditional Yemeni dishes with ancient flavours that take you to the heart of Yemen.',
-                'orderTitle' => 'Order online',
-                'orderSubtitle' => 'Enjoy our authentic Yemeni dishes with ease',
-                'delivery' => 'Delivery',
-                'deliveryText' => 'Fresh to your door',
-                'pickup' => 'Pick-up',
-                'pickupText' => 'Ready when you arrive',
-                'dinein' => 'Dine in',
-                'dineinText' => 'An unforgettable Yemeni experience',
-            ]);
-
-    $slides = [
-        [
-            'image' => asset('images/restaurant/home-hero.webp'),
-            'alt' => $isArabic
-                ? 'شبام حضرموت والبحر وقت الغروب'
-                : ($isDutch
-                    ? 'Shibam Hadramout aan de kust van Jemen bij zonsondergang'
-                    : 'Shibam Hadramout beside the sea at sunset'),
-            'eyebrow' => $isArabic
-                ? 'رحلة نكهة يمنية أصيلة'
-                : ($isDutch
-                    ? 'EEN AUTHENTIEKE YEMENITISCHE SMAAKREIS'
-                    : 'AN AUTHENTIC YEMENI FLAVOUR JOURNEY'),
-            'title' => $isArabic
-                ? "مذاق حضرموت\nفي كل لقمة"
-                : ($isDutch
-                    ? "De smaak van\nHadramout\nin elke hap"
-                    : "The taste of\nHadramout\nin every bite"),
-            'text' => $isArabic
-                ? 'أطباق يمنية تقليدية بنكهة عريقة، تأخذك إلى قلب اليمن.'
-                : ($isDutch
-                    ? 'Traditionele Yemenitische gerechten met eeuwenoude smaken, rechtstreeks uit het hart van Jemen.'
-                    : 'Traditional Yemeni dishes with ancient flavours that take you to the heart of Yemen.'),
-        ],
-        [
-            'image' => asset('images/restaurant/restaurant-feast.webp'),
-            'alt' => $isArabic
-                ? 'مائدة يمنية عامرة بالأطباق'
-                : ($isDutch
-                    ? 'Een rijk gevulde Yemenitische tafel'
-                    : 'A generous Yemeni feast table'),
-            'eyebrow' => $isArabic
-                ? 'كرم الضيافة اليمنية'
-                : ($isDutch
-                    ? 'YEMENITISCHE GASTVRIJHEID'
-                    : 'YEMENI HOSPITALITY'),
-            'title' => $isArabic
-                ? "سفرة تجمعنا\nعلى الخير"
-                : ($isDutch
-                    ? "Een tafel\nvol warmte"
-                    : "A table\nfull of warmth"),
-            'text' => $isArabic
-                ? 'نكهات غنية وأجواء دافئة تجعل كل زيارة ذكرى جميلة.'
-                : ($isDutch
-                    ? 'Rijke smaken en warme momenten die van elk bezoek een mooie herinnering maken.'
-                    : 'Rich flavours and warm moments that make every visit memorable.'),
-        ],
-        [
-            'image' => asset('images/restaurant/order-dinein.webp'),
-            'alt' => $isArabic
-                ? 'طبق مندي يمني شهي'
-                : ($isDutch
-                    ? 'Een heerlijke Yemenitische mandi-schotel'
-                    : 'A delicious Yemeni mandi platter'),
-            'eyebrow' => $isArabic ? 'مذاق يُحضّر بشغف' : ($isDutch ? 'MET LIEFDE BEREID' : 'PREPARED WITH PASSION'),
-            'title' => $isArabic
-                ? "مندي شهي\nبطعم أصيل"
-                : ($isDutch
-                    ? "Mandi met\nauthentieke smaak"
-                    : "Mandi with\nauthentic flavour"),
-            'text' => $isArabic
-                ? 'أرز معطر وبهارات يمنية ولحم طري، في طبق واحد لا يُنسى.'
-                : ($isDutch
-                    ? 'Geurige rijst, Yemenitische specerijen en mals vlees in één onvergetelijk gerecht.'
-                    : 'Fragrant rice, Yemeni spices and tender meat in one unforgettable dish.'),
-        ],
-    ];
-
-    // بطاقات "اطلب أونلاين" مع أيقونات Lucide (تُمرّر كـ key للتبديل في الـ blade)
-    $orderOptions = [
-        ['key' => 'truck',        'title' => $content['delivery'], 'description' => $content['deliveryText'], 'image' => 'order-delivery.webp'],
-        ['key' => 'shopping-bag', 'title' => $content['pickup'],   'description' => $content['pickupText'],   'image' => 'order-pickup.webp'],
-        ['key' => 'utensils',     'title' => $content['dinein'],   'description' => $content['dineinText'],   'image' => 'order-dinein.webp'],
-    ];
-@endphp
-
 {{-- الهوم فقط: لا يحتوي هذا الملف على الهيدر أو الفوتر --}}
 <div id="home" dir='ltr' class="home-page overflow-hidden bg-[#FBF7ED] text-[#57151B]">
 
@@ -170,9 +45,10 @@
                 x-transition:leave-end="opacity-0"
                 class="absolute inset-0">
 
+                {{-- تم الاعتماد على slide.image المجهزة من Livewire والتي تحتوي على مسار Storage --}}
                 <img
                     :src="slide.image"
-                    :alt="slide.alt"
+                    :alt="slide.title"
                     width="1600"
                     height="1000"
                     :loading="index === 0 ? 'eager' : 'lazy'"
@@ -181,16 +57,11 @@
                     class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-[7000ms] ease-out will-change-transform"
                     :class="activeSlide === index ? 'scale-105' : 'scale-100'">
 
-                {{-- طبقات تدرج لضمان وضوح النص --}}
+                {{-- طبقات تدرج لضمان وضوح النص
                 <div class="pointer-events-none absolute inset-0 bg-gradient-to-l from-[#4A0D12]/95 via-[#4A0D12]/60 to-[#4A0D12]/5"></div>
-                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#4A0D12]/75 via-transparent to-transparent"></div>
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#4A0D12]/75 via-transparent to-transparent"></div> --}}
             </div>
         </template>
-
-        {{-- زخرفة جانبية --}}
-        <div aria-hidden="true"
-            class="pointer-events-none absolute inset-y-0 end-0 z-10 w-16 opacity-20 [background-image:linear-gradient(135deg,transparent_0%,transparent_44%,#D9B36B_45%,transparent_47%,transparent_100%)] [background-size:48px_48px]">
-        </div>
 
         {{-- المحتوى النصي --}}
         <div class="relative z-20 flex min-h-[560px] items-end justify-center px-7 pb-14 sm:min-h-[650px] sm:px-12 sm:pb-20 lg:min-h-[calc(100svh-78px)] lg:items-center lg:justify-end lg:px-16 lg:pb-0 xl:px-24">
@@ -220,7 +91,7 @@
                             class="mx-auto mt-7 max-w-[410px] text-sm leading-8 text-[#F0DCC5] drop-shadow-md lg:mx-0"
                             x-text="slide.text"></p>
 
-                        {{-- فاصل زخرفي بـ Lucide Diamond --}}
+                        {{-- فاصل زخرفي --}}
                         <div class="mt-8 flex items-center justify-center gap-4 lg:justify-end">
                             <span class="h-px w-12 bg-[#D9B36B]"></span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
@@ -235,22 +106,16 @@
             </div>
         </div>
 
-        {{-- ============================================================
-             أزرار التنقل يمين/يسار — Lucide Chevrons
-             ============================================================ --}}
+        {{-- أزرار التنقل --}}
         <button
             type="button"
             @click="previous(); start()"
             aria-label="{{ $isArabic ? 'الصورة السابقة' : ($isDutch ? 'Vorige dia' : 'Previous slide') }}"
-            class="group absolute start-4 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D9B36B]/40 bg-[#4A0D12]/40 text-[#D9B36B] shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D9B36B] hover:bg-[#D9B36B] hover:text-[#4A0D12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF9EE] sm:h-12 sm:w-12">
+            class="group absolute start-4 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D9B36B]/40 bg-[#4A0D12]/40 text-[#D9B36B] shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D9B36B] hover:bg-[#D9B36B] hover:text-[#4A0D12] sm:h-12 sm:w-12">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"
                 aria-hidden="true">
-                @if ($isArabic)
-                    <path d="m9 18 6-6-6-6"/>
-                @else
                     <path d="m15 18-6-6 6-6"/>
-                @endif
             </svg>
         </button>
 
@@ -258,21 +123,15 @@
             type="button"
             @click="next(); start()"
             aria-label="{{ $isArabic ? 'الصورة التالية' : ($isDutch ? 'Volgende dia' : 'Next slide') }}"
-            class="group absolute end-4 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D9B36B]/40 bg-[#4A0D12]/40 text-[#D9B36B] shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D9B36B] hover:bg-[#D9B36B] hover:text-[#4A0D12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF9EE] sm:h-12 sm:w-12">
+            class="group absolute end-4 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D9B36B]/40 bg-[#4A0D12]/40 text-[#D9B36B] shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D9B36B] hover:bg-[#D9B36B] hover:text-[#4A0D12] sm:h-12 sm:w-12">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"
                 aria-hidden="true">
-                @if ($isArabic)
-                    <path d="m15 18-6-6 6-6"/>
-                @else
                     <path d="m9 18 6-6-6-6"/>
-                @endif
             </svg>
         </button>
 
-        {{-- ============================================================
-             مؤشر الشرائح — Pill حديث ينمو عند التفعيل
-             ============================================================ --}}
+        {{-- مؤشر الشرائح --}}
         <div class="absolute bottom-6 start-1/2 z-30 -translate-x-1/2" role="tablist"
             aria-label="{{ $isArabic ? 'شرائح الصور' : ($isDutch ? 'Afbeeldingsdia\'s' : 'Image slides') }}"
             dir="ltr">
@@ -284,7 +143,7 @@
                         :aria-label="`{{ $isArabic ? 'انتقل إلى الصورة' : ($isDutch ? 'Ga naar dia' : 'Go to slide') }} ${index + 1}`"
                         :aria-selected="activeSlide === index"
                         role="tab"
-                        class="h-1.5 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9B36B]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2C0D0A]"
+                        class="h-1.5 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9B36B]/70"
                         :class="activeSlide === index
                             ? 'w-8 bg-gradient-to-r from-[#D9B36B] to-[#E8C88A] shadow-[0_0_12px_rgba(217,179,107,0.55)]'
                             : 'w-1.5 bg-[#FDFBF7]/45 hover:bg-[#FDFBF7]/80 hover:scale-125'">
@@ -297,14 +156,13 @@
     {{-- ============================================================
          اطلب أونلاين — بطاقات مع أيقونات Lucide
          ============================================================ --}}
-    <section   class="relative bg-[#FBF7ED] px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-        {{-- خلفية مائية خفيفة --}}
+    <section class="relative bg-[#FBF7ED] px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div aria-hidden="true"
             class="pointer-events-none absolute inset-0 opacity-[0.08] [background-image:radial-gradient(#C89B4A_1px,transparent_1px)] [background-size:36px_36px]">
         </div>
 
         <div class="relative mx-auto max-w-6xl">
-            {{-- رأس القسم --}}
+            {{-- رأس القسم تم تحويله ليدعم اللغات بشكل مباشر دون الحاجة لمصفوفة content --}}
             <div class="text-center">
                 <div class="flex items-center justify-center gap-4 text-[#C89B4A]">
                     <span class="h-px w-16 bg-[#C89B4A]"></span>
@@ -317,23 +175,22 @@
                 </div>
 
                 <h2 class="mt-3 font-serif text-4xl font-bold tracking-[-0.04em] text-[#57151B] sm:text-5xl">
-                    {{ $content['orderTitle'] }}
+                    {{ $isArabic ? 'خيارات الطلب' : ($isDutch ? 'Bestelopties' : 'Order Options') }}
                 </h2>
 
                 <p class="mt-3 text-sm text-[#B5863C] sm:text-base">
-                    {{ $content['orderSubtitle'] }}
-                </p>
+                    {{ $isArabic ? 'اختر الطريقة التي تناسبك لتجربة أطباقنا' : ($isDutch ? 'Kies hoe u van onze gerechten wilt genieten' : 'Choose how you want to experience our dishes') }}
             </div>
 
             {{-- البطاقات --}}
             <div class="mt-10 grid gap-6 md:grid-cols-3">
                 @foreach ($orderOptions as $option)
                     <a href="#reservation"
-                        class="group relative overflow-hidden rounded-xl border border-[#D9C9B4] bg-[#FFFDF8] shadow-[0_5px_16px_rgba(87,21,27,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C89B4A] hover:shadow-[0_14px_28px_rgba(87,21,27,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C89B4A]">
+                        class="group relative overflow-hidden rounded-xl border border-[#D9C9B4] bg-[#FFFDF8] shadow-[0_5px_16px_rgba(87,21,27,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C89B4A] hover:shadow-[0_14px_28px_rgba(87,21,27,0.12)]">
 
-                        {{-- صورة البطاقة --}}
+                        {{-- صورة البطاقة (تستقبل الرابط المباشر من المودل/Livewire) --}}
                         <div class="relative h-32 overflow-hidden sm:h-36">
-                            <img src="{{ asset('images/restaurant/' . $option['image']) }}"
+                            <img src="{{ $option['image'] }}"
                                 alt="{{ $option['title'] }}"
                                 width="800" height="420"
                                 loading="lazy"
@@ -344,7 +201,6 @@
 
                         {{-- محتوى البطاقة --}}
                         <div class="relative px-5 pb-5 pt-0 text-center">
-                            {{-- أيقونة دائرية متداخلة (Lucide) --}}
                             <span class="relative -mt-6 mx-auto flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#FBF7ED] bg-[#57151B] text-[#D9B36B] shadow-md transition-transform duration-300 group-hover:scale-105"
                                 aria-hidden="true">
                                 @switch($option['key'])
@@ -390,7 +246,6 @@
                                 {{ $option['description'] }}
                             </p>
 
-                            {{-- CTA: أيقونة Lucide Arrow --}}
                             <span
                                 class="mx-auto mt-5 flex h-9 w-9 items-center justify-center rounded-full bg-[#C89B4A] text-[#FFF9EE] shadow-sm transition-all duration-300 group-hover:bg-[#B5863C] group-hover:shadow-md"
                                 aria-hidden="true">
@@ -419,4 +274,3 @@
         class="h-5 w-full border-t border-[#C89B4A]/20 bg-[#FBF7ED] [background-image:linear-gradient(135deg,transparent_0%,transparent_42%,#C89B4A_43%,transparent_45%,transparent_100%)] [background-size:34px_34px] opacity-70">
     </div>
 </div>
-

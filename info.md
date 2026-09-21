@@ -57,3 +57,26 @@ php artisan make:livewire CreatePost --class
 
  
 php artisan migrate:fresh
+
+
+
+مسح التخزين المؤقت (للتأكد من أن Laravel يقرأ الإعدادات الجديدة وليس النسخة القديمة من SQLite):
+
+Bash
+php artisan config:clear
+بناء الجداول (لترحيل الهيكل إلى قاعدة jemenitische_keuken في MySQL):
+
+Bash
+php artisan migrate
+
+
+لإنشاء جسر بين مجلد التخزين ومجلد الويب العام:
+
+Bash
+php artisan storage:link
+
+
+إنشاء الـ Model مع ملف الـ Migration في أمر واحد متصل:
+
+
+php artisan make:model Slider -m   
