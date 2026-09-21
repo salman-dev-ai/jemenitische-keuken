@@ -18,6 +18,8 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use LaraZeus\SpatieTranslatable\SpatieTranslatablePlugin;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -66,6 +68,11 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->plugin(SpatieTranslatablePlugin::make()->defaultLocales(['en', 'ar', 'nl']));
+            ->plugin(SpatieTranslatablePlugin::make()->defaultLocales(['en', 'ar', 'nl']))
+            ->renderHook(
+                // PanelsRenderHook::PAGE_HEADER_ACTIONS_AFTER,
+                PanelsRenderHook::USER_MENU_BEFORE,
+                fn () => view('filament.admin-header.view-user-app-button'),
+            );
     }
 }
