@@ -20,8 +20,7 @@ class OrderOptionForm
             ->components([
                 // ========== العمود الرئيسي (2/3) ==========
                 Section::make('محتوى الخيار')
-                    ->description('أدخل بيانات الخيار بجميع اللغات')
-                    ->icon("heroicon-o-document-text")
+                    //  ->icon("lucide-document-text")
                     ->schema([
                         Tabs::make('translations')
                             ->tabs([
@@ -44,7 +43,7 @@ class OrderOptionForm
 
                                 // ----- الهولندية -----
                                 Tab::make('الهولندية (NL)')
-                                    ->icon("heroicon-o-language")
+                                    ->icon("lucide-languages")
                                     ->schema([
                                         TextInput::make('title.nl')
                                             ->label('Titel')
@@ -58,7 +57,7 @@ class OrderOptionForm
 
                                 // ----- الإنجليزية -----
                                 Tab::make('الإنجليزية (EN)')
-                                    ->icon("heroicon-o-language")
+                                    ->icon("lucide-languages")
                                     ->schema([
                                         TextInput::make('title.en')
                                             ->label('Title')
@@ -77,13 +76,14 @@ class OrderOptionForm
 
                 // ========== الشريط الجانبي (1/3) ==========
                 Section::make('الإعدادات والوسائط')
-                    ->icon("heroicon-o-cog")
+                    ->icon("lucide-cog")
                     ->schema([
                         FileUpload::make('image')
                             ->label('الصورة')
                             ->image()
                             ->imageEditor()
                             ->directory('order-options')
+                            ->disk('public')
                             ->maxSize(2048)
                             ->required(),
 

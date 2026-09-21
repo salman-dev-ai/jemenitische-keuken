@@ -18,6 +18,7 @@ class OrderOptionsTable
             ->columns([
                 ImageColumn::make('image')
                     ->label('الصورة')
+                    ->disk('public')
                     ->circular()
                     ->imageSize(50),
 

@@ -22,17 +22,17 @@ class GalleryItemsTable
         return $table
             ->columns([
                 // 1. معاينة الصورة المصغرة بجودة عالية
-                ImageColumn::make('image_path')
+            ImageColumn::make('image_path')
                     ->label('الصورة')
-                    ->disk('public')
-                    ->visibility('public')
-
+                    ->disk('public') // ضروري جداً إذا كانت الصور تُرفع عبر FileUpload الافتراضي
+                    ->imageSize(50) // حجم مثالي للعرض الدائري في الجداول
                     ->circular()
+                    ->defaultImageUrl('https://placehold.co/100x100/e2e8f0/64748b?text=no img') // للتجربة والعزل
                     ->extraImgAttributes([
                         'class' => 'object-cover',
                         'loading' => 'lazy',
-                    ])->circular()
-                    ->defaultImageUrl(url('/images/1 (2).jpg')),
+                    ]),
+
 
                 // 2. عنوان الصورة التراثية بالعربي (مع الإنجليزي بالأسفل)
                 TextColumn::make('title.ar')

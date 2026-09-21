@@ -97,6 +97,8 @@ class SliderForm
                             ->image()
                             ->imageEditor()
                             ->directory('sliders')
+                            ->disk('public')
+
                             ->required(),
 
                         Toggle::make('is_active')
