@@ -32,6 +32,46 @@ class OrderForm
                         Section::make('بيانات العميل والطلب')
                             ->icon('heroicon-o-user')
                             ->schema([
+
+                                // ➕ حقل اختيار العميل المسجل (جديد)
+                                Select::make('customer_id')
+                                    ->label('العميل المسجل')
+                                    ->placeholder('اختر عميلاً مسجلاً (اختياري)')
+                                    ->relationship(
+                                        name: 'customer',
+                                        titleAttribute: 'name',
+                                    )
+                                    ->getOptionLabelFromRecordUsing(
+                                        fn($record) => sprintf('%s (%s)', $record->name, $record->phone ?? 'بدون هاتف')
+                                    )
+                                    ->searchable(['name', 'email', 'phone'])
+                                    ->preload()
+                                    ->native(false)
+                                    ->live()
+                                    // ✨ تعبئة البيانات تلقائياً وعنوان التوصيل
+                                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                        if ($state && $customer = \App\Models\Customer::find($state)) {
+                                            if (blank($get('customer_name'))) {
+                                                $set('customer_name', $customer->name);
+                                            }
+                                            if (blank($get('customer_phone'))) {
+                                                $set('customer_phone', $customer->phone);
+                                            }
+                                            if (blank($get('customer_email'))) {
+                                                $set('customer_email', $customer->email);
+                                            }
+                                            // تعبئة عنوان التوصيل من بيانات العميل
+                                            if (blank($get('delivery_address'))) {
+                                                $set('delivery_address', $customer->address);
+                                            }
+                                            if (blank($get('delivery_city'))) {
+                                                $set('delivery_city', $customer->city);
+                                            }
+                                            if (blank($get('delivery_postal_code'))) {
+                                                $set('delivery_postal_code', $customer->postal_code);
+                                            }
+                                        }
+                                    }),
                                 TextInput::make('order_number')
                                     ->label('رقم الطلب المرجعي')
                                     ->disabled()
@@ -67,10 +107,10 @@ class OrderForm
                                             ->relationship(
                                                 name: 'menuItem',
                                                 titleAttribute: 'name',
-                                                modifyQueryUsing: fn (Builder $query) => $query->available()->orderBy('name->ar'),
+                                                modifyQueryUsing: fn(Builder $query) => $query->available()->orderBy('name->ar'),
                                             )
                                             ->getOptionLabelFromRecordUsing(
-                                                fn (MenuItem $record) => sprintf(
+                                                fn(MenuItem $record) => sprintf(
                                                     '%s (€%.2f)',
                                                     $record->localized_name,
                                                     $record->price
@@ -80,6 +120,13 @@ class OrderForm
                                             ->preload()
                                             ->required()
                                             ->columnSpan(4),
+                                                                            Select::make('type')
+                                    ->label('نوع الطلب')
+                                    ->options(OrderType::class)
+                                    ->required()
+                                    ->default(OrderType::PICKUP)
+                                    // 🆕 تفعيل الـ live لتطبيق الشرط على حقول العنوان
+                                    ->live(),
 
                                         TextInput::make('quantity')
                                             ->label('الكمية')
@@ -107,6 +154,32 @@ class OrderForm
                                             ->prefix('€')
                                             ->readOnly()
                                             ->columnSpan(3),
+
+                                                                            // 📍 حقول عنوان التوصيل (جديد مع شرط الإلزام)
+                                TextInput::make('delivery_address')
+                                    ->label('عنوان التوصيل')
+                                    ->placeholder('مثال: Kerkstraat 123')
+                                    ->maxLength(255)
+                                    // 🔧 التصحيح 7: إلزامي فقط إذا كان نوع الطلب = DELIVERY
+                                    ->required(fn (callable $get): bool => $get('type') === OrderType::DELIVERY->value)
+                                    ->default(null)
+                                    ->columnSpanFull(),
+
+                                Grid::make(['default' => 1, 'md' => 2])->schema([
+                                    TextInput::make('delivery_city')
+                                        ->label('مدينة التوصيل')
+                                        ->placeholder('Amsterdam')
+                                        ->maxLength(255)
+                                        ->required(fn (callable $get): bool => $get('type') === OrderType::DELIVERY->value)
+                                        ->default(null),
+
+                                    TextInput::make('delivery_postal_code')
+                                        ->label('الرمز البريدي للتوصيل')
+                                        ->placeholder('1012 NK')
+                                        ->maxLength(20)
+                                        ->required(fn (callable $get): bool => $get('type') === OrderType::DELIVERY->value)
+                                        ->default(null),
+                                ])->columnSpanFull(),
                                     ])
                                     ->columns(12)
                                     ->defaultItems(1)

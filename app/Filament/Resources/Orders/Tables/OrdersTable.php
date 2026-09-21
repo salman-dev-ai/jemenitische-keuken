@@ -34,6 +34,13 @@ class OrdersTable
                     ->label('رقم العميل')
                     ->searchable(),
 
+                                    // ➕ عمود مدينة التوصيل
+                TextColumn::make('delivery_city')
+                    ->label('مدينة التوصيل')
+                    ->placeholder('—')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('customer_email')
                     ->searchable(),
 
@@ -46,6 +53,14 @@ class OrdersTable
                     ->label('الحالة')
                     ->badge()
                     ->sortable(),
+
+                                    // ➕ عمود العميل المسجل
+                TextColumn::make('customer.name')
+                    ->label('العميل المسجل')
+                    ->placeholder('—')
+                    ->searchable()
+                    ->toggleable()
+                    ->color('info'),
 
                 TextColumn::make('payment_status')
                     ->label('الدفع')

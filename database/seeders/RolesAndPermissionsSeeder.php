@@ -70,6 +70,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'reservations.edit',
             'reservations.delete',
 
+                        // Customers
+            'customers.view',
+            'customers.create',
+            'customers.edit',
+            'customers.delete',
+
             // Gallery
             'gallery.view',
             'gallery.create',
@@ -119,6 +125,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'orders.create',
             'orders.edit',
             'orders.delete',
+
+            'customers.view',
+            'customers.create',
+            'customers.edit',
+            'customers.delete',
 
             'reservations.view',
             'reservations.create',

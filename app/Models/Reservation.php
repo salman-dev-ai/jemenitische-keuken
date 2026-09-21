@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // إضافة هذه الإشارة
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
@@ -17,6 +18,7 @@ class Reservation extends Model
 
     protected $fillable = [
         'reference_code',
+        'customer_id', // إضافة حقل customer_id هنا
         'customer_name',
         'customer_email',
         'customer_phone',
@@ -59,5 +61,13 @@ class Reservation extends Model
     public function preorder(): HasOne
     {
         return $this->hasOne(Order::class)->where('type', OrderType::PREORDER);
+    }
+
+    /**
+     * الحصول على العميل المرتبط بالحجز.
+     */
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
     }
 }

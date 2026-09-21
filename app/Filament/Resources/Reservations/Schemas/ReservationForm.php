@@ -26,8 +26,43 @@ class ReservationForm
                     Grid::make(1)->schema([
                         Section::make('بيانات العميل')
                             ->description('معلومات التواصل مع صاحب الحجز')
-                            ->icon('heroicon-o-user')
-                            ->schema([
+                            ->icon('heroicon-o-user')->
+
+
+                            // ➕ حقل اختيار العميل المسجل (جديد)
+
+
+                            schema([
+
+                                Select::make('customer_id')
+                                    ->label('العميل المسجل')
+                                    ->placeholder('اختر عميلاً مسجلاً (اختياري)')
+                                    ->relationship(
+                                        name: 'customer',
+                                        titleAttribute: 'name',
+                                    )
+                                    ->getOptionLabelFromRecordUsing(
+                                        fn($record) => sprintf('%s (%s)', $record->name, $record->phone ?? 'بدون هاتف')
+                                    )
+                                    ->searchable(['name', 'email', 'phone'])
+                                    ->preload()
+                                    ->native(false)
+                                    ->live()
+                                    // ✨ تعبئة بيانات العميل تلقائياً عند الاختيار
+                                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                        if ($state && $customer = \App\Models\Customer::find($state)) {
+                                            if (blank($get('customer_name'))) {
+                                                $set('customer_name', $customer->name);
+                                            }
+                                            if (blank($get('customer_phone'))) {
+                                                $set('customer_phone', $customer->phone);
+                                            }
+                                            if (blank($get('customer_email'))) {
+                                                $set('customer_email', $customer->email);
+                                            }
+                                        }
+                                    }),
+
                                 TextInput::make('customer_name') // ✅ الاسم الصحيح
                                     ->label('اسم العميل')
                                     ->required()
@@ -62,8 +97,13 @@ class ReservationForm
                                         ->required()
                                         ->seconds(false)
                                         ->datalist([
-                                            '12:00', '13:00', '14:00',
-                                            '18:00', '19:00', '20:00', '21:00',
+                                            '12:00',
+                                            '13:00',
+                                            '14:00',
+                                            '18:00',
+                                            '19:00',
+                                            '20:00',
+                                            '21:00',
                                         ]),
                                 ]),
 

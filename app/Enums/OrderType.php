@@ -11,6 +11,8 @@ enum OrderType: string implements HasColor, HasLabel
     case DINE_IN = 'dine_in';
     case PREORDER = 'preorder';
 
+        case DELIVERY = 'delivery';
+
     public function getLabel(): ?string
     {
         return __("messages.enums.order_type.{$this->value}");
@@ -22,6 +24,7 @@ enum OrderType: string implements HasColor, HasLabel
             self::PICKUP => 'info',
             self::DINE_IN => 'success',
             self::PREORDER => 'warning',
+             self::DELIVERY => 'warning',
         };
     }
 }

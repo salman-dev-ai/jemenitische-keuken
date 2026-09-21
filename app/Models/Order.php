@@ -17,10 +17,14 @@ class Order extends Model
 
     protected $fillable = [
         'reservation_id',
+        'customer_id', // إضافة حقل customer_id هنا
         'order_number',
         'customer_name',
         'customer_phone',
         'customer_email',
+        'delivery_address', // إضافة حقول العنوان هنا
+        'delivery_city',
+        'delivery_postal_code',
         'type',
         'status',
         'subtotal',
@@ -59,6 +63,14 @@ class Order extends Model
     public function reservation(): BelongsTo
     {
         return $this->belongsTo(Reservation::class);
+    }
+
+    /**
+     * الحصول على العميل المرتبط بالطلب.
+     */
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
     }
 
     public function scopeActive(Builder $query): Builder
