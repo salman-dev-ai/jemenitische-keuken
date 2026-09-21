@@ -63,7 +63,7 @@ class SlidersTable
                     ->trueLabel('المفعلة فقط')
                     ->falseLabel('المعطلة فقط'),
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make()
                     ->slideOver()
                     ->label('تعديل'),
