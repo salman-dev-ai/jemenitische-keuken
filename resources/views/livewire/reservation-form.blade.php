@@ -246,6 +246,49 @@
                                 placeholder="{{ __('messages.reservation.specialRequestsPlaceholder') }}"
                                 class="w-full rounded-xl border-stone-200 bg-[#FAF7F2] text-sm focus:border-[#E07513] focus:ring-4 focus:ring-[#E07513]/10"></textarea>
                         </div>
+                        {{-- 🆕 زر تذكرني + زر لست أنا --}}
+<div class="mt-4 space-y-3 border-t border-stone-100 pt-4">
+    {{-- إذا كان العميل عائداً: عرض رسالة ترحيب و زر "لست أنا" --}}
+    @if ($isReturningCustomer)
+        <div class="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm"
+             wire:key="returning-customer-banner">
+            <x-lucide-user-check class="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
+            <div class="flex-1">
+                <strong class="block font-bold text-amber-900">
+                    {{ __('messages.remember.welcome_back') }}
+                </strong>
+                <span class="text-amber-800">
+                    {{ __('messages.remember.filled_automatically') }}
+                </span>
+            </div>
+            <button type="button"
+                wire:click="forgetCustomer"
+                wire:confirm="{{ __('messages.remember.confirm_forget') }}"
+                wire:loading.attr="disabled"
+                wire:target="forgetCustomer"
+                class="shrink-0 rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-bold text-amber-700 transition hover:border-amber-400 hover:text-amber-900 disabled:cursor-wait disabled:opacity-50">
+                <span wire:loading.remove wire:target="forgetCustomer">
+                    {{ __('messages.remember.not_you') }}
+                </span>
+                <span wire:loading wire:target="forgetCustomer">
+                    ...
+                </span>
+            </button>
+        </div>
+    @endif
+
+    {{-- Checkbox تذكرني --}}
+    <label for="remember_me"
+        class="flex cursor-pointer items-center gap-3 rounded-xl p-2 transition hover:bg-stone-50">
+        <input id="remember_me"
+            type="checkbox"
+            wire:model="remember_me"
+            class="h-5 w-5 rounded-md border-stone-300 text-[#6B1F2B] focus:ring-2 focus:ring-[#E07513]">
+        <span class="flex-1 text-sm font-semibold text-stone-700">
+            {{ __('messages.remember.checkbox') }}
+        </span>
+    </label>
+</div>
                     </div>
 
                     {{-- زر الإرسال --}}

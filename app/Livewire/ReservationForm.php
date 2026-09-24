@@ -2,8 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Concerns\RemembersCustomer;
 use App\Services\ReservationService;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
 use Livewire\Attributes\Lazy;
@@ -13,19 +15,21 @@ use Livewire\Component;
 #[Lazy]
 class ReservationForm extends Component
 {
+    use RemembersCustomer;
+
     #[Validate('required|integer|min:1|max:20')]
     public int $party_size = 2;
 
     #[Validate('required|date|after_or_equal:today')]
     public string $reservation_date = '';
 
-    #[Validate('required')]
+    #[Validate('required|date_format:H:i')]
     public string $reservation_time = '';
 
     #[Validate('required|string|min:3|max:255')]
     public string $customer_name = '';
 
-    #[Validate('required|string|min:8|max:30')]
+    #[Validate('required|string|min:8|max:20|regex:/^[0-9+\-\s()]+$/')]
     public string $customer_phone = '';
 
     #[Validate('nullable|email|max:150')]
@@ -33,6 +37,10 @@ class ReservationForm extends Component
 
     #[Validate('nullable|string|max:500')]
     public string $special_requests = '';
+
+    public bool $remember_me = true;
+
+    public bool $isReturningCustomer = false;
 
     public ?string $successMessage = null;
 
@@ -44,42 +52,85 @@ class ReservationForm extends Component
     {
         $this->reservation_date = now()->format('Y-m-d');
 
-        // حساب الوقت القادم المتاح (تقريب لأقرب نصف ساعة بعد ساعة من الآن)
-        $time = now()->addHour();
-        $minutes = $time->minute;
-        $roundedMinutes = $minutes >= 30 ? 60 : 30;
-        if ($roundedMinutes == 60) {
+        // حساب الوقت القادم المتاح (تقريب لأقرب نصف ساعة بعد ساعة)
+        $time = now()->addHour()->seconds(0);
+        $roundedMinutes = (int) ceil($time->minute / 30) * 30;
+
+        if ($roundedMinutes === 60) {
             $time->addHour()->startOfHour();
         } else {
-            $time->minute = 30;
+            $time->setTime($time->hour, 0)->addMinutes($roundedMinutes);
         }
+
         $this->reservation_time = $time->format('H:i');
+
+        // 🆕 تحميل بيانات العميل إن وُجد
+        $customer = $this->loadCustomerFromCookie();
+
+        if ($customer) {
+            $this->customer_name       = $customer->name ?? '';
+            $this->customer_phone      = $customer->phone ?? '';
+            $this->customer_email      = $customer->email ?? '';
+            $this->isReturningCustomer = true;
+        }
+    }
+
+    public function forgetCustomer(): void
+    {
+        $this->forgetCustomerCookie();
+
+        $this->reset([
+            'customer_name',
+            'customer_phone',
+            'customer_email',
+            'special_requests',
+        ]);
+
+        $this->isReturningCustomer = false;
+        $this->remember_me         = true;
     }
 
     public function submitReservation(ReservationService $reservationService): void
     {
         $this->reset(['errorMessage', 'successMessage', 'referenceCode']);
 
-        // 1. حماية الـ Rate Limiting (حماية ضد البوتات 3 طلبات كل دقيقة)
-        $rateLimiterKey = 'reservation-submit:'.request()->ip();
-        if (RateLimiter::tooManyAttempts($rateLimiterKey, 3)) {
-            $this->errorMessage = __('messages.reservation.rate_limit_exceeded') ?? 'عذراً، لقد قمت بمحاولات كثيرة. يرجى المحاولة بعد قليل.';
+        $rateKey = 'reservation:'.request()->ip().':'.sha1($this->customer_phone);
+
+        if (RateLimiter::tooManyAttempts($rateKey, 5)) {
+            $this->errorMessage = __('messages.reservation.rate_limit_exceeded');
 
             return;
         }
-        RateLimiter::hit($rateLimiterKey, 60);
+
+        RateLimiter::hit($rateKey, 60);
 
         $validated = $this->validate();
+        $validated['customer_phone'] = preg_replace('/[\s\-\(\)]+/', '', $validated['customer_phone']);
 
         try {
-            $reservation = $reservationService->createReservation($validated);
+            $customer = null;
 
-            $this->referenceCode = $reservation->reference_code;
+            $reservation = DB::transaction(function () use ($validated, $reservationService, &$customer) {
+                if ($this->remember_me) {
+                    $customer = $this->upsertCustomer();
+                    $validated['customer_id'] = $customer->id;
+                }
+
+                return $reservationService->createReservation($validated);
+            });
+
+            if ($this->remember_me && $customer) {
+                $this->setCustomerCookie($customer);
+                $this->isReturningCustomer = true;
+            }
+
+            RateLimiter::clear($rateKey);
+
+            $this->referenceCode  = $reservation->reference_code;
             $this->successMessage = __('messages.reservation.success');
 
-            // إطلاق إشعار Toast الأنيق (Livewire v4: named parameters)
             $this->dispatch('notify',
-                title: __('messages.notifications.reservation_title'),
+                title:   __('messages.notifications.reservation_title'),
                 message: __('messages.notifications.reservation_message'),
             );
 
@@ -89,10 +140,12 @@ class ReservationForm extends Component
                 'customer_email',
                 'special_requests',
             ]);
-            $this->party_size = 2;
+
+            $this->reset('party_size');
 
         } catch (Exception $e) {
-            $this->errorMessage = $e->getMessage();
+            report($e);
+            $this->errorMessage = __('messages.reservation.generic_error');
         }
     }
 
