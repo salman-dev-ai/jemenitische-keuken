@@ -1,6 +1,9 @@
 <?php
+  
+declare(strict_types=1);
 
 namespace App\Livewire\Concerns;
+
 
 use App\Models\Customer;
 use Illuminate\Support\Facades\Cookie;
@@ -54,17 +57,35 @@ trait RemembersCustomer
     /**
      * 🆕 حذف الكوكي + تدمير التوكن في DB.
      */
+ 
+
+    /**
+     * 🗑️ إيقاف "تذكرني" (دون حذف العميل من قاعدة البيانات).
+     *
+     * - يُصفّر remember_token في DB.
+     * - يحذف الكوكي من المتصفح.
+     * - يحتفظ بسجل العميل وعلاقاته للاستخدام المستقبلي.
+     *
+     * 📌 المصدر: https://laravel.com/docs/12.x/responses#deleting-cookies
+     *
+     * @return void
+     */
     protected function forgetCustomerCookie(): void
     {
         $token = Cookie::get(self::CUSTOMER_COOKIE_NAME);
 
         if (filled($token)) {
             Customer::where('remember_token', $token)
-                ->update(['remember_token' => null]);
+                ->update(['remember_token' => null]);  // ✅ لا حذف
         }
 
-        Cookie::queue(Cookie::forget(self::CUSTOMER_COOKIE_NAME, '/'));
+        Cookie::queue(Cookie::forget(
+            name: self::CUSTOMER_COOKIE_NAME,
+            path: '/',
+        ));
     }
+
+// ... (بقية الـ Trait)
 
     /**
      * 🆕 توليد توكن آمن للعميل.

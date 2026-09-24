@@ -1,10 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 📄 المسار: app/Livewire/ReservationForm.php
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * 🎯 الغرض:
+ *    نموذج حجز مستقل — يتحقق، يطبّع الهاتف، يحفظ الحجز، يرسل إشعاراً.
+ *
+ * 🧩 يعتمد على:
+ *    - App\Livewire\Concerns\RemembersCustomer
+ *    - App\Services\ReservationService
+ *    - App\Exceptions\ReservationException
+ *
+ * 🔐 الأمان:
+ *    - Rate Limiting (IP فقط — قبل التحقق).
+ *    - تطبيع أرقام الهاتف العربية.
+ *
+ * 🕒 آخر تحديث: 2026-09-24
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
 namespace App\Livewire;
 
+use App\Exceptions\ReservationException;
 use App\Livewire\Concerns\RemembersCustomer;
 use App\Services\ReservationService;
-use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
@@ -23,13 +46,16 @@ class ReservationForm extends Component
     #[Validate('required|date|after_or_equal:today')]
     public string $reservation_date = '';
 
-    #[Validate('required|date_format:H:i')]
-    public string $reservation_time = '';
+   #[Validate(['required',  'regex:/^([01]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/',])]
+    
+  
+
+public string $reservation_time = '';
 
     #[Validate('required|string|min:3|max:255')]
     public string $customer_name = '';
 
-    #[Validate('required|string|min:8|max:20|regex:/^[0-9+\-\s()]+$/')]
+    #[Validate('required|string|min:8|max:20|regex:/^[0-9٠١٢٣٤٥٦٧٨٩+\-().\s]+$/')]
     public string $customer_phone = '';
 
     #[Validate('nullable|email|max:150')]
@@ -48,11 +74,19 @@ class ReservationForm extends Component
 
     public ?string $errorMessage = null;
 
+    /**
+     * 🎬 التهيئة الأولى.
+     */
     public function mount(): void
     {
+        // ─────────────────────────────────────────────────────────────
+        // 1️⃣ التاريخ: اليوم
+        // ─────────────────────────────────────────────────────────────
         $this->reservation_date = now()->format('Y-m-d');
 
-        // حساب الوقت القادم المتاح (تقريب لأقرب نصف ساعة بعد ساعة)
+        // ─────────────────────────────────────────────────────────────
+        // 2️⃣ الوقت: أقرب نصف ساعة بعد ساعة
+        // ─────────────────────────────────────────────────────────────
         $time = now()->addHour()->seconds(0);
         $roundedMinutes = (int) ceil($time->minute / 30) * 30;
 
@@ -64,7 +98,9 @@ class ReservationForm extends Component
 
         $this->reservation_time = $time->format('H:i');
 
-        // 🆕 تحميل بيانات العميل إن وُجد
+        // ─────────────────────────────────────────────────────────────
+        // 3️⃣ استرجاع بيانات العميل من الكوكي
+        // ─────────────────────────────────────────────────────────────
         $customer = $this->loadCustomerFromCookie();
 
         if ($customer) {
@@ -75,6 +111,9 @@ class ReservationForm extends Component
         }
     }
 
+    /**
+     * 🗑️ إيقاف "تذكرني" (لا يحذف البيانات من DB).
+     */
     public function forgetCustomer(): void
     {
         $this->forgetCustomerCookie();
@@ -90,11 +129,20 @@ class ReservationForm extends Component
         $this->remember_me         = true;
     }
 
+    /**
+     * 📅 إرسال الحجز.
+     *
+     * @param  ReservationService $reservationService
+     * @return void
+     */
     public function submitReservation(ReservationService $reservationService): void
     {
         $this->reset(['errorMessage', 'successMessage', 'referenceCode']);
 
-        $rateKey = 'reservation:'.request()->ip().':'.sha1($this->customer_phone);
+        // ─────────────────────────────────────────────────────────────
+        // 1️⃣ Rate Limiting (IP فقط — قبل التحقق)
+        // ─────────────────────────────────────────────────────────────
+        $rateKey = 'reservation:' . request()->ip();
 
         if (RateLimiter::tooManyAttempts($rateKey, 5)) {
             $this->errorMessage = __('messages.reservation.rate_limit_exceeded');
@@ -104,9 +152,29 @@ class ReservationForm extends Component
 
         RateLimiter::hit($rateKey, 60);
 
-        $validated = $this->validate();
-        $validated['customer_phone'] = preg_replace('/[\s\-\(\)]+/', '', $validated['customer_phone']);
+        // ─────────────────────────────────────────────────────────────
+        // 2️⃣ التحقق + تطبيع الهاتف
+        // ─────────────────────────────────────────────────────────────
+        try {
+            $validated = $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            RateLimiter::clear($rateKey);
+            throw $e;
+        }
 
+        $phone = preg_replace('/[\s\-\(\)]+/', '', $validated['customer_phone']);
+
+        $phone = strtr($phone, [
+            '٠' => '0', '١' => '1', '٢' => '2', '٣' => '3', '٤' => '4',
+            '٥' => '5', '٦' => '6', '٧' => '7', '٨' => '8', '٩' => '9',
+        ]);
+
+        $validated['customer_phone'] = $phone;
+        $this->customer_phone        = $phone;
+
+        // ─────────────────────────────────────────────────────────────
+        // 3️⃣ الحفظ داخل Transaction
+        // ─────────────────────────────────────────────────────────────
         try {
             $customer = null;
 
@@ -119,6 +187,9 @@ class ReservationForm extends Component
                 return $reservationService->createReservation($validated);
             });
 
+            // ─────────────────────────────────────────────────────────
+            // 4️⃣ بعد النجاح: كوكي + إشعار + تنظيف
+            // ─────────────────────────────────────────────────────────
             if ($this->remember_me && $customer) {
                 $this->setCustomerCookie($customer);
                 $this->isReturningCustomer = true;
@@ -129,7 +200,8 @@ class ReservationForm extends Component
             $this->referenceCode  = $reservation->reference_code;
             $this->successMessage = __('messages.reservation.success');
 
-            $this->dispatch('notify',
+            $this->dispatch(
+                'notify',
                 title:   __('messages.notifications.reservation_title'),
                 message: __('messages.notifications.reservation_message'),
             );
@@ -141,19 +213,31 @@ class ReservationForm extends Component
                 'special_requests',
             ]);
 
-            $this->reset('party_size');
+            $this->party_size = 2;
 
-        } catch (Exception $e) {
+        } catch (ReservationException $e) {
             report($e);
+            RateLimiter::clear($rateKey);
+            $this->errorMessage = $e->getMessage();
+
+        } catch (\Throwable $e) {
+            report($e);
+            RateLimiter::clear($rateKey);
             $this->errorMessage = __('messages.reservation.generic_error');
         }
     }
 
+    /**
+     * ⏳ Placeholder أثناء التحميل Lazy.
+     */
     public function placeholder(): View
     {
         return view('livewire.placeholders.reservation-form');
     }
 
+    /**
+     * 🎨 العرض.
+     */
     public function render(): View
     {
         return view('livewire.reservation-form');

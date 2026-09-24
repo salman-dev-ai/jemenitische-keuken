@@ -5,7 +5,7 @@ use App\Models\RestaurantSetting;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $settings = RestaurantSetting::getCached();
+     $settings = RestaurantSetting::current();
 
     return view('welcome', compact('settings'));
 })->name('home');

@@ -38,7 +38,7 @@ class MenuWithCart extends Component
 
     public string $customer_name = '';
 
-    public string $customer_phone = '';
+    public string $customer_phone = ''; 
 
     public string $customer_email = '';
 
@@ -132,133 +132,382 @@ class MenuWithCart extends Component
     // 🧾 قواعد التحقق (ديناميكية حسب نوع الطلب)
     // ═══════════════════════════════════════════
 
+      /**
+     * 🧾 قواعد التحقق (ديناميكية حسب نوع الطلب).
+     *
+     * - حقول التوصيل إلزامية فقط عند order_type = DELIVERY.
+     * - رقم الهاتف يقبل الأرقام العربية (٠-٩) والإنجليزية (0-9).
+     * - Party size محدود بقيمة من config/reservations.php (config-driven).
+     * 
+     * @return array<string, mixed>
+     */
+     /**
+     * 🧾 قواعد التحقق (ديناميكية حسب نوع الطلب).
+     *
+     * القواعد:
+     *   - حقول التوصيل إلزامية فقط عند order_type = DELIVERY.
+     *   - حقول الحجز إلزامية فقط عند DINE_IN أو PREORDER.
+     *   - رقم الهاتف يقبل الأرقام العربية (٠-٩) والإنجليزية (0-9).
+     *   - order_type يقبل فقط قيم OrderType enum (القيم القديمة تُطبَّع في updatedOrderType).
+     *
+     *
+     * @return array<string, mixed>
+     */
+       /**
+     * 🧾 قواعد التحقق (ديناميكية حسب نوع الطلب).
+     *
+     * القواعد:
+     *   - حقول التوصيل إلزامية فقط عند order_type = DELIVERY.
+     *   - حقول الحجز إلزامية فقط عند DINE_IN أو PREORDER.
+     *   - رقم الهاتف يقبل الأرقام العربية (٠-٩) والإنجليزية (0-9).
+     *   - order_type يقبل فقط قيم OrderType enum (القيم القديمة تُطبَّع في updatedOrderType).
+     *
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
-        $isDelivery = $this->order_type === OrderType::DELIVERY->value;
+        // ─────────────────────────────────────────────────────────────
+        // 1️⃣ تحديد النمط
+        // ─────────────────────────────────────────────────────────────
+        $isDelivery       = $this->order_type === OrderType::DELIVERY->value;
+        $needsReservation = in_array($this->order_type, [
+            OrderType::DINE_IN->value,
+            OrderType::PREORDER->value,
+        ], true);
+
+        // ─────────────────────────────────────────────────────────────
+        // 2️⃣ الحدود من الإعدادات (config-driven)
+        // ─────────────────────────────────────────────────────────────
+        $minPartySize = (int) config('reservations.party_size.min', 1);
+        $maxPartySize = (int) config('reservations.party_size.max', 20);
 
         return [
-            // بيانات العميل
-            'customer_name'         => 'required|string|min:3|max:100',
-            'customer_phone'        => ['required', 'string', 'min:8', 'max:20', 'regex:/^[0-9+\-\s()]+$/'],
-            'customer_email'        => 'nullable|email|max:150',
+            // ─────────────────────────────────────────────────────────
+            // 3️⃣ بيانات العميل
+            // ─────────────────────────────────────────────────────────
+            'customer_name'         => ['required', 'string', 'min:3', 'max:100'],
 
-            // حقول التوصيل (إلزامية فقط عند DELIVERY)
-            'delivery_address'      => [$isDelivery ? 'required' : 'nullable', 'string', 'max:255'],
-            'delivery_city'         => [$isDelivery ? 'required' : 'nullable', 'string', 'max:255'],
-            'delivery_postal_code'  => [$isDelivery ? 'required' : 'nullable', 'string', 'max:20'],
+            // يقبل: أرقام عربية (٠-٩) + إنجليزية (0-9) + + - ( ) . والفراغات
+            'customer_phone'        => [
+                'required',
+                'string',
+                'min:7',
+                'max:30',
+                'regex:/^[0-9٠١٢٣٤٥٦٧٨٩+\-().\s]+$/',
+            ],
 
-            // حقول الحجز
-            'reservation_date'      => 'required|date|after_or_equal:today',
-            'reservation_time'      => 'required|date_format:H:i',
-            'party_size'            => 'required|integer|min:1|max:20',
-            'special_requests'      => 'nullable|string|max:500',
+            'customer_email'        => ['nullable', 'email', 'max:150'],
 
-            // نوع الطلب
-            'order_type'            => ['required', Rule::enum(OrderType::class)],
+            // ─────────────────────────────────────────────────────────
+            // 4️⃣ حقول التوصيل (إلزامية فقط عند DELIVERY)
+            // ─────────────────────────────────────────────────────────
+            'delivery_address'      => [
+                $isDelivery ? 'required' : 'nullable',
+                'string',
+                'max:255',
+            ],
+            'delivery_city'         => [
+                $isDelivery ? 'required' : 'nullable',
+                'string',
+                'max:255',
+            ],
+            'delivery_postal_code'  => [
+                $isDelivery ? 'required' : 'nullable',
+                'string',
+                'max:30',
+                // 🎯 الرمز البريدي الهولندي: 4 أرقام + مسافة اختيارية + حرفان
+                //    مثال: 1012 NK أو 1012NK
+                'regex:/^\d{4}\s?[A-Za-z]{2}$/',
+            ],
+
+            // ─────────────────────────────────────────────────────────
+            // 5️⃣ حقول الحجز (إلزامية فقط عند DINE_IN / PREORDER)
+            // ─────────────────────────────────────────────────────────
+            'reservation_date'      => [
+                $needsReservation ? 'required' : 'nullable',
+                'date',
+                'after_or_equal:today',
+            ],
+
+            // 🎯 نمط صارم: H:i أو HH:i أو H:i:s أو HH:i:s
+            //    - الساعة: 0-23 (أو 00-23)
+            //    - الدقيقة: 00-59
+            //    - الثانية (اختياري): 00-59
+            //    ⚠️ يرفض الأوقات المستحيلة مثل 99:99 أو 25:00
+            'reservation_time'      => [
+                $needsReservation ? 'required' : 'nullable',
+                'string',
+                'regex:/^([01]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/',
+            ],
+
+            'party_size'            => [
+                $needsReservation ? 'required' : 'nullable',
+                'integer',
+                'min:' . $minPartySize,
+                'max:' . $maxPartySize,
+            ],
+
+            'special_requests'      => ['nullable', 'string', 'max:500'],
+
+            // ─────────────────────────────────────────────────────────
+            // 6️⃣ نوع الطلب — قيم enum الصحيحة فقط
+            //    (القيم القديمة تُطبَّع في updatedOrderType)
+            // ─────────────────────────────────────────────────────────
+            'order_type'            => [
+                'required',
+                'string',
+                Rule::in([
+                    OrderType::DINE_IN->value,
+                    OrderType::PICKUP->value,
+                    OrderType::PREORDER->value,
+                    OrderType::DELIVERY->value,
+                ]),
+            ],
         ];
     }
 
     /**
      * 🆕 رسائل تحقق مخصصة.
      */
+       /**
+     * 🆕 رسائل تحقق مخصصة.
+     *
+     * تُعيد مصفوفة برسائل التحقق المخصصة للحقول التي تحتاج ترجمة خاصة.
+     * تعتمد على مفاتيح قسم 'order' في ملفات lang/{ar,en,nl}/messages.php.
+     *
+     * @return array<string, string>
+     */
     protected function messages(): array
     {
         return [
-            'delivery_address.required'     => __('messages.remember.address_required'),
-            'delivery_city.required'        => __('messages.remember.city_required'),
-            'delivery_postal_code.required' => __('messages.remember.postal_required'),
+            // ─────────────────────────────────────────────────────────────
+            // 1️⃣ حقول التوصيل (إلزامية عند DELIVERY فقط)
+            // ─────────────────────────────────────────────────────────────
+            'delivery_address.required'     => __('messages.order.address_required'),
+            'delivery_city.required'        => __('messages.order.city_required'),
+            'delivery_postal_code.required' => __('messages.order.postal_required'),
+
+            // ─────────────────────────────────────────────────────────────
+            // 2️⃣ تنسيق رقم الهاتف (يقبل الأرقام العربية والإنجليزية)
+            // ─────────────────────────────────────────────────────────────
+            'customer_phone.regex'          => __('messages.order.phone_format'),
         ];
     }
+
+
+    
 
     // ═══════════════════════════════════════════
     // 💳 إتمام الطلب (Checkout)
     // ═══════════════════════════════════════════
 
+     /**
+     * 💳 إتمام الطلب (Checkout).
+     *
+     * ينفّذ الخطوات التالية بالترتيب:
+     *   1. التحقق من أن السلة غير فارغة.
+     *   2. التحقق من صحة المدخلات (validation).
+     *   3. تطبيق Rate Limiting (بعد التحقق، باستخدام IP).
+     *   4. تطبيع رقم الهاتف (Arabic-Indic → ASCII).
+     *   5. تنفيذ DB::transaction (حجز + طلب + عميل اختياري).
+     *   6. ضبط كوكي "تذكرني" بعد نجاح الـ Transaction.
+     *   7. تنظيف السلة والنموذج + إرسال إشعار النجاح.
+     *
+     * 📌 المصادر:
+     *   - https://livewire.laravel.com/docs/4.x/actions
+     *   - https://laravel.com/docs/12.x/rate-limiting
+     *   - https://laravel.com/docs/12.x/database#database-transactions
+     *
+     * @param  ReservationService $reservationService
+     * @param  OrderService       $orderService
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function checkout(
         ReservationService $reservationService,
         OrderService $orderService
     ): void {
+
+        $this->normalizeOrderType();
+        // ─────────────────────────────────────────────────────────────
+        // 1️⃣ تصفير الأخطاء السابقة
+        // ─────────────────────────────────────────────────────────────
         $this->resetErrorBag();
 
+        // ─────────────────────────────────────────────────────────────
+        // 2️⃣ فحص السلة الفارغة
+        // ─────────────────────────────────────────────────────────────
         if ($this->isCartEmpty) {
-            $this->dispatch('notify',
+            $this->dispatch(
+                'notify',
                 title:   __('messages.menu.empty'),
                 message: '',
+                type:    'warning',
             );
 
             return;
         }
 
-        // 🛡️ Rate Limiting
-        $rateKey = 'checkout:'.request()->ip().':'.sha1($this->customer_phone);
+        // ─────────────────────────────────────────────────────────────
+        // 3️⃣ التحقق من المدخلات أولاً (قبل Rate Limit)
+        //    السبب: Rate Limit يستخدم IP فقط، لأن customer_phone غير موثوق بعد
+        // ─────────────────────────────────────────────────────────────
+        try {
+            $validated = $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch(
+                'notify',
+                title:   __('messages.order.validation_error'),
+                message: $e->validator->errors()->first(),
+                type:    'error',
+            );
+
+            throw $e;
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // 4️⃣ Rate Limiting (بعد التحقق، باستخدام IP كمفتاح أساسي)
+        //    المصدر: https://laravel.com/docs/12.x/rate-limiting
+        // ─────────────────────────────────────────────────────────────
+        $rateKey = 'checkout:' . request()->ip();
 
         if (RateLimiter::tooManyAttempts($rateKey, 5)) {
-            $this->addError('checkout', __('messages.order.rate_limit_exceeded'));
+            $seconds = RateLimiter::availableIn($rateKey);
+            $msg     = sprintf(__('messages.order.rate_limit_exceeded'), $seconds);
+
+            $this->dispatch(
+                'notify',
+                title:   __('messages.order.error_title'),
+                message: $msg,
+                type:    'error',
+            );
+
+            $this->addError('general', $msg);
 
             return;
         }
 
         RateLimiter::hit($rateKey, 60);
 
-        $validated = $this->validate();
-
-        // 🧹 تطبيع رقم الهاتف
+        // ─────────────────────────────────────────────────────────────
+        // 5️⃣ تطبيع رقم الهاتف (تحويل الأرقام العربية إلى ASCII)
+        //    يمنع تخزين نفس الرقم بتنسيقين مختلفين
+        // ─────────────────────────────────────────────────────────────
         $validated['customer_phone'] = $this->normalizePhone($validated['customer_phone']);
 
+        // ─────────────────────────────────────────────────────────────
+        // 6️⃣ تنفيذ العملية داخل Transaction
+        // ─────────────────────────────────────────────────────────────
         try {
             $customer = null;
 
-            DB::transaction(function () use ($validated, $reservationService, $orderService, &$customer) {
-                // 1. العميل (إن كان "تذكرني" مفعّل)
+            DB::transaction(function () use (
+                $validated,
+                $reservationService,
+                $orderService,
+                &$customer
+            ) {
+                // 6.1) العميل (عند تفعيل "تذكرني")
                 if ($this->remember_me) {
                     $customer = $this->upsertCustomer($this->buildCustomerExtraData());
                 }
 
-                // 2. نوع الطلب
-                $finalOrderType = OrderType::tryFrom($this->order_type) ?? OrderType::DINE_IN;
+                // 6.2) تحديد نوع الطلب النهائي — يرمي استثناء عند قيمة غير صالحة
+                $finalOrderType = OrderType::tryFrom($this->order_type);
 
-                // 3. الحجز (فقط dine_in أو preorder)
+                if ($finalOrderType === null) {
+                    throw new OrderException(__('messages.errors.invalid_order_type'));
+                }
+
+                // 6.3) الحجز (فقط dine_in أو preorder)
                 $reservation = null;
+
                 if (in_array($finalOrderType, [OrderType::DINE_IN, OrderType::PREORDER], true)) {
                     $reservation = $reservationService->createReservation(
                         $this->buildReservationData($validated, $customer)
                     );
                 }
 
-                // 4. الطلب
-                $orderItems = collect($this->cart)->map(fn ($item) => [
-                    'menu_item_id' => $item['id'],
-                    'quantity'     => $item['quantity'],
-                ])->all();
+                // 6.4) تجهيز عناصر الطلب
+                $orderItems = collect($this->cart)
+                    ->map(fn (array $item): array => [
+                        'menu_item_id' => $item['id'],
+                        'quantity'     => $item['quantity'],
+                    ])
+                    ->all();
 
+                // 6.5) إنشاء الطلب
                 $orderService->createOrder(
                     $this->buildOrderData($validated, $customer, $reservation, $finalOrderType),
                     $orderItems
                 );
             });
 
-            // 5. الكوكي بعد نجاح الـ Transaction
+            // ─────────────────────────────────────────────────────────
+            // 7️⃣ بعد نجاح الـ Transaction: كوكي "تذكرني"
+            //    (خارج Transaction — قاعدة صريحة)
+            // ─────────────────────────────────────────────────────────
             if ($this->remember_me && $customer) {
                 $this->setCustomerCookie($customer);
                 $this->isReturningCustomer = true;
             }
 
+            // ─────────────────────────────────────────────────────────
+            // 8️⃣ مسح Rate Limiter بعد النجاح
+            // ─────────────────────────────────────────────────────────
             RateLimiter::clear($rateKey);
 
-            // 6. تنظيف الحالة
+            // ─────────────────────────────────────────────────────────
+            // 9️⃣ تنظيف الحالة
+            // ─────────────────────────────────────────────────────────
             $this->clearCart();
             $this->isCartModalOpen = false;
             $this->resetCustomerForm();
 
-            // 7. إشعار النجاح
-            $this->dispatch('notify',
+            // ─────────────────────────────────────────────────────────
+            // 🔟 إشعار النجاح
+            // ─────────────────────────────────────────────────────────
+            $this->dispatch(
+                'notify',
                 title:   __('messages.notifications.order_title'),
                 message: __('messages.notifications.order_message'),
+                type:    'success',
             );
 
-        } catch (Exception $e) {
+        } catch (OrderException | ReservationException $e) {
+            // ─────────────────────────────────────────────────────────
+            // 🅰️ استثناءات العمل المعروفة — رسائل آمنة للمستخدم
+            // ─────────────────────────────────────────────────────────
             report($e);
-            $this->addError('checkout', __('messages.order.generic_error'));
+
+            $errMsg = $e->getMessage();  // ✅ آمن: رسائلنا المخصصة فقط
+
+            $this->dispatch(
+                'notify',
+                title:   __('messages.order.error_title'),
+                message: $errMsg,
+                type:    'error',
+            );
+
+            $this->addError('general', $errMsg);
+
+        } catch (\Throwable $e) {
+            // ─────────────────────────────────────────────────────────
+            // 🅱️ استثناءات غير متوقعة — لا نكشف getMessage() للمستخدم
+            // ─────────────────────────────────────────────────────────
+            report($e);
+
+            $errMsg = __('messages.order.generic_error');
+
+            $this->dispatch(
+                'notify',
+                title:   __('messages.order.error_title'),
+                message: $errMsg,
+                type:    'error',
+            );
+
+            $this->addError('general', $errMsg);
         }
     }
 
@@ -420,6 +669,54 @@ class MenuWithCart extends Component
             )
             ->orderBy('sort_order')
             ->get();
+    }
+
+
+        /**
+     * 🧹 تطبيع قيمة order_type إلى قيمة OrderType enum الصحيحة.
+     *
+     * تُترجم القيم القديمة (camelCase من واجهات سابقة) إلى القيم الحالية.
+     * مفيدة عند استدعائها يدوياً من mount() أو عند استقبال قيمة من query string.
+     *
+     * 🎯 القيم المدعومة:
+     *    - 'dineIn'   → 'dine_in'
+     *    - 'takeaway' → 'pickup'
+     *
+     * @return void
+     */
+    protected function normalizeOrderType(): void
+    {
+        // ─────────────────────────────────────────────────────────────
+        // 1️⃣ خريطة القيم القديمة → الجديدة
+        // ─────────────────────────────────────────────────────────────
+        $legacyMap = [
+            'dineIn'   => OrderType::DINE_IN->value,
+            'takeaway' => OrderType::PICKUP->value,
+        ];
+
+        // ─────────────────────────────────────────────────────────────
+        // 2️⃣ التطبيع إذا كانت القيمة الحالية قديمة
+        // ─────────────────────────────────────────────────────────────
+        if (isset($legacyMap[$this->order_type])) {
+            $this->order_type = $legacyMap[$this->order_type];
+        }
+    }
+
+    /**
+     * 🔄 Lifecycle hook — يُستدعى تلقائياً عند تحديث order_type من الواجهة.
+     *
+     * Livewire يستدعي `updated{PropertyName}` تلقائياً عند تغيير الخاصية.
+     * هذا يضمن أن أي قيمة قديمة تُطبَّع فوراً قبل أن تصل إلى rules().
+     *
+     * 📌 المصدر:
+     *    - https://livewire.laravel.com/docs/4.x/lifecycle-hooks#updated
+     *
+     * @param  mixed $value القيمة الجديدة لـ order_type
+     * @return void
+     */
+    public function updatedOrderType(mixed $value): void
+    {
+        $this->normalizeOrderType();
     }
 
     // ═══════════════════════════════════════════

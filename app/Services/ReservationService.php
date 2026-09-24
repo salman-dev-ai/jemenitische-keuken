@@ -1,5 +1,5 @@
 <?php
-
+// D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemenitische-keuken-chat\app\Services\ReservationService.php
 declare(strict_types=1);
 
 namespace App\Services;
@@ -41,10 +41,7 @@ class ReservationService
             $time      = $data['reservation_time'];
             $partySize = (int) $data['party_size'];
 
-            // 2.1 فحص التعارض
-            if ($this->hasConflictingReservation($date, $time, $data['id'] ?? null)) {
-                throw ReservationException::timeConflict();
-            }
+       
 
             // 2.2 تجهيز البيانات
             $status = $this->resolveStatus($data['status'] ?? null);

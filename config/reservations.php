@@ -36,5 +36,6 @@ return [
        // 🆕 مدة الحجز الافتراضية بالدقائق
     'default_duration_minutes' => env('RESERVATION_DURATION_MINUTES', 90),
 
+ 
 ];
 

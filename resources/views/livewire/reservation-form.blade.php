@@ -1,3 +1,5 @@
+
+<!-- D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemenitische-keuken-chat\resources\views\livewire\reservation-form.blade.php -->
 <section class="relative overflow-hidden bg-[#FAF4ED] py-12 font-['Tajawal',sans-serif] sm:py-16 lg:py-20"
     dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

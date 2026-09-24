@@ -1,5 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 📄 المسار: app/Filament/Resources/RestaurantSettings/Schemas/RestaurantSettingForm.php
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * 🎯 الغرض:
+ *    Schema نموذج إعدادات المطعم (Filament 5).
+ *    يضيف: نسبة BTW + الحد الأقصى للكمية لكل طبق.
+ *
+ * 🧩 يعتمد على:
+ *    - Filament 5 Schemas API
+ *    - LaraZeus\SpatieTranslatable (للترجمة التلقائية عبر التبويبات)
+ *
+ * ⚠️ تحذيرات مهمة:
+ *    - name و address مترجمان — LaraZeus يتعامل مع الترجمة تلقائياً.
+ *    - vat_rate يُخزَّن كنسبة مئوية (9.00 = 9%).
+ *
+ * 🕒 آخر تحديث: 2026-09-24
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
 namespace App\Filament\Resources\RestaurantSettings\Schemas;
 
 use Filament\Forms\Components\KeyValue;
@@ -28,7 +51,10 @@ class RestaurantSettingForm
                         Tab::make('المعلومات الأساسية')
                             ->icon(Heroicon::OutlinedInformationCircle)
                             ->schema([
-                                TextInput::make('name')->label('name restaurant')->required()->maxLength(255),
+                                TextInput::make('name')
+                                    ->label('اسم المطعم')
+                                    ->required()
+                                    ->maxLength(255),
 
                                 TextInput::make('phone')
                                     ->label('رقم الهاتف')
@@ -82,7 +108,7 @@ class RestaurantSettingForm
 
                         /*
                         |--------------------------------------------------------------------------
-                        | 3. Operations
+                        | 3. Operations & Opening Hours
                         |--------------------------------------------------------------------------
                         */
 
@@ -111,8 +137,38 @@ class RestaurantSettingForm
                             ])
                             ->columns(2),
 
-                    ])->columnSpanFull(),
+                        /*
+                        |--------------------------------------------------------------------------
+                        | 4. Tax & Orders (جديد)
+                        |--------------------------------------------------------------------------
+                        */
 
+                        Tab::make('الضريبة & الطلبات')
+                            ->icon(Heroicon::OutlinedBanknotes)
+                            ->schema([
+                                TextInput::make('vat_rate')
+                                    ->label('نسبة الضريبة BTW')
+                                    ->numeric()
+                                    ->required()
+                                    ->minValue(0)
+                                    ->maxValue(100)
+                                    ->step(0.01)
+                                    ->suffix('%')
+                                    ->default(9.00)
+                                    ->helperText('الأسعار في القائمة لا تشمل الضريبة — تُضاف في ملخص الطلب. مثال: 9.00 = 9%'),
+
+                                TextInput::make('max_quantity_per_item')
+                                    ->label('الحد الأقصى للكمية لكل طبق')
+                                    ->numeric()
+                                    ->required()
+                                    ->minValue(1)
+                                    ->maxValue(500)
+                                    ->default(50)
+                                    ->helperText('أقصى كمية يمكن طلبها من الطبق الواحد (مثال: 50)'),
+                            ])
+                            ->columns(2),
+
+                    ])->columnSpanFull(),
             ]);
     }
 }

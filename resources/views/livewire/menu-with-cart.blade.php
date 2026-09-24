@@ -517,11 +517,12 @@
     </label>
     <select id="order_type"
         wire:model.live="order_type"
-        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all appearance-none">
+        class="w-full px-3 py-2.5 rounded-xl bg-white border @error('order_type') border-rose-300 ring-1 ring-rose-200 @else border-stone-200 @enderror text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all appearance-none">
         <option value="dine_in">{{ __('messages.reservation.dineIn') }}</option>
         <option value="pickup">{{ __('messages.reservation.takeaway') }}</option>
         <option value="delivery">{{ __('messages.reservation.delivery') }}</option>
     </select>
+    @error('order_type') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
 </div>
 
                                 <div>
@@ -648,6 +649,29 @@
     </label>
 </div>
 
+                            {{-- 🔍 ملخص تفصيلي للأخطاء — فوق زر الإرسال مباشرة لضمان الرؤية --}}
+                            @if ($errors->any())
+                                <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3 animate-shake space-y-2">
+                                    <div class="flex items-center gap-2">
+                                        <x-lucide-alert-octagon class="w-4 h-4 text-rose-600 shrink-0" />
+                                        <span class="font-black text-xs text-rose-900 uppercase tracking-wider">
+                                            {{ $errors->count() }} {{ __('messages.order.validation_error') }}
+                                        </span>
+                                    </div>
+                                    <ol class="list-decimal list-inside space-y-0.5 pl-1">
+                                        @foreach ($errors->all() as $idx => $msg)
+                                            <li class="text-xs text-rose-800 leading-relaxed">
+                                                {{ $msg }}
+                                            </li>
+                                        @endforeach
+                                    </ol>
+                                    <div class="rounded-lg bg-slate-900 text-[10px] font-mono text-slate-100 p-2 overflow-x-auto">
+                                        <span class="text-amber-300 font-bold">DEBUG Keys:</span>
+                                        {{ implode(', ', array_keys($errors->toArray())) }}
+                                    </div>
+                                </div>
+                            @endif
+
                             {{-- ملخص السعر وزر الإرسال --}}
                             <div class="pt-4 border-t border-stone-200 mt-6 space-y-4">
                                 <div
@@ -674,6 +698,51 @@
                             </div>
 
                         </form>
+                        {{--
+    ═══════════════════════════════════════════════════════════════════════
+    📄 المكوّن: كتلة عرض أخطاء الـ Checkout (خطأ عام + ملخص أخطاء الحقول)
+    ═══════════════════════════════════════════════════════════════════════
+    🎯 الغرض:
+       - عرض خطأ عام (checkout) — أخطاء RateLimit، Exceptions، تعارض زمني.
+       - عرض ملخص بصري عندما تكون هناك أخطاء في حقول أخرى.
+    🧩 يعتمد على:
+       - Livewire 4 error bag ($errors)
+       - مفاتيح الترجمة: messages.order.error_title / validation_summary
+    🔐 الأمان:
+       - لا يعرض أي تفاصيل داخلية (Exceptions مُعالَجة في Livewire).
+    ⚠️ تحذيرات:
+       - مفتاح الخطأ الموحّد هو 'checkout'.
+         يجب أن يستدعي Livewire: $this->addError('checkout', $msg);
+    🕒 آخر تحديث: 2026-09-24
+    ═══════════════════════════════════════════════════════════════════════
+--}}
+<div wire:key="checkout-error-banner">
+
+    {{-- ⚠️ خطأ عام (RateLimit / Exception / تعارض زمني) --}}
+    @error('checkout')
+        <div class="mb-4 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm animate-shake"
+             role="alert">
+            <x-lucide-alert-circle class="mt-0.5 h-6 w-6 shrink-0 text-rose-600" aria-hidden="true" />
+            <div class="flex-1">
+                <strong class="block font-black text-rose-900">
+                    {{ __('messages.order.error_title') }}
+                </strong>
+                <span class="text-rose-800 leading-relaxed">{{ $message }}</span>
+            </div>
+        </div>
+    @enderror
+
+    {{-- 🔍 ملخص أخطاء الحقول (يظهر فقط إذا وُجدت أخطاء أخرى غير checkout) --}}
+    @if ($errors->any() && ! $errors->has('checkout'))
+        <div class="mb-3 flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800">
+            <x-lucide-triangle-alert class="h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>
+                {{ __('messages.order.validation_summary', ['count' => $errors->count()]) }}
+            </span>
+        </div>
+    @endif
+
+</div>
                         @endif
                     </div>
                 </div>
