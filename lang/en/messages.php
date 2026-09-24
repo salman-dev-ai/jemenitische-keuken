@@ -140,11 +140,13 @@ return [
         'submit' => 'Submit and Confirm Interactive Reservation',
         'processing' => 'Processing your reservation and checking availability...',
         'contactDetails' => 'Reservation & Contact Details',
-        'serviceType' => 'Service Type',
-        'dineIn' => 'Dine-In (Table / Majlis)',
-        'takeaway' => 'Takeaway',
-        'orderTotal' => 'Total Order Amount:',
-        'confirmReservation' => 'Confirm Reservation & Receive WhatsApp Notification',
+      'serviceType'         => 'Service Type',
+        'dineIn'              => 'Dine In 🍽️',
+        'takeaway'            => 'Takeaway 🥡',
+        'delivery'            => 'Home Delivery 🚚',
+
+        'orderTotal'          => 'Total Order Amount:',
+        'confirmReservation'  => 'Confirm Reservation & Receive WhatsApp Notification', 
         'processingReservation' => 'Registering reservation and sending WhatsApp details...',
         'smsNotice' => 'A copy of your order will be sent to your WhatsApp for confirmation',
         'requestsPlaceholderMenu' => 'Example: Please prepare Adeni tea, or there is a nut allergy...',
@@ -160,7 +162,7 @@ return [
         'rate_limit_exceeded' => 'Too many orders. Please wait a minute.',
     ],
     
-    'remember' => [
+ 'remember' => [
         'welcome_back'         => 'Welcome back! 👋',
         'filled_automatically' => 'Your details have been filled automatically.',
         'not_you'              => 'Not you?',
@@ -170,10 +172,19 @@ return [
         'forgotten_title'      => 'Your details have been cleared',
         'forgotten_message'    => 'You can start fresh.',
 
+        'delivery_details'     => 'Delivery Address Details 📍',
+        'address'              => 'Full Address',
+        'address_placeholder'  => 'e.g. Kerkstraat 123, II',
+        'city'                 => 'City',
+        'city_placeholder'     => 'Amsterdam',
+        'postal_code'          => 'Postal Code',
+        'postal_placeholder'   => '1012 NK',
+
         'address_required'     => 'Delivery address is required.',
         'city_required'        => 'City is required.',
         'postal_required'      => 'Postal code is required.',
     ],
+
 
     // ===== Gallery =====
     'gallery' => [
@@ -208,12 +219,25 @@ return [
     ],
 
     // ===== Error Messages =====
-    'errors' => [
-        'table_capacity' => 'Table number (:table) cannot accommodate :count guests. Its maximum capacity is :capacity.',
-        'table_inactive' => 'The selected table is currently unavailable for reservations.',
-        'time_conflict' => 'The table is already reserved at this time or within a two-hour window. Please choose another time or a different table.',
-    ],
+   'errors' => [
+    'missing_customer_data'  => 'Please enter name and phone number.',
+    'missing_required_fields'=> 'Required fields are missing (date and time).',
+    'invalid_party_size'     => 'Invalid party size (1-20).',
+    'invalid_status'         => 'Invalid reservation status.',
+    'invalid_date_format'    => 'Invalid date format.',
+    'invalid_time_format'    => 'Invalid time format.',
+    'past_date'              => 'Cannot book a past date.',
+    'time_conflict'          => 'Sorry, this time is fully booked. Please choose another time.',
+// الطلبات
 
+    'empty_cart'             => 'Cannot create an order without items.',
+    'menu_item_unavailable'  => 'The requested item (#:id) is not available.',
+    'invalid_quantity'       => 'Invalid quantity for ":name" (value: :qty).',
+    'invalid_menu_item_id'   => 'Invalid menu item ID.',
+    'invalid_reservation'    => 'The linked reservation does not exist.',
+    'invalid_order_status'   => 'Invalid order status.',
+    'invalid_order_type'     => 'Invalid order type.',
+],
     // ===== Contact Messages =====
     'contact' => [
 

@@ -512,13 +512,18 @@
 
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.serviceType') }}</label>
-                                    <select wire:model="order_type"
-                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all appearance-none">
-                                        <option value="dine_in">{{ __('messages.reservation.dineIn') }}</option>
-                                        <option value="takeaway">{{ __('messages.reservation.takeaway') }}</option>
-                                    </select>
-                                </div>
+    <label for="order_type" class="block text-xs font-bold text-stone-700 mb-1.5">
+        {{ __('messages.reservation.serviceType') }}
+    </label>
+    <select id="order_type"
+        wire:model.live="order_type"
+        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all appearance-none">
+        <option value="dine_in">{{ __('messages.reservation.dineIn') }}</option>
+        <option value="pickup">{{ __('messages.reservation.takeaway') }}</option>
+        <option value="delivery">{{ __('messages.reservation.delivery') }}</option>
+    </select>
+</div>
+
                                 <div>
                                     <label for="cart-party-size" class="block text-xs font-bold text-stone-700 mb-1.5">
                                         {{ __('messages.reservation.partySize') }}
@@ -528,6 +533,70 @@
                                         class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
                                     @error('party_size') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
                                 </div>
+                                {{-- 🆕 حقول عنوان التوصيل (تظهر فقط عند التوصيل) --}}
+@if ($order_type === 'delivery')
+    <div class="space-y-3 p-3 rounded-2xl border border-amber-200 bg-amber-50/50 animate-fade-in"
+         wire:key="delivery-fields">
+        <h5 class="font-bold text-xs text-amber-800 uppercase tracking-wider flex items-center gap-2">
+            <x-lucide-truck class="w-4 h-4" aria-hidden="true" />
+            {{ __('messages.remember.delivery_details') }}
+        </h5>
+
+        {{-- 📍 العنوان الكامل --}}
+        <div>
+            <label for="delivery_address" class="block text-xs font-bold text-stone-700 mb-1.5">
+                {{ __('messages.remember.address') }}
+                <span class="text-rose-500" aria-hidden="true">*</span>
+            </label>
+            <input id="delivery_address"
+                type="text"
+                wire:model="delivery_address"
+                placeholder="{{ __('messages.remember.address_placeholder') }}"
+                autocomplete="street-address"
+                class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all @error('delivery_address') border-rose-300 @enderror">
+            @error('delivery_address')
+                <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            {{-- 🏙️ المدينة --}}
+            <div>
+                <label for="delivery_city" class="block text-xs font-bold text-stone-700 mb-1.5">
+                    {{ __('messages.remember.city') }}
+                    <span class="text-rose-500" aria-hidden="true">*</span>
+                </label>
+                <input id="delivery_city"
+                    type="text"
+                    wire:model="delivery_city"
+                    placeholder="{{ __('messages.remember.city_placeholder') }}"
+                    autocomplete="address-level2"
+                    class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all @error('delivery_city') border-rose-300 @enderror">
+                @error('delivery_city')
+                    <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- 📮 الرمز البريدي --}}
+            <div>
+                <label for="delivery_postal_code" class="block text-xs font-bold text-stone-700 mb-1.5">
+                    {{ __('messages.remember.postal_code') }}
+                    <span class="text-rose-500" aria-hidden="true">*</span>
+                </label>
+                <input id="delivery_postal_code"
+                    type="text"
+                    wire:model="delivery_postal_code"
+                    placeholder="{{ __('messages.remember.postal_placeholder') }}"
+                    dir="ltr"
+                    autocomplete="postal-code"
+                    class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all @error('delivery_postal_code') border-rose-300 @enderror">
+                @error('delivery_postal_code')
+                    <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+    </div>
+@endif
                             </div>
 
                             <div>
@@ -536,6 +605,48 @@
                                     placeholder="{{ __('messages.reservation.requestsPlaceholderMenu') }}"
                                     class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all resize-none"></textarea>
                             </div>
+
+                            {{-- 🆕 تذكرني + لست أنا --}}
+<div class="space-y-3 pt-2">
+    @if ($isReturningCustomer)
+        <div class="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm animate-fade-in"
+             wire:key="returning-customer-banner">
+            <x-lucide-user-check class="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
+            <div class="flex-1">
+                <strong class="block font-bold text-amber-900">
+                    {{ __('messages.remember.welcome_back') }}
+                </strong>
+                <span class="text-amber-800">
+                    {{ __('messages.remember.filled_automatically') }}
+                </span>
+            </div>
+            <button type="button"
+                wire:click="forgetCustomer"
+                wire:confirm="{{ __('messages.remember.confirm_forget') }}"
+                wire:loading.attr="disabled"
+                wire:target="forgetCustomer"
+                class="shrink-0 rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-bold text-amber-700 transition hover:border-amber-400 hover:text-amber-900 disabled:cursor-wait disabled:opacity-50">
+                <span wire:loading.remove wire:target="forgetCustomer">
+                    {{ __('messages.remember.not_you') }}
+                </span>
+                <span wire:loading wire:target="forgetCustomer" class="inline-flex items-center gap-1">
+                    <x-lucide-loader-2 class="w-3 h-3 animate-spin" aria-hidden="true" />
+                </span>
+            </button>
+        </div>
+    @endif
+
+    <label for="remember_me"
+        class="flex cursor-pointer items-center gap-3 rounded-xl p-2 transition hover:bg-stone-50">
+        <input id="remember_me"
+            type="checkbox"
+            wire:model="remember_me"
+            class="h-5 w-5 rounded-md border-stone-300 text-[#E07513] focus:ring-2 focus:ring-[#E07513]/30">
+        <span class="flex-1 text-sm font-semibold text-stone-700">
+            {{ __('messages.remember.checkbox') }}
+        </span>
+    </label>
+</div>
 
                             {{-- ملخص السعر وزر الإرسال --}}
                             <div class="pt-4 border-t border-stone-200 mt-6 space-y-4">

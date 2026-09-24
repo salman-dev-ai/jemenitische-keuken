@@ -33,5 +33,8 @@ return [
         'decay_seconds' => 60,
     ],
 
+       // 🆕 مدة الحجز الافتراضية بالدقائق
+    'default_duration_minutes' => env('RESERVATION_DURATION_MINUTES', 90),
+
 ];
 

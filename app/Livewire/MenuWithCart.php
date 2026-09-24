@@ -321,6 +321,17 @@ class MenuWithCart extends Component
     /**
      * 🆕 تجهيز بيانات الطلب.
      */
+        /**
+     * ┌─────────────────────────────────────────────────────────────────────┐
+     * │ 🎯 تجهيز بيانات الطلب للإرسال إلى OrderService                     │
+     * └─────────────────────────────────────────────────────────────────────┘
+     *
+     * ⚠️ مهم جداً:
+     *    - reservation_id يُمرَّر دائماً (حتى لو null) لأن OrderService
+     *      يتحقق من وجوده إن كان غير null.
+     *    - customer_id يُمرَّر فقط إن وُجد العميل (remember_me).
+     *    - notes يحتوي على مرجع الحجز إن وُجد لتمكين تتبّع الربط.
+     */
     protected function buildOrderData(
         array $validated,
         $customer,
@@ -340,9 +351,13 @@ class MenuWithCart extends Component
             'delivery_postal_code' => $this->delivery_postal_code ?: null,
         ];
 
+        // 🔗 ربط العميل (إن وُجد)
         if ($customer) {
             $data['customer_id'] = $customer->id;
         }
+
+        // 🔗 ربط الحجز (إن وُجد) — يُمرَّر كـ null إن لم يكن هناك حجز
+        $data['reservation_id'] = $reservation?->id;
 
         return $data;
     }

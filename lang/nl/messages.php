@@ -143,11 +143,12 @@ return [
         'submit' => 'Verstuur & bevestig reservering',
         'processing' => 'Uw reservering wordt verwerkt en de beschikbaarheid wordt gecontroleerd...',
         'contactDetails' => 'Reservering & Contactgegevens',
-        'serviceType' => 'Soort service',
-        'dineIn' => 'Dine-in (Tafel / Majlis)',
-        'takeaway' => 'Afhalen',
-        'orderTotal' => 'Totaal orderbedrag:',
-        'confirmReservation' => 'Bevestig reservering & Ontvang WhatsApp-melding',
+              'serviceType'         => 'Type Service',
+        'dineIn'              => 'Dine In 🍽️',
+        'takeaway'            => 'Afhalen 🥡',
+        'delivery'            => 'Bezorging aan huis 🚚',
+        'orderTotal'          => 'Totaal orderbedrag:',
+        'confirmReservation'  => 'Bevestig reservering & Ontvang WhatsApp-melding',
         'processingReservation' => 'Reservering registreren en WhatsApp-gegevens verzenden...',
         'smsNotice' => 'Een kopie van uw bestelling wordt voor bevestiging naar uw WhatsApp verzonden',
         'requestsPlaceholderMenu' => 'Voorbeeld: Bereid alsjeblieft Adeni-thee, of er is een notenallergie...',
@@ -173,6 +174,14 @@ return [
 
         'forgotten_title'      => 'Je gegevens zijn gewist',
         'forgotten_message'    => 'Je kunt opnieuw beginnen.',
+
+        'delivery_details'     => 'Bezorgadres Gegevens 📍',
+        'address'              => 'Volledig Adres',
+        'address_placeholder'  => 'bijv. Kerkstraat 123, II',
+        'city'                 => 'Stad',
+        'city_placeholder'     => 'Amsterdam',
+        'postal_code'          => 'Postcode',
+        'postal_placeholder'   => '1012 NK',
 
         'address_required'     => 'Bezorgadres is verplicht.',
         'city_required'        => 'Stad is verplicht.',
@@ -212,11 +221,27 @@ return [
     ],
 
     // ===== Foutmeldingen =====
-    'errors' => [
-        'table_capacity' => 'Tafelnummer (:table) biedt geen plaats aan :count gasten. De maximale capaciteit is :capacity.',
-        'table_inactive' => 'De geselecteerde tafel is momenteel niet beschikbaar voor reserveringen.',
-        'time_conflict' => 'De tafel is op dit tijdstip al gereserveerd of binnen een periode van twee uur daaromheen. Kies een ander tijdstip of een andere tafel.',
-    ],
+   'errors' => [
+    'missing_customer_data'  => 'Voer naam en telefoonnummer in.',
+    'missing_required_fields'=> 'Verplichte velden ontbreken (datum en tijd).',
+    'invalid_party_size'     => 'Ongeldig aantal personen (1-20).',
+    'invalid_status'         => 'Ongeldige reserveringsstatus.',
+    'invalid_date_format'    => 'Ongeldig datumformaat.',
+    'invalid_time_format'    => 'Ongeldig tijdformaat.',
+    'past_date'              => 'Kan niet boeken in het verleden.',
+    'time_conflict'          => 'Sorry, dit tijdstip is volgeboekt. Kies een ander tijdstip.',
+
+
+
+// الطلبات
+ 'empty_cart'             => 'Kan geen bestelling aanmaken zonder gerechten.',
+    'menu_item_unavailable'  => 'Het gevraagde gerecht (#:id) is niet beschikbaar.',
+    'invalid_quantity'       => 'Ongeldige hoeveelheid voor ":name" (waarde: :qty).',
+    'invalid_menu_item_id'   => 'Ongeldig menu-item ID.',
+    'invalid_reservation'    => 'De gekoppelde reservering bestaat niet.',
+    'invalid_order_status'   => 'Ongeldige bestelstatus.',
+    'invalid_order_type'     => 'Ongeldig besteltype.',
+],
 
     // ===== contact =====
 
