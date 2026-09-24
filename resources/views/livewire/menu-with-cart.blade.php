@@ -681,15 +681,23 @@
                                         class="text-xl font-black text-[#E07513]">€{{ number_format($this->totalCartAmount, 2) }}</span>
                                 </div>
 
-                                <button type="submit" wire:loading.attr="disabled"
-                                    class="w-full py-4 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-xl text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+             <button type="submit"
+    wire:loading.attr="disabled"
+    wire:target="checkout"
+    class="w-full py-4 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-xl text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
 
-                                    <span wire:loading.remove>{{ __('messages.reservation.confirmReservation') }} <x-lucide-crown class="w-5 h-5 inline-block" /></span>
+    <span wire:loading.remove wire:target="checkout">
+        {{ __('messages.reservation.confirmReservation') }}
+        <x-lucide-crown class="w-5 h-5 inline-block" />
+    </span>
 
-                                    <span wire:loading
-                                        class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                                    <span wire:loading>{{ __('messages.reservation.processingReservation') }}</span>
-                                </button>
+    <span wire:loading wire:target="checkout"
+        class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+
+    <span wire:loading wire:target="checkout">
+        {{ __('messages.reservation.processingReservation') }}
+    </span>
+</button>
 
                                 <p class="text-[10px] text-center text-stone-400 flex items-center justify-center gap-1">
                                     <x-lucide-shield-check class="w-3 h-3" />
@@ -698,39 +706,8 @@
                             </div>
 
                         </form>
-                        {{--
-    ═══════════════════════════════════════════════════════════════════════
-    📄 المكوّن: كتلة عرض أخطاء الـ Checkout (خطأ عام + ملخص أخطاء الحقول)
-    ═══════════════════════════════════════════════════════════════════════
-    🎯 الغرض:
-       - عرض خطأ عام (checkout) — أخطاء RateLimit، Exceptions، تعارض زمني.
-       - عرض ملخص بصري عندما تكون هناك أخطاء في حقول أخرى.
-    🧩 يعتمد على:
-       - Livewire 4 error bag ($errors)
-       - مفاتيح الترجمة: messages.order.error_title / validation_summary
-    🔐 الأمان:
-       - لا يعرض أي تفاصيل داخلية (Exceptions مُعالَجة في Livewire).
-    ⚠️ تحذيرات:
-       - مفتاح الخطأ الموحّد هو 'checkout'.
-         يجب أن يستدعي Livewire: $this->addError('checkout', $msg);
-    🕒 آخر تحديث: 2026-09-24
-    ═══════════════════════════════════════════════════════════════════════
---}}
-<div wire:key="checkout-error-banner">
-
-    {{-- ⚠️ خطأ عام (RateLimit / Exception / تعارض زمني) --}}
-    @error('checkout')
-        <div class="mb-4 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm animate-shake"
-             role="alert">
-            <x-lucide-alert-circle class="mt-0.5 h-6 w-6 shrink-0 text-rose-600" aria-hidden="true" />
-            <div class="flex-1">
-                <strong class="block font-black text-rose-900">
-                    {{ __('messages.order.error_title') }}
-                </strong>
-                <span class="text-rose-800 leading-relaxed">{{ $message }}</span>
-            </div>
-        </div>
-    @enderror
+                        
+   
 
     {{-- 🔍 ملخص أخطاء الحقول (يظهر فقط إذا وُجدت أخطاء أخرى غير checkout) --}}
     @if ($errors->any() && ! $errors->has('checkout'))

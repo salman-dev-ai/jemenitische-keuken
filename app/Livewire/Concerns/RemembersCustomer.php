@@ -59,14 +59,18 @@ trait RemembersCustomer
      */
  
 
-    /**
+      /**
      * 🗑️ إيقاف "تذكرني" (دون حذف العميل من قاعدة البيانات).
      *
      * - يُصفّر remember_token في DB.
-     * - يحذف الكوكي من المتصفح.
+     * - يحذف الكوكي من المتصفح (بانتهاء صلاحيته).
      * - يحتفظ بسجل العميل وعلاقاته للاستخدام المستقبلي.
      *
-     * 📌 المصدر: https://laravel.com/docs/12.x/responses#deleting-cookies
+     * 📌 الحيلة: نستخدم Cookie::make مع minutes سالبة (منتهية)
+     *    بدل Cookie::forget — لأن forget لا تقبل secure/sameSite
+     *    وبالتالي قد لا تحذف الكوكي بشكل صحيح في بعض المتصفحات.
+     *
+     * 📌 المصدر: https://laravel.com/docs/12.x/requests#cookies
      *
      * @return void
      */
@@ -76,12 +80,21 @@ trait RemembersCustomer
 
         if (filled($token)) {
             Customer::where('remember_token', $token)
-                ->update(['remember_token' => null]);  // ✅ لا حذف
+                ->update(['remember_token' => null]);
         }
 
-        Cookie::queue(Cookie::forget(
-            name: self::CUSTOMER_COOKIE_NAME,
-            path: '/',
+        // ✅ إنشاء كوكي منتهي بنفس خصائص setCustomerCookie
+        //    minutes سالبة → المتصفح يحذفه فوراً
+        Cookie::queue(Cookie::make(
+            name:     self::CUSTOMER_COOKIE_NAME,
+            value:    '',
+            minutes:  -2628000,             // 5 سنوات في الماضي
+            path:     '/',
+            domain:   null,
+            secure:   config('reservations.cookie.secure', true),
+            httpOnly: true,
+            raw:      false,
+            sameSite: config('reservations.cookie.same_site', 'lax'),
         ));
     }
 
@@ -101,16 +114,23 @@ trait RemembersCustomer
      *
      * @param array $additionalData حقول إضافية (عنوان، مدينة، ... إلخ)
      */
+        /**
+     * 🆕 إنشاء أو تحديث سجل العميل.
+     * يجب أن يُستدعى داخل DB::transaction.
+     *
+     * 🎯 المعرّف الوحيد: رقم الهاتف (مُطبَّع).
+     *    - لا نستخدم email كمعرّف (قد يكون مشتركاً بين أفراد الأسرة).
+     *    - إذا كان الهاتف جديداً → سجل جديد (حتى لو تطابق الإيميل).
+     *
+     * @param array $additionalData حقول إضافية (عنوان، مدينة، ... إلخ)
+     */
     protected function upsertCustomer(array $additionalData = []): Customer
     {
-        $customer = Customer::query()
-            ->where(function ($q) {
-                $q->where('phone', $this->customer_phone);
+        // 🎯 تطبيع الهاتف أولاً — لضمان توحيد الصيغة
+        $normalizedPhone = $this->normalizePhone($this->customer_phone);
 
-                if (filled($this->customer_email)) {
-                    $q->orWhere('email', $this->customer_email);
-                }
-            })
+        $customer = Customer::query()
+            ->where('phone', $normalizedPhone)   // ✅ phone فقط
             ->lockForUpdate()
             ->first();
 
@@ -120,7 +140,7 @@ trait RemembersCustomer
 
         $customer->fill(array_merge([
             'name'          => $this->customer_name,
-            'phone'         => $this->customer_phone ?: null,
+            'phone'         => $normalizedPhone,   // ✅ مُطبَّع
             'email'         => $this->customer_email ?: null,
             'last_order_at' => now(),
         ], $additionalData));
@@ -133,4 +153,27 @@ trait RemembersCustomer
 
         return $customer;
     }
+
+
+        /**
+     * 🆕 تطبيع رقم الهاتف — للتوحيد قبل البحث/الحفظ.
+     *
+     * - يحوّل الأرقام العربية-الهندية (٠-٩) إلى ASCII (0-9)
+     * - يحذف المسافات والرموز: `-` `(` `)` `.`
+     * - يُبقي `+` في بدايتها فقط
+     *
+     * @param  string $phone
+     * @return string
+     */
+    protected function normalizePhone(string $phone): string
+    {
+        // 1️⃣ تحويل الأرقام العربية-الهندية إلى ASCII
+        $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+        $ascii  = ['0','1','2','3','4','5','6','7','8','9'];
+        $phone  = str_replace($arabic, $ascii, $phone);
+
+        // 2️⃣ حذف كل ما ليس رقماً أو + (نُبقي + فقط)
+        return preg_replace('/[^\d+]/', '', $phone) ?: '';
+    }
+    
 }
