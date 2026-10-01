@@ -233,7 +233,7 @@
                                     <h4 class="text-lg font-black text-stone-900 mb-1.5 leading-snug">
                                         {{ $item->localized_name }}
                                     </h4>
-                                    <p class="text-xs text-stone-500 leading-relaxed line-clamp-2 mb-3">
+                                    <p class="text-sm text-stone-500 leading-relaxed line-clamp-2 mb-3">
                                         {{ $item->localized_description }}
                                     </p>
 
@@ -242,7 +242,7 @@
                                         <div class="flex flex-wrap gap-1 mb-3">
                                             @foreach (is_array($item->allergens) ? $item->allergens : json_decode($item->allergens, true) as $allergen)
                                                 <span
-                                                    class="text-[9px] font-bold px-2 py-0.5 bg-stone-100 text-stone-600 rounded-md border border-stone-200">
+                                                    class="text-[12px] font-bold px-2 py-0.5 bg-stone-100 text-stone-600 rounded-md border border-stone-200">
                                                     {{ $allergen }}
                                                 </span>
                                             @endforeach

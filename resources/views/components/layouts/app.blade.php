@@ -59,7 +59,7 @@
                     <div class="flex items-center justify-between w-full lg:w-auto">
 
                         {{-- الشعار البارز والدائري مع شادو خفيف --}}
-                        <a href="#home" @click="activeSection = 'home'"
+                        <a href="#reservation" @click="activeSection = 'reservation' "
                             class="group flex shrink-0 items-center transition-transform hover:scale-105">
                             <div
                                 class="relative p-0 rounded-full bg-white/90 border border-[#E07513]/40 shadow-md shadow-[#E07513]/15  ring-white/60 z-10 backdrop-blur-sm">
@@ -68,142 +68,49 @@
                             </div>
                         </a>
 
-                        {{-- أزرار التفاعل للجوال فقط --}}
-                        <div class="flex items-center gap-1.5 sm:gap-2 lg:hidden">
 
-                            <!-- زر الواتساب (يومض) -->
-                            <a href="https://wa.me/+769771924870" target="_blank"
-                                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white shadow-md shadow-[#25D366]/40 transition-all hover:scale-110 animate-pulse">
-                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
-                                </svg>
-                            </a>
 
-                            <!-- زر الطلب Thuisbezorgd -->
-                            <a href="https://www.thuisbezorgd.nl/menu/jemenitische-keuken-restaurant#pre"
-                                target="_blank"
-                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white/50 p-1.5 shadow-sm transition-all hover:scale-105">
-                                <img src="{{ asset('images/thuisbezorgd.png') }}" alt="Thuisbezorgd"
-                                    class="h-full w-full object-contain" />
-                            </a>
 
-                            <!-- زر الحجز -->
-                            <a href="#reservation"
-                                class="inline-flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-gradient-to-r from-[#E07513] to-[#B85709] px-3 text-[11px] font-bold text-white shadow-md shadow-[#E07513]/25 transition-all animate-pulse">
-                                {{ __('messages.nav.bookTableBtn') }}
-                            </a>
 
-                            <!-- زر تبديل اللغة -->
 
-                            <div class="relative shrink-0" x-data="{ open: false }">
-                                <button @click="open = !open" @keydown.escape.window="open = false" type="button"
-                                    class="flex h-10 items-center gap-1.5 rounded-xl border border-gray-200 bg-white/50 px-3 text-xs font-bold text-gray-800 transition-all hover:bg-gray-100">
-                                    <span>{{ app()->getLocale() == 'ar' ? 'العربية' : (app()->getLocale() == 'nl' ? 'Nederlands' : 'English') }}</span>
-                                    <svg class="h-3.5 w-3.5 text-gray-500 transition-transform duration-200"
-                                        :class="{ 'rotate-180': open }" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </button>
-                                <div x-show="open" @click.away="open = false" x-cloak
-                                    class="absolute right-0 mt-2 w-32 rounded-xl border border-gray-100 bg-white/95 backdrop-blur-md py-1 text-xs shadow-2xl z-50">
-                                    <a wire:navigate href="{{ route('lang.switch', 'ar') }}"
-                                        class="block px-3 py-2 text-gray-700 hover:bg-[#E07513]/10 hover:text-[#E07513]">العربية</a>
-                                    <a wire:navigate href="{{ route('lang.switch', 'nl') }}"
-                                        class="block px-3 py-2 text-gray-700 hover:bg-[#E07513]/10 hover:text-[#E07513]">Nederlands</a>
-                                    <a wire:navigate href="{{ route('lang.switch', 'en') }}"
-                                        class="block px-3 py-2 text-gray-700 hover:bg-[#E07513]/10 hover:text-[#E07513]">English</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {{-- أزرار التفاعل للجوال فقط --}}
+                    <div class="flex items-center gap-1.5 sm:gap-2 lg:hidden">
 
-                    {{-- الصف الثاني: روابط التنقل (مع الخط النشط) --}}
-                    <nav class="w-full lg:w-auto border-t border-gray-200/50 pt-2 lg:border-t-0 lg:pt-0"
-                        aria-label="{{ __('messages.nav.primary') }}">
-                        <ul
-                            class="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 text-xs sm:text-sm font-bold text-gray-700">
-
-                            <!-- رابط 1: الرئيسية -->
-                            <li>
-                                <a href="#home" @click="activeSection = 'home'"
-                                    class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
-                                    :class="activeSection === 'home' ? 'text-[#E07513]' : ''">
-                                    {{ __('messages.nav.home') }}
-                                    <!-- الخط السفلي للرابط النشط -->
-                                    <span
-                                        class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
-                                        :class="activeSection === 'home' ? 'w-full' : 'w-0 hover:w-full'"></span>
-                                </a>
-                            </li>
-
-                            <!-- رابط 2: المنيو -->
-                            <li>
-                                <a href="#menu" @click="activeSection = 'menu'"
-                                    class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
-                                    :class="activeSection === 'menu' ? 'text-[#E07513]' : ''">
-                                    {{ __('messages.nav.menu') }}
-                                    <span
-                                        class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
-                                        :class="activeSection === 'menu' ? 'w-full' : 'w-0 hover:w-full'"></span>
-                                </a>
-                            </li>
-
-                            <!-- رابط 3: المعرض -->
-                            <li>
-                                <a href="#gallery" @click="activeSection = 'gallery'"
-                                    class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
-                                    :class="activeSection === 'gallery' ? 'text-[#E07513]' : ''">
-                                    {{ __('messages.nav.gallery') }}
-                                    <span
-                                        class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
-                                        :class="activeSection === 'gallery' ? 'w-full' : 'w-0 hover:w-full'"></span>
-                                </a>
-                            </li>
-
-                            <!-- رابط 4: الحجز -->
-                            <li>
-                                <a href="#reservation" @click="activeSection = 'reservation'"
-                                    class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
-                                    :class="activeSection === 'reservation' ? 'text-[#E07513]' : ''">
-                                    {{ __('messages.nav.reservation') }}
-                                    <span
-                                        class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
-                                        :class="activeSection === 'reservation' ? 'w-full' : 'w-0 hover:w-full'"></span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-
-                    {{-- الجانب الأيمن لسطح المكتب فقط: أزرار التفاعل --}}
-                    <div class="hidden lg:flex items-center gap-3 shrink-0">
-
-                        <!-- زر الواتساب -->
-                        <a href="https://wa.me/رقم_الهاتف_هنا" target="_blank"
-                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white shadow-md shadow-[#25D366]/40 transition-all hover:scale-110 animate-pulse"
-                            title="تواصل معنا">
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                        <!-- زر الواتساب (يومض) -->
+                        <a href="https://wa.me/+769771924870" target="_blank"
+                            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white shadow-md shadow-[#25D366]/40 transition-all hover:scale-110 animate-pulse">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
                             </svg>
                         </a>
 
-                        <!-- زر Thuisbezorgd -->
+                        {{-- أيقونة درجة التوصيل في الهيدر --}}
+                         <a href="#delivery.zones" @click="activeSection = 'delivery.zones'" aria-label="مناطق التوصيل"
+                            class="relative z-10 block shrink-0">
+                            <div
+                                class="relative flex h-16 w-20 items-center justify-center overflow-visible lg:h-20 lg:w-24">
+                                <img src="{{ asset('images/scooter_delivery_3d_with_driver.webp') }}"
+                                    alt="سكوتر التوصيل مع السائق"
+                                    class="h-full w-full object-contain object-center drop-shadow-md">
+                            </div>
+                        </a>
+
+                        <!-- زر الطلب Thuisbezorgd -->
                         <a href="https://www.thuisbezorgd.nl/menu/jemenitische-keuken-restaurant#pre" target="_blank"
-                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white/50 p-2 shadow-sm transition-all hover:scale-105 hover:bg-gray-100">
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white/50 p-1.5 shadow-sm transition-all hover:scale-105">
                             <img src="{{ asset('images/thuisbezorgd.png') }}" alt="Thuisbezorgd"
                                 class="h-full w-full object-contain" />
                         </a>
 
                         <!-- زر الحجز -->
                         <a href="#reservation"
-                            class="inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-gradient-to-r from-[#E07513] to-[#B85709] px-5 text-sm font-bold text-white shadow-md shadow-[#E07513]/25 transition-all hover:-translate-y-0.5 animate-pulse">
+                            class="inline-flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-gradient-to-r from-[#E07513] to-[#B85709] px-3 text-[11px] font-bold text-white shadow-md shadow-[#E07513]/25 transition-all animate-pulse">
                             {{ __('messages.nav.bookTableBtn') }}
                         </a>
 
-                        <!-- زر تبديل اللغة (كما هو) -->
+                        <!-- زر تبديل اللغة -->
+
                         <div class="relative shrink-0" x-data="{ open: false }">
                             <button @click="open = !open" @keydown.escape.window="open = false" type="button"
                                 class="flex h-10 items-center gap-1.5 rounded-xl border border-gray-200 bg-white/50 px-3 text-xs font-bold text-gray-800 transition-all hover:bg-gray-100">
@@ -226,9 +133,130 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
+
+                {{-- الصف الثاني: روابط التنقل (مع الخط النشط) --}}
+                <nav class="w-full lg:w-auto border-t border-gray-200/50 pt-2 lg:border-t-0 lg:pt-0"
+                    aria-label="{{ __('messages.nav.primary') }}">
+                    <ul
+                        class="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 text-xs sm:text-sm font-bold text-gray-700">
+
+                        <!-- رابط 1: الرئيسية -->
+                        <li>
+                            <a href="#home" @click="activeSection = 'home'"
+                                class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
+                                :class="activeSection === 'home' ? 'text-[#E07513]' : ''">
+                                {{ __('messages.nav.home') }}
+                                <!-- الخط السفلي للرابط النشط -->
+                                <span
+                                    class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
+                                    :class="activeSection === 'home' ? 'w-full' : 'w-0 hover:w-full'"></span>
+                            </a>
+                        </li>
+
+                        <!-- رابط 2: المنيو -->
+                        <li>
+                            <a href="#menu" @click="activeSection = 'menu'"
+                                class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
+                                :class="activeSection === 'menu' ? 'text-[#E07513]' : ''">
+                                {{ __('messages.nav.menu') }}
+                                <span
+                                    class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
+                                    :class="activeSection === 'menu' ? 'w-full' : 'w-0 hover:w-full'"></span>
+                            </a>
+                        </li>
+
+                        <!-- رابط 3: المعرض -->
+                        <li>
+                            <a href="#gallery" @click="activeSection = 'gallery'"
+                                class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
+                                :class="activeSection === 'gallery' ? 'text-[#E07513]' : ''">
+                                {{ __('messages.nav.gallery') }}
+                                <span
+                                    class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
+                                    :class="activeSection === 'gallery' ? 'w-full' : 'w-0 hover:w-full'"></span>
+                            </a>
+                        </li>
+
+                        <!-- رابط 4: الحجز -->
+                        <li>
+                            <a href="#reservation" @click="activeSection = 'reservation'"
+                                class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
+                                :class="activeSection === 'reservation' ? 'text-[#E07513]' : ''">
+                                {{ __('messages.nav.reservation') }}
+                                <span
+                                    class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
+                                    :class="activeSection === 'reservation' ? 'w-full' : 'w-0 hover:w-full'"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                {{-- الجانب الأيمن لسطح المكتب فقط: أزرار التفاعل --}}
+                <div class="hidden lg:flex items-center gap-3 shrink-0">
+
+                    <!-- زر الواتساب -->
+                    <a href="https://wa.me/رقم_الهاتف_هنا" target="_blank"
+                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white shadow-md shadow-[#25D366]/40 transition-all hover:scale-110 animate-pulse"
+                        title="تواصل معنا">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
+                        </svg>
+                    </a>
+
+
+                        {{-- أيقونة درجة التوصيل في الهيدر --}}
+                         <a href="#delivery.zones" @click="activeSection = 'delivery.zones'" aria-label="مناطق التوصيل"
+                            class="relative z-10 block shrink-0">
+                            <div
+                                class="relative flex h-16 w-20 items-center justify-center overflow-visible lg:h-20 lg:w-24">
+                                <img src="{{ asset('images/scooter_delivery_3d_with_driver.webp') }}"
+                                    alt="سكوتر التوصيل مع السائق"
+                                    class="h-full w-full object-contain object-center drop-shadow-md">
+                            </div>
+                        </a>
+
+
+                    <!-- زر Thuisbezorgd -->
+                    <a href="https://www.thuisbezorgd.nl/menu/jemenitische-keuken-restaurant#pre" target="_blank"
+                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white/50 p-2 shadow-sm transition-all hover:scale-105 hover:bg-gray-100">
+                        <img src="{{ asset('images/thuisbezorgd.png') }}" alt="Thuisbezorgd"
+                            class="h-full w-full object-contain" />
+                    </a>
+
+                    <!-- زر الحجز -->
+                    <a href="#reservation"
+                        class="inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-gradient-to-r from-[#E07513] to-[#B85709] px-5 text-sm font-bold text-white shadow-md shadow-[#E07513]/25 transition-all hover:-translate-y-0.5 animate-pulse">
+                        {{ __('messages.nav.bookTableBtn') }}
+                    </a>
+
+                    <!-- زر تبديل اللغة (كما هو) -->
+                    <div class="relative shrink-0" x-data="{ open: false }">
+                        <button @click="open = !open" @keydown.escape.window="open = false" type="button"
+                            class="flex h-10 items-center gap-1.5 rounded-xl border border-gray-200 bg-white/50 px-3 text-xs font-bold text-gray-800 transition-all hover:bg-gray-100">
+                            <span>{{ app()->getLocale() == 'ar' ? 'العربية' : (app()->getLocale() == 'nl' ? 'Nederlands' : 'English') }}</span>
+                            <svg class="h-3.5 w-3.5 text-gray-500 transition-transform duration-200"
+                                :class="{ 'rotate-180': open }" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div x-show="open" @click.away="open = false" x-cloak
+                            class="absolute right-0 mt-2 w-32 rounded-xl border border-gray-100 bg-white/95 backdrop-blur-md py-1 text-xs shadow-2xl z-50">
+                            <a wire:navigate href="{{ route('lang.switch', 'ar') }}"
+                                class="block px-3 py-2 text-gray-700 hover:bg-[#E07513]/10 hover:text-[#E07513]">العربية</a>
+                            <a wire:navigate href="{{ route('lang.switch', 'nl') }}"
+                                class="block px-3 py-2 text-gray-700 hover:bg-[#E07513]/10 hover:text-[#E07513]">Nederlands</a>
+                            <a wire:navigate href="{{ route('lang.switch', 'en') }}"
+                                class="block px-3 py-2 text-gray-700 hover:bg-[#E07513]/10 hover:text-[#E07513]">English</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        </div>
         </div>
     </header>
 
@@ -237,140 +265,193 @@
         {{ $slot }}
     </main>
 
-@php
-    $translate = static function (string $key, string $fallback): string {
-        return \Illuminate\Support\Facades\Lang::has($key) ? __($key) : $fallback;
-    };
+    @php
+        $translate = static function (string $key, string $fallback): string {
+            return \Illuminate\Support\Facades\Lang::has($key) ? __($key) : $fallback;
+        };
 
-    $phone = trim((string) ($settings?->phone ?? ''));
-    $whatsapp = trim((string) ($settings?->whatsapp ?? ''));
-    $email = trim((string) ($settings?->email ?? ''));
-    $mapsLink = trim((string) ($settings?->google_maps_link ?? ''));
-    $city = trim((string) ($settings?->city ?? ''));
-    $postalCode = trim((string) ($settings?->postal_code ?? ''));
-    $address = trim((string) ($settings?->localized_address ?? ''));
-    $openingHours = is_array($settings?->opening_hours ?? null) ? $settings->opening_hours : [];
+        $phone = trim((string) ($settings?->phone ?? ''));
+        $whatsapp = trim((string) ($settings?->whatsapp ?? ''));
+        $email = trim((string) ($settings?->email ?? ''));
+        $mapsLink = trim((string) ($settings?->google_maps_link ?? ''));
+        $city = trim((string) ($settings?->city ?? ''));
+        $postalCode = trim((string) ($settings?->postal_code ?? ''));
+        $address = trim((string) ($settings?->localized_address ?? ''));
+        $openingHours = is_array($settings?->opening_hours ?? null) ? $settings->opening_hours : [];
 
-    $phoneHref = preg_replace('/[^0-9+]/', '', $phone) ?: '';
-    $whatsappHref = str_starts_with($whatsapp, 'http://') || str_starts_with($whatsapp, 'https://')
-        ? $whatsapp
-        : 'https://wa.me/' . preg_replace('/[^0-9]/', '', $whatsapp);
+        $phoneHref = preg_replace('/[^0-9+]/', '', $phone) ?: '';
+        $whatsappHref =
+            str_starts_with($whatsapp, 'http://') || str_starts_with($whatsapp, 'https://')
+                ? $whatsapp
+                : 'https://wa.me/' . preg_replace('/[^0-9]/', '', $whatsapp);
 
-    // غيّر المسار إذا كان اسم صورة المدينة في مشروعك مختلفاً.
-    $backgroundImage = asset('images/logo-transparent.webp');
-@endphp
+        // غيّر المسار إذا كان اسم صورة المدينة في مشروعك مختلفاً.
+        $backgroundImage = asset('images/logo-transparent.webp');
+    @endphp
 
-<footer dir="rtl" class="relative isolate min-h-[620px] overflow-hidden bg-[#171421] text-stone-100">
-    {{-- خلفية المدينة والتدرج الداكن مثل الصورة المرجعية --}}
-    <div class="pointer-events-none absolute inset-0 -z-20 bg-[#171421]"></div>
-    <div class="pointer-events-none absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat opacity-100  " style="background-image:url('{{ $backgroundImage }}')"></div>
-    <div class="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(15,18,37,.91)_0%,rgba(28,20,32,.80)_45%,rgba(31,12,5,.96)_100%)]"></div>
+    <footer dir="rtl" class="relative isolate min-h-[620px] overflow-hidden bg-[#171421] text-stone-100">
+        {{-- خلفية المدينة والتدرج الداكن مثل الصورة المرجعية --}}
+        <div class="pointer-events-none absolute inset-0 -z-20 bg-[#171421]"></div>
+        <div class="pointer-events-none absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat opacity-100  "
+            style="background-image:url('{{ $backgroundImage }}')"></div>
+        <div
+            class="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(15,18,37,.91)_0%,rgba(28,20,32,.80)_45%,rgba(31,12,5,.96)_100%)]">
+        </div>
 
-    <div class="mx-auto flex min-h-[620px] max-w-[1580px] flex-col px-8 pb-5 pt-8 sm:px-16 lg:px-[7.8%]">
-        {{-- الشريط العلوي --}}
-        <div class="flex items-start justify-between text-[11px] font-medium text-white/85">
-            <span>{{ $translate('messages.footer.welcome', 'مرحبا بكم  ً') }}</span>
-            <div class="text-center leading-tight">
-                <div class="text-[17px] font-black text-white">{{ $settings?->localized_name ?: 'المطبخ اليمني' }}</div>
-                <div class="mt-1 text-[9px] font-bold tracking-[.18em] text-[#d69045]">JEMENITISCHE KEUKEN</div>
+        <div class="mx-auto flex min-h-[620px] max-w-[1580px] flex-col px-8 pb-5 pt-8 sm:px-16 lg:px-[7.8%]">
+            {{-- الشريط العلوي --}}
+            <div class="flex items-start justify-between text-[11px] font-medium text-white/85">
+                <span>{{ $translate('messages.footer.welcome', 'مرحبا بكم  ً') }}</span>
+                <div class="text-center leading-tight">
+                    <div class="text-[17px] font-black text-white">{{ $settings?->localized_name ?: 'المطبخ اليمني' }}
+                    </div>
+                    <div class="mt-1 text-[9px] font-bold tracking-[.18em] text-[#d69045]">JEMENITISCHE KEUKEN</div>
+                </div>
+            </div>
+
+            {{-- عنوان الصفحة --}}
+            <div class="mt-3 text-center">
+                <p class="text-[10px] font-bold tracking-[.32em] text-[#d89043]">THE ORIGIN OF MANDI</p>
+                <h1 class="mt-1 text-[30px] font-black leading-tight text-white drop-shadow-lg sm:text-[34px]">نكهات
+                    يمنية أصيلة</h1>
+                <p class="mt-1 text-[12px] font-medium text-white/85">تجربة يمنية دافئة تجمع المذاق الأصيل والضيافة
+                    الكريمة.</p>
+                @if ($settings?->accepts_reservations)
+                    <a href="#reservation"
+                        class="mt-3 inline-flex h-9 items-center justify-center rounded-full bg-[#df791d] px-7 text-[13px] font-black text-white shadow-[0_4px_18px_rgba(223,121,29,.42)] transition hover:-translate-y-0.5 hover:bg-[#ef8b2b]">
+                        {{ $translate('messages.footer.reserveNow', 'احجز طاولتك الآن') }}
+                    </a>
+                @endif
+            </div>
+
+            {{-- ترتيب RTL: اكتشف يميناً، تواصل معنا في الوسط، ساعات العمل يساراً --}}
+            <div class="mt-6 grid flex-1 grid-cols-1 gap-3 lg:grid-cols-3 lg:gap-5">
+                {{-- اكتشف --}}
+                <section
+                    class="min-h-[200px] max-h-60 rounded-[16px] border border-white/30 bg-[linear-gradient(135deg,rgba(79,57,59,.70),rgba(47,31,34,.76))] p-5 shadow-[0_12px_30px_rgba(0,0,0,.27)] backdrop-blur-[5px]">
+                    <h2 class="flex items-center gap-2 text-[15px] font-black text-white"><span
+                            class="h-2 w-2 rounded-full bg-[#e17a18] shadow-[0_0_10px_rgba(225,122,24,.85)]"></span>{{ $translate('messages.footer.quickLinks', 'اكتشف') }}
+                    </h2>
+                    <ul class="mt-5 space-y-2.5 text-[13px] font-medium leading-5 text-white/80">
+                        <li><a href="#home"
+                                class="transition-colors hover:text-[#f1ae62]">{{ $translate('messages.nav.home', 'الرئيسية') }}</a>
+                        </li>
+                        <li><a href="#menu"
+                                class="transition-colors hover:text-[#f1ae62]">{{ $translate('messages.nav.menu', 'قائمة الطعام') }}</a>
+                        </li>
+                        <li><a href="#gallery"
+                                class="transition-colors hover:text-[#f1ae62]">{{ $translate('messages.nav.gallery', 'معرض الصور') }}</a>
+                        </li>
+                        @if ($settings?->accepts_reservations)
+                            <li><a href="#reservation"
+                                    class="font-bold text-[#f0a54f] transition-colors hover:text-[#ffd28d]">{{ $translate('messages.nav.reservation', 'الحجز') }}</a>
+                            </li>
+                        @endif
+                    </ul>
+                </section>
+
+                {{-- تواصل معنا --}}
+                <section
+                    class="min-h-[200px] max-h-60 rounded-[16px] border border-white/30 bg-[linear-gradient(135deg,rgba(79,57,59,.70),rgba(47,31,34,.76))] p-5 shadow-[0_12px_30px_rgba(0,0,0,.27)] backdrop-blur-[5px]">
+                    <h2 class="flex items-center gap-2 text-[15px] font-black text-white"><span
+                            class="h-2 w-2 rounded-full bg-[#e17a18] shadow-[0_0_10px_rgba(225,122,24,.85)]"></span>{{ $translate('messages.footer.contact', 'تواصل معنا') }}
+                    </h2>
+                    <div class="mt-4 space-y-2 text-[13px] font-medium leading-5 text-white/85">
+                        @if ($address || $city || $postalCode)
+                            <p class="flex items-center gap-2"><x-lucide-map-pin
+                                    class="h-4 w-4 shrink-0 text-[#efa452]" /> <span>{{ $address }}@if ($city)
+                                        , {{ $city }}
+                                        @endif @if ($postalCode)
+                                            , {{ $postalCode }}
+                                        @endif
+                                </span></p>
+                        @endif
+                        @if ($phone && $phoneHref)
+                            <a dir="ltr" href="tel:{{ $phoneHref }}"
+                                class="block w-fit transition-colors hover:text-[#f1ae62]">{{ $phone }}</a>
+                        @endif
+                        @if ($email)
+                            <a dir="ltr" href="mailto:{{ $email }}"
+                                class="block w-fit transition-colors hover:text-[#f1ae62]">{{ $email }}</a>
+                        @endif
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-center gap-2">
+                        <a href="#" aria-label="TikTok"
+                            class="flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-200 bg-[#10131d] text-white shadow-[0_0_12px_rgba(84,231,224,.22)] transition hover:-translate-y-0.5"><x-lucide-music-2
+                                class="h-5 w-5" /></a>
+                        @if ($whatsapp && $whatsappHref !== 'https://wa.me/')
+                            <a href="{{ $whatsappHref }}" target="_blank" rel="noopener noreferrer"
+                                aria-label="WhatsApp"
+                                class="flex h-11 w-11 items-center justify-center rounded-xl border border-emerald-200 bg-[#079b67] text-white transition hover:-translate-y-0.5 hover:bg-[#12b77d]">
+                                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
+                                </svg></a>
+                        @endif
+                    </div>
+
+                    @if ($mapsLink)
+                        <a href="{{ $mapsLink }}" target="_blank" rel="noopener noreferrer"
+                            class="mx-auto mt-3 flex h-9 w-fit items-center gap-1.5 rounded-xl border border-[#d89145] bg-[#804315]/60 px-3 text-[12px] font-bold text-[#f0b66d] transition hover:bg-[#a85a1d]/70"><x-lucide-map-pin
+                                class="h-4 w-4" />{{ $translate('messages.footer.viewMap', 'الموقع على خريطة جوجل') }}</a>
+                    @endif
+                </section>
+
+                {{-- ساعات العمل --}}
+                <section
+                    class="min-h-[200px] max-h-60 rounded-[16px] border border-white/30 bg-[linear-gradient(135deg,rgba(79,57,59,.70),rgba(47,31,34,.76))] p-5 shadow-[0_12px_30px_rgba(0,0,0,.27)] backdrop-blur-[5px]">
+                    <h2 class="flex items-center gap-2 text-[15px] font-black text-white"><span
+                            class="h-2 w-2 rounded-full bg-[#e17a18] shadow-[0_0_10px_rgba(225,122,24,.85)]"></span>{{ $translate('messages.footer.hours', 'ساعات العمل') }}
+                    </h2>
+                    @if ($openingHours)
+                        <dl class="mt-5 space-y-1.5 text-[12px] font-medium">
+                            @foreach ($openingHours as $day => $hours)
+                                @php
+                                    $hoursText = is_array($hours)
+                                        ? implode(
+                                            ' - ',
+                                            array_filter(
+                                                array_map(static fn($value): string => (string) $value, $hours),
+                                            ),
+                                        )
+                                        : (string) $hours;
+                                @endphp
+                                <div class="flex items-center justify-between gap-4">
+                                    <dt class="text-white/80">
+                                        {{ $translate('messages.days.' . strtolower((string) $day), (string) $day) }}
+                                    </dt>
+                                    <dd dir="ltr" class="font-bold text-[#efa452]">{{ $hoursText }}</dd>
+                                </div>
+                            @endforeach
+                        </dl>
+                    @else
+                        <p class="mt-5 text-[13px] leading-6 text-white/70">
+                            {{ $translate('messages.footer.hoursUnavailable', 'يرجى التواصل معنا لمعرفة ساعات العمل.') }}
+                        </p>
+                    @endif
+                </section>
+            </div>
+
+            <div
+                class="mt-5 flex items-center justify-between border-t border-[#c57832]/70 pt-3 text-[10px] font-medium text-white/65">
+                <p>{{ $translate('messages.footer.rights', 'جميع الحقوق محفوظة') }} <span dir="ltr">©
+                        {{ now()->year }}</span></p>
+                <p class="text-[#d69348]">The Origin Of Mandi • أصل المندي</p>
             </div>
         </div>
+    </footer>
 
-        {{-- عنوان الصفحة --}}
-        <div class="mt-3 text-center">
-            <p class="text-[10px] font-bold tracking-[.32em] text-[#d89043]">THE ORIGIN OF MANDI</p>
-            <h1 class="mt-1 text-[30px] font-black leading-tight text-white drop-shadow-lg sm:text-[34px]">نكهات يمنية أصيلة</h1>
-            <p class="mt-1 text-[12px] font-medium text-white/85">تجربة يمنية دافئة تجمع المذاق الأصيل والضيافة الكريمة.</p>
-            @if ($settings?->accepts_reservations)
-                <a href="#reservation" class="mt-3 inline-flex h-9 items-center justify-center rounded-full bg-[#df791d] px-7 text-[13px] font-black text-white shadow-[0_4px_18px_rgba(223,121,29,.42)] transition hover:-translate-y-0.5 hover:bg-[#ef8b2b]">
-                    {{ $translate('messages.footer.reserveNow', 'احجز طاولتك الآن') }}
-                </a>
-            @endif
-        </div>
-
-        {{-- ترتيب RTL: اكتشف يميناً، تواصل معنا في الوسط، ساعات العمل يساراً --}}
-        <div class="mt-6 grid flex-1 grid-cols-1 gap-3 lg:grid-cols-3 lg:gap-5">
-            {{-- اكتشف --}}
-            <section class="min-h-[200px] max-h-60 rounded-[16px] border border-white/30 bg-[linear-gradient(135deg,rgba(79,57,59,.70),rgba(47,31,34,.76))] p-5 shadow-[0_12px_30px_rgba(0,0,0,.27)] backdrop-blur-[5px]">
-                <h2 class="flex items-center gap-2 text-[15px] font-black text-white"><span class="h-2 w-2 rounded-full bg-[#e17a18] shadow-[0_0_10px_rgba(225,122,24,.85)]"></span>{{ $translate('messages.footer.quickLinks', 'اكتشف') }}</h2>
-                <ul class="mt-5 space-y-2.5 text-[13px] font-medium leading-5 text-white/80">
-                    <li><a href="#home" class="transition-colors hover:text-[#f1ae62]">{{ $translate('messages.nav.home', 'الرئيسية') }}</a></li>
-                    <li><a href="#menu" class="transition-colors hover:text-[#f1ae62]">{{ $translate('messages.nav.menu', 'قائمة الطعام') }}</a></li>
-                    <li><a href="#gallery" class="transition-colors hover:text-[#f1ae62]">{{ $translate('messages.nav.gallery', 'معرض الصور') }}</a></li>
-                    @if ($settings?->accepts_reservations)
-                        <li><a href="#reservation" class="font-bold text-[#f0a54f] transition-colors hover:text-[#ffd28d]">{{ $translate('messages.nav.reservation', 'الحجز') }}</a></li>
-                    @endif
-                </ul>
-            </section>
-
-            {{-- تواصل معنا --}}
-            <section class="min-h-[200px] max-h-60 rounded-[16px] border border-white/30 bg-[linear-gradient(135deg,rgba(79,57,59,.70),rgba(47,31,34,.76))] p-5 shadow-[0_12px_30px_rgba(0,0,0,.27)] backdrop-blur-[5px]">
-                <h2 class="flex items-center gap-2 text-[15px] font-black text-white"><span class="h-2 w-2 rounded-full bg-[#e17a18] shadow-[0_0_10px_rgba(225,122,24,.85)]"></span>{{ $translate('messages.footer.contact', 'تواصل معنا') }}</h2>
-                <div class="mt-4 space-y-2 text-[13px] font-medium leading-5 text-white/85">
-                    @if ($address || $city || $postalCode)
-                        <p class="flex items-center gap-2"><x-lucide-map-pin class="h-4 w-4 shrink-0 text-[#efa452]" /> <span>{{ $address }}@if ($city), {{ $city }}@endif @if ($postalCode), {{ $postalCode }}@endif</span></p>
-                    @endif
-                    @if ($phone && $phoneHref)
-                        <a dir="ltr" href="tel:{{ $phoneHref }}" class="block w-fit transition-colors hover:text-[#f1ae62]">{{ $phone }}</a>
-                    @endif
-                    @if ($email)
-                        <a dir="ltr" href="mailto:{{ $email }}" class="block w-fit transition-colors hover:text-[#f1ae62]">{{ $email }}</a>
-                    @endif
-                </div>
-
-                <div class="mt-4 flex items-center justify-center gap-2">
-                    <a href="#" aria-label="TikTok" class="flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-200 bg-[#10131d] text-white shadow-[0_0_12px_rgba(84,231,224,.22)] transition hover:-translate-y-0.5"><x-lucide-music-2 class="h-5 w-5" /></a>
-                    @if ($whatsapp && $whatsappHref !== 'https://wa.me/')
-                        <a href="{{ $whatsappHref }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="flex h-11 w-11 items-center justify-center rounded-xl border border-emerald-200 bg-[#079b67] text-white transition hover:-translate-y-0.5 hover:bg-[#12b77d]">  <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
-                            </svg></a>
-                    @endif
-                </div>
-
-                @if ($mapsLink)
-                    <a href="{{ $mapsLink }}" target="_blank" rel="noopener noreferrer" class="mx-auto mt-3 flex h-9 w-fit items-center gap-1.5 rounded-xl border border-[#d89145] bg-[#804315]/60 px-3 text-[12px] font-bold text-[#f0b66d] transition hover:bg-[#a85a1d]/70"><x-lucide-map-pin class="h-4 w-4" />{{ $translate('messages.footer.viewMap', 'الموقع على خريطة جوجل') }}</a>
-                @endif
-            </section>
-
-            {{-- ساعات العمل --}}
-            <section class="min-h-[200px] max-h-60 rounded-[16px] border border-white/30 bg-[linear-gradient(135deg,rgba(79,57,59,.70),rgba(47,31,34,.76))] p-5 shadow-[0_12px_30px_rgba(0,0,0,.27)] backdrop-blur-[5px]">
-                <h2 class="flex items-center gap-2 text-[15px] font-black text-white"><span class="h-2 w-2 rounded-full bg-[#e17a18] shadow-[0_0_10px_rgba(225,122,24,.85)]"></span>{{ $translate('messages.footer.hours', 'ساعات العمل') }}</h2>
-                @if ($openingHours)
-                    <dl class="mt-5 space-y-1.5 text-[12px] font-medium">
-                        @foreach ($openingHours as $day => $hours)
-                            @php
-                                $hoursText = is_array($hours) ? implode(' - ', array_filter(array_map(static fn ($value): string => (string) $value, $hours))) : (string) $hours;
-                            @endphp
-                            <div class="flex items-center justify-between gap-4">
-                                <dt class="text-white/80">{{ $translate('messages.days.' . strtolower((string) $day), (string) $day) }}</dt>
-                                <dd dir="ltr" class="font-bold text-[#efa452]">{{ $hoursText }}</dd>
-                            </div>
-                        @endforeach
-                    </dl>
-                @else
-                    <p class="mt-5 text-[13px] leading-6 text-white/70">{{ $translate('messages.footer.hoursUnavailable', 'يرجى التواصل معنا لمعرفة ساعات العمل.') }}</p>
-                @endif
-            </section>
-        </div>
-
-        <div class="mt-5 flex items-center justify-between border-t border-[#c57832]/70 pt-3 text-[10px] font-medium text-white/65">
-            <p>{{ $translate('messages.footer.rights', 'جميع الحقوق محفوظة') }} <span dir="ltr">© {{ now()->year }}</span></p>
-            <p class="text-[#d69348]">The Origin Of Mandi • أصل المندي</p>
-        </div>
-    </div>
-</footer>
-
-{{-- If Lucide is loaded through Vite, this line activates every data-lucide icon above. --}}
-@once
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                if (window.lucide) window.lucide.createIcons();
-            });
-        </script>
-    @endpush
-@endonce
+    {{-- If Lucide is loaded through Vite, this line activates every data-lucide icon above. --}}
+    @once
+        @push('scripts')
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    if (window.lucide) window.lucide.createIcons();
+                });
+            </script>
+        @endpush
+    @endonce
 
 
 

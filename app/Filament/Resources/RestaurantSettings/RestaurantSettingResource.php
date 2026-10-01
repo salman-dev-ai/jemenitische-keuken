@@ -25,6 +25,7 @@ class RestaurantSettingResource extends Resource
     protected static string|BackedEnum|null $navigationIcon =
         Heroicon::OutlinedCog6Tooth;
 
+ 
     protected static ?string $navigationLabel =
         'إعدادات المطعم';
 
@@ -37,7 +38,8 @@ class RestaurantSettingResource extends Resource
         'إعدادات المطعم';
 
     protected static string|UnitEnum|null $navigationGroup =
-        'النظام';
+        'إعدادات المطعم';
+
 
     // This is the order of the resource in the navigation,
     // lower numbers are displayed first

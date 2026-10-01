@@ -20,9 +20,16 @@
         <livewire:customer-reviews-marquee />
     </section>
 
+   
+
     {{-- Reservation section --}}
     <section id="reservation" class="py-20">
         <livewire:reservation-form />
     </section>
 
+
+    {{-- Delivery Zones section --}}
+ <section id="delivery_zones" class="py-20">
+        <livewire:show-delivery-zones/>
+    </section>
 </x-layouts.app>
