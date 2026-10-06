@@ -356,4 +356,14 @@ return [
         'loading'     => 'Laden...',
         'scrollToTop' => 'Terug naar boven',
     ],
+
+
+    'discount_type' => [
+        'percentage' => 'Percentage',
+        'fixed'      => 'Vast bedrag',
+    ],
+    'media_type' => [
+        'image' => 'Afbeelding',
+        'video' => 'Video',
+    ],
 ];

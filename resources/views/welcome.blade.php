@@ -5,6 +5,10 @@
         <livewire:home-page />
     </div>
 
+     <section id="offers-section" class="py-10">
+        <livewire:offers-section/>
+    </section>
+
     {{-- Gallery section --}}
     <section id="gallery" class="py-10">
         <livewire:gallery-section />

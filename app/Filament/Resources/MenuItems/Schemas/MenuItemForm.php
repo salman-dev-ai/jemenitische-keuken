@@ -20,6 +20,7 @@ use Filament\Schemas\Components\Utilities\Set as UtilitiesSet;
 
 class MenuItemForm
 {
+    
     public static function configure(Schema $schema): Schema
     {
         return $schema

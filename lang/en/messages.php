@@ -354,4 +354,14 @@ return [
         'loading'     => 'Loading...',
         'scrollToTop' => 'Scroll to top',
     ],
+
+
+     'discount_type' => [
+        'percentage' => 'Percentage',
+        'fixed'      => 'Fixed Amount',
+    ],
+    'media_type' => [
+        'image' => 'Image',
+        'video' => 'Video',
+    ],
 ];
