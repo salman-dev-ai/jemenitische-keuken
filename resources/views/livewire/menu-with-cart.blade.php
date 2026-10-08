@@ -129,7 +129,8 @@
             {{-- ========================================================= --}}
             {{-- 2. شريط التمرير الأفقي (يظهر فقط على الجوال) --}}
             {{-- ========================================================= --}}
-            <div class="lg:hidden col-span-1 overflow-x-auto pb-2 -mx-4 px-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div
+                class="lg:hidden col-span-1 overflow-x-auto pb-2 -mx-4 px-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 <div class="flex items-center gap-2 min-w-max">
                     <button wire:click="selectCategory('all')"
                         class="px-4 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all
@@ -168,12 +169,13 @@
                         @if ($selectedCategorySlug === 'all')
                             <x-lucide-crown class="w-5 h-5" />{{ __('messages.menu.all') }}
                         @else
-                           <x-lucide-utensils class="w-5 h-5" />
+                            <x-lucide-utensils class="w-5 h-5" />
                             {{ $this->categories->firstWhere('slug', $selectedCategorySlug)?->localized_name ?: __('messages.menu.dishes') }}
                         @endif
                     </h3>
                     <span class="text-xs font-bold text-stone-500 bg-stone-100 px-3 py-1 rounded-full">
-                        {{ $this->filteredItems->count() }} {{ trans_choice('messages.menu.dishes', $this->filteredItems->count()) }}
+                        {{ $this->filteredItems->count() }}
+                        {{ trans_choice('messages.menu.dishes', $this->filteredItems->count()) }}
                     </span>
                 </div>
 
@@ -200,7 +202,8 @@
                                 @else
                                     <div
                                         class="w-full h-full flex items-center justify-center bg-stone-50 text-stone-300 text-5xl">
-                                        <x-lucide-soup class="w-10 h-10 text-stone-300" /></div>
+                                        <x-lucide-soup class="w-10 h-10 text-stone-300" />
+                                    </div>
                                 @endif
 
                                 {{-- شارات الطبق --}}
@@ -208,13 +211,15 @@
                                     @if ($item->is_featured)
                                         <span
                                             class="px-2.5 py-1 bg-amber-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
-                                            	<x-lucide-star class="w-3 h-3 fill-white" aria-hidden="true" /> {{ __('messages.menu.featured') }}
+                                            <x-lucide-star class="w-3 h-3 fill-white" aria-hidden="true" />
+                                            {{ __('messages.menu.featured') }}
                                         </span>
                                     @endif
                                     @if ($item->is_spicy)
                                         <span
                                             class="px-2.5 py-1 bg-red-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
-                                            <x-lucide-flame class="w-3 h-3" aria-hidden="true" /> {{ __('messages.menu.spicy') }}
+                                            <x-lucide-flame class="w-3 h-3" aria-hidden="true" />
+                                            {{ __('messages.menu.spicy') }}
                                         </span>
                                     @endif
                                 </div>
@@ -280,13 +285,15 @@
                                                 title="{{ __('messages.menu.removeFromCart') }}">
 
                                                 <span wire:loading.remove
-                                                    wire:target="removeFromCart({{ $item->id }})"><x-lucide-trash-2 class="w-4 h-4" /></span>
+                                                    wire:target="removeFromCart({{ $item->id }})"><x-lucide-trash-2
+                                                        class="w-4 h-4" /></span>
                                                 <span wire:loading wire:target="removeFromCart({{ $item->id }})"
                                                     class="w-4 h-4 border-2 border-red-500/30 border-t-red-600 rounded-full animate-spin"></span>
                                             </button>
                                             <span
                                                 class="font-black text-stone-900 text-base w-8 text-center">{{ $cartQty }}</span>
-                                            <button type="button" wire:click="updateQuantity({{ $item->id }}, 1)"
+                                            <button type="button"
+                                                wire:click="updateQuantity({{ $item->id }}, 1)"
                                                 class="w-9 h-9 rounded-lg bg-amber-500 text-white hover:bg-amber-600 flex items-center justify-center font-bold text-lg shadow-sm transition-colors">
                                                 +
                                             </button>
@@ -301,7 +308,7 @@
                     @empty
                         <div
                             class="col-span-full text-center py-16 bg-stone-50 rounded-3xl border border-dashed border-stone-300">
-                            <div class="text-5xl mb-3">	<x-lucide-utensils class="w-4 h-4" /></div>
+                            <div class="text-5xl mb-3"> <x-lucide-utensils class="w-4 h-4" /></div>
                             <h3 class="text-lg font-bold text-stone-700">{{ __('messages.menu.empty') }}</h3>
                         </div>
                     @endforelse
@@ -323,7 +330,7 @@
                     <div class="relative">
                         <div
                             class="w-11 h-11 rounded-2xl bg-[#E07513] text-white flex items-center justify-center font-bold shadow-md text-lg">
-                          <x-lucide-shopping-bag class="w-6 h-6" />
+                            <x-lucide-shopping-bag class="w-6 h-6" />
                         </div>
                         <span
                             class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber-400 text-stone-950 text-[11px] font-black flex items-center justify-center">
@@ -333,15 +340,15 @@
                     <div class="text-right">
                         {{-- <span class="text-xs text-amber-200 font-bold block">{{ __('messages.menu.cartReady')  }}</span> --}}
                         <span class="text-sm sm:text-base font-black text-white">
-                            {{ __('messages.menu.total')  }}: €{{ number_format($this->totalCartAmount, 2) }}
+                            {{ __('messages.menu.total') }}: €{{ number_format($this->totalCartAmount, 2) }}
                         </span>
                     </div>
                 </div>
 
                 <button type="button" wire:click="$set('isCartModalOpen', true)"
                     class="px-5 py-2.5 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-2xl text-xs sm:text-sm shadow-md transition-all flex items-center gap-2 cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD700]">
-{{--  'إتمام الطلب والحجز الآن' --}}
-                    <span>{{ __('messages.menu.checkout')  }}</span>
+                    {{--  'إتمام الطلب والحجز الآن' --}}
+                    <span>{{ __('messages.menu.checkout') }}</span>
                     <x-lucide-arrow-left class="w-4 h-4 rtl:rotate-0 ltr:rotate-180" aria-hidden="true" />
                 </button>
             </div>
@@ -351,8 +358,8 @@
     {{-- 5. نافذة السلة وتأكيد الحجز الفعلي (Cart Drawer / Checkout Modal) --}}
     @if ($isCartModalOpen)
         <div class="fixed inset-0 z-50 overflow-hidden" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}"
-             role="dialog" aria-modal="true" aria-labelledby="cart-modal-title"
-             x-data @keydown.window.escape="$wire.set('isCartModalOpen', false)">
+            role="dialog" aria-modal="true" aria-labelledby="cart-modal-title" x-data
+            @keydown.window.escape="$wire.set('isCartModalOpen', false)">
             {{-- خلفية معتمة --}}
             <div class="absolute inset-0 bg-stone-900/70 backdrop-blur-sm transition-opacity"
                 wire:click="$set('isCartModalOpen', false)" aria-hidden="true"></div>
@@ -367,10 +374,13 @@
                         <div class="flex items-center gap-3">
                             <div
                                 class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-xl">
-                                <x-lucide-crown class="w-5 h-5" /></div>
+                                <x-lucide-crown class="w-5 h-5" />
+                            </div>
                             <div>
-                                <h3 class="font-black text-base text-white">{{ __('messages.menu.cart') ?? 'سلة الأطباق وتثبيت الحجز' }}</h3>
-                                <p class="text-xs text-amber-200">{{ $this->totalCartCount }} {{ __('messages.menu.items') ?? 'أصناف مختارة' }}</p>
+                                <h3 class="font-black text-base text-white">
+                                    {{ __('messages.menu.cart') ?? 'سلة الأطباق وتثبيت الحجز' }}</h3>
+                                <p class="text-xs text-amber-200">{{ $this->totalCartCount }}
+                                    {{ __('messages.menu.items') ?? 'أصناف مختارة' }}</p>
                             </div>
                         </div>
                         <button wire:click="$set('isCartModalOpen', false)"
@@ -386,13 +396,16 @@
                     <div class="flex-1 overflow-y-auto p-5 space-y-5">
 
                         {{-- قائمة الأطباق --}}
-                        @if(count($cart) === 0)
+                        @if (count($cart) === 0)
                             <div class="flex flex-col items-center justify-center py-12 text-center">
-                                <div class="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mb-4 border-2 border-stone-200">
+                                <div
+                                    class="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mb-4 border-2 border-stone-200">
                                     <x-lucide-shopping-cart class="w-10 h-10 text-stone-300" />
                                 </div>
-                                <h3 class="text-sm font-black text-stone-700 mb-2">{{ __('messages.menu.empty') ?? 'السلة فارغة' }}</h3>
-                                <p class="text-xs text-stone-500 max-w-[200px] mb-6">{{ __('messages.menu.emptyText') }}</p>
+                                <h3 class="text-sm font-black text-stone-700 mb-2">
+                                    {{ __('messages.menu.empty') ?? 'السلة فارغة' }}</h3>
+                                <p class="text-xs text-stone-500 max-w-[200px] mb-6">
+                                    {{ __('messages.menu.emptyText') }}</p>
                                 <button type="button" @click="$wire.isCartModalOpen = false"
                                     class="w-full py-3 bg-[#2A0D0A] hover:bg-[#E07513] text-white font-bold rounded-xl text-sm transition-colors">
                                     {{ __('messages.menu.browseMenu') }}
@@ -402,7 +415,8 @@
                             <div>
                                 <h4
                                     class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                    <span><x-lucide-utensils class="w-4 h-4" /></span> {{ __('messages.menu.selectedDishes') ?? 'الأطباق المختارة للوليمة' }}
+                                    <span><x-lucide-utensils class="w-4 h-4" /></span>
+                                    {{ __('messages.menu.selectedDishes') ?? 'الأطباق المختارة للوليمة' }}
                                 </h4>
                                 <div class="space-y-3">
                                     @foreach ($cart as $id => $cartItem)
@@ -419,14 +433,17 @@
                                             <div
                                                 class="flex items-center gap-2 bg-stone-50 p-1 rounded-lg border border-stone-200">
                                                 {{-- زر الحذف السريع --}}
-                                                <button type="button" wire:click="removeFromCart({{ $id }})"
+                                                <button type="button"
+                                                    wire:click="removeFromCart({{ $id }})"
                                                     wire:loading.attr="disabled"
                                                     wire:target="removeFromCart({{ $id }})"
                                                     class="w-7 h-7 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors disabled:opacity-50"
                                                     title="{{ __('messages.menu.removeFromCart') }}">
                                                     <span wire:loading.remove
-                                                        wire:target="removeFromCart({{ $id }})"><x-lucide-trash-2 class="w-3 h-3" /></span>
-                                                    <span wire:loading wire:target="removeFromCart({{ $id }})"
+                                                        wire:target="removeFromCart({{ $id }})"><x-lucide-trash-2
+                                                            class="w-3 h-3" /></span>
+                                                    <span wire:loading
+                                                        wire:target="removeFromCart({{ $id }})"
                                                         class="w-3 h-3 border border-red-500 border-t-transparent rounded-full animate-spin"></span>
                                                 </button>
 
@@ -457,274 +474,411 @@
                                 </div>
                             </div>
 
-                        {{-- نموذج بيانات الحجز --}}
-                        <form wire:submit="checkout" class="space-y-4 pt-4 border-t border-stone-200">
-                            <h4
-                                class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-1 flex items-center gap-2">
-                                <span>	<x-lucide-clipboard-list class="w-4 h-4" /></span> {{ __('messages.reservation.contactDetails') }}
-                            </h4>
+                            {{-- نموذج بيانات الحجز --}}
+                            <form wire:submit="checkout" class="space-y-4 pt-4 border-t border-stone-200">
+                                <h4
+                                    class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-1 flex items-center gap-2">
+                                    <span> <x-lucide-clipboard-list class="w-4 h-4" /></span>
+                                    {{ __('messages.reservation.contactDetails') }}
+                                </h4>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div class="sm:col-span-2">
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.fullName') }} <span class="text-rose-500" aria-hidden="true">*</span></label>
-                                    <input type="text" wire:model="customer_name" required
-                                        placeholder="{{ __('messages.reservation.fullNamePlaceholder') }}"
-                                        autocomplete="name"
-                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
-                                    @error('customer_name') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div class="sm:col-span-2">
+                                        <label
+                                            class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.fullName') }}
+                                            <span class="text-rose-500" aria-hidden="true">*</span></label>
+                                        <input type="text" wire:model="customer_name" required
+                                            placeholder="{{ __('messages.reservation.fullNamePlaceholder') }}"
+                                            autocomplete="name"
+                                            class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                        @error('customer_name')
+                                            <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label
+                                            class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.phone') }}
+                                            <span class="text-rose-500" aria-hidden="true">*</span></label>
+                                        <input type="tel" wire:model="customer_phone" required
+                                            placeholder="+31 6 1234 5678" dir="ltr" autocomplete="tel"
+                                            class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                        @error('customer_phone')
+                                            <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label
+                                            class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.email') ?? __('messages.contact.form.email') }}</label>
+                                        <input type="email" wire:model="customer_email"
+                                            placeholder="example@domain.com" autocomplete="email"
+                                            class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                        @error('customer_email')
+                                            <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label
+                                            class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.reservationDate') }}
+                                            <span class="text-rose-500" aria-hidden="true">*</span></label>
+                                        <input type="date" wire:model="reservation_date" required
+                                            min="{{ now()->toDateString() }}"
+                                            class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                        @error('reservation_date')
+                                            <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.preferredTime') }}
+                                            <span class="text-rose-500" aria-hidden="true">*</span></label>
+                                        <input type="time" wire:model="reservation_time" required
+                                            class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                        @error('reservation_time')
+                                            <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label for="order_type" class="block text-xs font-bold text-stone-700 mb-1.5">
+                                            {{ __('messages.reservation.serviceType') }}
+                                        </label>
+                                        <select id="order_type" wire:model.live="order_type"
+                                            class="w-full px-3 py-2.5 rounded-xl bg-white border @error('order_type') border-rose-300 ring-1 ring-rose-200 @else border-stone-200 @enderror text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all appearance-none">
+                                            <option value="dine_in">{{ __('messages.reservation.dineIn') }}</option>
+                                            <option value="pickup">{{ __('messages.reservation.takeaway') }}</option>
+                                            <option value="delivery">{{ __('messages.reservation.delivery') }}
+                                            </option>
+                                        </select>
+                                        @error('order_type')
+                                            <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label for="cart-party-size"
+                                            class="block text-xs font-bold text-stone-700 mb-1.5">
+                                            {{ __('messages.reservation.partySize') }}
+                                        </label>
+                                        <input id="cart-party-size" type="number" wire:model="party_size"
+                                            min="1" max="20" required
+                                            class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
+                                        @error('party_size')
+                                            <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    {{-- 🆕 حقول عنوان التوصيل (تظهر فقط عند التوصيل) --}}
+                                    @if ($order_type === 'delivery')
+                                        <div class="space-y-3 p-3 rounded-2xl border border-amber-200 bg-amber-50/50 animate-fade-in"
+                                            wire:key="delivery-fields">
+                                            <h5
+                                                class="font-bold text-xs text-amber-800 uppercase tracking-wider flex items-center gap-2">
+                                                <x-lucide-truck class="w-4 h-4" aria-hidden="true" />
+                                                {{ __('messages.remember.delivery_details') }}
+                                            </h5>
+
+                                            {{-- 📍 العنوان الكامل --}}
+                                            <div>
+                                                <label for="delivery_address"
+                                                    class="block text-xs font-bold text-stone-700 mb-1.5">
+                                                    {{ __('messages.remember.address') }}
+                                                    <span class="text-rose-500" aria-hidden="true">*</span>
+                                                </label>
+                                                <input id="delivery_address" type="text"
+                                                    wire:model="delivery_address"
+                                                    placeholder="{{ __('messages.remember.address_placeholder') }}"
+                                                    autocomplete="street-address"
+                                                    class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all @error('delivery_address') border-rose-300 @enderror">
+                                                @error('delivery_address')
+                                                    <span
+                                                        class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="grid grid-cols-2 gap-3">
+                                                {{-- 🏙️ المدينة --}}
+                                                <div>
+                                                    <label for="delivery_city"
+                                                        class="block text-xs font-bold text-stone-700 mb-1.5">
+                                                        {{ __('messages.remember.city') }}
+                                                        <span class="text-rose-500" aria-hidden="true">*</span>
+                                                    </label>
+                                                    <input id="delivery_city" type="text"
+                                                        wire:model="delivery_city"
+                                                        placeholder="{{ __('messages.remember.city_placeholder') }}"
+                                                        autocomplete="address-level2"
+                                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all @error('delivery_city') border-rose-300 @enderror">
+                                                    @error('delivery_city')
+                                                        <span
+                                                            class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+
+                                                {{-- 📮 الرمز البريدي --}}
+                                                <div>
+                                                    <label for="delivery_postal_code"
+                                                        class="block text-xs font-bold text-stone-700 mb-1.5">
+                                                        {{ __('messages.remember.postal_code') }}
+                                                        <span class="text-rose-500" aria-hidden="true">*</span>
+                                                    </label>
+                                                    <input id="delivery_postal_code" type="text"
+                                                        wire:model="delivery_postal_code"
+                                                        placeholder="{{ __('messages.remember.postal_placeholder') }}"
+                                                        dir="ltr" autocomplete="postal-code"
+                                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all @error('delivery_postal_code') border-rose-300 @enderror">
+                                                    @error('delivery_postal_code')
+                                                        <span
+                                                            class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.phone') }} <span class="text-rose-500" aria-hidden="true">*</span></label>
-                                    <input type="tel" wire:model="customer_phone" required
-                                        placeholder="+31 6 1234 5678"
-                                        dir="ltr"
-                                        autocomplete="tel"
-                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
-                                    @error('customer_phone') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
+                                    <label
+                                        class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.specialRequests') }}</label>
+                                    <textarea wire:model="special_requests" rows="2"
+                                        placeholder="{{ __('messages.reservation.requestsPlaceholderMenu') }}"
+                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all resize-none"></textarea>
                                 </div>
 
-                                <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.email') ?? __('messages.contact.form.email') }}</label>
-                                    <input type="email" wire:model="customer_email"
-                                        placeholder="example@domain.com"
-                                        autocomplete="email"
-                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
-                                    @error('customer_email') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
+                                {{-- 🆕 تذكرني + لست أنا --}}
+                                <div class="space-y-3 pt-2">
+                                    @if ($isReturningCustomer)
+                                        <div class="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm animate-fade-in"
+                                            wire:key="returning-customer-banner">
+                                            <x-lucide-user-check class="mt-0.5 h-5 w-5 shrink-0 text-amber-600"
+                                                aria-hidden="true" />
+                                            <div class="flex-1">
+                                                <strong class="block font-bold text-amber-900">
+                                                    {{ __('messages.remember.welcome_back') }}
+                                                </strong>
+                                                <span class="text-amber-800">
+                                                    {{ __('messages.remember.filled_automatically') }}
+                                                </span>
+                                            </div>
+                                            <button type="button" wire:click="forgetCustomer"
+                                                wire:confirm="{{ __('messages.remember.confirm_forget') }}"
+                                                wire:loading.attr="disabled" wire:target="forgetCustomer"
+                                                class="shrink-0 rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-bold text-amber-700 transition hover:border-amber-400 hover:text-amber-900 disabled:cursor-wait disabled:opacity-50">
+                                                <span wire:loading.remove wire:target="forgetCustomer">
+                                                    {{ __('messages.remember.not_you') }}
+                                                </span>
+                                                <span wire:loading wire:target="forgetCustomer"
+                                                    class="inline-flex items-center gap-1">
+                                                    <x-lucide-loader-2 class="w-3 h-3 animate-spin"
+                                                        aria-hidden="true" />
+                                                </span>
+                                            </button>
+                                        </div>
+                                    @endif
 
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.reservationDate') }} <span class="text-rose-500" aria-hidden="true">*</span></label>
-                                    <input type="date" wire:model="reservation_date" required
-                                        min="{{ now()->toDateString() }}"
-                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
-                                    @error('reservation_date') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.preferredTime') }} <span class="text-rose-500" aria-hidden="true">*</span></label>
-                                    <input type="time" wire:model="reservation_time" required
-                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
-                                    @error('reservation_time') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-    <label for="order_type" class="block text-xs font-bold text-stone-700 mb-1.5">
-        {{ __('messages.reservation.serviceType') }}
-    </label>
-    <select id="order_type"
-        wire:model.live="order_type"
-        class="w-full px-3 py-2.5 rounded-xl bg-white border @error('order_type') border-rose-300 ring-1 ring-rose-200 @else border-stone-200 @enderror text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all appearance-none">
-        <option value="dine_in">{{ __('messages.reservation.dineIn') }}</option>
-        <option value="pickup">{{ __('messages.reservation.takeaway') }}</option>
-        <option value="delivery">{{ __('messages.reservation.delivery') }}</option>
-    </select>
-    @error('order_type') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
-</div>
-
-                                <div>
-                                    <label for="cart-party-size" class="block text-xs font-bold text-stone-700 mb-1.5">
-                                        {{ __('messages.reservation.partySize') }}
-                                    </label>
-                                    <input id="cart-party-size" type="number" wire:model="party_size" min="1" max="20"
-                                        required
-                                        class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all">
-                                    @error('party_size') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
-                                </div>
-                                {{-- 🆕 حقول عنوان التوصيل (تظهر فقط عند التوصيل) --}}
-@if ($order_type === 'delivery')
-    <div class="space-y-3 p-3 rounded-2xl border border-amber-200 bg-amber-50/50 animate-fade-in"
-         wire:key="delivery-fields">
-        <h5 class="font-bold text-xs text-amber-800 uppercase tracking-wider flex items-center gap-2">
-            <x-lucide-truck class="w-4 h-4" aria-hidden="true" />
-            {{ __('messages.remember.delivery_details') }}
-        </h5>
-
-        {{-- 📍 العنوان الكامل --}}
-        <div>
-            <label for="delivery_address" class="block text-xs font-bold text-stone-700 mb-1.5">
-                {{ __('messages.remember.address') }}
-                <span class="text-rose-500" aria-hidden="true">*</span>
-            </label>
-            <input id="delivery_address"
-                type="text"
-                wire:model="delivery_address"
-                placeholder="{{ __('messages.remember.address_placeholder') }}"
-                autocomplete="street-address"
-                class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all @error('delivery_address') border-rose-300 @enderror">
-            @error('delivery_address')
-                <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-            {{-- 🏙️ المدينة --}}
-            <div>
-                <label for="delivery_city" class="block text-xs font-bold text-stone-700 mb-1.5">
-                    {{ __('messages.remember.city') }}
-                    <span class="text-rose-500" aria-hidden="true">*</span>
-                </label>
-                <input id="delivery_city"
-                    type="text"
-                    wire:model="delivery_city"
-                    placeholder="{{ __('messages.remember.city_placeholder') }}"
-                    autocomplete="address-level2"
-                    class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all @error('delivery_city') border-rose-300 @enderror">
-                @error('delivery_city')
-                    <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
-                @enderror
-            </div>
-
-            {{-- 📮 الرمز البريدي --}}
-            <div>
-                <label for="delivery_postal_code" class="block text-xs font-bold text-stone-700 mb-1.5">
-                    {{ __('messages.remember.postal_code') }}
-                    <span class="text-rose-500" aria-hidden="true">*</span>
-                </label>
-                <input id="delivery_postal_code"
-                    type="text"
-                    wire:model="delivery_postal_code"
-                    placeholder="{{ __('messages.remember.postal_placeholder') }}"
-                    dir="ltr"
-                    autocomplete="postal-code"
-                    class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all @error('delivery_postal_code') border-rose-300 @enderror">
-                @error('delivery_postal_code')
-                    <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span>
-                @enderror
-            </div>
-        </div>
-    </div>
-@endif
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-stone-700 mb-1.5">{{ __('messages.reservation.specialRequests') }}</label>
-                                <textarea wire:model="special_requests" rows="2"
-                                    placeholder="{{ __('messages.reservation.requestsPlaceholderMenu') }}"
-                                    class="w-full px-3 py-2.5 rounded-xl bg-white border border-stone-200 text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all resize-none"></textarea>
-                            </div>
-
-                            {{-- 🆕 تذكرني + لست أنا --}}
-<div class="space-y-3 pt-2">
-    @if ($isReturningCustomer)
-        <div class="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm animate-fade-in"
-             wire:key="returning-customer-banner">
-            <x-lucide-user-check class="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
-            <div class="flex-1">
-                <strong class="block font-bold text-amber-900">
-                    {{ __('messages.remember.welcome_back') }}
-                </strong>
-                <span class="text-amber-800">
-                    {{ __('messages.remember.filled_automatically') }}
-                </span>
-            </div>
-            <button type="button"
-                wire:click="forgetCustomer"
-                wire:confirm="{{ __('messages.remember.confirm_forget') }}"
-                wire:loading.attr="disabled"
-                wire:target="forgetCustomer"
-                class="shrink-0 rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-bold text-amber-700 transition hover:border-amber-400 hover:text-amber-900 disabled:cursor-wait disabled:opacity-50">
-                <span wire:loading.remove wire:target="forgetCustomer">
-                    {{ __('messages.remember.not_you') }}
-                </span>
-                <span wire:loading wire:target="forgetCustomer" class="inline-flex items-center gap-1">
-                    <x-lucide-loader-2 class="w-3 h-3 animate-spin" aria-hidden="true" />
-                </span>
-            </button>
-        </div>
-    @endif
-
-    <label for="remember_me"
-        class="flex cursor-pointer items-center gap-3 rounded-xl p-2 transition hover:bg-stone-50">
-        <input id="remember_me"
-            type="checkbox"
-            wire:model="remember_me"
-            class="h-5 w-5 rounded-md border-stone-300 text-[#E07513] focus:ring-2 focus:ring-[#E07513]/30">
-        <span class="flex-1 text-sm font-semibold text-stone-700">
-            {{ __('messages.remember.checkbox') }}
-        </span>
-    </label>
-</div>
-
-                            {{-- 🔍 ملخص تفصيلي للأخطاء — فوق زر الإرسال مباشرة لضمان الرؤية --}}
-                            @if ($errors->any())
-                                <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3 animate-shake space-y-2">
-                                    <div class="flex items-center gap-2">
-                                        <x-lucide-alert-octagon class="w-4 h-4 text-rose-600 shrink-0" />
-                                        <span class="font-black text-xs text-rose-900 uppercase tracking-wider">
-                                            {{ $errors->count() }} {{ __('messages.order.validation_error') }}
+                                    <label for="remember_me"
+                                        class="flex cursor-pointer items-center gap-3 rounded-xl p-2 transition hover:bg-stone-50">
+                                        <input id="remember_me" type="checkbox" wire:model="remember_me"
+                                            class="h-5 w-5 rounded-md border-stone-300 text-[#E07513] focus:ring-2 focus:ring-[#E07513]/30">
+                                        <span class="flex-1 text-sm font-semibold text-stone-700">
+                                            {{ __('messages.remember.checkbox') }}
                                         </span>
+                                    </label>
+                                </div>
+
+                                {{-- 🔍 ملخص تفصيلي للأخطاء — فوق زر الإرسال مباشرة لضمان الرؤية --}}
+                                @if ($errors->any())
+                                    <div
+                                        class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3 animate-shake space-y-2">
+                                        <div class="flex items-center gap-2">
+                                            <x-lucide-alert-octagon class="w-4 h-4 text-rose-600 shrink-0" />
+                                            <span class="font-black text-xs text-rose-900 uppercase tracking-wider">
+                                                {{ $errors->count() }} {{ __('messages.order.validation_error') }}
+                                            </span>
+                                        </div>
+                                        <ol class="list-decimal list-inside space-y-0.5 pl-1">
+                                            @foreach ($errors->all() as $idx => $msg)
+                                                <li class="text-xs text-rose-800 leading-relaxed">
+                                                    {{ $msg }}
+                                                </li>
+                                            @endforeach
+                                        </ol>
+                                        <div
+                                            class="rounded-lg bg-slate-900 text-[10px] font-mono text-slate-100 p-2 overflow-x-auto">
+                                            <span class="text-amber-300 font-bold">DEBUG Keys:</span>
+                                            {{ implode(', ', array_keys($errors->toArray())) }}
+                                        </div>
                                     </div>
-                                    <ol class="list-decimal list-inside space-y-0.5 pl-1">
-                                        @foreach ($errors->all() as $idx => $msg)
-                                            <li class="text-xs text-rose-800 leading-relaxed">
-                                                {{ $msg }}
-                                            </li>
-                                        @endforeach
-                                    </ol>
-                                    <div class="rounded-lg bg-slate-900 text-[10px] font-mono text-slate-100 p-2 overflow-x-auto">
-                                        <span class="text-amber-300 font-bold">DEBUG Keys:</span>
-                                        {{ implode(', ', array_keys($errors->toArray())) }}
+                                @endif
+
+
+                            {{-- ═══════════════════════════════════════════════════════ --}}
+                            {{-- 🎫 قسم الكوبون --}}
+                            {{-- ═══════════════════════════════════════════════════════ --}}
+                            <div class="pt-4 border-t border-stone-200 mt-6 space-y-3">
+                                <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-1 flex items-center gap-2">
+                                    <x-lucide-ticket-percent class="w-4 h-4" aria-hidden="true" />
+                                    {{ __('cart.coupon.section_title') }}
+                                </h4>
+
+                                @if ($this->hasAppliedCoupon())
+                                    {{-- ✅ الكوبون المطبَّق --}}
+                                    <div class="flex items-center justify-between gap-3 p-3 rounded-xl border-2 border-emerald-200 bg-emerald-50 animate-fade-in">
+                                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                                            <div class="w-9 h-9 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0">
+                                                <x-lucide-check class="w-5 h-5" aria-hidden="true" />
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <div class="font-black text-sm text-emerald-900 truncate" dir="ltr">
+                                                    {{ $appliedCouponCode }}
+                                                </div>
+                                                <div class="text-xs text-emerald-700">
+                                                    {{ __('cart.coupon.saved') }}
+                                                    <span class="font-black">€{{ number_format($appliedCouponDiscount, 2) }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button"
+                                            wire:click="removeCoupon"
+                                            wire:loading.attr="disabled"
+                                            wire:target="removeCoupon"
+                                            class="shrink-0 w-8 h-8 rounded-lg bg-white text-rose-500 hover:bg-rose-100 flex items-center justify-center transition-colors disabled:opacity-50"
+                                            title="{{ __('cart.coupon.remove') }}">
+                                            <span wire:loading.remove wire:target="removeCoupon">
+                                                <x-lucide-x class="w-4 h-4" aria-hidden="true" />
+                                            </span>
+                                            <span wire:loading wire:target="removeCoupon"
+                                                class="w-4 h-4 border-2 border-rose-500/30 border-t-rose-600 rounded-full animate-spin"></span>
+                                        </button>
                                     </div>
+                                @else
+                                    {{-- 📝 حقل إدخال الكوبون --}}
+                                    <div class="flex items-stretch gap-2">
+                                        <input type="text"
+                                            wire:model="couponCode"
+                                            wire:keydown.enter.prevent="applyCoupon"
+                                            placeholder="{{ __('cart.coupon.placeholder') }}"
+                                            dir="ltr"
+                                            autocomplete="off"
+                                            spellcheck="false"
+                                            class="flex-1 min-w-0 px-3 py-2.5 rounded-xl bg-white border text-sm outline-hidden focus:border-[#E07513] focus:ring-1 focus:ring-[#E07513]/20 transition-all uppercase tracking-wider font-bold @error('couponCode') border-rose-300 @else border-stone-200 @enderror">
+
+                                        <button type="button"
+                                            wire:click="applyCoupon"
+                                            wire:loading.attr="disabled"
+                                            wire:target="applyCoupon"
+                                            class="px-4 py-2.5 rounded-xl bg-[#2C0D0A] hover:bg-[#E07513] text-white font-bold text-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-wait shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD700]">
+                                            <span wire:loading.remove wire:target="applyCoupon">
+                                                {{ __('cart.coupon.apply') }}
+                                            </span>
+                                            <span wire:loading wire:target="applyCoupon"
+                                                class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                                        </button>
+                                    </div>
+
+                                    {{-- ⚠️ رسالة خطأ --}}
+                                    @if ($couponError)
+                                        <div class="flex items-start gap-2 p-2.5 rounded-xl border border-rose-200 bg-rose-50 text-xs animate-shake">
+                                            <x-lucide-alert-circle class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" aria-hidden="true" />
+                                            <span class="text-rose-800 leading-relaxed">{{ $couponError }}</span>
+                                        </div>
+                                    @endif
+                                @endif
+                            </div>
+
+                                {{-- ملخص السعر وزر الإرسال --}}
+                                <div class="pt-4 border-t border-stone-200 mt-6 space-y-4">
+                                                                  {{-- 💰 ملخص السعر التفصيلي --}}
+                                <div class="bg-[#FAF4ED] p-4 rounded-xl border border-[#E07513]/25 space-y-2.5">
+
+                                    {{-- المجموع الفرعي --}}
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-stone-600">{{ __('cart.summary.subtotal') }}</span>
+                                        <span class="font-bold text-stone-800">€{{ number_format($this->pricing->subtotal, 2) }}</span>
+                                    </div>
+
+                                    {{-- 🎫 الخصم — يظهر فقط عند وجود كوبون --}}
+                                    @if ($this->pricing->discount > 0)
+                                        <div class="flex justify-between items-center text-sm">
+                                            <span class="text-emerald-700 flex items-center gap-1.5">
+                                                <x-lucide-ticket-percent class="w-3.5 h-3.5" aria-hidden="true" />
+                                                <span>{{ __('cart.summary.discount') }}</span>
+                                                <span class="text-xs font-bold text-emerald-600" dir="ltr">({{ $appliedCouponCode }})</span>
+                                            </span>
+                                            <span class="font-bold text-emerald-600">−€{{ number_format($this->pricing->discount, 2) }}</span>
+                                        </div>
+
+                                        {{-- المجموع بعد الخصم --}}
+                                        <div class="flex justify-between items-center text-sm pb-2 border-b border-[#E07513]/15">
+                                            <span class="text-stone-600">{{ __('cart.summary.after_discount') }}</span>
+                                            <span class="font-bold text-stone-800">€{{ number_format($this->pricing->taxableAmount, 2) }}</span>
+                                        </div>
+                                    @endif
+
+                                    {{-- 💶 الضريبة (VAT) --}}
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-stone-600 flex items-center gap-1.5">
+                                            <span>{{ __('cart.summary.vat') }}</span>
+                                            <span class="text-xs text-stone-400 font-normal">({{ number_format($this->pricing->vatRate, 0) }}%)</span>
+                                        </span>
+                                        <span class="font-bold text-stone-800">€{{ number_format($this->pricing->vat, 2) }}</span>
+                                    </div>
+
+                                    {{-- 🏆 الإجمالي النهائي --}}
+                                    <div class="flex justify-between items-center pt-2.5 border-t-2 border-[#E07513]/30">
+                                        <span class="text-base font-black text-[#2C0D0A]">{{ __('cart.summary.total') }}</span>
+                                        <span class="text-xl font-black text-[#E07513]">€{{ number_format($this->pricing->total, 2) }}</span>
+                                    </div>
+                                </div>
+                                    <button type="submit" wire:loading.attr="disabled" wire:target="checkout"
+                                        class="w-full py-4 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-xl text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+
+                                        <span wire:loading.remove wire:target="checkout">
+                                            {{ __('messages.reservation.confirmReservation') }}
+                                            <x-lucide-crown class="w-5 h-5 inline-block" />
+                                        </span>
+
+                                        <span wire:loading wire:target="checkout"
+                                            class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+
+                                        <span wire:loading wire:target="checkout">
+                                            {{ __('messages.reservation.processingReservation') }}
+                                        </span>
+                                    </button>
+
+                                    <p
+                                        class="text-[10px] text-center text-stone-400 flex items-center justify-center gap-1">
+                                        <x-lucide-shield-check class="w-3 h-3" />
+                                        <span>{{ __('messages.reservation.smsNotice') }}</span>
+                                    </p>
+                                </div>
+
+                            </form>
+
+
+
+                            {{-- 🔍 ملخص أخطاء الحقول (يظهر فقط إذا وُجدت أخطاء أخرى غير checkout) --}}
+                            @if ($errors->any() && !$errors->has('checkout'))
+                                <div
+                                    class="mb-3 flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800">
+                                    <x-lucide-triangle-alert class="h-4 w-4 shrink-0" aria-hidden="true" />
+                                    <span>
+                                        {{ __('messages.order.validation_summary', ['count' => $errors->count()]) }}
+                                    </span>
                                 </div>
                             @endif
 
-                            {{-- ملخص السعر وزر الإرسال --}}
-                            <div class="pt-4 border-t border-stone-200 mt-6 space-y-4">
-                                <div
-                                    class="bg-[#FAF4ED] p-4 rounded-xl border border-[#E07513]/25 flex justify-between items-center">
-                                    <span class="text-sm font-bold text-stone-700">{{ __('messages.reservation.orderTotal') }}</span>
-                                    <span
-                                        class="text-xl font-black text-[#E07513]">€{{ number_format($this->totalCartAmount, 2) }}</span>
-                                </div>
-
-             <button type="submit"
-    wire:loading.attr="disabled"
-    wire:target="checkout"
-    class="w-full py-4 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-xl text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
-
-    <span wire:loading.remove wire:target="checkout">
-        {{ __('messages.reservation.confirmReservation') }}
-        <x-lucide-crown class="w-5 h-5 inline-block" />
-    </span>
-
-    <span wire:loading wire:target="checkout"
-        class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-
-    <span wire:loading wire:target="checkout">
-        {{ __('messages.reservation.processingReservation') }}
-    </span>
-</button>
-
-                                <p class="text-[10px] text-center text-stone-400 flex items-center justify-center gap-1">
-                                    <x-lucide-shield-check class="w-3 h-3" />
-                                    <span>{{ __('messages.reservation.smsNotice') }}</span>
-                                </p>
-                            </div>
-
-                        </form>
-                        
-   
-
-    {{-- 🔍 ملخص أخطاء الحقول (يظهر فقط إذا وُجدت أخطاء أخرى غير checkout) --}}
-    @if ($errors->any() && ! $errors->has('checkout'))
-        <div class="mb-3 flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800">
-            <x-lucide-triangle-alert class="h-4 w-4 shrink-0" aria-hidden="true" />
-            <span>
-                {{ __('messages.order.validation_summary', ['count' => $errors->count()]) }}
-            </span>
-        </div>
-    @endif
-
-</div>
-                        @endif
                     </div>
-                </div>
-            </div>
-        </div>
+    @endif
+    </div>
+    </div>
+    </div>
+    </div>
 
 
     @endif

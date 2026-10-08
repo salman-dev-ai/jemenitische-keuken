@@ -29,7 +29,7 @@ php artisan make:filament-resource Customer --generate
 
  php artisan view:clearالوظيفة: مسح كاش ملفات الواجهات (Blade Views).
 
-
+                                                                                                                                      
  Ctrl + F5 (تحديث صلب للتحميل)الوظيفة: إعادة تحميل الصفحة في متصفح الإنترنت مع مسح كاش المتصفح.
 
 

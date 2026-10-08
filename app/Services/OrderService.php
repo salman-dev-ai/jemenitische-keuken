@@ -10,39 +10,43 @@ declare(strict_types=1);
  * 🎯 الغرض:
  *    خدمة إنشاء الطلبات — تحقق، قفل الأطباق، حساب الإجماليات، الحفظ.
  *
- * 🧩 يعتمد على:
- *    - App\Models\MenuItem, Order, Reservation, RestaurantSetting
- *    - App\Enums\OrderType, OrderStatus
- *    - App\Exceptions\OrderException
- *
- * 💰 منطق الضريبة:
- *    - الأسعار في menu_items.price لا تشمل BTW.
- *    - vat_rate يُقرأ من DB (RestaurantSetting) — يعدّله الأدمن من Filament.
- *    - subtotal = sum(unit_price × qty)
- *    - tax      = subtotal × (vat_rate / 100)
- *    - total    = subtotal + tax
+ * 💰 منطق الضريبة (مع دعم الكوبون):
+ *    - subtotal = Σ(unit_price × qty)
+ *    - discount = min(coupon.discount, subtotal)
+ *    - tax      = (subtotal - discount) × (vat_rate / 100)
+ *    - total    = (subtotal - discount) + tax
+ *    ⚠️ الحسابات تتم داخل PricingService (لا تكرار).
  *
  * 🔐 الأمان:
- *    - التحقق من type و status و payment_status قبل الحفظ.
- *    - lockForUpdate على menu_items لمنع تغيير السعر أثناء الطلب.
+ *    - كل العملية داخل DB::transaction (attempts: 3).
+ *    - lockForUpdate على menu_items لمنع تغيير السعر.
+ *    - claim + redeem داخل نفس الـ transaction (Atomicity).
  *
- * ⚠️ تحذيرات مهمة:
- *    - لا تعتمد على config('orders.*') — كل الإعدادات من DB.
+ * 🎫 تدفّق الكوبون:
+ *    1. Client يُدخل الكود في السلة → Livewire::applyCoupon()
+ *       → CouponService::validate() → CouponResult
+ *    2. عند تأكيد الطلب → OrderService::createOrder(couponCode)
+ *       → يتحقق مجدداً (لضمان عدم استنفاد الكوبون)
+ *       → يحسب discount عبر PricingService
+ *       → يحفظ snapshot الكوبون في الطلب
+ *       → claim + redeem
  *
- * 🕒 آخر تحديث: 2026-09-24
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
 namespace App\Services;
 
+use App\DTOs\CouponResult;
 use App\Enums\OrderStatus;
 use App\Enums\OrderType;
 use App\Exceptions\OrderException;
+use App\Models\Customer;
 use App\Models\MenuItem;
 use App\Models\Order;
 use App\Models\Reservation;
 use App\Models\RestaurantSetting;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -50,125 +54,255 @@ use Illuminate\Support\Str;
 class OrderService
 {
     /**
-     * 📦 إنشاء طلب جديد مع كل عناصره.
+     * Dependency Injection — بدل new داخل الدوال.
+     */
+    public function __construct(
+        private readonly CouponService $couponService,
+        private readonly PricingService $pricingService,
+    ) {}
+
+    // ══════════════════════════════════════════════════════════════
+    // 🎯 الدالة الرئيسية
+    // ══════════════════════════════════════════════════════════════
+
+    /**
+     * 📦 إنشاء طلب جديد مع كوبون اختياري.
      *
-     * @param  array<string, mixed> $orderData
-     * @param  array<int, array{menu_item_id: int|string, quantity: int|string}> $items
-     * @return Order
+     * @param  array<string, mixed>  $orderData
+     * @param  array<int, array{menu_item_id: int|string, quantity: int|string}>  $items
+     * @param  string|null  $couponCode  كود الكوبون (اختياري)
      *
      * @throws OrderException
      */
-    public function createOrder(array $orderData, array $items): Order
-    {
-        // ─────────────────────────────────────────────────────────────
-        // 1️⃣ السلة غير فارغة
-        // ─────────────────────────────────────────────────────────────
+    public function createOrder(
+        array $orderData,
+        array $items,
+        ?string $couponCode = null,
+    ): Order {
+        // ─────────────────────────────────────────────────────────
+        // 1️⃣ تحققات أساسية (بدون DB)
+        // ─────────────────────────────────────────────────────────
         if (empty($items)) {
             throw OrderException::emptyCart();
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // 2️⃣ تحقق من type (قبل Transaction)
-        // ─────────────────────────────────────────────────────────────
-         
         $type = $this->resolveType($orderData['type'] ?? null);
-
-        // ─────────────────────────────────────────────────────────────
-        // 3️⃣ تحقق من الحجز (إن وُجد)
-        // ─────────────────────────────────────────────────────────────
         $this->validateReservation($orderData['reservation_id'] ?? null);
 
-        return DB::transaction(function () use ($orderData, $items, $type) {
-            // ─────────────────────────────────────────────────────────
-            // 4️⃣ قفل الأطباق لمنع تغيير الأسعار أثناء الطلب
-            // ─────────────────────────────────────────────────────────
+        // ─────────────────────────────────────────────────────────
+        // 2️⃣ العملية كاملة داخل transaction (Atomicity)
+        // ─────────────────────────────────────────────────────────
+        return DB::transaction(function () use (
+            $orderData,
+            $items,
+            $type,
+            $couponCode,
+        ): Order {
+            // 2.1 ─── قفل الأطباق لمنع تغيير الأسعار ───
             $menuItemIds = collect($items)
                 ->pluck('menu_item_id')
-                ->map(fn ($id) => (int) $id)
+                ->map(fn ($id): int => (int) $id)
                 ->all();
 
+            /** @var Collection<int, MenuItem> $menuItems */
             $menuItems = MenuItem::query()
                 ->whereIn('id', $menuItemIds)
-                ->available()
                 ->lockForUpdate()
                 ->get()
                 ->keyBy('id');
 
-            // ─────────────────────────────────────────────────────────
-            // 5️⃣ تجهيز العناصر + حساب المجموع
-            // ─────────────────────────────────────────────────────────
+            // 2.2 ─── تجهيز العناصر + subtotal ───
             [$preparedItems, $subtotal] = $this->prepareItems($items, $menuItems);
 
-            // ─────────────────────────────────────────────────────────
-            // 6️⃣ حساب الضريبة (ديناميكية من Filament)
-            // ─────────────────────────────────────────────────────────
-            $vatRate = RestaurantSetting::vatRate();   // مثال: 0.09
-            $tax     = round($subtotal * $vatRate, 2);
-            $total   = round($subtotal + $tax, 2);
+            // 2.3 ─── التحقق من الكوبون (إن وُجد) ───
+            $couponResult = CouponResult::none();
+            $customer     = null;
 
-            // ─────────────────────────────────────────────────────────
-            // 7️⃣ تجهيز بيانات الطلب
-            // ─────────────────────────────────────────────────────────
-            $finalOrderData = Arr::only($orderData, [
-                'customer_id',
-                'reservation_id',
-                'customer_name',
-                'customer_phone',
-                'customer_email',
-                'delivery_address',
-                'delivery_city',
-                'delivery_postal_code',
-                'payment_method',
-                'notes',
-            ]);
+            if ($couponCode !== null && $couponCode !== '') {
+                $customer = $this->resolveCouponCustomer($orderData, $couponCode);
 
-            $finalOrderData['type']           = $type;
-            $finalOrderData['order_number']   = $this->generateOrderNumber();
-            $finalOrderData['subtotal']       = $subtotal;
-            $finalOrderData['tax']            = $tax;
-            $finalOrderData['total']          = $total;
-            $finalOrderData['status']         = $this->resolveStatus($orderData['status'] ?? null);
-            $finalOrderData['payment_status'] = $this->resolvePaymentStatus($orderData['payment_status'] ?? null);
+                // تحويل العناصر لصيغة CouponService::validate()
+                $couponItems = $this->buildCouponItems($preparedItems, $menuItems);
 
-            // ─────────────────────────────────────────────────────────
-            // 8️⃣ الإنشاء
-            // ─────────────────────────────────────────────────────────
+                // ⚠️ validate() لا ترمي — تُرجع CouponResult
+                $couponResult = $this->couponService->validate(
+                    $couponCode,
+                    $customer,
+                    $couponItems,
+                );
+
+                if (! $couponResult->isValid) {
+                    // رمي استثناء باستخدام رسالة CouponResult
+                    throw new OrderException(
+                        $couponResult->errorMessage ?? __('coupons.errors.invalid_code'),
+                    );
+                }
+            }
+
+            // 2.4 ─── حساب التسعير الكامل عبر PricingService ───
+            $discountAmount = $couponResult->isValid
+                ? $couponResult->discountAmount
+                : 0.0;
+
+            /** @var \App\DTOs\PricingBreakdown $pricing */
+            $pricing = $this->pricingService->calculate($subtotal, $discountAmount);
+
+            // 2.5 ─── تجهيز بيانات الطلب ───
+            $finalOrderData = $this->buildFinalOrderData($orderData, $type, $pricing);
+
+            // 2.6 ─── snapshot الكوبون ───
+            if ($couponResult->isValid && $couponResult->coupon !== null) {
+                $finalOrderData['coupon_id']       = $couponResult->coupon->id;
+                $finalOrderData['coupon_code']     = $couponResult->coupon->code;
+                $finalOrderData['discount_type']   = $couponResult->coupon->discount_type->value;
+                $finalOrderData['discount_amount'] = $pricing->discount;
+            }
+
+            // 2.7 ─── إنشاء الطلب + العناصر ───
             $order = Order::create($finalOrderData);
             $order->items()->createMany($preparedItems);
 
-            // ─────────────────────────────────────────────────────────
-            // 9️⃣ تسجيل للتدقيق (debug فقط)
-            // ─────────────────────────────────────────────────────────
+            // 2.8 ─── claim + redeem داخل نفس transaction ───
+            if (
+                $couponResult->isValid
+                && $couponResult->coupon !== null
+                && $customer !== null
+            ) {
+                $usage = $this->couponService->claim($customer, $couponResult->coupon);
+                $this->couponService->redeem($usage, $order, $pricing->discount);
+            }
+
+            // 2.9 ─── تسجيل تدقيقي ───
             Log::debug('Order created', [
-                'id'           => $order->id,
-                'order_number' => $order->order_number,
-                'customer_id'  => $order->customer_id,
-                'type'         => $order->type->value,
-                'subtotal'     => $subtotal,
-                'vat_rate'     => $vatRate,
-                'tax'          => $tax,
-                'total'        => $total,
-                'items_count'  => count($preparedItems),
+                'id'              => $order->id,
+                'order_number'    => $order->order_number,
+                'customer_id'     => $order->customer_id,
+                'type'            => $order->type->value,
+                'subtotal'        => $pricing->subtotal,
+                'discount_amount' => $pricing->discount,
+                'vat_rate'        => $pricing->vatRate,
+                'tax'             => $pricing->vat,
+                'total'           => $pricing->total,
+                'items_count'     => count($preparedItems),
+                'coupon_code'     => $couponResult->coupon?->code,
             ]);
 
             return $order;
-        });
+        }, attempts: 3);
     }
+
+    // ══════════════════════════════════════════════════════════════
+    // 🔧 Builder Helpers
+    // ══════════════════════════════════════════════════════════════
+
+    /**
+     * 🎫 حلّ العميل صاحب الكوبون (مع التحقق من وجوده).
+     *
+     * @throws OrderException
+     */
+    protected function resolveCouponCustomer(array $orderData, string $couponCode): Customer
+    {
+        $customerId = $orderData['customer_id'] ?? null;
+
+        if ($customerId === null) {
+            throw new OrderException(
+                __('coupons.errors.customer_required'),
+            );
+        }
+
+        $customer = Customer::find($customerId);
+
+        if ($customer === null) {
+            throw new OrderException(
+                __('coupons.errors.customer_not_found'),
+            );
+        }
+
+        return $customer;
+    }
+
+    /**
+     * 🎫 تحويل العناصر المُجهَّزة إلى صيغة CouponService::validate().
+     *
+     * المطلوب: array{id, price, quantity, category_id}
+     *
+     * @param  array<int, array{menu_item_id: int, quantity: int, unit_price: float, total_price: float}>  $preparedItems
+     * @param  Collection<int, MenuItem>  $menuItems
+     *
+     * @return array<int, array{id: int, price: float, quantity: int, category_id: ?int}>
+     */
+    protected function buildCouponItems(array $preparedItems, Collection $menuItems): array
+    {
+        return collect($preparedItems)
+            ->map(function (array $item) use ($menuItems): array {
+                $menuItem = $menuItems->get($item['menu_item_id']);
+
+                return [
+                    'id'          => $item['menu_item_id'],
+                    'price'       => (float) $item['unit_price'],
+                    'quantity'    => (int) $item['quantity'],
+                    'category_id' => $menuItem?->menu_category_id,
+                ];
+            })
+            ->all();
+    }
+
+    /**
+     * 📋 تجهيز البيانات النهائية للطلب.
+     *
+     * @param  array<string, mixed>  $orderData
+     * @param  \App\DTOs\PricingBreakdown  $pricing
+     *
+     * @return array<string, mixed>
+     */
+    protected function buildFinalOrderData(
+        array $orderData,
+        OrderType $type,
+        \App\DTOs\PricingBreakdown $pricing,
+    ): array {
+        $data = Arr::only($orderData, [
+            'customer_id',
+            'reservation_id',
+            'customer_name',
+            'customer_phone',
+            'customer_email',
+            'delivery_address',
+            'delivery_city',
+            'delivery_postal_code',
+            'payment_method',
+            'notes',
+        ]);
+
+        $data['type']           = $type;
+        $data['order_number']   = $this->generateOrderNumber();
+        $data['subtotal']       = $pricing->subtotal;
+        $data['tax']            = $pricing->vat;
+        $data['total']          = $pricing->total;
+        $data['status']         = $this->resolveStatus($orderData['status'] ?? null);
+        $data['payment_status'] = $this->resolvePaymentStatus($orderData['payment_status'] ?? null);
+
+        return $data;
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // 🔧 Core Helpers
+    // ══════════════════════════════════════════════════════════════
 
     /**
      * 🧾 تجهيز العناصر وحساب المجموع الفرعي.
      *
-     * @param  array<int, array{menu_item_id: int|string, quantity: int|string}> $items
-     * @param  \Illuminate\Support\Collection<int, MenuItem> $menuItems
+     * @param  array<int, array{menu_item_id: int|string, quantity: int|string}>  $items
+     * @param  Collection<int, MenuItem>  $menuItems
+     *
      * @return array{0: array<int, array<string, mixed>>, 1: float}
      *
      * @throws OrderException
      */
-    protected function prepareItems(array $items, $menuItems): array
+    protected function prepareItems(array $items, Collection $menuItems): array
     {
-        $subtotal      = 0.0;
+        $subtotal = 0.0;
         $preparedItems = [];
-        $maxQuantity   = RestaurantSetting::maxQuantityPerItem();
+        $maxQuantity = RestaurantSetting::maxQuantityPerItem();
 
         foreach ($items as $item) {
             $menuItemId = (int) ($item['menu_item_id'] ?? 0);
@@ -181,7 +315,14 @@ class OrderService
                 throw OrderException::menuItemUnavailable($menuItemId);
             }
 
+            /** @var MenuItem $menuItem */
             $menuItem = $menuItems->get($menuItemId);
+
+            // ✅ التحقق من التوفر
+            if (! $menuItem->is_available) {
+                throw OrderException::menuItemUnavailable($menuItemId);
+            }
+
             $quantity = (int) ($item['quantity'] ?? 0);
 
             if ($quantity < 1 || $quantity > $maxQuantity) {
@@ -200,14 +341,11 @@ class OrderService
             ];
         }
 
-        return [$preparedItems, $subtotal];
+        return [$preparedItems, round($subtotal, 2)];
     }
 
     /**
      * 🔗 التحقق من وجود الحجز إن وُجد reservation_id.
-     *
-     * @param  int|null $reservationId
-     * @return void
      *
      * @throws OrderException
      */
@@ -222,25 +360,17 @@ class OrderService
         }
     }
 
-    
     /**
-     * 🔄 تحويل type إلى Enum صالح — يقبل OrderType أو string.
-     *
-     * يتبع نفس نمط resolveStatus() — يقبل الكائن الجاهز أو النص.
-     *
-     * @param  mixed $type
-     * @return OrderType
+     * 🔄 تحويل type إلى Enum صالح.
      *
      * @throws OrderException
      */
     protected function resolveType(mixed $type): OrderType
     {
-        // ✅ الحالة 1: كائن OrderType جاهز
         if ($type instanceof OrderType) {
             return $type;
         }
 
-        // ✅ الحالة 2: string يُحوَّل عبر tryFrom
         $resolved = is_string($type) ? OrderType::tryFrom($type) : null;
 
         if ($resolved === null) {
@@ -249,11 +379,9 @@ class OrderService
 
         return $resolved;
     }
+
     /**
-     * 🔄 تحويل status إلى Enum صالح — يرمي استثناء عند قيمة خاطئة.
-     *
-     * @param  mixed $status
-     * @return OrderStatus
+     * 🔄 تحويل status إلى Enum صالح.
      *
      * @throws OrderException
      */
@@ -277,10 +405,7 @@ class OrderService
     }
 
     /**
-     * 💳 تحويل payment_status إلى قيمة صالحة من whitelist.
-     *
-     * @param  mixed $paymentStatus
-     * @return string
+     * 💳 تحويل payment_status إلى قيمة صالحة.
      */
     protected function resolvePaymentStatus(mixed $paymentStatus): string
     {
@@ -295,8 +420,6 @@ class OrderService
 
     /**
      * 🎫 توليد رقم طلب فريد.
-     *
-     * @return string
      */
     protected function generateOrderNumber(): string
     {

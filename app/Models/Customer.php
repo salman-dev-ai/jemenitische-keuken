@@ -1,18 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * نموذج العميل.
+ *
+ * 🔑 المعرّف الوحيد: phone (مُطبَّع) — لا email.
+ * 🍪 remember_token: يُخزَّن في كوكي + DB لتذكّر العميل.
+ * 🆕 isNew(): عميل جديد (لم يطلب بعد) → يستحق كوبون ترحيبي.
+ */
 class Customer extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
-     * الحقول التي يمكن تعبئتها جماعياً.
+     * الحقول القابلة للتعيين الجماعي.
      *
      * @var array<int, string>
      */
@@ -28,7 +39,7 @@ class Customer extends Model
     ];
 
     /**
-     * الحقول التي يجب أن تكون مخفية افتراضياً.
+     * الحقول المخفية عند التحويل إلى array/JSON.
      *
      * @var array<int, string>
      */
@@ -37,16 +48,23 @@ class Customer extends Model
     ];
 
     /**
-     * الحقول التي يجب تحويلها إلى أنواع أصلية.
+     * تحويلات الأنواع — Laravel 11+ style.
      *
-     * @var array<string, string>
+     * @return array<string, mixed>
      */
-    protected $casts = [
-        'last_order_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'last_order_at' => 'datetime',
+        ];
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // العلاقات
+    // ══════════════════════════════════════════════════════════════
 
     /**
-     * الحصول على الحجوزات المرتبطة بالعميل.
+     * حجوزات العميل.
      */
     public function reservations(): HasMany
     {
@@ -54,10 +72,62 @@ class Customer extends Model
     }
 
     /**
-     * الحصول على الطلبات المرتبطة بالعميل.
+     * طلبات العميل.
      */
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * سجل استخدامات الكوبونات (لقسم "كوبوناتي").
+     */
+    public function couponUsages(): HasMany
+    {
+        return $this->hasMany(CouponUsage::class);
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // Scopes
+    // ══════════════════════════════════════════════════════════════
+
+    /**
+     * العملاء الجدد (لم يطلبوا بعد) — مؤهلون للكوبون الترحيبي.
+     */
+    public function scopeNew(Builder $query): Builder
+    {
+        return $query->whereNull('last_order_at');
+    }
+
+    /**
+     * العملاء العائدون (طلبوا سابقاً).
+     */
+    public function scopeReturning(Builder $query): Builder
+    {
+        return $query->whereNotNull('last_order_at');
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // Business Helpers
+    // ══════════════════════════════════════════════════════════════
+
+    /**
+     * هل العميل طلب سابقاً؟
+     */
+    public function hasEverOrdered(): bool
+    {
+        return $this->last_order_at !== null;
+    }
+
+    /**
+     * هل العميل جديد (لم يطلب بعد)؟
+     *
+     * يُستخدم لمنطق الكوبون الترحيبي:
+     *   - new  → يمكنه رؤية/المطالبة بالكوبون الترحيبي
+     *   - not  → يرى العروض العادية فقط
+     */
+    public function isNew(): bool
+    {
+        return ! $this->hasEverOrdered();
     }
 }
