@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Concerns;
 
+use App\Enums\CouponUsageStatus;
 use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Services\CouponService;
@@ -123,11 +124,27 @@ trait ManagesMyCoupons
     #[Computed]
     public function myCoupons(): Collection
     {
+        $customer = $this->loadCustomerFromCookie();
+
+        if ($customer !== null) {
+            return CouponUsage::query()
+                ->with('coupon')
+                ->where('customer_id', $customer->id)
+                ->where('status', CouponUsageStatus::Claimed)
+                ->whereHas('coupon', fn ($query) => $query->available())
+                ->with(['coupon' => fn ($query) => $query->available()])
+                ->latest('claimed_at')
+                ->get()
+                ->map(fn (CouponUsage $usage) => $usage->coupon)
+                ->filter()
+                ->values();
+        }
+
         return Coupon::query()
-            ->available() // active + notExpired + notExhausted
-            ->orderByDesc('is_welcome') // الترحيبية أولاً
-            ->orderByDesc('created_at') // ثم الأحدث
-            ->limit(20) // حماية من الأداء
+            ->welcome()
+            ->available()
+            ->orderByDesc('created_at')
+            ->limit(20)
             ->get();
     }
 

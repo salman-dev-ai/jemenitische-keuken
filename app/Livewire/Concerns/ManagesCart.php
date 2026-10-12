@@ -19,9 +19,16 @@ trait ManagesCart
     /** 📈 الحد الأقصى لكمية الطبق الواحد */
     protected const CART_MAX_QUANTITY = 50;
 
+    protected function cartSessionKey(): string
+    {
+        $customerToken = request()->cookie('remember_customer_token');
+
+        return 'yemeni_cart_' . md5($customerToken ?: 'guest');
+    }
+
     public function initializeCart(): void
     {
-        $this->cart = session()->get(self::CART_SESSION_KEY, []);
+        $this->cart = session()->get($this->cartSessionKey(), []);
     }
 
     /**
@@ -95,6 +102,7 @@ trait ManagesCart
     {
         $this->cart = [];
         session()->forget(self::CART_SESSION_KEY);
+        session()->forget($this->cartSessionKey());
         $this->dispatch('cart-updated');
     }
 
@@ -103,7 +111,7 @@ trait ManagesCart
      */
     protected function persistCart(): void
     {
-        session()->put(self::CART_SESSION_KEY, $this->cart);
+        session()->put($this->cartSessionKey(), $this->cart);
     }
 
     #[Computed]

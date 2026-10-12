@@ -81,6 +81,16 @@ class MenuWithCart extends Component
         $this->hydrateCustomerFields();
     }
 
+    #[On('customer-remembered')]
+    public function syncCustomerFromCookie(): void
+    {
+        $this->hydrateCustomerFields();
+
+        if ($this->isReturningCustomer) {
+            $this->remember_me = true;
+        }
+    }
+
     /**
      * 🆕 تعبئة حقول العميل من الكوكي إن وُجد.
      */
@@ -89,6 +99,8 @@ class MenuWithCart extends Component
         $customer = $this->loadCustomerFromCookie();
 
         if (! $customer) {
+            $this->isReturningCustomer = false;
+
             return;
         }
 
@@ -100,6 +112,16 @@ class MenuWithCart extends Component
         $this->delivery_postal_code = $customer->postal_code ?? '';
         $this->isReturningCustomer  = true;
     }
+
+    #[Computed]
+public function menuItems()
+{
+    return MenuItem::query()
+        ->where('is_available', true)
+        ->with('category:id,slug') // اسم العلاقة في الموديل عندك
+        ->orderBy('sort_order')
+        ->get();
+}
 
     /**
      * 🔄 Livewire hook — يُستدعى عند أي تعديل على $cart.
@@ -147,7 +169,7 @@ class MenuWithCart extends Component
         }
     }
 
- 
+
 
     // ═══════════════════════════════════════════
     // 🆕 زر "لست أنا؟"

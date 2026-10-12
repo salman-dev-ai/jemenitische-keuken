@@ -13,7 +13,7 @@ use Livewire\Component;
 #[Lazy]
 class HomePage extends Component
 {
-     
+
    public function render()
     {
         $loc = app()->getLocale();
@@ -39,7 +39,7 @@ class HomePage extends Component
         });
 
         // تمرير المتغيرات للواجهة
-        return view('livewire.home-page', [
+        return view('livewire.home.home-page', [
             'slides' => $slides,
             'orderOptions' => $orderOptions,
             'isArabic' => $loc === 'ar',
