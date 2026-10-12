@@ -108,6 +108,15 @@ trait ManagesCoupon
             return;
         }
 
+        try {
+            $couponService->claim($customer, $result->coupon);
+        } catch (\Throwable $e) {
+            $this->couponError = $e->getMessage();
+            $this->resetAppliedCoupon();
+
+            return;
+        }
+
         // ✅ حفظ النتيجة
         $this->appliedCouponId       = $result->coupon->id;
         $this->appliedCouponCode     = $result->coupon->code;

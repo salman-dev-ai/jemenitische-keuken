@@ -1,4 +1,4 @@
-<section id="gallery"
+ <section id="gallery"
     class="relative overflow-hidden border-b border-[#E07513]/30 bg-[#1C0907] py-20 font-['Tajawal',sans-serif] text-white"
     dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}" aria-labelledby="gallery-heading">
     <div class="pointer-events-none absolute right-1/4 top-0 h-96 w-96 rounded-full bg-[#E07513]/10 blur-3xl"></div>

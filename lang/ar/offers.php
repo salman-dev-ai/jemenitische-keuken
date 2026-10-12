@@ -3,6 +3,10 @@
 declare(strict_types=1);
 
 return [
+
+  'header' => [
+        'tab' => 'التخفيضات',
+    ],
     'hero' => [
         'title' => 'عروض اليوم',
         'subtitle' => 'الكوبونات',
@@ -23,7 +27,7 @@ return [
     'expires_soon' => 'ينتهي قريبًا',
     'no_image' => 'لا توجد صورة',
     'empty' => 'لا توجد عروض متاحة حالياً',
- 
+
 
     'modal' => [
     'title'    => 'احصل على خصمك',

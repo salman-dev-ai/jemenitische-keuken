@@ -13,7 +13,7 @@ Route::get('/', function () {
 
 
 Route::get('/delivery-zones', ShowDeliveryZones::class)
-    ->name('delivery.zones');
+    ->name('delivery-zones');
 
 // التوثيق الرسمي يفرض ربط الاسم بالشكل التالي:
 // Route::get('lang/switch', [LanguageController::class, 'switch'])->name('lang.switch');

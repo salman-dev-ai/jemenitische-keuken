@@ -9,6 +9,10 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
     class="scroll-smooth">
 
+        {{-- يحسب بيانات التواصل والساعات مرة واحدة قبل التذييل --}}
+        @include('components.layouts.partials.helpers')
+
+        
     {{-- وسوم الرأس: الخطوط والأصول وأنماط Livewire --}}
     @include('components.layouts.partials.head')
 
@@ -25,8 +29,6 @@
             {{ $slot }}
         </main>
 
-        {{-- يحسب بيانات التواصل والساعات مرة واحدة قبل التذييل --}}
-        @include('components.layouts.partials.helpers')
 
         <footer id="about" dir="rtl" class="relative isolate min-h-[620px] overflow-hidden bg-[#171421] text-stone-100">
             @include('components.layouts.partials.footer.footer-top', ['section' => 'backdrop'])

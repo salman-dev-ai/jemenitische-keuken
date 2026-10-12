@@ -82,8 +82,44 @@ $useCoupon = function (int $promotionId) {
 
     {{-- ═══ سكربت النسخ ═══ --}}
     <script>
-        window.addEventListener('coupon-copied', (e) => {
-            navigator.clipboard.writeText(e.detail.code);
+        window.copyCouponCode = function (code) {
+            if (!code) {
+                return Promise.resolve();
+            }
+
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(code);
+            }
+
+            return new Promise((resolve, reject) => {
+                const textarea = document.createElement('textarea');
+                textarea.value = code;
+                textarea.setAttribute('readonly', '');
+                textarea.style.position = 'fixed';
+                textarea.style.top = '-9999px';
+                textarea.style.left = '-9999px';
+
+                document.body.appendChild(textarea);
+                textarea.select();
+                textarea.setSelectionRange(0, textarea.value.length);
+
+                try {
+                    const copied = document.execCommand('copy');
+                    if (copied) {
+                        resolve();
+                    } else {
+                        reject(new Error('Copy command failed'));
+                    }
+                } catch (error) {
+                    reject(error);
+                } finally {
+                    textarea.remove();
+                }
+            });
+        };
+
+        window.addEventListener('coupon-copied', (event) => {
+            window.copyCouponCode(event.detail?.code ?? '').catch(() => {});
         });
     </script>
 

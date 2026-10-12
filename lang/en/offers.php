@@ -3,6 +3,11 @@
 declare(strict_types=1);
 
 return [
+
+ 'header' => [
+        'tab' => 'Offers',
+    ],
+
     'hero' => [
         'title' => "Today's Offers",
         'subtitle' => 'Coupons',

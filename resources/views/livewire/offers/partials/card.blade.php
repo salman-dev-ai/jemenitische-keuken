@@ -80,19 +80,25 @@ D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemeniti
 
         {{-- صندوق كود الكوبون + زر النسخ --}}
         @if ($coupon)
-                <div x-data="{ copied: false }"
-                    class="mt-3 flex items-center justify-between gap-2 rounded-lg border-2 border-dashed border-amber-300 bg-amber-50/60 px-3 py-2">
+                <div x-data="{
+                    copied: false,
+                    async copyCode() {
+                        try {
+                            await window.copyCouponCode?.(@js($coupon->code));
+                            this.copied = true;
+                            setTimeout(() => this.copied = false, 2000);
+                        } catch (error) {
+                            this.copied = false;
+                        }
+                    }
+                }" class="mt-3 flex items-center justify-between gap-2 rounded-lg border-2 border-dashed border-amber-300 bg-amber-50/60 px-3 py-2">
                     <code class="font-mono text-sm font-bold tracking-wider text-amber-900">
                             {{ $coupon->code }}
                         </code>
 
                     <button type="button"
-                        wire:click="dispatch('open-coupon-modal', { promotionId: {{ $promotion->id }}, action: 'copy' })"
-                        x-data="{ copied: false }" @coupon-copied="
-                navigator.clipboard.writeText(@js($coupon->code));
-                copied = true;
-                setTimeout(() => copied = false, 2000);
-            " class="relative flex h-6 w-6 items-center justify-center transition"
+                        @click="copyCode()"
+                        class="relative flex h-6 w-6 items-center justify-center transition"
                         :class="copied ? 'text-green-600' : 'text-amber-700 hover:text-amber-900'"
                         :title="copied ? '{{ __('offers.actions.copied') }}' : '{{ __('offers.actions.copy') }}'">
                         {{-- أيقونة النسخ --}}

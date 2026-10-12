@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Resources\Coupons\RelationManagers;
+namespace App\Filament\Resources\Coupons;
 
 use App\Enums\CouponUsageStatus;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -32,7 +32,8 @@ class UsagesRelationManager extends RelationManager
                     ->label('الحالة')
                     ->badge()
                     ->formatStateUsing(fn (CouponUsageStatus $state): string => $state->getLabel())
-                    ->color(fn (CouponUsageStatus $state): string => $state->color()),
+                    // ->color(fn (CouponUsageStatus $state): string => $state->color())
+                    ,
 
                 TextColumn::make('discount_amount')
                     ->label('قيمة الخصم')

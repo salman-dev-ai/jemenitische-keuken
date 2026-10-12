@@ -5,7 +5,7 @@
         <livewire:home-page />
     </div>
 
-     <section id="offers-section" class="py-10">
+     <section id="offers" class="py-10">
         <livewire:offers-section/>
     </section>
 
@@ -24,7 +24,7 @@
         <livewire:customer-reviews-marquee />
     </section>
 
-   
+
 
     {{-- Reservation section --}}
     <section id="reservation" class="py-20">
@@ -33,7 +33,7 @@
 
 
     {{-- Delivery Zones section --}}
- <section id="delivery_zones" class="py-20">
+ <section id="delivery_zones" class="px-0">
         <livewire:show-delivery-zones/>
     </section>
 </x-layouts.app>

@@ -1,7 +1,7 @@
 {{--
-    شريط الروابط الرئيسي.
-    يعرض الرئيسية والمنيو والمعرض وعن المطعم،
-    ويلون الرابط النشط مع خط سفلي يتحرك فوراً عبر Alpine.
+شريط الروابط الرئيسي.
+يعرض الرئيسية والمنيو والمعرض وعن المطعم،
+ويلون الرابط النشط مع خط سفلي يتحرك فوراً عبر Alpine.
 --}}
 <nav class="w-full border-t border-gray-200/50 pt-2 lg:w-auto lg:border-t-0 lg:pt-0"
     aria-label="{{ __('messages.nav.primary') }}">
@@ -14,6 +14,17 @@
                 {{ __('messages.nav.home') }}
                 <span class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
                     :class="activeSection === 'home' ? 'w-full' : 'w-0 hover:w-full'"></span>
+            </a>
+        </li>
+
+
+        <li>{{-- تبويب التخفيضات --}}
+            <a href="#offers"  @click="activeSection ='offers' "
+               class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
+                :class="activeSection === 'offers' ? 'text-[#E07513]' : ''">
+                {{ __('offers.header.tab') }}
+                 <span class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
+                    :class="activeSection === 'offers' ? 'w-full' : 'w-0 hover:w-full'"></span>
             </a>
         </li>
 
