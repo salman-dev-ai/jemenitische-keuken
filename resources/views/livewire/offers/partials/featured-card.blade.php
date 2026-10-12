@@ -4,7 +4,7 @@
     $discount = $coupon?->discount_value ?? 0;
     $locale = app()->getLocale();
 @endphp
-
+{{-- D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemenitische-keuken-chat\resources\views\livewire\offers\partials\featured-card.blade.php --}}
 <div class="relative h-full overflow-hidden rounded-3xl bg-gradient-to-br from-red-900 via-red-950 to-red-900 shadow-xl">
 
     <div class="absolute inset-0 opacity-10"

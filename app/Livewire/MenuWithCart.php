@@ -6,9 +6,7 @@ namespace App\Livewire;
 
 use App\Enums\OrderType;
 use App\Exceptions\OrderException;
-use App\Livewire\Concerns\ManagesCart;
-use App\Livewire\Concerns\ManagesCoupon;
-use App\Livewire\Concerns\RemembersCustomer;
+
 use App\Models\MenuCategory;
 use App\Models\MenuItem;
 use App\Services\OrderService;
@@ -17,17 +15,26 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+
+
+use App\Livewire\Concerns\ManagesCart;
+use App\Livewire\Concerns\ManagesCoupon;
+use App\Livewire\Concerns\ManagesMyCoupons;
+use App\Livewire\Concerns\RemembersCustomer;
+
+
+
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\On;
 use Livewire\Component;
-
 #[Lazy]
 class MenuWithCart extends Component
 {
     use ManagesCart;
     use ManagesCoupon;
+    use ManagesMyCoupons;
     use RemembersCustomer;
-
     // ═══════════════════════════════════════════
     // 🎛️ حالة المكوّن (State)
     // ═══════════════════════════════════════════
@@ -111,6 +118,36 @@ class MenuWithCart extends Component
             $this->couponError = __('cart.coupon.cart_changed_reapply');
         }
     }
+
+
+
+        // ═══════════════════════════════════════════
+    // 🎫 استقبال حدث "تطبيق كوبون" من العروض
+    // ═══════════════════════════════════════════
+
+    /**
+     * 🎯 يُستدعى عند إطلاق coupon-modal حدث "apply-coupon-to-cart".
+     *
+     * التدفّق:
+     *   1. يُعيّن الكود في الحقل
+     *   2. يستدعي applyCoupon() من ManagesCoupon (يستخدم CouponService)
+     *   3. يفتح نافذة السلة تلقائياً
+     *
+     * ⚠️ ملاحظة: الكوكي (remember_customer_token) تم ضبطه بالفعل
+     *    من coupon-modal، لذا loadCustomerFromCookie() سيعمل.
+     */
+    #[On('apply-coupon-to-cart')]
+    public function applyCouponFromOffer(string $code, \App\Services\CouponService $couponService): void
+    {
+        $this->couponCode = $code;
+        $this->applyCoupon($couponService);
+
+        if (! $this->isCartModalOpen) {
+            $this->isCartModalOpen = true;
+        }
+    }
+
+ 
 
     // ═══════════════════════════════════════════
     // 🆕 زر "لست أنا؟"
