@@ -8,7 +8,8 @@ declare(strict_types=1);
  * ═══════════════════════════════════════════════════════════════════════════
  *
  * 🎯 الغرض:
- *    نموذج حجز مستقل — يتحقق، يطبّع الهاتف، يحفظ الحجز، يرسل إشعاراً.
+ *    نموذج حجز مستقل — يتحقق، يطبّع الهاتف، يحفظ الحجز، يرسل إشعاراً،
+ *    ثم يُرجع رابط واتساب جاهزاً لإرسال تفاصيل الحجز إلى المدير.
  *
  * 🧩 يعتمد على:
  *    - App\Livewire\Concerns\RemembersCustomer
@@ -132,10 +133,14 @@ public string $reservation_time = '';
     /**
      * 📅 إرسال الحجز.
      *
+     * 📲 واتساب: لا تُحوِّل الدالة الصفحة بنفسها، بل تُرجع رابط wa.me عند النجاح
+     *    ليفتحه النموذج (Alpine) في تبويب جديد. وتُرجع null في كل حالة أخرى
+     *    (Rate Limit، خطأ، أو فشل بناء الرسالة).
+     *
      * @param  ReservationService $reservationService
-     * @return void
+     * @return string|null رابط واتساب الجاهز أو null
      */
-    public function submitReservation(ReservationService $reservationService): void
+    public function submitReservation(ReservationService $reservationService): ?string
     {
         $this->reset(['errorMessage', 'successMessage', 'referenceCode']);
 
@@ -147,7 +152,7 @@ public string $reservation_time = '';
         if (RateLimiter::tooManyAttempts($rateKey, 5)) {
             $this->errorMessage = __('messages.reservation.rate_limit_exceeded');
 
-            return;
+            return null;
         }
 
         RateLimiter::hit($rateKey, 60);
@@ -200,6 +205,9 @@ public string $reservation_time = '';
             $this->referenceCode  = $reservation->reference_code;
             $this->successMessage = __('messages.reservation.success');
 
+            // 📲 رابط واتساب للمدير — يجب بناؤه قبل تفريغ الحقول أدناه لأنه يقرأ بيانات الحجز
+            $whatsAppUrl = $this->makeWhatsAppUrl($validated, $reservation->reference_code);
+
             $this->dispatch(
                 'notify',
                 title:   __('messages.notifications.reservation_title'),
@@ -215,6 +223,8 @@ public string $reservation_time = '';
 
             $this->party_size = 2;
 
+            // 📲 إرجاع الرابط للنموذج ليفتحه في تبويب جديد (بعد حفظ الحجز فعلياً)
+            return $whatsAppUrl;
         } catch (ReservationException $e) {
             report($e);
             RateLimiter::clear($rateKey);
@@ -225,6 +235,75 @@ public string $reservation_time = '';
             RateLimiter::clear($rateKey);
             $this->errorMessage = __('messages.reservation.generic_error');
         }
+
+        return null;
+    }
+
+    // ═══════════════════════════════════════════
+    // 📲 إرسال الحجز إلى المدير عبر واتساب
+    // ═══════════════════════════════════════════
+
+    /**
+     * رقم واتساب المدير بالصيغة الدولية بلا + أو أصفار (967 = مفتاح اليمن).
+     * يُقرأ من config('services.whatsapp.order_number') ويُمكن ضبطه من .env،
+     * وإلا يُستخدم الرقم الافتراضي 771924870.
+     */
+    protected function whatsAppNumber(): string
+    {
+  $whatsapp = preg_replace('/\D+/', '', (string) \App\Models\RestaurantSetting::current()->whatsapp ?? '');
+
+    return $whatsapp !== '' ? $whatsapp : '';    }
+
+    /**
+     * يبني رابط wa.me الجاهز بنص الحجز، أو null إذا فشل البناء.
+     *
+     * ⚠️ فشل البناء لا يجب أن يُفسد الحجز (محفوظ مسبقاً في قاعدة البيانات)،
+     *    لذلك نلتقط الاستثناء ونسجّله فقط بدل رميه.
+     *
+     * @param array<string, mixed> $validated      المدخلات بعد التحقق وتطبيع الهاتف
+     * @param string|int|null      $referenceCode  رمز مرجع الحجز
+     */
+    protected function makeWhatsAppUrl(array $validated, string|int|null $referenceCode): ?string
+    {
+        try {
+            return 'https://wa.me/' . $this->whatsAppNumber()
+                . '?text=' . rawurlencode($this->buildWhatsAppMessage($validated, (string) $referenceCode));
+        } catch (\Throwable $e) {
+            report($e);
+
+            return null;
+        }
+    }
+
+    /**
+     * يبني نص رسالة الحجز (يصل للمدير، لذلك لغته ثابتة بالعربية
+     * بغض النظر عن لغة واجهة العميل).
+     *
+     * @param array<string, mixed> $validated
+     */
+    protected function buildWhatsAppMessage(array $validated, string $referenceCode): string
+    {
+        $lines = [
+            '*طلب حجز جديد*',
+            '',
+            "رقم المرجع: {$referenceCode}",
+            "الاسم: {$validated['customer_name']}",
+            "الهاتف: {$validated['customer_phone']}",
+        ];
+
+        if (! empty($validated['customer_email'])) {
+            $lines[] = "البريد: {$validated['customer_email']}";
+        }
+
+        $lines[] = "التاريخ: {$validated['reservation_date']}";
+        $lines[] = "الوقت: {$validated['reservation_time']}";
+        $lines[] = "عدد الأشخاص: {$validated['party_size']}";
+
+        if (! empty($validated['special_requests'])) {
+            $lines[] = "ملاحظات: {$validated['special_requests']}";
+        }
+
+        return implode("\n", $lines);
     }
 
     /**

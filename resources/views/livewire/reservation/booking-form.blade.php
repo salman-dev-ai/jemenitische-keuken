@@ -33,8 +33,39 @@
         </div>
     @endif
 
-    {{-- الإرسال يبقى هنا حتى ترث الحقول الفرعية نفس مكوّن Livewire. --}}
-    <form wire:submit.prevent="submitReservation" class="space-y-7">
+    {{--
+        الإرسال يبقى هنا حتى ترث الحقول الفرعية نفس مكوّن Livewire.
+
+        إرسال الحجز + فتح واتساب في تبويب جديد:
+        1) عند الضغط نفتح تبويباً فارغاً فوراً (داخل حدث المستخدم) كي لا يحجبه المتصفح.
+        2) ننتظر نتيجة submitReservation() من الخادم: رابط wa.me عند النجاح أو null عند أي فشل.
+        3) نجاح ⇒ نوجّه التبويب إلى واتساب. فشل ⇒ نغلق التبويب الفارغ ويبقى العميل في صفحته.
+        4) إن حجب المتصفح التبويب نفتح واتساب في الصفحة الحالية كحل بديل.
+    --}}
+    <form
+        x-data="{
+            async submit() {
+                const tab = window.open('', '_blank');
+                let url = null;
+
+                try {
+                    url = await this.$wire.submitReservation();
+                } finally {
+                    const isValid = typeof url === 'string' && url.startsWith('https://wa.me/');
+
+                    if (isValid && tab && !tab.closed) {
+                        tab.opener = null;
+                        tab.location.href = url;
+                    } else if (isValid) {
+                        window.location.href = url;
+                    } else if (tab && !tab.closed) {
+                        tab.close();
+                    }
+                }
+            },
+        }"
+        @submit.prevent="submit()"
+        class="space-y-7">
         {{-- يلوّن مؤشر التقدم حسب الخطوة الظاهرة الآن أمام المستخدم داخل النموذج. --}}
         <div class="flex items-center gap-3" aria-label="Reservation steps">
             <div class="h-1.5 flex-1 rounded-full transition-colors duration-300"
