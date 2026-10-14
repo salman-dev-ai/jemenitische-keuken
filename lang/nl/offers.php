@@ -21,6 +21,9 @@ return [
     'actions' => [
         'use_now' => 'Nu gebruiken',
         'copy' => 'Code kopiëren',
+     'copied' => 'Gekopieerd',
+    'apply'  => 'Toepassen'
+
     ],
 
     'video' => 'Video',

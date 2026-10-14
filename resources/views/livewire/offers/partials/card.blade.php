@@ -79,42 +79,44 @@ D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemeniti
         </h3>
 
         {{-- صندوق كود الكوبون + زر النسخ --}}
-        @if ($coupon)
-                <div x-data="{
-                    copied: false,
-                    async copyCode() {
-                        try {
-                            await window.copyCouponCode?.(@js($coupon->code));
-                            this.copied = true;
-                            setTimeout(() => this.copied = false, 2000);
-                        } catch (error) {
-                            this.copied = false;
-                        }
-                    }
-                }" class="mt-3 flex items-center justify-between gap-2 rounded-lg border-2 border-dashed border-amber-300 bg-amber-50/60 px-3 py-2">
-                    <code class="font-mono text-sm font-bold tracking-wider text-amber-900">
-                            {{ $coupon->code }}
-                        </code>
+     @if ($coupon)
+    <div
+        x-data="{ copied: false, timer: null }"
+        x-on:coupon-copied.window="
+            if ($event.detail.promotionId === {{ $promotion->id }}) {
+                copied = true;
+                clearTimeout(timer);
+                timer = setTimeout(() => copied = false, 2000);
+            }
+        "
+        class="mt-3 flex items-center justify-between gap-2 rounded-lg border-2 border-dashed border-amber-300 bg-amber-50/60 px-3 py-2"
+    >
+        <code class="font-mono text-sm font-bold tracking-wider text-amber-900">
+            {{ $coupon->code }}
+        </code>
 
-                    <button type="button"
-                        @click="copyCode()"
-                        class="relative flex h-6 w-6 items-center justify-center transition"
-                        :class="copied ? 'text-green-600' : 'text-amber-700 hover:text-amber-900'"
-                        :title="copied ? '{{ __('offers.actions.copied') }}' : '{{ __('offers.actions.copy') }}'">
-                        {{-- أيقونة النسخ --}}
-                        <svg x-show="!copied" x-cloak class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
+        <button type="button"
+            @click="$dispatch('open-coupon-modal', { promotionId: {{ $promotion->id }}, action: 'copy' })"
+            class="flex items-center gap-1 text-xs font-bold transition"
+            :class="copied ? 'text-green-600' : 'text-amber-700 hover:text-amber-900'">
 
-                        {{-- أيقونة الصح --}}
-                        <svg x-show="copied" x-cloak class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </button>
-                </div>
-        @endif
+            {{-- أيقونة النسخ --}}
+            <svg x-show="!copied" x-cloak class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
 
+            {{-- أيقونة الصح --}}
+            <svg x-show="copied" x-cloak class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+            </svg>
+
+            {{-- النص بجانب الأيقونة --}}
+            <span x-show="!copied" x-cloak>{{ __('offers.actions.copy') }}</span>
+            <span x-show="copied" x-cloak>{{ __('offers.actions.copied') }}</span>
+        </button>
+    </div>
+@endif
         {{-- ينتهي قريبًا --}}
         @if ($promotion->ends_at)
             <div class="mt-3 flex items-center justify-center gap-1.5 text-xs font-medium text-red-700">

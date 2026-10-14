@@ -15,7 +15,7 @@
     </section>
 
     {{-- Menu with cart section --}}
-    <section id="menu_with_cart" class="py-20">
+    <section id="menu_with_cart"  >
         <livewire:menu-with-cart />
     </section>
 
@@ -27,13 +27,13 @@
 
 
     {{-- Reservation section --}}
-    <section id="reservation" class="py-20">
+    <section id="reservation" class="px-10">
         <livewire:reservation-form />
     </section>
 
 
     {{-- Delivery Zones section --}}
- <section id="delivery_zones" class="px-0">
+ <section id="delivery_zones" class="p-0">
         <livewire:show-delivery-zones/>
     </section>
 </x-layouts.app>

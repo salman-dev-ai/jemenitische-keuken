@@ -7,24 +7,27 @@ use Illuminate\Support\Str;
 use function Livewire\Volt\{state, on};
 
 /**
- * مكوّن Volt لنافذة الكوبون.
- * يلتقط حدث الفتح من العروض. للعميل المسجل يطبق الكوبون مباشرة،
- * وللجديد يعرض التسجيل ثم ينشئ العميل. لا يعيد التوجيه ولا ينفذ المطالبة هنا.
+ * resources/views/livewire/coupon-modal.blade.php
+ *
+ * مكوّن Volt لنافذة الكوبون (المنطق فقط، والواجهة في modals/coupon/modal.blade.php).
+ * - عميل مسجل: ينسخ الكوبون أو يطبقه مباشرة.
+ * - عميل جديد: تفتح نافذة التسجيل، وبعد الحفظ ينفذ الفعل الذي ضغط عليه (نسخ أو استخدام).
  */
 
-// تحتفظ هذه الحالة بإظهار النافذة وحقول الضيف ورمز الكوبون الحالي.
 state([
-    'show'        => false,
-    'name'        => '',
-    'phone'       => '',
-    'email'       => '',
-    'address'     => '',
-    'city'        => '',
-    'postal_code' => '',
-    'couponCode'  => '',
+    'show'          => false,
+    'promotionId'   => 0,
+    'pendingAction' => 'use', // copy | use
+    'name'          => '',
+    'phone'         => '',
+    'email'         => '',
+    'address'       => '',
+    'city'          => '',
+    'postal_code'   => '',
+    'couponCode'    => '',
 ]);
 
-// يلتقط حدث استخدم الآن من بطاقات العروض ويقرر مسار العميل.
+// يلتقط حدث الفتح من بطاقات العروض ويقرر المسار.
 on(['open-coupon-modal' => function (int $promotionId, string $action = 'use') {
     $promotion = Promotion::with('coupon')->find($promotionId);
 
@@ -32,30 +35,40 @@ on(['open-coupon-modal' => function (int $promotionId, string $action = 'use') {
         return;
     }
 
-    $this->couponCode = $promotion->coupon->code;
+    $this->promotionId   = $promotionId;
+    $this->pendingAction = $action === 'copy' ? 'copy' : 'use';
+    $this->couponCode    = $promotion->coupon->code;
     $this->resetForm();
 
-    // عميل مسجل ينسخ الرمز أو يطبقه دون فتح نموذج التسجيل.
+    // عميل مسجل: ينفذ الفعل مباشرة بدون نموذج.
     if ($this->currentCustomer()) {
-        if ($action === 'copy') {
-            // يطلب من الواجهة الأمامية نسخ رمز الكوبون الحالي إلى الحافظة.
-            $this->dispatch('coupon-copied', code: $this->couponCode);
-        } else {
-            // يطبق رمز الكوبون مباشرة على السلة ثم يوقف مسار الضيف.
-            $this->applyToCart();
-        }
-
+        $this->runPendingAction();
         return;
     }
 
-    // للعميل الجديد يفتح نموذج التسجيل سواء كان الفعل نسخاً أو استخداماً.
+    // عميل جديد: يفتح نموذج التسجيل.
     $this->show = true;
 }]);
 
-// يتحقق من بيانات الضيف ثم ينشئ عميلا ويحفظ كوكي التذكر.
+// ينفذ الفعل المعلّق: نسخ الكود أو تطبيقه على السلة.
+$runPendingAction = function (): void {
+    if ($this->pendingAction === 'copy') {
+        $this->show = false;
+        // promotionId يجعل علامة "تم النسخ" تظهر على الكارد المحدد فقط.
+        $this->dispatch('coupon-copied',
+            promotionId: $this->promotionId,
+            code: $this->couponCode,
+        );
+        return;
+    }
+
+    $this->applyToCart();
+};
+
+// يتحقق من بيانات الضيف وينشئ العميل ثم ينفذ الفعل المعلّق.
 $submitGuest = function (): void {
     $validated = $this->validate([
-        'name' => 'required|string|min:3|max:255',
+        'name'  => 'required|string|min:3|max:255',
         'phone' => [
             'required',
             'string',
@@ -86,16 +99,22 @@ $submitGuest = function (): void {
     );
 
     $this->dispatch('customer-remembered');
-    $this->applyToCart();
+    $this->runPendingAction();
 };
 
-// يغلق النافذة ثم يرسل حدث تطبيق الكوبون الحالي إلى السلة.
+// يعيد جلب الكود من قاعدة البيانات (لا يثق بالحقل القادم من المتصفح).
 $applyToCart = function (): void {
+    $promotion = Promotion::with('coupon')->find($this->promotionId);
+
+    if (! $promotion || ! $promotion->coupon) {
+        return;
+    }
+
     $this->show = false;
-    $this->dispatch('apply-coupon-to-cart', code: $this->couponCode);
+    $this->dispatch('apply-coupon-to-cart', code: $promotion->coupon->code);
 };
 
-// يعيد سجل العميل الحالي إن وجد رمز التذكر داخل الكوكي.
+// العميل الحالي من كوكي التذكر.
 $currentCustomer = function (): ?Customer {
     $token = request()->cookie('remember_customer_token');
 
@@ -104,7 +123,6 @@ $currentCustomer = function (): ?Customer {
         : null;
 };
 
-// يفرغ حقول نموذج التسجيل كلها قبل فتح النافذة من جديد.
 $resetForm = function (): void {
     $this->name        = '';
     $this->phone       = '';
@@ -114,7 +132,7 @@ $resetForm = function (): void {
     $this->postal_code = '';
 };
 
-// يحول الأرقام العربية إلى إنجليزية ثم يزيل الفراغات والرموز الزائدة.
+// يحول الأرقام العربية إلى إنجليزية ويزيل الفراغات والرموز.
 $normalizePhone = function (string $phone): string {
     $arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
     $ascii  = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -125,9 +143,7 @@ $normalizePhone = function (string $phone): string {
 ?>
 
 <div>
-    {{-- يخفي عقد Alpine قبل التهيئة حتى لا تومض النافذة عند التحميل. --}}
     <style>[x-cloak]{display:none !important}</style>
 
-    {{-- يستدعي شجرة العرض البصرية ويبقي منطق Volt كله في هذا الملف. --}}
     @include('livewire.modals.coupon.modal')
 </div>

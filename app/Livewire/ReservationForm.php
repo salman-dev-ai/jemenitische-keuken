@@ -35,7 +35,7 @@ use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
-#[Lazy]
+// #[Lazy]
 class ReservationForm extends Component
 {
     use RemembersCustomer;
@@ -47,8 +47,8 @@ class ReservationForm extends Component
     public string $reservation_date = '';
 
    #[Validate(['required',  'regex:/^([01]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/',])]
-    
-  
+
+
 
 public string $reservation_time = '';
 

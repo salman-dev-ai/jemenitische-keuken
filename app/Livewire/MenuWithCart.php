@@ -28,7 +28,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Lazy;
 use Livewire\Attributes\On;
 use Livewire\Component;
-#[Lazy]
+// #[Lazy]
 class MenuWithCart extends Component
 {
     use ManagesCart;

@@ -41,9 +41,9 @@ it('renders a safe browser-copy flow for promotion coupon buttons', function () 
     $html = view('livewire.offers.partials.card', ['promotion' => $promotion])->render();
 
     expect($html)
-        ->toContain('copyCode()')
         ->toContain("document.execCommand('copy')")
-        ->not->toContain("wire:click=\"dispatch('open-coupon-modal'");
+        ->toContain("open-coupon-modal")
+        ->toContain("action: 'copy'");
 });
 
 it('claims a valid coupon when applied so it appears in my coupons', function () {

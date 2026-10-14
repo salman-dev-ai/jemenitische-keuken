@@ -10,7 +10,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
-#[Lazy]
+// #[Lazy]
 class HomePage extends Component
 {
 

@@ -1,5 +1,12 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * مكون قسم المعرض: يجلب العناصر المفعلة مرتبة من قاعدة البيانات مرة واحدة،
+ * ثم تتولى Alpine.js في الواجهة التصفية الفورية بين الأقسام دون طلبات إضافية للخادم.
+ * يظهر الهيكل العظمي عند أول زيارة فقط، ثم يُتخطى التحميل الكسول.
+ */
 
 namespace App\Livewire;
 
@@ -7,30 +14,35 @@ use App\Models\GalleryItem;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
-#[Lazy]
 class GallerySection extends Component
 {
-    public string $selectedCategory = 'all';
+    // مفتاح الجلسة الذي يدل على أن الزائر شاهد التحميل الأولي.
+    private const SEEN_KEY = 'gallery.initial_load_done';
 
-   public function selectCategory(string $category): void
+    // يحدد هل يُستخدم التحميل الكسول: أول زيارة فقط في هذه الجلسة.
+    public static function shouldLazyLoad(): bool
     {
-        // Livewire action parameters come from the client, so do not trust them blindly.
-        if ($category === 'all' || array_key_exists($category, GalleryItem::CATEGORIES)) {
-            $this->selectedCategory = $category;
-        }
+        return ! session()->has(self::SEEN_KEY);
     }
 
+    // يُنفذ بعد اكتمال التحميل الفعلي، فيُسجَّل أن الهيكل عُرض مرة.
+    public function mount(): void
+    {
+        session()->put(self::SEEN_KEY, true);
+    }
 
- #[Computed]
+    // الأقسام التي تحتوي عناصر مفعلة فقط، بنفس ترتيب GalleryItem::CATEGORIES.
+    #[Computed]
     public function categories(): Collection
     {
         $locale = (string) app()->getLocale();
         $fallbackLocale = (string) config('app.fallback_locale', 'en');
+        $present = $this->galleryItems->pluck('category')->unique()->all();
 
         return collect(GalleryItem::CATEGORIES)
+            ->filter(fn (array $translations, string $key): bool => in_array($key, $present, true))
             ->map(
                 fn (array $translations, string $key): array => [
                     'key' => $key,
@@ -40,22 +52,18 @@ class GallerySection extends Component
                         ?? $key),
                 ],
             )
-            ->prepend([
-                'key' => 'all',
-                'name' => __('messages.menu.all'),
-            ])
             ->values();
     }
 
     /**
      * @return Collection<int, GalleryItem>
      */
+    // جلب كل العناصر المفعلة مرتبة، والتصفية بين الأقسام تتم في المتصفح.
     #[Computed]
     public function galleryItems(): Collection
     {
         return GalleryItem::query()
             ->active()
-            ->byCategory($this->selectedCategory)
             ->ordered()
             ->get([
                 'id',
@@ -73,6 +81,15 @@ class GallerySection extends Component
             ]);
     }
 
+    // العنصر المميز للواجهة العلوية، وإلا فأول عنصر مفعل.
+    #[Computed]
+    public function featuredItem(): ?GalleryItem
+    {
+        return $this->galleryItems->firstWhere('is_featured', true)
+            ?? $this->galleryItems->first();
+    }
+
+    // عرض هيكل تحميل مؤقت حتى يجهز المكون.
     public function placeholder(): View
     {
         return view('livewire.placeholders.gallery-section');

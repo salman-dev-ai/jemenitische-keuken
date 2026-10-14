@@ -3,6 +3,10 @@
     $direction = $locale === 'ar' ? 'rtl' : 'ltr';
 @endphp
 
+{{-- هذا المكون يعرض مناطق التوصيل وأسعارها داخل واجهة عربية أو أوروبية. --}}
+{{-- يحدد اتجاه الصفحة ونمط اللغة ويعرض عنوان الخدمة مع جدول المناطق. --}}
+{{-- يحتوي القسم على شاشة تحميل وجدول بيانات وزر طلب سريع للعميل. --}}
+
 <div
     id="delivery-zones"
     lang="{{ $locale }}"
@@ -31,6 +35,7 @@
     >
 
     <section class="relative z-10 mx-auto w-full max-w-screen-2xl" aria-labelledby="delivery-zones-title">
+        {{-- رأس الصفحة مع الشعار والعنوان الوصفي لمناطق التوصيل. --}}
         <header class="mb-5 text-center sm:mb-6">
             <div class="mb-3 inline-flex items-center gap-3 rounded-full border border-[#214f70]/20 bg-[#fffdf8]/90 py-2 pe-5 ps-2 text-start shadow-lg">
                 <img
@@ -61,6 +66,7 @@
             </p>
         </header>
 
+        {{-- شاشة التحميل المؤقتة قبل ظهور بيانات المناطق. --}}
         <div wire:loading role="status" aria-live="polite" aria-label="{{ __('delivery.loading') }}" class="overflow-hidden rounded-2xl border-2 border-[#e08a3c] bg-[#fffdf8]/95 shadow-2xl">
             <span class="sr-only">{{ __('delivery.loading') }}</span>
             <div class="flex items-center gap-2 px-5 py-3 text-xs font-semibold text-[#214f70] sm:px-6">
@@ -89,6 +95,7 @@
             </div>
         </div>
 
+        {{-- جدول مناطق التوصيل مع الأكواد ورسوم التوصيل لكل منطقة. --}}
         <div wire:loading.remove class="overflow-hidden rounded-2xl border-2 border-[#e08a3c] bg-[#fffdf8]/95 shadow-2xl">
             <div class="overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#214f70]" tabindex="0" aria-label="{{ __('delivery.table_label') }}">
                 <table class="w-full min-w-[620px] table-fixed border-collapse text-[#4a2723]">
@@ -145,6 +152,7 @@
             </div>
         </div>
 
+        {{-- زر الطلب السريع لتوجيه الزائر إلى صفحة الطلب. --}}
         <div class="mx-auto mt-4 flex w-fit max-w-full flex-wrap items-center justify-center gap-3 rounded-full bg-[#274739]/95 py-2 pe-2 ps-4 text-xs font-bold text-[#fffaf0] shadow-lg sm:text-sm">
             <span>{{ __('delivery.order_caption') }}</span>
             <a href="{{ config('services.restaurant.order_url', '#menu') }}" class="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#e9a34b] to-[#d77b2a] px-5 py-2 font-black text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">

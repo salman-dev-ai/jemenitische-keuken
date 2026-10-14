@@ -6,7 +6,7 @@ use Illuminate\View\View;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
-#[Lazy]
+// #[Lazy]
 class CustomerReviewsMarquee extends Component
 {
     // ✅ بيانات ثابتة للتقييمات (يمكن استبدالها لاحقاً بـ Review Model)
