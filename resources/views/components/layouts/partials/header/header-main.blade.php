@@ -40,7 +40,7 @@
                         <div
                             class="relative z-10 rounded-full border border-[#E07513]/40 bg-white/90 p-0 shadow-md shadow-[#E07513]/15 ring-white/60 backdrop-blur-sm">
                             <img src="{{ asset('images/image.png') }}" alt="المطبخ اليمني"
-                                class="h-10 w-10 rounded-full object-cover sm:h-20 sm:w-20 lg:h-26 lg:w-26">
+                                class="h-14 w-14 rounded-full object-cover sm:h-20 sm:w-20 lg:h-26 lg:w-26">
                         </div>
                     </a>
 

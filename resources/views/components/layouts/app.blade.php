@@ -30,7 +30,7 @@
     </main>
 
     <!-- #endregion -->
-    <section id="about" class="py-10">
+    <section id="about" class="">
         <livewire:footer />
     </section>
 

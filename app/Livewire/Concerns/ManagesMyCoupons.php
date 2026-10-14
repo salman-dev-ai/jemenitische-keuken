@@ -10,6 +10,7 @@ use App\Models\CouponUsage;
 use App\Services\CouponService;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Renderless;
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
@@ -32,6 +33,12 @@ use Livewire\Attributes\Computed;
  *    - عميل مسجّل → يرى كل الكوبونات المتاحة + كوبوناته الخاصة
  *    - عميل غير مسجّل → يرى معاينة للكوبونات الترحيبية مع دعوة للتسجيل
  *
+ * ⚡ الأداء والحركة:
+ *    - الفتح والإغلاق تتحكم بهما Alpine في ملف النافذة (my-coupons-modal.blade.php)
+ *      فتظهر اللوحة فوراً وتنزلق عند الإغلاق.
+ *    - عند الإغلاق من PHP نرسل الحدث `close-my-coupons` بدل تغيير الخاصية مباشرة،
+ *      حتى تعمل حركة الخروج قبل أن يُحذف العنصر.
+ *
  * ⚠️ ملاحظة:
  *    - لا نستخدم CouponService::claim() هنا لأن التطبيق يتم مباشرة
  *      عبر الحقل في السلة. claim() + redeem() يحدثان في OrderService عند التأكيد.
@@ -43,10 +50,10 @@ trait ManagesMyCoupons
     // 🎛️ الحالة (State)
     // ══════════════════════════════════════════════════════════════
 
-    /** 🪟 هل نافذة "كوبوناتي" مفتوحة؟ */
+    /** 🪟 هل نافذة "كوبوناتي" مفتوحة؟ (تُحمَّل البيانات فقط عند true) */
     public bool $isMyCouponsModalOpen = false;
 
-    /** 📋 الكود الذي نُسخ مؤخراً (للـ visual feedback) */
+    /** 📋 الكود الذي نُسخ مؤخراً */
     public ?string $copiedCouponCode = null;
 
     // ══════════════════════════════════════════════════════════════
@@ -55,6 +62,9 @@ trait ManagesMyCoupons
 
     /**
      * 🪟 فتح نافذة "كوبوناتي".
+     *
+     * تُستدعى من Alpine بالتوازي مع ظهور اللوحة فوراً في المتصفح،
+     * وتؤدي فقط إلى تحميل بيانات الكوبونات.
      */
     public function openMyCoupons(): void
     {
@@ -64,6 +74,8 @@ trait ManagesMyCoupons
 
     /**
      * 🪟 إغلاق نافذة "كوبوناتي".
+     *
+     * تُستدعى من Alpine بعد انتهاء حركة الانزلاق (300ms).
      */
     public function closeMyCoupons(): void
     {
@@ -72,11 +84,12 @@ trait ManagesMyCoupons
     }
 
     /**
-     * 📋 تعليم كود بأنه نُسخ (للـ visual feedback فقط).
+     * 📋 تعليم كود بأنه نُسخ.
      *
-     * النسخ الفعلي يحدث في Alpine.js (navigator.clipboard).
-     * هذه الدالة تُحدّث الحالة فقط لتغيير شكل الزر.
+     * النسخ الفعلي وتغيير شكل الزر يحدثان في Alpine.js،
+     * لذلك نمنع إعادة رسم المكوّن (Renderless) لتكون الاستجابة أسرع.
      */
+    #[Renderless]
     public function markCouponAsCopied(string $code): void
     {
         $this->copiedCouponCode = $code;
@@ -90,7 +103,7 @@ trait ManagesMyCoupons
      * التدفّق:
      *   1. تعيين الكود في الحقل
      *   2. استدعاء applyCoupon() (من ManagesCoupon)
-     *   3. إغلاق النافذة
+     *   3. إغلاق النافذة بحركة انزلاق (عبر حدث للمتصفح)
      *   4. فتح سلة التسوق إن لم تكن مفتوحة
      *
      * @param CouponService $couponService يُحقن تلقائياً من Livewire
@@ -99,12 +112,15 @@ trait ManagesMyCoupons
     {
         $this->couponCode = $code;
         $this->applyCoupon($couponService);
-        $this->isMyCouponsModalOpen = false;
+
+        // ✅ كان: $this->isMyCouponsModalOpen = false;  ← يحذف العنصر فوراً بلا حركة
+        // الآن Alpine يشغّل حركة الخروج ثم يستدعي closeMyCoupons() بنفسه.
+        $this->dispatch('close-my-coupons');
 
         // ✅ افتح السلة تلقائياً إذا لم تكن مفتوحة
-        if (! $this->isCartModalOpen) {
-            $this->isCartModalOpen = true;
-        }
+        // if (! $this->isCartModalOpen) {
+        //     $this->isCartModalOpen = true;
+        // }
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -114,10 +130,10 @@ trait ManagesMyCoupons
     /**
      * 🎫 قائمة الكوبونات المتاحة للعميل.
      *
-     * الترتيب:
-     *   1. الكوبونات الترحيبية أولاً (is_welcome = true)
-     *   2. ثم الكوبونات العادية
-     *   3. الأحدث إنشاءً أولاً
+     * - عميل مسجّل: كوبوناته المُطالَب بها (Claimed) والمتاحة حالياً.
+     * - زائر: الكوبونات الترحيبية المتاحة.
+     *
+     * استعلام واحد مع eager loading (بدون استعلامات N+1).
      *
      * @return Collection<int, Coupon>
      */
@@ -128,11 +144,10 @@ trait ManagesMyCoupons
 
         if ($customer !== null) {
             return CouponUsage::query()
-                ->with('coupon')
+                ->with(['coupon' => fn ($query) => $query->available()])
                 ->where('customer_id', $customer->id)
                 ->where('status', CouponUsageStatus::Claimed)
                 ->whereHas('coupon', fn ($query) => $query->available())
-                ->with(['coupon' => fn ($query) => $query->available()])
                 ->latest('claimed_at')
                 ->get()
                 ->map(fn (CouponUsage $usage) => $usage->coupon)

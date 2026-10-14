@@ -1,18 +1,55 @@
-{{-- نافذة كوبوناتي — تُعرض فقط عند $isMyCouponsModalOpen لأنها تجلب بيانات (myCoupons) من الخادم.
-     ملف إضافي خارج الهيكل المطلوب: الهيكل لم يتضمن مكاناً لها، ودمجها داخل modal.blade.php
-     سيجعلها تحمل transform الأب فيكسر position:fixed. --}}
-<div x-data="{ show: false }" x-init="$nextTick(() => show = true)"
+{{-- نافذة كوبوناتي — فتح فوري من المتصفح + إغلاق انزلاقي سلس.
+     تعمل بطريقتين:
+       1) (الأسرع) تُضمَّن دائماً في الصفحة بدون @if، ويفتحها الزر بالحدث: @click="$dispatch('open-my-coupons')"
+       2) تُضمَّن داخل @if ($isMyCouponsModalOpen) كما في السابق، فتفتح تلقائياً عند الإنشاء.
+     الإغلاق: Alpine يشغّل حركة الخروج أولاً ثم يُبلغ الخادم. من PHP استخدم:
+       $this->dispatch('close-my-coupons');
+--}}
+<div x-data="{
+        visible: false,
+        show: false,
+        open() {
+            if (this.visible) return;
+            this.visible = true;
+            this.$nextTick(() => this.show = true);
+            if (!$wire.isMyCouponsModalOpen) $wire.openMyCoupons();
+        },
+        close() {
+            if (!this.show) return;
+            this.show = false;
+            setTimeout(() => {
+                this.visible = false;
+                $wire.closeMyCoupons();
+            }, 300);
+        },
+    }"
+    x-init="if ($wire.isMyCouponsModalOpen) { visible = true; $nextTick(() => show = true); }"
+    @open-my-coupons.window="open()"
+    @close-my-coupons.window="close()"
+    @keydown.escape.window="visible && close()"
+    x-show="visible" x-cloak
+    data-my-coupons
+    :data-open="visible"
     class="fixed inset-0 z-[60] overflow-hidden" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}"
-    role="dialog" aria-modal="true" aria-labelledby="my-coupons-title"
-    @keydown.escape.window="$wire.closeMyCoupons()">
+    role="dialog" aria-modal="true" aria-labelledby="my-coupons-title">
 
-    <div x-show="show" x-transition.opacity class="absolute inset-0 bg-stone-900/70 backdrop-blur-sm"
-        wire:click="closeMyCoupons" aria-hidden="true"></div>
+    {{-- الخلفية --}}
+    <div x-show="show"
+        x-transition:enter="transition-opacity ease-out duration-300"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition-opacity ease-in duration-300"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+        class="absolute inset-0 bg-stone-900/70"
+        @click="close()" aria-hidden="true"></div>
 
     <div class="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
-        <div x-show="show" x-transition:enter="transform transition ease-out duration-300"
+        {{-- اللوحة --}}
+        <div x-show="show"
+            x-transition:enter="transform transition ease-out duration-300"
             x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
-            class="w-screen max-w-md md:max-w-lg bg-[#FAF6F0] text-[#2C1810] shadow-2xl flex flex-col justify-between border-l border-[#E8DFD3]">
+            x-transition:leave="transform transition ease-in duration-300"
+            x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
+            class="transform-gpu will-change-transform w-screen max-w-md md:max-w-lg bg-[#FAF6F0] text-[#2C1810] shadow-2xl flex flex-col justify-between border-l border-[#E8DFD3]">
 
             <div
                 class="p-5 bg-gradient-to-r from-[#2A0D0A] to-[#1A0604] text-white flex items-center justify-between border-b border-[#E07513]/30 shrink-0">
@@ -25,14 +62,14 @@
                         <p class="text-xs text-amber-200">{{ __('my-coupons.subtitle') }}</p>
                     </div>
                 </div>
-                <button type="button" wire:click="closeMyCoupons"
+                <button type="button" @click="close()"
                     class="text-stone-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10">
                     <x-lucide-x class="w-5 h-5" aria-hidden="true" />
                 </button>
             </div>
 
             <div class="flex-1 overflow-y-auto p-5">
-                @if ($this->hasMyCoupons)
+                @if ($isMyCouponsModalOpen && $this->hasMyCoupons)
                     <div class="mb-4 p-3 rounded-xl border border-amber-200 bg-amber-50/60 flex items-start gap-2">
                         <x-lucide-info class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
                         <p class="text-xs text-amber-800 leading-relaxed">{{ __('my-coupons.hint') }}</p>
@@ -138,7 +175,7 @@
                             </div>
                         @endforeach
                     </div>
-                @else
+                @elseif ($isMyCouponsModalOpen)
                     <div class="flex flex-col items-center justify-center py-12 text-center">
                         <div
                             class="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mb-4 border-2 border-stone-200">
@@ -146,6 +183,13 @@
                         </div>
                         <h3 class="text-base font-black text-stone-700 mb-2">{{ __('my-coupons.empty') }}</h3>
                         <p class="text-xs text-stone-500 max-w-[260px] leading-relaxed">{{ __('my-coupons.empty_hint') }}</p>
+                    </div>
+                @else
+                    {{-- هيكل تحميل يظهر لحظة الفتح حتى تصل البيانات من الخادم --}}
+                    <div class="space-y-3 animate-pulse" aria-hidden="true">
+                        @for ($i = 0; $i < 3; $i++)
+                            <div class="h-40 rounded-2xl bg-stone-200/70"></div>
+                        @endfor
                     </div>
                 @endif
             </div>

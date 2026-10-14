@@ -4,7 +4,7 @@
     class="fixed inset-0 z-50 overflow-hidden"
     dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}"
     role="dialog" aria-modal="true" aria-labelledby="cart-modal-title"
-    @keydown.escape.window="if (!$wire.isMyCouponsModalOpen) isCartOpen = false">
+    @keydown.escape.window="if (!document.querySelector('[data-my-coupons][data-open=true]')) isCartOpen = false">
 
     {{-- الخلفية --}}
     <div x-show="isCartOpen"
@@ -39,7 +39,7 @@
 
                 <div class="flex items-center gap-1">
                     {{-- كوبوناتي: يجلب بيانات من الخادم --}}
-                    <button type="button" wire:click="openMyCoupons"
+                    <button type="button" @click="$dispatch('open-my-coupons')"
                         class="text-amber-200 hover:text-white hover:bg-white/10 rounded-full p-2 transition-colors"
                         title="{{ __('my-coupons.title') }}" aria-label="{{ __('my-coupons.title') }}">
                         <x-lucide-ticket-percent class="w-5 h-5" aria-hidden="true" />

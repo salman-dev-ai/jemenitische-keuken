@@ -32,7 +32,7 @@
     @include('livewire.menu.cart.modal')
 
     {{-- نافذة كوبوناتي: تبقى مربوطة بالخادم لأنها تجلب بيانات (انظر الملاحظات) --}}
-    @if ($isMyCouponsModalOpen)
+    {{-- @if ($isMyCouponsModalOpen) --}}
         @include('livewire.menu.cart.my-coupons-modal')
-    @endif
+    {{-- @endif --}}
 </section>
