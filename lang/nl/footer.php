@@ -50,4 +50,10 @@ return [
         'saturday' => 'Zaterdag',
         'sunday' => 'Zondag',
     ],
+
+    'hours_title'  => 'Openingstijden',
+'hours_note'   => 'De openingstijden kunnen afwijken op feestdagen en speciale gelegenheden.',
+'open_now'     => 'Nu open',
+'closed_now'   => 'Nu gesloten',
+ 
 ];

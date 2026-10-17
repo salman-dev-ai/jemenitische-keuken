@@ -20,7 +20,7 @@
 
         {{-- شبكة البطاقات الأربع المتجاوبة --}}
         <div class="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            @include('livewire.footer.footer-hours')
+            {{-- @include('livewire.footer.footer-hours') --}}
             @include('livewire.footer.footer-contact')
         </div>
 

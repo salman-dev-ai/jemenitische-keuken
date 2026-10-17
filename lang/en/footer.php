@@ -50,4 +50,10 @@ return [
         'saturday' => 'Saturday',
         'sunday' => 'Sunday',
     ],
+
+    'hours_title'  => 'Opening hours',
+'hours_note'   => 'Hours may vary on holidays and special occasions.',
+'open_now'     => 'Open now',
+'closed_now'   => 'Closed right now',
+ 
 ];

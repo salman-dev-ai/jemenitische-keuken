@@ -13,11 +13,9 @@ use App\Models\RestaurantSetting;
 use App\Support\OpeningHoursPresenter;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
-use Livewire\Attributes\Lazy;
-use Livewire\Component;
+ use Livewire\Component;
 
-// #[Lazy]
-final class Footer extends Component
+ final class Footer extends Component
 {
     private const RTL_LOCALES = ['ar', 'he', 'fa', 'ur'];
 

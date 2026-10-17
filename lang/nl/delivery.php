@@ -19,4 +19,8 @@ return [
     'order_now' => 'Bestel nu',
     'order_arrow' => '→',
     'loading' => 'Bezorggebieden worden bijgewerkt...',
-];
+
+'zones_title'  => 'Bezorgzones',
+'zones_count'  => ':count zones beschikbaar',
+
+    ];

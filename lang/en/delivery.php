@@ -19,4 +19,8 @@ return [
     'order_now' => 'Order now',
     'order_arrow' => '→',
     'loading' => 'Updating delivery areas...',
-];
+'zones_title'  => 'Delivery zones',
+'zones_count'  => ':count zones available',
+
+
+    ];

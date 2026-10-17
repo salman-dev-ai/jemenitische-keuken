@@ -19,4 +19,8 @@ return [
     'order_now' => 'اطلب الآن',
     'order_arrow' => '←',
     'loading' => 'جارٍ تحديث مناطق التوصيل...',
-];
+
+'zones_title'  => 'مناطق التوصيل',
+'zones_count'  => ':count منطقة متاحة',
+
+    ];

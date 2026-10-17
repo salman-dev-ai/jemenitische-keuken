@@ -46,4 +46,6 @@ return [
     'cancel'             => 'Annuleren',
     'submit'             => 'Registreren & korting ontvangen',
 ],
+
+
 ];
