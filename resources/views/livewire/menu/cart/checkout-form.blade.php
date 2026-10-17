@@ -120,7 +120,7 @@
     <div x-show="$wire.order_type === 'delivery'" x-cloak x-transition
         class="space-y-3 p-3 rounded-2xl border border-amber-200 bg-amber-50/50">
         <h5 class="font-bold text-xs text-amber-800 uppercase tracking-wider flex items-center gap-2">
-            <x-lucide-truck class="w-4 h-4" aria-hidden="true" />
+            <x-lucide-truck-electric class="w-4 h-4" aria-hidden="true" />
             {{ __('messages.remember.delivery_details') }}
         </h5>
 
@@ -198,7 +198,10 @@
             class="flex cursor-pointer items-center gap-3 rounded-xl p-2 transition hover:bg-stone-50">
             <input id="remember_me" type="checkbox" wire:model="remember_me"
                 class="h-5 w-5 rounded-md border-stone-300 text-[#E07513] focus:ring-2 focus:ring-[#E07513]/30">
-            <span class="flex-1 text-sm font-semibold text-stone-700">{{ __('messages.remember.checkbox') }}</span>
+            <span class="flex-1 text-sm font-semibold text-stone-700">{{ __('messages.remember.checkbox') }}
+                                <x-lucide-save-check class="ml-1 inline  font-semibold h-5 w-5 text-[#6B1F2B]" aria-hidden="true" />
+
+            </span>
         </label>
     </div>
 

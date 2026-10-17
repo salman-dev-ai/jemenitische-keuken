@@ -194,13 +194,13 @@ return [
     ],
 
     // ═══════════════════════════════════════════
-    // 💾 Remember Me + Address Fields
+    //   Remember Me + Address Fields
     // ═══════════════════════════════════════════
     'remember' => [
         'welcome_back' => 'Welcome back! 👋',
         'filled_automatically' => 'Your details have been filled automatically.',
         'not_you' => 'Not you?',
-        'checkbox' => 'Remember me next time 💾',
+        'checkbox' => 'Remember me next time  ',
         'confirm_forget' => 'Are you sure? Your saved details will be cleared.',
         'confirm_title' => 'Confirm clearing details',
         'confirm_yes' => 'Yes, clear my details',
@@ -208,7 +208,7 @@ return [
         'forgotten_title' => 'Your details have been cleared',
         'forgotten_message' => 'You can start fresh.',
 
-        'delivery_details' => 'Delivery Address Details 📍',
+        'delivery_details' => 'Delivery Address Details  ',
         'address' => 'Full Address',
         'address_placeholder' => 'e.g. Kerkstraat 123, II',
         'city' => 'City',

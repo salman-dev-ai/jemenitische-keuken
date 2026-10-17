@@ -3,9 +3,12 @@
 namespace App\Filament\Resources\Customers\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
@@ -86,8 +89,11 @@ class CustomersTable
                     ->label('العملاء المحذوفين'),
             ])
             ->recordActions([
-                EditAction::make()
-                    ->label('تعديل'),
+
+                EditAction::make()->label('تعديل'),
+                DeleteAction::make()->label('حذف'),
+                RestoreAction::make()->label('استعادة'),
+                ForceDeleteAction::make()->label('حذف نهائي'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

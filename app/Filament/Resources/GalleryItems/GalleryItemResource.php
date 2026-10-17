@@ -15,6 +15,9 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+
+
 use UnitEnum;
 
 class GalleryItemResource extends Resource
@@ -58,6 +61,8 @@ class GalleryItemResource extends Resource
         return GalleryItemsTable::configure($table);
     }
 
+
+
     public static function getRelations(): array
     {
         return [
@@ -71,6 +76,7 @@ class GalleryItemResource extends Resource
             'index' => ListGalleryItems::route('/'),
             'create' => CreateGalleryItem::route('/create'),
             'edit' => EditGalleryItem::route('/{record}/edit'),
+
         ];
     }
 
@@ -79,6 +85,7 @@ class GalleryItemResource extends Resource
         return parent::getRecordRouteBindingEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ])
+            ;
     }
 }

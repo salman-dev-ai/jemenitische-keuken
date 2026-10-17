@@ -51,7 +51,7 @@ class CustomerForm
 
                         ])->columnSpan(['default' => 1, 'lg' => 1]),
 
-                    // 📍 القسم الثاني: بيانات العنوان
+                    //   القسم الثاني: بيانات العنوان
                     Section::make('بيانات العنوان')
                         ->description('عنوان التوصيل الافتراضي للعميل')
                         ->icon('heroicon-o-map-pin')

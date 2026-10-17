@@ -194,13 +194,13 @@ return [
     ],
 
     // ═══════════════════════════════════════════
-    // 💾 Onthoud mij + Adresvelden
+    //   Onthoud mij + Adresvelden
     // ═══════════════════════════════════════════
     'remember' => [
         'welcome_back' => 'Welkom terug! 👋',
         'filled_automatically' => 'Uw gegevens zijn automatisch ingevuld.',
         'not_you' => 'Niet jou?',
-        'checkbox' => 'Onthoud mij de volgende keer 💾',
+        'checkbox' => 'Onthoud mij de volgende keer  ',
         'confirm_forget' => 'Weet je het zeker? Je opgeslagen gegevens worden gewist.',
         'confirm_title' => 'Gegevens wissen bevestigen',
         'confirm_yes' => 'Ja, wis mijn gegevens',
@@ -208,7 +208,7 @@ return [
         'forgotten_title' => 'Je gegevens zijn gewist',
         'forgotten_message' => 'Je kunt opnieuw beginnen.',
 
-        'delivery_details' => 'Bezorgadres Gegevens 📍',
+        'delivery_details' => 'Bezorgadres Gegevens  ',
         'address' => 'Volledig Adres',
         'address_placeholder' => 'bijv. Kerkstraat 123, II',
         'city' => 'Stad',

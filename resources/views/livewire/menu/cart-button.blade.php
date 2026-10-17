@@ -8,7 +8,7 @@
                 <div class="relative">
                     <div
                         class="w-11 h-11 rounded-2xl bg-[#E07513] text-white flex items-center justify-center shadow-md">
-                        <x-lucide-shopping-bag class="w-6 h-6" aria-hidden="true" />
+                        <x-icon-shopping-cart-plus class="w-6 h-6" aria-hidden="true" />
                     </div>
                     <span
                         class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber-400 text-stone-950 text-[11px] font-black flex items-center justify-center">

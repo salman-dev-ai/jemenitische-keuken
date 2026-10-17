@@ -94,7 +94,7 @@ class OrderOptionForm
                                 'shopping-bag'  => '🛍️ كيس تسوق',
                                 'utensils'      => '🍽️ أدوات طعام',
                                 'clock'         => '⏰ ساعة',
-                                'map-pin'       => '📍 موقع',
+                                'map-pin'       => '  موقع',
                                 'credit-card'   => '💳 بطاقة دفع',
                                 'package'       => '📦 طرد',
                                 'store'         => '🏪 متجر',

@@ -118,7 +118,7 @@ class GalleryItemForm
                             ->imageEditor()
                             ->required()
                             ->helperText('يفضل استخدام صور أفقية بدقة لا تقل عن 1200x800 بكسل.'),
-                       
+
                         TextInput::make('thumbnail_path')
                             ->label('مسار الصورة المصغرة (اختياري)')
                             ->placeholder('يتم إنشاؤه تلقائياً في حال تركه فارغاً')
@@ -151,14 +151,7 @@ class GalleryItemForm
                             ->default(0)
                             ->helperText('الأرقام الأصغر تظهر أولاً (مثال: 1 يظهر قبل 2).'),
 
-                        TextInput::make('views_count')
-                            ->label('عدد المشاهدات التراكمي')
-                            ->numeric()
-                            ->default(0)
-                            ->disabled()
-                            ->dehydrated(false)
-                            ->helperText('يتم احتسابه تلقائياً عند فتح الزوار للصورة في الموقع.'),
-
+                   
                         Toggle::make('is_available')
                             ->label('تفعيل الصورة (تظهر في الموقع مباشرة)')
                             ->default(true)

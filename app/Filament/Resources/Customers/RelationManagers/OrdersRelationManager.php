@@ -66,7 +66,7 @@ class OrdersRelationManager extends RelationManager
                         ->default(OrderStatus::PENDING),
                 ]),
 
-                // 📍 حقول عنوان التوصيل مع شرط الإلزام حسب نوع الطلب
+                //   حقول عنوان التوصيل مع شرط الإلزام حسب نوع الطلب
                 TextInput::make('delivery_address')
                     ->label('عنوان التوصيل')
                     ->maxLength(255)
