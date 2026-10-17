@@ -7,7 +7,6 @@ namespace App\Filament\Resources\Coupons;
 use App\Filament\Resources\Coupons\Pages\CreateCoupon;
 use App\Filament\Resources\Coupons\Pages\EditCoupon;
 use App\Filament\Resources\Coupons\Pages\ListCoupons;
-use App\Filament\Resources\Coupons\UsagesRelationManager;
 use App\Filament\Resources\Coupons\Schemas\CouponForm;
 use App\Filament\Resources\Coupons\Tables\CouponsTable;
 use App\Models\Coupon;
@@ -25,9 +24,9 @@ class CouponResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'التخفيضات';
 
-    protected static ?int $navigationSort = 1;
-
     protected static ?string $recordTitleAttribute = 'code';
+
+    protected static ?int $navigationSort = 5;
 
     public static function getNavigationLabel(): string
     {
@@ -59,6 +58,16 @@ class CouponResource extends Resource
         return [
             UsagesRelationManager::class,
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::where('is_active', true)->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success';
     }
 
     public static function getPages(): array

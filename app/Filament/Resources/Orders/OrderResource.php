@@ -38,7 +38,18 @@ class OrderResource extends Resource
 
     public static function table(Table $table): Table
     {
+
         return OrdersTable::configure($table);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
     }
 
     public static function getRelations(): array

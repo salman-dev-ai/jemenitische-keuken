@@ -69,8 +69,15 @@
                         {{ __('messages.remember.filled_automatically') }}
                     </span>
                 </div>
-                <button type="button" wire:click="forgetCustomer"
-                    wire:confirm="{{ __('messages.remember.confirm_forget') }}" wire:loading.attr="disabled"
+                <button type="button"
+                    @click="window.dispatchEvent(new CustomEvent('confirm-action', { detail: {
+                        title: @js(__('messages.remember.confirm_title')),
+                        message: @js(__('messages.remember.confirm_forget')),
+                        confirmLabel: @js(__('messages.remember.confirm_yes')),
+                        cancelLabel: @js(__('messages.confirm.cancel')),
+                        onConfirm: () => $wire.forgetCustomer(),
+                    } }))"
+                    wire:loading.attr="disabled"
                     wire:target="forgetCustomer"
                     class="shrink-0 rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-bold text-amber-700 transition hover:border-amber-400 hover:text-amber-900 disabled:cursor-wait disabled:opacity-50">
                     <span wire:loading.remove wire:target="forgetCustomer">

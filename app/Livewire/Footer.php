@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use App\Models\RestaurantSetting;
+use App\Support\OpeningHoursPresenter;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Lazy;
@@ -18,15 +19,6 @@ use Livewire\Component;
 // #[Lazy]
 final class Footer extends Component
 {
-    /** ترتيب أيام الأسبوع المعتمد في التجميع. */
-    private const DAY_ORDER = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-
-    /** مطابقة اليوم مع ترقيم جافاسكربت لتمييز اليوم الحالي. */
-    private const JS_DAY = [
-        'sunday' => 0, 'monday' => 1, 'tuesday' => 2, 'wednesday' => 3,
-        'thursday' => 4, 'friday' => 5, 'saturday' => 6,
-    ];
-
     private const RTL_LOCALES = ['ar', 'he', 'fa', 'ur'];
 
     /** هيكل بديل يظهر أثناء التحميل الكسول. */
@@ -100,82 +92,9 @@ final class Footer extends Component
             'tiktok' => $tiktok !== '' ? $tiktok : null,
             'whatsapp_href' => $whatsappDigits !== '' ? 'https://wa.me/' . $whatsappDigits : null,
 
-            'hours' => $this->groupHours($s?->getAttribute('opening_hours')),
+            'hours' => OpeningHoursPresenter::rows($s?->getAttribute('opening_hours')),
             'locales' => config('app.supported_locales', ['ar', 'en', 'nl']),
         ];
-    }
-
-    /** دمج الأيام المتتالية ذات الساعات المتطابقة في صف واحد. */
-    private function groupHours(mixed $hours): array
-    {
-        if (! is_array($hours) || $hours === []) {
-            return [];
-        }
-
-        $hours = array_change_key_case($hours, CASE_LOWER);
-        $groups = [];
-
-        foreach (self::DAY_ORDER as $day) {
-            $text = $this->formatSlot($hours[$day] ?? null);
-            $last = array_key_last($groups);
-
-            if ($last !== null && $groups[$last]['hours'] === $text) {
-                $groups[$last]['days'][] = $day;
-            } else {
-                $groups[] = ['days' => [$day], 'hours' => $text];
-            }
-        }
-
-        return array_map(function (array $group): array {
-            $days = $group['days'];
-            $first = __('footer.days.' . $days[0]);
-            $end = __('footer.days.' . $days[array_key_last($days)]);
-
-            return [
-                'label' => count($days) > 1 ? "{$first} – {$end}" : $first,
-                'hours' => $group['hours'],
-                'js' => array_map(static fn (string $d): int => self::JS_DAY[$d], $days),
-            ];
-        }, $groups);
-    }
-
-    /** تحويل صيغ الساعات المختلفة إلى نص واحد أو null عند الإغلاق. */
-    private function formatSlot(mixed $raw): ?string
-    {
-        if ($raw === null || $raw === false || $raw === '') {
-            return null;
-        }
-
-        if (is_string($raw)) {
-            $value = trim($raw);
-
-            return in_array(mb_strtolower($value), ['closed', 'مغلق', '-', 'x'], true) ? null : $value;
-        }
-
-        if (! is_array($raw) || ! empty($raw['closed'])) {
-            return null;
-        }
-
-        if (isset($raw['open'], $raw['close'])) {
-            return $raw['open'] . ' – ' . $raw['close'];
-        }
-
-        if (array_filter($raw, 'is_scalar') === $raw) {
-            return implode(' – ', array_filter(array_map('strval', $raw))) ?: null;
-        }
-
-        $parts = [];
-        foreach ($raw as $slot) {
-            $text = is_array($slot)
-                ? implode(' – ', array_filter(array_map('strval', $slot)))
-                : trim((string) $slot);
-
-            if ($text !== '') {
-                $parts[] = $text;
-            }
-        }
-
-        return $parts ? implode(' / ', $parts) : null;
     }
 
     /** تحويل مسار الملف المخزن إلى رابط، أو استخدام الصورة الاحتياطية. */

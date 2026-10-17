@@ -3,6 +3,7 @@
 namespace App\Livewire\Concerns;
 
 use App\Models\MenuItem;
+use App\Models\RestaurantSetting;
 use Livewire\Attributes\Computed;
 
 /**
@@ -16,8 +17,17 @@ trait ManagesCart
     /** 🗝️ مفتاح الجلسة لحفظ السلة */
     protected const CART_SESSION_KEY = 'yemeni_cart';
 
-    /** 📈 الحد الأقصى لكمية الطبق الواحد */
-    protected const CART_MAX_QUANTITY = 50;
+    /**
+     * 📈 الحد الأقصى لكمية الطبق الواحد.
+     *
+     * يُقرأ من إعدادات المطعم (الأدمن: الحد الأقصى للكمية لكل طبق)
+     * وليس رقماً ثابتاً — فأي تغيير في الأدمن يُطبَّق فوراً على صفحة المستخدم.
+     */
+    #[Computed]
+    public function maxQuantityPerItem(): int
+    {
+        return max(1, RestaurantSetting::maxQuantityPerItem());
+    }
 
     protected function cartSessionKey(): string
     {
@@ -42,11 +52,21 @@ trait ManagesCart
             return;
         }
 
-        if (isset($this->cart[$itemId])) {
-            $this->cart[$itemId]['quantity'] = min(
-                $this->cart[$itemId]['quantity'] + 1,
-                self::CART_MAX_QUANTITY
-            );
+        $max = $this->maxQuantityPerItem();
+        $current = $this->cart[$itemId]['quantity'] ?? 0;
+
+        // 🚫 وصل العميل للحد الأقصى → نُخبره بدل التجاهل الصامت
+        if ($current >= $max) {
+            $this->notifyMaxQuantityReached($item->localized_name, $max);
+
+            return;
+        }
+
+        // 🎈 هل هذه أول إضافة للسلة؟ (نُظهر ترحيباً تفاعلياً للعميل في أول طبق فقط)
+        $isFirstItem = empty($this->cart);
+
+        if ($current > 0) {
+            $this->cart[$itemId]['quantity'] = $current + 1;
         } else {
             $this->cart[$itemId] = [
                 'id'       => $item->id,
@@ -58,6 +78,14 @@ trait ManagesCart
 
         $this->persistCart();
         $this->dispatch('cart-updated');
+
+        if ($isFirstItem) {
+            $this->dispatch(
+                'notify',
+                title: __('cart.first_add.title'),
+                message: __('cart.first_add.message', ['name' => $item->localized_name]),
+            );
+        }
     }
 
     /**
@@ -69,11 +97,16 @@ trait ManagesCart
             return;
         }
 
+        $max = $this->maxQuantityPerItem();
         $newQty = $this->cart[$itemId]['quantity'] + $delta;
 
         if ($newQty <= 0) {
             unset($this->cart[$itemId]);
-        } elseif ($newQty <= self::CART_MAX_QUANTITY) {
+        } elseif ($newQty > $max) {
+            $this->notifyMaxQuantityReached($this->cart[$itemId]['name'], $max);
+
+            return;
+        } else {
             $this->cart[$itemId]['quantity'] = $newQty;
         }
 
@@ -112,6 +145,18 @@ trait ManagesCart
     protected function persistCart(): void
     {
         session()->put($this->cartSessionKey(), $this->cart);
+    }
+
+    /**
+     * 🔔 إخبار العميل بأنه وصل للحد الأقصى لكمية الطبق.
+     */
+    protected function notifyMaxQuantityReached(string $itemName, int $max): void
+    {
+        $this->dispatch(
+            'notify',
+            title: __('cart.max_quantity.title'),
+            message: __('cart.max_quantity.message', ['name' => $itemName, 'max' => $max]),
+        );
     }
 
     #[Computed]

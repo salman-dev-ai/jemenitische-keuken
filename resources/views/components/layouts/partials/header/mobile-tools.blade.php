@@ -5,13 +5,16 @@
 --}}
 
 @php
-    extract($footerLayout ?? [], EXTR_SKIP);
+    $f = $footerLayout ?? [];
+    extract($f, EXTR_SKIP);
+    $whatsapp = (string) ($whatsapp ?? ($f['whatsapp'] ?? ''));
+    $whatsappHref = (string) ($whatsappHref ?? ($f['whatsapp_href'] ?? ''));
 @endphp
 
 <div class="flex items-center gap-1.5 sm:gap-2 lg:hidden">
 
 
-       @if ($whatsapp && $whatsappHref !== 'https://wa.me/')
+       @if ($whatsapp !== '' && $whatsappHref !== '' && $whatsappHref !== 'https://wa.me/')
             <a href="{{ $whatsappHref }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
         class="hidden h-9 w-9 shrink-0 animate-pulse items-center justify-center rounded-full bg-[#25D366] text-white shadow-md shadow-[#25D366]/40 transition-all hover:scale-110 sm:flex">
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">

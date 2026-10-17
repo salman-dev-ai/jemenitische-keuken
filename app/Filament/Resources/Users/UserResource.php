@@ -30,6 +30,8 @@ class UserResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'إدارة النظام';
 
+    protected static ?int $navigationSort = 6;
+
     /**
      * المستخدمون لا يمكنهم الوصول إلى هذه الصفحة
      * إلا إذا كانوا Super Admin.
@@ -47,6 +49,16 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return UsersTable::configure($table);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'info';
     }
 
     public static function getRelations(): array

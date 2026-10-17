@@ -7,7 +7,6 @@ use App\Filament\Resources\Sliders\Pages\CreateSlider;
 use App\Filament\Resources\Sliders\Pages\EditSlider;
 use App\Filament\Resources\Sliders\Pages\ListSliders;
 use App\Filament\Resources\Sliders\Schemas\SliderForm;
-use App\Filament\Resources\Sliders\Tables\SlidersTable;
 use App\Models\Slider;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -15,23 +14,24 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use UnitEnum;
 
-
 class SliderResource extends Resource
 {
-     protected static ?string $model = Slider::class;
+    protected static ?string $model = Slider::class;
 
-      // استخدام Lucide enum بدلاً من Heroicons
-    protected static string|BackedEnum|null $navigationIcon = "lucide-megaphone";
+    // استخدام Lucide enum بدلاً من Heroicons
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-megaphone';
 
-    protected static ?string $navigationLabel =  'الشرائح الإعلانية';
+    protected static ?string $navigationLabel = 'الشرائح الإعلانية';
 
     protected static ?string $modelLabel = 'شريحة إعلانية';
+
     // أضف هذا السطر لتحديد صيغة الجمع باللغة العربية
-protected static ?string $pluralModelLabel = 'الشرائح الإعلانية';
+    protected static ?string $pluralModelLabel = 'الشرائح الإعلانية';
 
     // تفعيل التجميع في القائمة الجانبية
     protected static string|UnitEnum|null $navigationGroup = 'إدارة المحتوى والوسائط';
 
+    protected static ?int $navigationSort = 4;
 
     /**
      * شارة ذكية تعرض عدد الصور النشطة حالياً في القائمة الجانبية
@@ -41,6 +41,10 @@ protected static ?string $pluralModelLabel = 'الشرائح الإعلانية'
         return (string) static::getModel()::where('is_active', true)->count();
     }
 
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
+    }
 
     public static function form(Schema $schema): Schema
     {

@@ -10,7 +10,7 @@ use App\Filament\Resources\Customers\RelationManagers\ReservationsRelationManage
 use App\Filament\Resources\Customers\Schemas\CustomerForm;
 use App\Filament\Resources\Customers\Tables\CustomersTable;
 use App\Models\Customer;
-
+use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +18,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use UnitEnum;
-use BackedEnum;
+
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
@@ -34,7 +34,7 @@ class CustomerResource extends Resource
     // 📂 تجميع المورد تحت تصنيف إدارة العملاء
     protected static string|UnitEnum|null $navigationGroup = 'إدارة العملاء';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 3;
 
     /**
      * التحقق من صلاحية الوصول للمورد.
@@ -66,6 +66,16 @@ class CustomerResource extends Resource
             ReservationsRelationManager::class,
             OrdersRelationManager::class,
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success';
     }
 
     public static function getPages(): array

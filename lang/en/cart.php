@@ -27,4 +27,15 @@ return [
         'vat'            => 'VAT',
         'total'          => 'Total',
     ],
+
+    'max_quantity' => [
+        'title'   => 'Maximum reached',
+        'message' => 'You cannot order more than :max of ":name".',
+        'hint'    => 'Max :max',
+    ],
+
+    'first_add' => [
+        'title'   => '🛒 Added to your cart!',
+        'message' => '":name" has been added to your cart — enjoy shopping.',
+    ],
 ];

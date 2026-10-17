@@ -16,7 +16,10 @@ class RestaurantSalesChart extends ChartWidget
     use HasFiltersSchema;
 
     protected ?string $heading = 'المبيعات';
+
     protected static ?int $sort = 2;
+
+    protected ?string $maxHeight = '360px';
 
     protected int|string|array $columnSpan = [
         'default' => 1,

@@ -3,22 +3,40 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Order;
+use Filament\Support\RawJs;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\DB;
 
 class OrderStatusChart extends ChartWidget
 {
     protected ?string $heading = 'حالة الطلبات';
+
     protected static ?int $sort = 3;
+
+    protected ?string $maxHeight = '320px';
+
+    protected ?string $pollingInterval = null;
 
     protected int|string|array $columnSpan = [
         'default' => 1,
         'lg' => 2,
     ];
 
+    /**
+     * إجمالي الطلبات يظهر تحت العنوان.
+     */
+    public function getDescription(): ?string
+    {
+        $total = Order::query()
+            ->whereIn('status', ['pending', 'processing', 'completed', 'cancelled'])
+            ->count();
+
+        return 'إجمالي الطلبات: '.number_format($total);
+    }
+
     protected function getData(): array
     {
-        // 1. تحسين الأداء: استخدام استعلام واحد لتجميع البيانات بدلاً من 4 استعلامات منفصلة
+        // استعلام واحد لتجميع كل الحالات
         $statusCounts = Order::query()
             ->select('status', DB::raw('count(*) as total'))
             ->whereIn('status', ['pending', 'processing', 'completed', 'cancelled'])
@@ -30,29 +48,34 @@ class OrderStatusChart extends ChartWidget
                 [
                     'label' => 'عدد الطلبات',
                     'data' => [
-                        $statusCounts->get('pending', 0),
-                        $statusCounts->get('processing', 0),
-                        $statusCounts->get('completed', 0),
-                        $statusCounts->get('cancelled', 0),
+                        (int) $statusCounts->get('pending', 0),
+                        (int) $statusCounts->get('processing', 0),
+                        (int) $statusCounts->get('completed', 0),
+                        (int) $statusCounts->get('cancelled', 0),
                     ],
-                    // 2. استخدام ألوان دلالية (Semantic Colors) لكل حالة لتبدو احترافية
+
+                    // ألوان متناسقة مع هوية المطبخ اليمني
                     'backgroundColor' => [
-                        '#f59e0b', // برتقالي: قيد الانتظار
-                        '#3b82f6', // أزرق: قيد التجهيز
-                        '#10b981', // أخضر: مكتملة
-                        '#ef4444', // أحمر: ملغاة
+                        '#E8B04B', // ذهبي رملي — قيد الانتظار
+                        '#C8650A', // برتقالي محروق — قيد التجهيز
+                        '#4F8A5B', // أخضر هادئ — مكتملة
+                        '#7A1E1E', // عنابي — ملغاة
                     ],
-                    'borderColor' => [
-                        '#d97706', // حواف داكنة قليلاً لبروز العمود
-                        '#2563eb',
-                        '#059669',
-                        '#dc2626',
+                    'hoverBackgroundColor' => [
+                        '#F2C269',
+                        '#E07A12',
+                        '#5FA06D',
+                        '#942626',
                     ],
-                    'borderWidth' => 1,
-                    'borderRadius' => 4, // جعل زوايا الأعمدة العلوية دائرية قليلاً لمظهر عصري
+
+                    // بدون حدود بيضاء
+                    'borderWidth' => 0,
+                    'borderColor' => 'transparent',
+                    'borderRadius' => 14,
+                    'spacing' => 4,
+                    'hoverOffset' => 12,
                 ],
             ],
-
             'labels' => [
                 'قيد الانتظار',
                 'قيد التجهيز',
@@ -64,6 +87,69 @@ class OrderStatusChart extends ChartWidget
 
     protected function getType(): string
     {
-        return 'bar';
+        return 'doughnut';
+    }
+
+    protected function getOptions(): array|RawJs
+    {
+        return RawJs::make(<<<'JS'
+        {
+            cutout: '74%',
+            rotation: -90,
+            responsive: true,
+            maintainAspectRatio: true,
+            animation: {
+                animateRotate: true,
+                animateScale: true,
+                duration: 1200,
+                easing: 'easeOutQuart',
+            },
+            layout: { padding: 8 },
+            scales: {
+                x: { display: false },
+                y: { display: false },
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    rtl: true,
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        boxWidth: 10,
+                        boxHeight: 10,
+                        padding: 18,
+                        font: {
+                            family: 'Tajawal, Cairo, sans-serif',
+                            size: 13,
+                            weight: '600',
+                        },
+                    },
+                },
+                tooltip: {
+                    rtl: true,
+                    backgroundColor: '#3A0A0A',
+                    titleColor: '#E8B04B',
+                    bodyColor: '#FFF8EE',
+                    borderColor: '#C8650A',
+                    borderWidth: 1,
+                    padding: 12,
+                    cornerRadius: 10,
+                    displayColors: true,
+                    boxPadding: 6,
+                    titleFont: { family: 'Tajawal, Cairo, sans-serif', size: 13, weight: '700' },
+                    bodyFont: { family: 'Tajawal, Cairo, sans-serif', size: 13 },
+                    callbacks: {
+                        label: (ctx) => {
+                            const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                            const pct = total ? Math.round((ctx.parsed / total) * 100) : 0;
+                            return ` ${ctx.parsed} طلب (${pct}%)`;
+                        },
+                    },
+                },
+            },
+        }
+        JS);
     }
 }

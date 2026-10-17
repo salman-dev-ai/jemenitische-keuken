@@ -128,6 +128,12 @@ public string $reservation_time = '';
 
         $this->isReturningCustomer = false;
         $this->remember_me         = true;
+
+        $this->dispatch(
+            'notify',
+            title:   __('messages.remember.forgotten_title'),
+            message: __('messages.remember.forgotten_message'),
+        );
     }
 
     /**

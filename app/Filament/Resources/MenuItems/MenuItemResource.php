@@ -11,7 +11,6 @@ use App\Models\MenuItem;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -24,7 +23,7 @@ class MenuItemResource extends Resource
 
     protected static ?string $model = MenuItem::class;
 
-     protected static string|BackedEnum|null $navigationIcon = 'lucide-utensils-crossed';
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-utensils-crossed';
 
     protected static ?string $navigationLabel = 'الأطباق';
 
@@ -34,6 +33,8 @@ class MenuItemResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'إدارة المنيو';
 
+    protected static ?int $navigationSort = 1;
+
     public static function form(Schema $schema): Schema
     {
         return MenuItemForm::configure($schema);
@@ -42,6 +43,16 @@ class MenuItemResource extends Resource
     public static function table(Table $table): Table
     {
         return MenuItemsTable::configure($table);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::where('is_available', true)->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success';
     }
 
     public static function getRelations(): array

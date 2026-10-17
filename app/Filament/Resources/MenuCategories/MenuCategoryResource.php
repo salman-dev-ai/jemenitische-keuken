@@ -44,7 +44,15 @@ class MenuCategoryResource extends Resource
         return MenuCategoriesTable::configure($table);
     }
 
-   
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::where('is_available', true)->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
+    }
 
     public static function getPages(): array
     {

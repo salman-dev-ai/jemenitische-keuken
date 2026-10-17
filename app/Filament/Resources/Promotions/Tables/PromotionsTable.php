@@ -23,13 +23,17 @@ class PromotionsTable
                 ImageColumn::make('image')
                     ->label('الصورة')
                     ->disk('public')
-                    ->height(50)
-                    ->width(80),
 
+                    ->width(80)
+                    ->circular()
+                    ->defaultImageUrl('https://placehold.co/100x100/e2e8f0/64748b?text=no img') // للتجربة والعزل
+                    ->extraImgAttributes([
+                        'class' => 'object-cover',
+                        'loading' => 'lazy',
+                    ]),
                 TextColumn::make('title')
                     ->label('العنوان')
-                    ->getStateUsing(fn ($record): string =>
-                        $record->getTranslation('title', app()->getLocale())
+                    ->getStateUsing(fn ($record): string => $record->getTranslation('title', app()->getLocale())
                         ?? $record->getTranslation('title', 'ar')
                         ?? '—'
                     )
@@ -44,8 +48,7 @@ class PromotionsTable
 
                 TextColumn::make('coupon.discount_value')
                     ->label('الخصم')
-                    ->suffix(fn ($record): string =>
-                        $record->coupon?->discount_type?->isPercentage() ? '%' : ' €'
+                    ->suffix(fn ($record): string => $record->coupon?->discount_type?->isPercentage() ? '%' : ' €'
                     )
                     ->sortable(),
 

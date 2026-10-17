@@ -12,13 +12,21 @@ use Exception;
 class CouponException extends Exception
 {
     public const CODE_NOT_FOUND = 'coupon_not_found';
+
     public const CODE_INACTIVE = 'coupon_inactive';
+
     public const CODE_EXPIRED = 'coupon_expired';
+
     public const CODE_EXHAUSTED = 'coupon_exhausted';
+
     public const CODE_CUSTOMER_LIMIT = 'coupon_customer_limit';
+
     public const CODE_MIN_TOTAL = 'coupon_min_total';
+
     public const CODE_NOT_APPLICABLE = 'coupon_not_applicable';
+
     public const CODE_ALREADY_CLAIMED = 'coupon_already_claimed';
+
     public const CODE_ALREADY_USED = 'coupon_already_used';
 
     public readonly string $errorCode;
@@ -27,7 +35,7 @@ class CouponException extends Exception
     public readonly array $context;
 
     /**
-     * @param array<string, mixed> $context
+     * @param  array<string, mixed>  $context
      */
     public function __construct(
         string $errorCode,
@@ -49,31 +57,31 @@ class CouponException extends Exception
     {
         return new self(
             self::CODE_NOT_FOUND,
-            "Coupon code '{$code}' not found.",
+            __('coupons.errors.not_found', ['code' => $code]),
             ['code' => $code],
         );
     }
 
     public static function inactive(): self
     {
-        return new self(self::CODE_INACTIVE, 'Coupon is inactive.');
+        return new self(self::CODE_INACTIVE, __('coupons.errors.inactive'));
     }
 
     public static function expired(): self
     {
-        return new self(self::CODE_EXPIRED, 'Coupon has expired.');
+        return new self(self::CODE_EXPIRED, __('coupons.errors.expired'));
     }
 
     public static function exhausted(): self
     {
-        return new self(self::CODE_EXHAUSTED, 'Coupon has reached its maximum uses.');
+        return new self(self::CODE_EXHAUSTED, __('coupons.errors.exhausted'));
     }
 
     public static function customerLimit(int $maxPerCustomer): self
     {
         return new self(
             self::CODE_CUSTOMER_LIMIT,
-            "Customer has reached the limit of {$maxPerCustomer} uses.",
+            __('coupons.errors.customer_limit', ['max' => $maxPerCustomer]),
             ['max_uses_per_customer' => $maxPerCustomer],
         );
     }
@@ -82,7 +90,7 @@ class CouponException extends Exception
     {
         return new self(
             self::CODE_MIN_TOTAL,
-            "Order total must be at least {$minTotal}.",
+            __('coupons.errors.min_total', ['min_total' => $minTotal]),
             [
                 'min_order_total' => $minTotal,
                 'current_total' => $currentTotal,
@@ -94,7 +102,7 @@ class CouponException extends Exception
     {
         return new self(
             self::CODE_NOT_APPLICABLE,
-            'Coupon is not applicable to any item in the cart.',
+            __('coupons.errors.not_applicable'),
         );
     }
 
@@ -102,7 +110,7 @@ class CouponException extends Exception
     {
         return new self(
             self::CODE_ALREADY_CLAIMED,
-            'Coupon already claimed by this customer.',
+            __('coupons.errors.already_claimed'),
         );
     }
 
@@ -110,7 +118,7 @@ class CouponException extends Exception
     {
         return new self(
             self::CODE_ALREADY_USED,
-            'Coupon already used.',
+            __('coupons.errors.already_used'),
         );
     }
 }

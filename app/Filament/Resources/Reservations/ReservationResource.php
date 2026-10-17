@@ -30,7 +30,7 @@ class ReservationResource extends Resource
     // 🏆 تجميع المورد تحت تصنيف العمليات اليومية
     protected static string|UnitEnum|null $navigationGroup = 'العمليات اليومية';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {
@@ -40,6 +40,16 @@ class ReservationResource extends Resource
     public static function table(Table $table): Table
     {
         return ReservationsTable::configure($table);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'info';
     }
 
     public static function getRelations(): array

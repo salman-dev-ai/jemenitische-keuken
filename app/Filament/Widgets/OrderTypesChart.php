@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Order;
+use Filament\Support\RawJs;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\DB;
 
@@ -10,72 +11,138 @@ class OrderTypesChart extends ChartWidget
 {
     protected ?string $heading = 'أنواع الطلبات';
 
-        protected static ?int $sort = 2;
+    protected static ?int $sort = 2;
 
+    protected ?string $maxHeight = '360px';
+
+    protected ?string $pollingInterval = null;
 
     protected int|string|array $columnSpan = [
         'default' => 1,
         'lg' => 1,
     ];
 
+    /**
+     * إجمالي الطلبات (غير الملغاة) يظهر تحت العنوان.
+     */
+    public function getDescription(): ?string
+    {
+        $total = Order::query()
+            ->where('status', '!=', 'cancelled')
+            ->whereIn('type', ['pickup', 'dine_in', 'delivery'])
+            ->count();
+
+        return 'إجمالي الطلبات: '.number_format($total);
+    }
+
     protected function getData(): array
     {
-        // 1. تحسين الأداء: استعلام واحد لتجميع البيانات بدلاً من استعلامين منفصلين
         $orderCounts = Order::query()
             ->select('type', DB::raw('count(*) as total'))
             ->where('status', '!=', 'cancelled')
-            ->whereIn('type', ['pickup', 'dine_in'])
+            ->whereIn('type', ['pickup', 'dine_in', 'delivery'])
             ->groupBy('type')
             ->pluck('total', 'type');
-
-        // استخراج القيم مع وضع 0 كقيمة افتراضية في حال عدم وجود طلبات
-        $pickup = $orderCounts->get('pickup', 0);
-        $dineIn = $orderCounts->get('dine_in', 0);
 
         return [
             'datasets' => [
                 [
                     'label' => 'عدد الطلبات',
                     'data' => [
-                        $pickup,
-                        $dineIn,
+                        (int) $orderCounts->get('pickup', 0),
+                        (int) $orderCounts->get('dine_in', 0),
+                        (int) $orderCounts->get('delivery', 0),
                     ],
-                    // 2. تلوين كل جزء من الدائرة بألوان احترافية (Tailwind Colors)
+
+                    // ألوان مستوحاة من شعار المطبخ اليمني
                     'backgroundColor' => [
-                        '#3b82f6', // أزرق (Blue 500) لطلبات الاستلام
-                        '#10b981', // أخضر (Emerald 500) للطلبات داخل المطعم
+                        '#C8650A', // برتقالي محروق — استلام
+                        '#7A1E1E', // عنابي دافئ — داخل المطعم
+                        '#E8B04B', // ذهبي رملي — توصيل
                     ],
-                    'borderColor' => [
-                        '#2563eb', // أزرق داكن للإطار
-                        '#059669', // أخضر داكن للإطار
+                    'hoverBackgroundColor' => [
+                        '#E07A12',
+                        '#942626',
+                        '#F2C269',
                     ],
-                    'borderWidth' => 2,
-                    'hoverOffset' => 4, // بروز الجزء عند تمرير الماوس عليه
+
+                    'borderWidth' => 0,
+                    'borderRadius' => 12,
+                    'borderSkipped' => false,
+                    'maxBarThickness' => 56,
                 ],
             ],
             'labels' => [
                 'استلام',
                 'داخل المطعم',
+                'توصيل إلى المنزل',
             ],
         ];
     }
 
     protected function getType(): string
     {
-        return 'doughnut';
+        return 'bar';
     }
 
-    // 3. تحسين المظهر: التحكم في تصميم الرسم البياني
-    protected function getOptions(): array
+    protected function getOptions(): array|RawJs
     {
-        return [
-            'plugins' => [
-                'legend' => [
-                    'display' => true,
-                    'position' => 'bottom', // نقل مفتاح الألوان للأسفل لتوفير المساحة
-                ],
-            ],
-            'cutout' => '75%', // جعل الدائرة المفرغة أنحف لتبدو عصرية وأنيقة
-        ];
+        return RawJs::make(<<<'JS'
+        {
+            responsive: true,
+            maintainAspectRatio: true,
+            animation: {
+                duration: 1000,
+                easing: 'easeOutQuart',
+            },
+            layout: { padding: 8 },
+            scales: {
+                x: {
+                    reverse: true,
+                    grid: { display: false },
+                    border: { display: false },
+                    ticks: {
+                        font: {
+                            family: 'Tajawal, Cairo, sans-serif',
+                            size: 13,
+                            weight: '600',
+                        },
+                    },
+                },
+                y: {
+                    position: 'right',
+                    beginAtZero: true,
+                    border: { display: false },
+                    grid: {
+                        color: 'rgba(200, 101, 10, 0.12)',
+                        borderDash: [4, 4],
+                    },
+                    ticks: {
+                        precision: 0,
+                        font: { family: 'Tajawal, Cairo, sans-serif', size: 12 },
+                    },
+                },
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    rtl: true,
+                    backgroundColor: '#3A0A0A',
+                    titleColor: '#E8B04B',
+                    bodyColor: '#FFF8EE',
+                    borderColor: '#C8650A',
+                    borderWidth: 1,
+                    padding: 12,
+                    cornerRadius: 10,
+                    displayColors: false,
+                    titleFont: { family: 'Tajawal, Cairo, sans-serif', size: 13, weight: '700' },
+                    bodyFont: { family: 'Tajawal, Cairo, sans-serif', size: 13 },
+                    callbacks: {
+                        label: (ctx) => ` ${ctx.parsed.y} طلب`,
+                    },
+                },
+            },
+        }
+        JS);
     }
 }

@@ -31,9 +31,9 @@ class GalleryItemResource extends Resource
 
     protected static ?string $modelLabel = 'صورة في المعرض';
 
-    protected static ?string $pluralModelLabel = 'معرض الصور الملكي';
+    protected static ?string $pluralModelLabel = 'معرض الصور التراثي';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 4;
 
     /**
      * شارة ذكية تعرض عدد الصور النشطة حالياً في القائمة الجانبية

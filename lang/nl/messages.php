@@ -26,27 +26,27 @@ return [
     // 🧭 Navigatie
     // ═══════════════════════════════════════════
     'nav' => [
-        'home'         => 'Home',
-        'about'        => 'Ons verhaal & erfgoed',
-        'menu'         => 'Menukaart',
-        'gallery'      => 'Galerij',
-        'reservation'  => 'Tafel reserveren',
-        'contact'      => 'Neem contact met ons op',
+        'home' => 'Home',
+        'about' => 'Ons verhaal & erfgoed',
+        'menu' => 'Menukaart',
+        'gallery' => 'Galerij',
+        'reservation' => 'Tafel reserveren',
+        'contact' => 'Neem contact met ons op',
         'bookTableBtn' => 'Reserveer nu uw tafel',
 
-        'primary'      => 'Primaire navigatie',
-        'secondary'    => 'Secundaire navigatie',
-        'mobile'       => 'Mobiel menu',
-        'toggleMenu'   => 'Menu openen of sluiten',
+        'primary' => 'Primaire navigatie',
+        'secondary' => 'Secundaire navigatie',
+        'mobile' => 'Mobiel menu',
+        'toggleMenu' => 'Menu openen of sluiten',
     ],
 
     // ═══════════════════════════════════════════
     // 🏷️ Merk
     // ═══════════════════════════════════════════
     'brand' => [
-        'name'        => 'Jemenitische Keuken',
-        'subName'     => 'JEMENITISCHE KEUKEN',
-        'slogan'      => 'De oorsprong van Mandi | أصل المندي',
+        'name' => 'Jemenitische Keuken',
+        'subName' => 'JEMENITISCHE KEUKEN',
+        'slogan' => 'De oorsprong van Mandi | أصل المندي',
         'description' => 'Wij nemen u mee op een authentieke culinaire reis...',
     ],
 
@@ -54,16 +54,16 @@ return [
     // 🏠 Homepage
     // ═══════════════════════════════════════════
     'home' => [
-        'greetingBadge'   => 'Welkom in het huis van Jemenitische gastvrijheid en authenticiteit',
-        'heroTitle'       => 'De koninklijke smaak van Jemenitische Mandi',
-        'heroSubtitle'    => 'Langzaam bereid boven een vuur van Samr-hout en op smaak gebracht met geheime Jemenitische kruiden...',
-        'ctaReserve'      => 'Reserveer uw tafel',
-        'ctaMenu'         => 'Bekijk onze koninklijke menukaart',
+        'greetingBadge' => 'Welkom in het huis van Jemenitische gastvrijheid en authenticiteit',
+        'heroTitle' => 'De koninklijke smaak van Jemenitische Mandi',
+        'heroSubtitle' => 'Langzaam bereid boven een vuur van Samr-hout en op smaak gebracht met geheime Jemenitische kruiden...',
+        'ctaReserve' => 'Reserveer uw tafel',
+        'ctaMenu' => 'Bekijk onze koninklijke menukaart',
         'hospitalityNote' => 'Gratis gastvrijheid en Adeni-thee voor al onze gasten',
 
         'stats' => [
-            'years'  => ['value' => '+25',  'label' => 'Jaar ervaring met Mandi'],
-            'halal'  => ['value' => '100%', 'label' => 'Dagelijks vers lokaal halal vlees'],
+            'years' => ['value' => '+25',  'label' => 'Jaar ervaring met Mandi'],
+            'halal' => ['value' => '100%', 'label' => 'Dagelijks vers lokaal halal vlees'],
             'spices' => ['value' => '+18',  'label' => 'Zeldzame en authentieke Jemenitische kruiden'],
             'rating' => ['value' => '4.9★', 'label' => 'Tevredenheidsscore van onze gasten'],
         ],
@@ -71,13 +71,13 @@ return [
         'majlis' => [
             'badge' => 'Gastvrijheid & privacy voor gezinnen',
             'title' => 'Een sfeer waarin de Jemenitische Majlis samenkomt met Europese elegantie',
-            'desc'  => 'Kies de zitplaats die het beste bij u past...',
+            'desc' => 'Kies de zitplaats die het beste bij u past...',
             'features' => [
                 'Traditionele privé-Majlis-zitplaatsen voor gezinnen met volledige privacy.',
                 'Ruime koninklijke tafels, perfect voor speciale gelegenheden en stijlvolle bijeenkomsten.',
                 'Gratis Jemenitische wierook en oudh-geur na iedere maaltijd.',
             ],
-            'cta'   => 'Reserveer vooraf uw favoriete zitplaats',
+            'cta' => 'Reserveer vooraf uw favoriete zitplaats',
             'quote' => 'In Jemen draait gastvrijheid niet alleen om eten; het is een traditie van vrijgevigheid en liefde die van generatie op generatie wordt doorgegeven.',
         ],
     ],
@@ -86,27 +86,27 @@ return [
     // 🍽️ Menukaart
     // ═══════════════════════════════════════════
     'menu' => [
-        'badge'          => 'Koninklijke gerechten',
-        'title'          => 'Traditionele Jemenitische gerechten',
-        'subtitle'       => 'Een uitgebreide menukaart, zorgvuldig samengesteld volgens de hoogste normen voor kwaliteit en authentieke Jemenitische smaak',
-        'dishes'         => 'Gerechten',
-        'all'            => 'Alle gerechten',
-        'selected'       => 'Geselecteerd',
-        'browse'         => 'Gerechten bekijken',
-        'orderNow'       => 'Reserveer om dit te proeven',
-        'empty'          => 'Er zijn momenteel geen beschikbare gerechten in deze categorie.',
-        'chefSpecial'    => 'Koninklijke specialiteit van de chef',
-        'addToCart'      => 'In winkelmandje',
-        'cartReady'      => 'Uw koninklijke winkelwagen is klaar',
-        'total'          => 'Totaal',
-        'checkout'       => 'Afrekenen & Nu boeken',
-        'cart'           => 'Uw winkelwagen & Reservering',
-        'items'          => 'geselecteerde items',
-        'emptyText'      => 'U heeft nog geen gerechten aan uw feestmaal toegevoegd.',
-        'browseMenu'     => 'Menu nu bekijken',
+        'badge' => 'Koninklijke gerechten',
+        'title' => 'Traditionele Jemenitische gerechten',
+        'subtitle' => 'Een uitgebreide menukaart, zorgvuldig samengesteld volgens de hoogste normen voor kwaliteit en authentieke Jemenitische smaak',
+        'dishes' => 'Gerechten',
+        'all' => 'Alle gerechten',
+        'selected' => 'Geselecteerd',
+        'browse' => 'Gerechten bekijken',
+        'orderNow' => 'Reserveer om dit te proeven',
+        'empty' => 'Er zijn momenteel geen beschikbare gerechten in deze categorie.',
+        'chefSpecial' => 'Koninklijke specialiteit van de chef',
+        'addToCart' => 'In winkelmandje',
+        'cartReady' => 'Uw koninklijke winkelwagen is klaar',
+        'total' => 'Totaal',
+        'checkout' => 'Afrekenen & Nu boeken',
+        'cart' => 'Uw winkelwagen & Reservering',
+        'items' => 'geselecteerde items',
+        'emptyText' => 'U heeft nog geen gerechten aan uw feestmaal toegevoegd.',
+        'browseMenu' => 'Menu nu bekijken',
         'selectedDishes' => 'Geselecteerde gerechten voor het feestmaal',
-        'featured'       => 'Aanbevolen',
-        'spicy'          => 'Pittig',
+        'featured' => 'Aanbevolen',
+        'spicy' => 'Pittig',
         'removeFromCart' => 'Gerecht uit winkelwagen verwijderen',
     ],
 
@@ -114,61 +114,61 @@ return [
     // 📅 Reservering
     // ═══════════════════════════════════════════
     'reservation' => [
-        'badge'                       => 'Direct online reserveren',
-        'title'                       => 'Reserveer uw tafel',
-        'subtitle'                    => 'Kies het aantal gasten, uw gewenste tijd en de gewenste zitplaats. Wij zorgen vervolgens voor de perfecte tafel.',
-        'tablesAvailable'             => 'Tafel beschikbaar op dit tijdstip',
-        'welcome'                     => 'Welkom, :name. Uw reservering is succesvol bevestigd.',
-        'referenceCode'               => 'Reserveringscode',
-        'date'                        => 'Datum',
-        'time'                        => 'Tijd',
-        'guests'                      => 'Aantal gasten',
-        'guestsCount'                 => ':count gasten',
-        'tableNumber'                 => 'Tafelnummer',
-        'table'                       => 'Tafel',
-        'errorTitle'                  => 'Controleer uw gegevens',
-        'step1'                       => 'Gegevens over gasten & tijd',
-        'partySize'                   => 'Aantal gasten',
-        'guestsLabel'                 => 'Gasten',
-        'reservationDate'             => 'Reserveringsdatum',
-        'today'                       => 'Vandaag',
-        'tomorrow'                    => 'Morgen',
-        'preferredTime'               => 'Gewenste aankomsttijd',
-        'email'                       => 'E-mailadres',
-        'sessionDuration'             => 'Beschikbare zitduur: 90 minuten',
-        'step2'                       => 'Kies uw tafel & zitplaats',
-        'capacity'                    => 'Capaciteit: :count gasten',
-        'available'                   => 'Beschikbaar',
-        'selected'                    => 'Geselecteerd ✓',
-        'mainHall'                    => 'Hoofdzaal',
-        'instantConfirm'              => 'Directe bevestiging',
-        'noTables'                    => 'Er zijn op dit tijdstip geen beschikbare tafels voor :count gasten. Probeer een ander tijdstip of een andere datum.',
-        'step3'                       => 'Contactgegevens & speciale verzoeken',
-        'fullName'                    => 'Volledige naam',
-        'fullNamePlaceholder'         => 'Vul uw naam in',
-        'phone'                       => 'Telefoonnummer voor bevestiging',
-        'specialRequests'             => 'Speciale opmerkingen of verzoeken (optioneel)',
-        'specialRequestsPlaceholder'  => 'Heeft u een speciale gelegenheid, kinderstoelen of bepaalde wensen?',
-        'submit'                      => 'Verstuur & bevestig reservering',
-        'processing'                  => 'Uw reservering wordt verwerkt en de beschikbaarheid wordt gecontroleerd...',
-        'contactDetails'              => 'Reservering & Contactgegevens',
+        'badge' => 'Direct online reserveren',
+        'title' => 'Reserveer uw tafel',
+        'subtitle' => 'Kies het aantal gasten, uw gewenste tijd en de gewenste zitplaats. Wij zorgen vervolgens voor de perfecte tafel.',
+        'tablesAvailable' => 'Tafel beschikbaar op dit tijdstip',
+        'welcome' => 'Welkom, :name. Uw reservering is succesvol bevestigd.',
+        'referenceCode' => 'Reserveringscode',
+        'date' => 'Datum',
+        'time' => 'Tijd',
+        'guests' => 'Aantal gasten',
+        'guestsCount' => ':count gasten',
+        'tableNumber' => 'Tafelnummer',
+        'table' => 'Tafel',
+        'errorTitle' => 'Controleer uw gegevens',
+        'step1' => 'Gegevens over gasten & tijd',
+        'partySize' => 'Aantal gasten',
+        'guestsLabel' => 'Gasten',
+        'reservationDate' => 'Reserveringsdatum',
+        'today' => 'Vandaag',
+        'tomorrow' => 'Morgen',
+        'preferredTime' => 'Gewenste aankomsttijd',
+        'email' => 'E-mailadres',
+        'sessionDuration' => 'Beschikbare zitduur: 90 minuten',
+        'step2' => 'Kies uw tafel & zitplaats',
+        'capacity' => 'Capaciteit: :count gasten',
+        'available' => 'Beschikbaar',
+        'selected' => 'Geselecteerd ✓',
+        'mainHall' => 'Hoofdzaal',
+        'instantConfirm' => 'Directe bevestiging',
+        'noTables' => 'Er zijn op dit tijdstip geen beschikbare tafels voor :count gasten. Probeer een ander tijdstip of een andere datum.',
+        'step3' => 'Contactgegevens & speciale verzoeken',
+        'fullName' => 'Volledige naam',
+        'fullNamePlaceholder' => 'Vul uw naam in',
+        'phone' => 'Telefoonnummer voor bevestiging',
+        'specialRequests' => 'Speciale opmerkingen of verzoeken (optioneel)',
+        'specialRequestsPlaceholder' => 'Heeft u een speciale gelegenheid, kinderstoelen of bepaalde wensen?',
+        'submit' => 'Verstuur & bevestig reservering',
+        'processing' => 'Uw reservering wordt verwerkt en de beschikbaarheid wordt gecontroleerd...',
+        'contactDetails' => 'Reservering & Contactgegevens',
 
         // Type Service
-        'serviceType'                 => 'Type Service',
-        'dineIn'                      => 'Dine In 🍽️',
-        'takeaway'                    => 'Afhalen 🥡',
-        'delivery'                    => 'Bezorging aan huis 🚚',
+        'serviceType' => 'Type Service',
+        'dineIn' => 'Dine In 🍽️',
+        'takeaway' => 'Afhalen 🥡',
+        'delivery' => 'Bezorging aan huis 🚚',
 
-        'orderTotal'                  => 'Totaal orderbedrag:',
-        'confirmReservation'          => 'Bevestig reservering & Ontvang WhatsApp-melding',
-        'processingReservation'       => 'Reservering registreren en WhatsApp-gegevens verzenden...',
-        'smsNotice'                   => 'Een kopie van uw bestelling wordt voor bevestiging naar uw WhatsApp verzonden',
-        'requestsPlaceholderMenu'     => 'Voorbeeld: Bereid alsjeblieft Adeni-thee, of er is een notenallergie...',
+        'orderTotal' => 'Totaal orderbedrag:',
+        'confirmReservation' => 'Bevestig reservering & Ontvang WhatsApp-melding',
+        'processingReservation' => 'Reservering registreren en WhatsApp-gegevens verzenden...',
+        'smsNotice' => 'Een kopie van uw bestelling wordt voor bevestiging naar uw WhatsApp verzonden',
+        'requestsPlaceholderMenu' => 'Voorbeeld: Bereid alsjeblieft Adeni-thee, of er is een notenallergie...',
 
         // Algemene berichten
-        'success'                     => 'Uw reserveringsaanvraag is succesvol verzonden! Wij bevestigen deze zo snel mogelijk.',
-        'generic_error'               => 'Er is een onverwachte fout opgetreden. Probeer het later opnieuw.',
-        'rate_limit_exceeded'         => 'Te veel pogingen. Probeer het over een ogenblik opnieuw.',
+        'success' => 'Uw reserveringsaanvraag is succesvol verzonden! Wij bevestigen deze zo snel mogelijk.',
+        'generic_error' => 'Er is een onverwachte fout opgetreden. Probeer het later opnieuw.',
+        'rate_limit_exceeded' => 'Te veel pogingen. Probeer het over een ogenblik opnieuw.',
     ],
 
     // ═══════════════════════════════════════════
@@ -176,95 +176,101 @@ return [
     // ═══════════════════════════════════════════
     'order' => [
         // Algemeen
-        'generic_error'       => 'We konden uw bestelling niet voltooien. Probeer het opnieuw.',
-        'rate_limit_exceeded' => 'Te veel bestellingen. Wacht een minuut.',
+        'generic_error' => 'We konden uw bestelling niet voltooien. Probeer het opnieuw.',
+        'rate_limit_exceeded' => 'Te veel bestelpogingen. Probeer het over %d seconden opnieuw.',
 
         // Bezorgvelden (verplicht bij DELIVERY)
-        'address_required'    => 'Bezorgadres is verplicht.',
-        'city_required'       => 'Stad is verplicht.',
-        'postal_required'     => 'Postcode is verplicht.',
+        'address_required' => 'Bezorgadres is verplicht.',
+        'city_required' => 'Stad is verplicht.',
+        'postal_required' => 'Postcode is verplicht.',
 
         // Telefoonformaat
-        'phone_format'        => 'Ongeldig telefoonnummer (Arabische en Engelse cijfers zijn toegestaan).',
-      // ... bestaande keys ...
+        'phone_format' => 'Ongeldig telefoonnummer (Arabische en Engelse cijfers zijn toegestaan).',
 
-        'error_title'         => 'Bestelling kon niet worden voltooid',
-        'validation_error'    => 'Controleer de velden',
-        'rate_limit_exceeded' => 'Te veel bestelpogingen. Probeer het over %d seconden opnieuw.',
-    
-        'validation_summary'  => ':count fout(en) verhinderen afrekenen — controleer de gemarkeerde velden.',
-        'rate_limit_exceeded' => 'Te veel bestelpogingen. Probeer het over %d seconden opnieuw.',
-
+        // Fouttitels & validatie
+        'error_title' => 'Bestelling kon niet worden voltooid',
+        'validation_error' => 'Controleer de velden',
+        'validation_summary' => ':count fout(en) verhinderen afrekenen — controleer de gemarkeerde velden.',
     ],
 
     // ═══════════════════════════════════════════
     // 💾 Onthoud mij + Adresvelden
     // ═══════════════════════════════════════════
     'remember' => [
-        'welcome_back'         => 'Welkom terug! 👋',
+        'welcome_back' => 'Welkom terug! 👋',
         'filled_automatically' => 'Uw gegevens zijn automatisch ingevuld.',
-        'not_you'              => 'Niet jou?',
-        'checkbox'             => 'Onthoud mij de volgende keer 💾',
-        'confirm_forget'       => 'Weet je het zeker? Je opgeslagen gegevens worden gewist.',
+        'not_you' => 'Niet jou?',
+        'checkbox' => 'Onthoud mij de volgende keer 💾',
+        'confirm_forget' => 'Weet je het zeker? Je opgeslagen gegevens worden gewist.',
+        'confirm_title' => 'Gegevens wissen bevestigen',
+        'confirm_yes' => 'Ja, wis mijn gegevens',
 
-        'forgotten_title'      => 'Je gegevens zijn gewist',
-        'forgotten_message'    => 'Je kunt opnieuw beginnen.',
+        'forgotten_title' => 'Je gegevens zijn gewist',
+        'forgotten_message' => 'Je kunt opnieuw beginnen.',
 
-        'delivery_details'     => 'Bezorgadres Gegevens 📍',
-        'address'              => 'Volledig Adres',
-        'address_placeholder'  => 'bijv. Kerkstraat 123, II',
-        'city'                 => 'Stad',
-        'city_placeholder'     => 'Amsterdam',
-        'postal_code'          => 'Postcode',
-        'postal_placeholder'   => '1012 NK',
+        'delivery_details' => 'Bezorgadres Gegevens 📍',
+        'address' => 'Volledig Adres',
+        'address_placeholder' => 'bijv. Kerkstraat 123, II',
+        'city' => 'Stad',
+        'city_placeholder' => 'Amsterdam',
+        'postal_code' => 'Postcode',
+        'postal_placeholder' => '1012 NK',
+    ],
+
+    // ═══════════════════════════════════════════
+    // ✅ Algemene bevestigingsdialoog (vervanger van wire:confirm)
+    // ═══════════════════════════════════════════
+    'confirm' => [
+        'yes' => 'Bevestigen',
+        'cancel' => 'Annuleren',
     ],
 
     // ═══════════════════════════════════════════
     // 🔔 Meldingen (Toast) — enkele bron
     // ═══════════════════════════════════════════
     'notifications' => [
-        'reservation_title'   => '🎉 Reservering bevestigd!',
+        'reservation_title' => '🎉 Reservering bevestigd!',
         'reservation_message' => 'Uw reservering is ontvangen.',
-        'order_title'         => '👑 Bestelling ontvangen!',
-        'order_message'       => 'Ons team neemt binnenkort contact met u op.',
-        'preorder_title'      => '🛒 Voorbestelling toegevoegd!',
-        'preorder_message'    => 'We bereiden uw gerechten voor uw aankomst.',
+        'order_title' => '👑 Bestelling ontvangen!',
+        'order_message' => 'Ons team neemt binnenkort contact met u op.',
+        'preorder_title' => '🛒 Voorbestelling toegevoegd!',
+        'preorder_message' => 'We bereiden uw gerechten voor uw aankomst.',
     ],
 
     // ═══════════════════════════════════════════
     // 🖼️ Galerij
     // ═══════════════════════════════════════════
     'gallery' => [
-        'badge'      => 'Traditionele erfgoedgalerij',
-        'title'      => 'Authentieke momenten, gevuld met de geur van houtvuur en kruiden',
-        'subtitle'   => 'Ontdek onze gastvrijheid, traditionele Mandi- en Muthbi-bereiding en authentieke Jemenitische zitplaatsen',
+        'badge' => 'Traditionele erfgoedgalerij',
+        'title' => 'Authentieke momenten, gevuld met de geur van houtvuur en kruiden',
+        'subtitle' => 'Ontdek onze gastvrijheid, traditionele Mandi- en Muthbi-bereiding en authentieke Jemenitische zitplaatsen',
         'categories' => 'Galerijcategorieën',
-        'loading'    => 'Afbeeldingen laden...',
-        'empty'      => 'Nog geen afbeeldingen in deze categorie.',
+        'loading' => 'Afbeeldingen laden...',
+        'empty' => 'Nog geen afbeeldingen in deze categorie.',
     ],
 
     // ═══════════════════════════════════════════
     // 👣 Footer
     // ═══════════════════════════════════════════
     'footer' => [
-        'quickLinks'       => 'Snelle links',
-        'rights'           => 'Alle rechten voorbehouden aan Jemenitische Keuken',
-        'contact'          => 'Neem contact met ons op',
-        'welcome'          => 'Wij heten u dagelijks welkom',
-        'hours'            => 'Openingstijden',
+        'quickLinks' => 'Snelle links',
+        'rights' => 'Alle rechten voorbehouden aan Jemenitische Keuken',
+        'contact' => 'Neem contact met ons op',
+        'welcome' => 'Wij heten u dagelijks welkom',
+        'hours' => 'Openingstijden',
         'hoursUnavailable' => 'Neem contact met ons op voor de openingstijden.',
-        'reserveNow'       => 'Reserveer nu uw tafel',
-        'whatsapp'         => 'Contact via WhatsApp',
-        'viewMap'          => 'Bekijk locatie op de kaart',
+        'reserveNow' => 'Reserveer nu uw tafel',
+        'whatsapp' => 'Contact via WhatsApp',
+        'viewMap' => 'Bekijk locatie op de kaart',
     ],
 
     // ═══════════════════════════════════════════
     // ⭐ Recensies
     // ═══════════════════════════════════════════
     'reviews' => [
-        'badge'    => 'Gastenbeoordelingen',
-        'title'    => 'Wat liefhebbers van Jemenitische smaak in Europa zeggen',
-        'stats'    => 'Uitstekend beoordeeld met 4.9 uit 5 op basis van 1.450+ geverifieerde beoordelingen',
+        'badge' => 'Gastenbeoordelingen',
+        'title' => 'Wat liefhebbers van Jemenitische smaak in Europa zeggen',
+        'stats' => 'Uitstekend beoordeeld met 4.9 uit 5 op basis van 1.450+ geverifieerde beoordelingen',
         'verified' => 'Geverifieerde Gast',
         'favorite' => 'Favoriete gerecht',
     ],
@@ -274,23 +280,23 @@ return [
     // ═══════════════════════════════════════════
     'errors' => [
         // ReservationService
-        'missing_customer_data'   => 'Voer naam en telefoonnummer in.',
+        'missing_customer_data' => 'Voer naam en telefoonnummer in.',
         'missing_required_fields' => 'Verplichte velden ontbreken (datum en tijd).',
-        'invalid_party_size'      => 'Ongeldig aantal personen (1-20).',
-        'invalid_status'          => 'Ongeldige reserveringsstatus.',
-        'invalid_date_format'     => 'Ongeldig datumformaat.',
-        'invalid_time_format'     => 'Ongeldig tijdformaat.',
-        'past_date'               => 'Kan niet boeken in het verleden.',
-        'time_conflict'           => 'Sorry, dit tijdstip is volgeboekt. Kies een ander tijdstip.',
+        'invalid_party_size' => 'Ongeldig aantal personen (1-20).',
+        'invalid_status' => 'Ongeldige reserveringsstatus.',
+        'invalid_date_format' => 'Ongeldig datumformaat.',
+        'invalid_time_format' => 'Ongeldig tijdformaat.',
+        'past_date' => 'Kan niet boeken in het verleden.',
+        'time_conflict' => 'Sorry, dit tijdstip is volgeboekt. Kies een ander tijdstip.',
 
         // OrderService
-        'empty_cart'              => 'Kan geen bestelling aanmaken zonder gerechten.',
-        'menu_item_unavailable'   => 'Het gevraagde gerecht (#:id) is niet beschikbaar.',
-        'invalid_quantity'        => 'Ongeldige hoeveelheid voor ":name" (waarde: :qty).',
-        'invalid_menu_item_id'    => 'Ongeldig menu-item ID.',
-        'invalid_reservation'     => 'De gekoppelde reservering bestaat niet.',
-        'invalid_order_status'    => 'Ongeldige bestelstatus.',
-        'invalid_order_type'      => 'Ongeldig besteltype.',
+        'empty_cart' => 'Kan geen bestelling aanmaken zonder gerechten.',
+        'menu_item_unavailable' => 'Het gevraagde gerecht (#:id) is niet beschikbaar.',
+        'invalid_quantity' => 'Ongeldige hoeveelheid voor ":name" (waarde: :qty).',
+        'invalid_menu_item_id' => 'Ongeldig menu-item ID.',
+        'invalid_reservation' => 'De gekoppelde reservering bestaat niet.',
+        'invalid_order_status' => 'Ongeldige bestelstatus.',
+        'invalid_order_type' => 'Ongeldig besteltype.',
     ],
 
     // ═══════════════════════════════════════════
@@ -301,27 +307,27 @@ return [
         'title' => 'Wij verwelkomen u graag en beantwoorden met plezier uw vragen',
 
         'form' => [
-            'title'   => 'Stuur ons een direct bericht',
+            'title' => 'Stuur ons een direct bericht',
             'success' => 'Uw bericht is succesvol verzonden. Wij nemen zo snel mogelijk contact met u op.',
-            'name'    => 'Volledige naam *',
-            'email'   => 'E-mailadres *',
-            'phone'   => 'Telefoonnummer / WhatsApp',
+            'name' => 'Volledige naam *',
+            'email' => 'E-mailadres *',
+            'phone' => 'Telefoonnummer / WhatsApp',
             'subject' => 'Type vraag',
             'message' => 'Uw bericht of speciaal verzoek *',
-            'submit'  => 'Bericht nu versturen →',
+            'submit' => 'Bericht nu versturen →',
 
             'subjects' => [
-                'inquiry'  => 'Algemene vraag over het restaurant en de menukaart',
-                'event'    => 'Reservering voor een speciale gelegenheid of grote familiebijeenkomst',
+                'inquiry' => 'Algemene vraag over het restaurant en de menukaart',
+                'event' => 'Reservering voor een speciale gelegenheid of grote familiebijeenkomst',
                 'catering' => 'Catering- en externe banketdiensten',
             ],
         ],
 
         'details' => [
-            'address'      => 'Adres & locatie',
+            'address' => 'Adres & locatie',
             'addressValue' => 'Damrak 45, Amsterdam, Nederland',
-            'hours'        => 'Openingstijden',
-            'hoursValue'   => 'Dagelijks van 12:00 tot 23:30',
+            'hours' => 'Openingstijden',
+            'hoursValue' => 'Dagelijks van 12:00 tot 23:30',
         ],
     ],
 
@@ -330,22 +336,22 @@ return [
     // ═══════════════════════════════════════════
     'enums' => [
         'order_status' => [
-            'pending'    => 'In behandeling',
+            'pending' => 'In behandeling',
             'processing' => 'Wordt bereid',
-            'completed'  => 'Voltooid',
-            'cancelled'  => 'Geannuleerd',
+            'completed' => 'Voltooid',
+            'cancelled' => 'Geannuleerd',
         ],
         'order_type' => [
-            'pickup'    => 'Afhalen',
-            'dine_in'   => 'Ter plaatse eten',
-            'preorder'  => 'Voorbestelling bij reservering',
+            'pickup' => 'Afhalen',
+            'dine_in' => 'Ter plaatse eten',
+            'preorder' => 'Voorbestelling bij reservering',
         ],
         'reservation_status' => [
-            'pending'   => 'In afwachting van bevestiging',
+            'pending' => 'In afwachting van bevestiging',
             'confirmed' => 'Bevestigd',
-            'seated'    => 'Gasten aanwezig',
+            'seated' => 'Gasten aanwezig',
             'cancelled' => 'Geannuleerd',
-            'no_show'   => 'Niet komen opdagen',
+            'no_show' => 'Niet komen opdagen',
         ],
     ],
 
@@ -353,14 +359,13 @@ return [
     // ♿ Toegankelijkheid & UI
     // ═══════════════════════════════════════════
     'accessibility' => [
-        'loading'     => 'Laden...',
+        'loading' => 'Laden...',
         'scrollToTop' => 'Terug naar boven',
     ],
 
-
     'discount_type' => [
         'percentage' => 'Percentage',
-        'fixed'      => 'Vast bedrag',
+        'fixed' => 'Vast bedrag',
     ],
     'media_type' => [
         'image' => 'Afbeelding',

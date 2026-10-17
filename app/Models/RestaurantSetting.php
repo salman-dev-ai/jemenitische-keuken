@@ -77,11 +77,11 @@ class RestaurantSetting extends Model
      */
     protected function casts(): array
     {
-        return [
-            'opening_hours'         => 'array',
-            'accepts_reservations'  => 'boolean',
+         return [
+            'opening_hours' => 'array',
+            'accepts_reservations' => 'boolean',
             'accepts_online_orders' => 'boolean',
-            'vat_rate'              => 'decimal:2',
+            'vat_rate' => 'decimal:2',
             'max_quantity_per_item' => 'integer',
         ];
     }
@@ -101,27 +101,28 @@ class RestaurantSetting extends Model
      * - يُنشئ صفاً افتراضياً إذا لم يوجد.
      * - Cache يُبطَّل تلقائياً عند أي تعديل.
      * - يعيد دائماً كائن RestaurantSetting (لا null أبداً).
-     *
-     * @return self
      */
     public static function current(): self
     {
         return Cache::rememberForever('restaurant_settings', function () {
-            return static::query()->firstOrCreate(
-                ['id' => 1],
+            // ⚠️ لا نبحث عن id محدد: الصف الأصلي يُنشأ بـ auto-increment (id != 1)،
+            //    ولأن id ليس في $fillable كان firstOrCreate يُنشئ صفاً افتراضياً
+            //    جديداً في كل مرة يُفرَّغ فيها الكاش → تكرار سجلات لا نهائي.
+            return static::query()->orderBy('id')->firstOrCreate(
+                [],
                 [
                     'name' => [
                         'ar' => 'المطبخ اليمني',
                         'en' => 'Yemeni Kitchen',
                         'nl' => 'Jemenitische Keuken',
                     ],
-                    'phone'                 => '+31 20 000 0000',
-                    'email'                 => 'info@example.com',
-                    'whatsapp'              => '+31612345678',
-                    'address'               => 'Damrak 45',
-                    'city'                  => 'Amsterdam',
-                    'postal_code'           => '1012 NK',
-                    'vat_rate'              => 9.00,
+                    'phone' => '+31 20 000 0000',
+                    'email' => 'info@example.com',
+                    'whatsapp' => '+31612345678',
+                    'address' => 'Damrak 45',
+                    'city' => 'Amsterdam',
+                    'postal_code' => '1012 NK',
+                    'vat_rate' => 9.00,
                     'max_quantity_per_item' => 50,
                 ],
             );
@@ -132,8 +133,6 @@ class RestaurantSetting extends Model
      * 💰 معدّل الضريبة (BTW) — كنسبة عشرية.
      *
      * مثال: 9.00 في DB → 0.09
-     *
-     * @return float
      */
     public static function vatRate(): float
     {
@@ -142,8 +141,6 @@ class RestaurantSetting extends Model
 
     /**
      * 🔢 الحد الأقصى للكمية لكل طبق.
-     *
-     * @return int
      */
     public static function maxQuantityPerItem(): int
     {
@@ -155,8 +152,6 @@ class RestaurantSetting extends Model
      *
      * - يعتمد على Spatie Translatable.
      * - Fallback: العربية → الإنجليزية.
-     *
-     * @return string
      */
     public function getLocalizedNameAttribute(): string
     {

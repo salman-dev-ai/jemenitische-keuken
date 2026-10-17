@@ -39,7 +39,7 @@ class RestaurantSettingsTable
 
             ->recordActions([
                 EditAction::make()->label('تعديل'),
-                DeleteAction::make()->label('حذف'),
+                // DeleteAction::make()->label('حذف'),
             ])
             ->paginated(false);
 

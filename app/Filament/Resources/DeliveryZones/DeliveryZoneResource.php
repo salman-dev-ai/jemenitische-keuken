@@ -11,13 +11,12 @@ use App\Models\DeliveryZone;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
 
 class DeliveryZoneResource extends Resource
 {
-   protected static ?string $model = DeliveryZone::class;   // ربط المورد بالموديل
+    protected static ?string $model = DeliveryZone::class;   // ربط المورد بالموديل
 
     // التصحيح: النوع يجب أن يكون string|BackedEnum|null وليس ?string
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-truck';
@@ -26,7 +25,7 @@ class DeliveryZoneResource extends Resource
     // إذا ظهر خطأ مشابه، غيّره إلى: protected static string|\UnitEnum|null $navigationGroup = 'Restaurant Settings';
     protected static string|UnitEnum|null $navigationGroup = 'إعدادات المطعم'; // تصنيف المورد في القائمة الجانبية
 
-    protected static ?int $navigationSort = 2;              // ترتيب الظهور في القائمة الجانبية
+    protected static ?int $navigationSort = 7;
 
     /**
      * إرجاع اسم المورد بصيغة المفرد (يظهر في الأزرار والعناوين).
@@ -68,6 +67,16 @@ class DeliveryZoneResource extends Resource
         return DeliveryZonesTable::configure($table);
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'primary';
+    }
+
     /**
      * إرجاع العلاقات (Relation Managers) إن وُجدت.
      */
@@ -77,6 +86,7 @@ class DeliveryZoneResource extends Resource
             //
         ];
     }
+
     public static function getPages(): array
     {
         return [

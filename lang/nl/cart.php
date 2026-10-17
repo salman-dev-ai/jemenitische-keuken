@@ -27,4 +27,15 @@ return [
         'vat'            => 'BTW',
         'total'          => 'Totaal',
     ],
+
+    'max_quantity' => [
+        'title'   => 'Maximum bereikt',
+        'message' => 'Je kunt niet meer dan :max van ":name" bestellen.',
+        'hint'    => 'Maximaal :max',
+    ],
+
+    'first_add' => [
+        'title'   => '🛒 Toegevoegd aan je winkelwagen!',
+        'message' => '":name" is toegevoegd aan je winkelwagen — veel plezier!',
+    ],
 ];

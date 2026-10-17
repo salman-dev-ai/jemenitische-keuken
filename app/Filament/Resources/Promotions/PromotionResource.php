@@ -24,9 +24,9 @@ class PromotionResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'التخفيضات';
 
-    protected static ?int $navigationSort = 2;
-
     protected static ?string $recordTitleAttribute = 'title';
+
+    protected static ?int $navigationSort = 5;
 
     public static function getNavigationLabel(): string
     {
@@ -51,6 +51,16 @@ class PromotionResource extends Resource
     public static function table(Table $table): Table
     {
         return PromotionsTable::configure($table);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::where('is_active', true)->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
     }
 
     public static function getPages(): array

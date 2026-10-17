@@ -34,7 +34,7 @@ class ContactForm extends Component
         // ✅ 3. إشعار نجاح
         session()->flash(
             'contact_success',
-            __('messages.contact.successMsg')
+            __('messages.contact.form.success')
                 ?? 'شكراً لتواصلك معنا! استلمنا رسالتك وسيتواصل معك فريق الضيافة خلال 24 ساعة.'
         );
 

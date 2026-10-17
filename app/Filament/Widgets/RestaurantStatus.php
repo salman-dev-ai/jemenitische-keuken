@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Order;
 use App\Models\RestaurantSetting;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -11,6 +12,7 @@ class RestaurantStatus extends StatsOverviewWidget
     protected function getStats(): array
     {
         $settings = RestaurantSetting::query()->first();
+        $totalRevenue = Order::query()->where('status', '!=', 'cancelled')->sum('total');
 
         return [
             Stat::make(
@@ -52,6 +54,14 @@ class RestaurantStatus extends StatsOverviewWidget
                         ? 'success'
                         : 'danger'
                 ),
+
+            // إجمالي الإيرادات
+            Stat::make('إجمالي الإيرادات', number_format($totalRevenue, 2).' €')
+                ->description('إيرادات الطلبات المعتمدة')
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                ->chart([5, 8, 10, 15, 12, 20, 25])
+                ->icon('heroicon-o-banknotes')
+                ->color('warning'),
         ];
     }
 }

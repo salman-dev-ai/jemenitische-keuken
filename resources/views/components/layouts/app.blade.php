@@ -40,6 +40,9 @@
     {{-- إشعارات المتصفح الفورية --}}
     @include('components.layouts.partials.toasts')
 
+    {{-- نافذة التأكيد الأنيقة (بديل wire:confirm) --}}
+    @include('components.layouts.partials.confirm')
+
     {{-- الأيقونات والنوافذ وسكربتات Livewire --}}
     @include('components.layouts.partials.scripts')
 </body>

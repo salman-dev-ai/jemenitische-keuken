@@ -26,27 +26,27 @@ return [
     // 🧭 Navigation
     // ═══════════════════════════════════════════
     'nav' => [
-        'home'         => 'Home',
-        'about'        => 'Our Story & Heritage',
-        'menu'         => 'Food Menu',
-        'gallery'      => 'Gallery',
-        'reservation'  => 'Book a Table',
-        'contact'      => 'Contact Us',
+        'home' => 'Home',
+        'about' => 'Our Story & Heritage',
+        'menu' => 'Food Menu',
+        'gallery' => 'Gallery',
+        'reservation' => 'Book a Table',
+        'contact' => 'Contact Us',
         'bookTableBtn' => 'Book Your Table Now',
 
-        'primary'      => 'Primary navigation',
-        'secondary'    => 'Secondary navigation',
-        'mobile'       => 'Mobile menu',
-        'toggleMenu'   => 'Open or close menu',
+        'primary' => 'Primary navigation',
+        'secondary' => 'Secondary navigation',
+        'mobile' => 'Mobile menu',
+        'toggleMenu' => 'Open or close menu',
     ],
 
     // ═══════════════════════════════════════════
     // 🏷️ Brand
     // ═══════════════════════════════════════════
     'brand' => [
-        'name'        => 'Yemeni Kitchen',
-        'subName'     => 'JEMENITISCHE KEUKEN',
-        'slogan'      => 'The Origin of Mandi | أصل المندي',
+        'name' => 'Yemeni Kitchen',
+        'subName' => 'JEMENITISCHE KEUKEN',
+        'slogan' => 'The Origin of Mandi | أصل المندي',
         'description' => 'We take you on an authentic culinary journey...',
     ],
 
@@ -54,16 +54,16 @@ return [
     // 🏠 Home Page
     // ═══════════════════════════════════════════
     'home' => [
-        'greetingBadge'   => 'Welcome to the House of Yemeni Generosity and Authenticity',
-        'heroTitle'       => 'The Royal Taste of Yemeni Mandi',
-        'heroSubtitle'    => 'Slow-cooked over Samr wood fire and prepared with secret Yemeni spices...',
-        'ctaReserve'      => 'Book Your Table',
-        'ctaMenu'         => 'Explore Our Royal Menu',
+        'greetingBadge' => 'Welcome to the House of Yemeni Generosity and Authenticity',
+        'heroTitle' => 'The Royal Taste of Yemeni Mandi',
+        'heroSubtitle' => 'Slow-cooked over Samr wood fire and prepared with secret Yemeni spices...',
+        'ctaReserve' => 'Book Your Table',
+        'ctaMenu' => 'Explore Our Royal Menu',
         'hospitalityNote' => 'Complimentary hospitality service and Adeni tea for all guests',
 
         'stats' => [
-            'years'  => ['value' => '+25',  'label' => 'Years of Mandi Experience'],
-            'halal'  => ['value' => '100%', 'label' => 'Fresh Local Halal Meat Every Day'],
+            'years' => ['value' => '+25',  'label' => 'Years of Mandi Experience'],
+            'halal' => ['value' => '100%', 'label' => 'Fresh Local Halal Meat Every Day'],
             'spices' => ['value' => '+18',  'label' => 'Rare and Authentic Yemeni Spices'],
             'rating' => ['value' => '4.9★', 'label' => 'Guest Satisfaction Rating'],
         ],
@@ -71,13 +71,13 @@ return [
         'majlis' => [
             'badge' => 'Hospitality & Family Privacy',
             'title' => 'An Atmosphere Blending the Yemeni Majlis with European Elegance',
-            'desc'  => 'Choose the seating experience that suits you best...',
+            'desc' => 'Choose the seating experience that suits you best...',
             'features' => [
                 'Private traditional floor-seating Majlis areas for families with complete privacy.',
                 'Spacious royal tables prepared for special occasions and elegant gatherings.',
                 'Complimentary Yemeni frankincense and oud fragrance after every meal.',
             ],
-            'cta'   => 'Book Your Preferred Seating in Advance',
+            'cta' => 'Book Your Preferred Seating in Advance',
             'quote' => 'In Yemen, hospitality is not merely about food; it is a tradition of generosity and love passed down from one generation to the next.',
         ],
     ],
@@ -86,27 +86,27 @@ return [
     // 🍽️ Menu
     // ═══════════════════════════════════════════
     'menu' => [
-        'badge'          => 'Royal Dishes',
-        'title'          => 'Traditional Yemeni Cuisine Categories',
-        'subtitle'       => 'A rich menu carefully categorized according to the highest standards of quality and authentic Yemeni flavor',
-        'dishes'         => 'Dishes',
-        'all'            => 'All Dishes',
-        'selected'       => 'Selected',
-        'browse'         => 'Explore Dishes',
-        'orderNow'       => 'Book to Taste It',
-        'empty'          => 'There are currently no available dishes in this category.',
-        'chefSpecial'    => "Chef's Royal Special",
-        'addToCart'      => 'Add to Cart',
-        'cartReady'      => 'Your royal cart is ready',
-        'total'          => 'Total',
-        'checkout'       => 'Checkout & Book Now',
-        'cart'           => 'Your Cart & Reservation',
-        'items'          => 'selected items',
-        'emptyText'      => "You haven't added any dishes to your feast yet.",
-        'browseMenu'     => 'Browse Menu Now',
+        'badge' => 'Royal Dishes',
+        'title' => 'Traditional Yemeni Cuisine Categories',
+        'subtitle' => 'A rich menu carefully categorized according to the highest standards of quality and authentic Yemeni flavor',
+        'dishes' => 'Dishes',
+        'all' => 'All Dishes',
+        'selected' => 'Selected',
+        'browse' => 'Explore Dishes',
+        'orderNow' => 'Book to Taste It',
+        'empty' => 'There are currently no available dishes in this category.',
+        'chefSpecial' => "Chef's Royal Special",
+        'addToCart' => 'Add to Cart',
+        'cartReady' => 'Your royal cart is ready',
+        'total' => 'Total',
+        'checkout' => 'Checkout & Book Now',
+        'cart' => 'Your Cart & Reservation',
+        'items' => 'selected items',
+        'emptyText' => "You haven't added any dishes to your feast yet.",
+        'browseMenu' => 'Browse Menu Now',
         'selectedDishes' => 'Selected Dishes for the Feast',
-        'featured'       => 'Featured',
-        'spicy'          => 'Spicy',
+        'featured' => 'Featured',
+        'spicy' => 'Spicy',
         'removeFromCart' => 'Remove dish from cart',
     ],
 
@@ -114,61 +114,61 @@ return [
     // 📅 Reservation
     // ═══════════════════════════════════════════
     'reservation' => [
-        'badge'                       => 'Instant Online Reservation',
-        'title'                       => 'Book Your Table',
-        'subtitle'                    => 'Choose the number of guests, preferred time, and seating location, and we will prepare the perfect table for you.',
-        'tablesAvailable'             => 'Table available at this time',
-        'welcome'                     => 'Welcome, :name. Your reservation has been successfully confirmed.',
-        'referenceCode'               => 'Reservation Reference Code',
-        'date'                        => 'Date',
-        'time'                        => 'Time',
-        'guests'                      => 'Number of Guests',
-        'guestsCount'                 => ':count guests',
-        'tableNumber'                 => 'Table Number',
-        'table'                       => 'Table',
-        'errorTitle'                  => 'Please Check Your Information',
-        'step1'                       => 'Guest & Time Details',
-        'partySize'                   => 'Number of Guests',
-        'guestsLabel'                 => 'Guests',
-        'reservationDate'             => 'Reservation Date',
-        'today'                       => 'Today',
-        'tomorrow'                    => 'Tomorrow',
-        'preferredTime'               => 'Preferred Arrival Time',
-        'email'                       => 'Email Address',
-        'sessionDuration'             => 'Available seating duration: 90 minutes',
-        'step2'                       => 'Choose Your Table & Seating Location',
-        'capacity'                    => 'Capacity: :count guests',
-        'available'                   => 'Available',
-        'selected'                    => 'Selected ✓',
-        'mainHall'                    => 'Main Hall',
-        'instantConfirm'              => 'Instant Confirmation',
-        'noTables'                    => 'There are no available tables for :count guests at this time. Please try another time or date.',
-        'step3'                       => 'Contact Details & Special Requests',
-        'fullName'                    => 'Full Name',
-        'fullNamePlaceholder'         => 'Enter your name',
-        'phone'                       => 'Phone Number for Confirmation',
-        'specialRequests'             => 'Special Notes or Requests (Optional)',
-        'specialRequestsPlaceholder'  => 'Do you have a special occasion? Need high chairs or specific arrangements?',
-        'submit'                      => 'Submit and Confirm Reservation',
-        'processing'                  => 'Processing your reservation and checking availability...',
-        'contactDetails'              => 'Reservation & Contact Details',
+        'badge' => 'Instant Online Reservation',
+        'title' => 'Book Your Table',
+        'subtitle' => 'Choose the number of guests, preferred time, and seating location, and we will prepare the perfect table for you.',
+        'tablesAvailable' => 'Table available at this time',
+        'welcome' => 'Welcome, :name. Your reservation has been successfully confirmed.',
+        'referenceCode' => 'Reservation Reference Code',
+        'date' => 'Date',
+        'time' => 'Time',
+        'guests' => 'Number of Guests',
+        'guestsCount' => ':count guests',
+        'tableNumber' => 'Table Number',
+        'table' => 'Table',
+        'errorTitle' => 'Please Check Your Information',
+        'step1' => 'Guest & Time Details',
+        'partySize' => 'Number of Guests',
+        'guestsLabel' => 'Guests',
+        'reservationDate' => 'Reservation Date',
+        'today' => 'Today',
+        'tomorrow' => 'Tomorrow',
+        'preferredTime' => 'Preferred Arrival Time',
+        'email' => 'Email Address',
+        'sessionDuration' => 'Available seating duration: 90 minutes',
+        'step2' => 'Choose Your Table & Seating Location',
+        'capacity' => 'Capacity: :count guests',
+        'available' => 'Available',
+        'selected' => 'Selected ✓',
+        'mainHall' => 'Main Hall',
+        'instantConfirm' => 'Instant Confirmation',
+        'noTables' => 'There are no available tables for :count guests at this time. Please try another time or date.',
+        'step3' => 'Contact Details & Special Requests',
+        'fullName' => 'Full Name',
+        'fullNamePlaceholder' => 'Enter your name',
+        'phone' => 'Phone Number for Confirmation',
+        'specialRequests' => 'Special Notes or Requests (Optional)',
+        'specialRequestsPlaceholder' => 'Do you have a special occasion? Need high chairs or specific arrangements?',
+        'submit' => 'Submit and Confirm Reservation',
+        'processing' => 'Processing your reservation and checking availability...',
+        'contactDetails' => 'Reservation & Contact Details',
 
         // Service Type
-        'serviceType'                 => 'Service Type',
-        'dineIn'                      => 'Dine In 🍽️',
-        'takeaway'                    => 'Takeaway 🥡',
-        'delivery'                    => 'Home Delivery 🚚',
+        'serviceType' => 'Service Type',
+        'dineIn' => 'Dine In 🍽️',
+        'takeaway' => 'Takeaway 🥡',
+        'delivery' => 'Home Delivery 🚚',
 
-        'orderTotal'                  => 'Total Order Amount:',
-        'confirmReservation'          => 'Confirm Reservation & Receive WhatsApp Notification',
-        'processingReservation'       => 'Registering reservation and sending WhatsApp details...',
-        'smsNotice'                   => 'A copy of your order will be sent to your WhatsApp for confirmation',
-        'requestsPlaceholderMenu'     => 'Example: Please prepare Adeni tea, or there is a nut allergy...',
+        'orderTotal' => 'Total Order Amount:',
+        'confirmReservation' => 'Confirm Reservation & Receive WhatsApp Notification',
+        'processingReservation' => 'Registering reservation and sending WhatsApp details...',
+        'smsNotice' => 'A copy of your order will be sent to your WhatsApp for confirmation',
+        'requestsPlaceholderMenu' => 'Example: Please prepare Adeni tea, or there is a nut allergy...',
 
         // General messages
-        'success'                     => 'Your reservation request has been successfully submitted! We will confirm it shortly.',
-        'generic_error'               => 'An unexpected error occurred. Please try again later.',
-        'rate_limit_exceeded'         => 'Too many attempts. Please try again in a moment.',
+        'success' => 'Your reservation request has been successfully submitted! We will confirm it shortly.',
+        'generic_error' => 'An unexpected error occurred. Please try again later.',
+        'rate_limit_exceeded' => 'Too many attempts. Please try again in a moment.',
     ],
 
     // ═══════════════════════════════════════════
@@ -176,93 +176,101 @@ return [
     // ═══════════════════════════════════════════
     'order' => [
         // General
-        'generic_error'       => 'We could not complete your order. Please try again.',
-        'rate_limit_exceeded' => 'Too many orders. Please wait a minute.',
+        'generic_error' => 'We could not complete your order. Please try again.',
+        'rate_limit_exceeded' => 'Too many order attempts. Please try again in %d seconds.',
 
         // Delivery fields (required only for DELIVERY)
-        'address_required'    => 'Delivery address is required.',
-        'city_required'       => 'City is required.',
-        'postal_required'     => 'Postal code is required.',
+        'address_required' => 'Delivery address is required.',
+        'city_required' => 'City is required.',
+        'postal_required' => 'Postal code is required.',
 
         // Phone format
-        'phone_format'        => 'Invalid phone number (Arabic and English digits are allowed).',
-       // ... existing keys ...
+        'phone_format' => 'Invalid phone number (Arabic and English digits are allowed).',
 
-        'error_title'         => 'Order could not be completed',
-        'validation_error'    => 'Please check the fields',
-        'rate_limit_exceeded' => 'Too many order attempts. Please try again in %d seconds.',
-            'validation_summary'  => ':count error(s) preventing checkout — please review the highlighted fields.',
-        'rate_limit_exceeded' => 'Too many order attempts. Please try again in %d seconds.',
+        // Error titles & validation
+        'error_title' => 'Order could not be completed',
+        'validation_error' => 'Please check the fields',
+        'validation_summary' => ':count error(s) preventing checkout — please review the highlighted fields.',
     ],
 
     // ═══════════════════════════════════════════
     // 💾 Remember Me + Address Fields
     // ═══════════════════════════════════════════
     'remember' => [
-        'welcome_back'         => 'Welcome back! 👋',
+        'welcome_back' => 'Welcome back! 👋',
         'filled_automatically' => 'Your details have been filled automatically.',
-        'not_you'              => 'Not you?',
-        'checkbox'             => 'Remember me next time 💾',
-        'confirm_forget'       => 'Are you sure? Your saved details will be cleared.',
+        'not_you' => 'Not you?',
+        'checkbox' => 'Remember me next time 💾',
+        'confirm_forget' => 'Are you sure? Your saved details will be cleared.',
+        'confirm_title' => 'Confirm clearing details',
+        'confirm_yes' => 'Yes, clear my details',
 
-        'forgotten_title'      => 'Your details have been cleared',
-        'forgotten_message'    => 'You can start fresh.',
+        'forgotten_title' => 'Your details have been cleared',
+        'forgotten_message' => 'You can start fresh.',
 
-        'delivery_details'     => 'Delivery Address Details 📍',
-        'address'              => 'Full Address',
-        'address_placeholder'  => 'e.g. Kerkstraat 123, II',
-        'city'                 => 'City',
-        'city_placeholder'     => 'Amsterdam',
-        'postal_code'          => 'Postal Code',
-        'postal_placeholder'   => '1012 NK',
+        'delivery_details' => 'Delivery Address Details 📍',
+        'address' => 'Full Address',
+        'address_placeholder' => 'e.g. Kerkstraat 123, II',
+        'city' => 'City',
+        'city_placeholder' => 'Amsterdam',
+        'postal_code' => 'Postal Code',
+        'postal_placeholder' => '1012 NK',
+    ],
+
+    // ═══════════════════════════════════════════
+    // ✅ Global confirmation dialog (wire:confirm replacement)
+    // ═══════════════════════════════════════════
+    'confirm' => [
+        'yes' => 'Confirm',
+        'cancel' => 'Cancel',
     ],
 
     // ═══════════════════════════════════════════
     // 🔔 Notifications (Toast) — single source
     // ═══════════════════════════════════════════
     'notifications' => [
-        'reservation_title'   => '🎉 Reservation Confirmed!',
+        'reservation_title' => '🎉 Reservation Confirmed!',
         'reservation_message' => 'Your reservation has been received.',
-        'order_title'         => '👑 Order Received!',
-        'order_message'       => 'Our team will contact you shortly.',
-        'preorder_title'      => '🛒 Pre-order Added!',
-        'preorder_message'    => 'We will prepare your dishes before you arrive.',
+        'order_title' => '👑 Order Received!',
+        'order_message' => 'Our team will contact you shortly.',
+        'preorder_title' => '🛒 Pre-order Added!',
+        'preorder_message' => 'We will prepare your dishes before you arrive.',
     ],
 
     // ═══════════════════════════════════════════
     // 🖼️ Gallery
     // ═══════════════════════════════════════════
     'gallery' => [
-        'badge'      => 'Traditional Heritage Gallery',
-        'title'      => 'Authentic Moments Filled with the Aroma of Wood Fire and Spices',
-        'subtitle'   => 'Discover our hospitality, traditional Mandi and Muthbi cooking, and authentic Yemeni seating experiences',
+        'badge' => 'Traditional Heritage Gallery',
+        'title' => 'Authentic Moments Filled with the Aroma of Wood Fire and Spices',
+        'subtitle' => 'Discover our hospitality, traditional Mandi and Muthbi cooking, and authentic Yemeni seating experiences',
         'categories' => 'Gallery Categories',
-        'loading'    => 'Loading images...',
-        'empty'      => 'No images available in this category yet.',
+        'loading' => 'Loading images...',
+        'empty' => 'No images available in this category yet.',
     ],
 
     // ═══════════════════════════════════════════
     // 👣 Footer
     // ═══════════════════════════════════════════
     'footer' => [
-        'quickLinks'       => 'Quick Links',
-        'rights'           => 'All rights reserved to Yemeni Kitchen',
-        'contact'          => 'Contact Us',
-        'welcome'          => 'We welcome you daily',
-        'hours'            => 'Opening Hours',
+        'quickLinks' => 'Quick Links',
+        'rights' => 'All rights reserved to Yemeni Kitchen',
+        'contact' => 'Contact Us',
+        'welcome' => 'We welcome you daily',
+        'hours' => 'Opening Hours',
         'hoursUnavailable' => 'Please contact us for opening hours.',
-        'reserveNow'       => 'Book Your Table Now',
-        'whatsapp'         => 'Contact via WhatsApp',
-        'viewMap'          => 'View Location on Map',
+        'reserveNow' => 'Book Your Table Now',
+        'whatsapp' => 'Contact via WhatsApp',
+        'viewMap' => 'View Location on Map',
     ],
 
     // ═══════════════════════════════════════════
     // ⭐ Reviews
     // ═══════════════════════════════════════════
     'reviews' => [
-        'badge'    => 'Guest Reviews',
-        'title'    => 'What Lovers of Yemeni Taste in Europe Say',
-        'stats'    => 'Excellent 4.9 out of 5 rating based on over 1,450 verified reviews',
+        'badge' => 'Guest Reviews',
+        'title' => 'What Lovers of Yemeni Taste in Europe Say',
+        'stats' => 'Excellent 4.9 out of 5 rating based on over 1,450 verified reviews',
         'verified' => 'Verified Guest',
         'favorite' => 'Favorite Dish',
     ],
@@ -272,23 +280,23 @@ return [
     // ═══════════════════════════════════════════
     'errors' => [
         // ReservationService
-        'missing_customer_data'   => 'Please enter name and phone number.',
+        'missing_customer_data' => 'Please enter name and phone number.',
         'missing_required_fields' => 'Required fields are missing (date and time).',
-        'invalid_party_size'      => 'Invalid party size (1-20).',
-        'invalid_status'          => 'Invalid reservation status.',
-        'invalid_date_format'     => 'Invalid date format.',
-        'invalid_time_format'     => 'Invalid time format.',
-        'past_date'               => 'Cannot book a past date.',
-        'time_conflict'           => 'Sorry, this time is fully booked. Please choose another time.',
+        'invalid_party_size' => 'Invalid party size (1-20).',
+        'invalid_status' => 'Invalid reservation status.',
+        'invalid_date_format' => 'Invalid date format.',
+        'invalid_time_format' => 'Invalid time format.',
+        'past_date' => 'Cannot book a past date.',
+        'time_conflict' => 'Sorry, this time is fully booked. Please choose another time.',
 
         // OrderService
-        'empty_cart'              => 'Cannot create an order without items.',
-        'menu_item_unavailable'   => 'The requested item (#:id) is not available.',
-        'invalid_quantity'        => 'Invalid quantity for ":name" (value: :qty).',
-        'invalid_menu_item_id'    => 'Invalid menu item ID.',
-        'invalid_reservation'     => 'The linked reservation does not exist.',
-        'invalid_order_status'    => 'Invalid order status.',
-        'invalid_order_type'      => 'Invalid order type.',
+        'empty_cart' => 'Cannot create an order without items.',
+        'menu_item_unavailable' => 'The requested item (#:id) is not available.',
+        'invalid_quantity' => 'Invalid quantity for ":name" (value: :qty).',
+        'invalid_menu_item_id' => 'Invalid menu item ID.',
+        'invalid_reservation' => 'The linked reservation does not exist.',
+        'invalid_order_status' => 'Invalid order status.',
+        'invalid_order_type' => 'Invalid order type.',
     ],
 
     // ═══════════════════════════════════════════
@@ -299,27 +307,27 @@ return [
         'title' => 'We are delighted to welcome you and answer your questions',
 
         'form' => [
-            'title'   => 'Send Us a Direct Message',
+            'title' => 'Send Us a Direct Message',
             'success' => 'Your message has been sent successfully. We will get back to you as soon as possible.',
-            'name'    => 'Full Name *',
-            'email'   => 'Email Address *',
-            'phone'   => 'Phone Number / WhatsApp',
+            'name' => 'Full Name *',
+            'email' => 'Email Address *',
+            'phone' => 'Phone Number / WhatsApp',
             'subject' => 'Inquiry Type',
             'message' => 'Your Message or Special Request *',
-            'submit'  => 'Send Message Now →',
+            'submit' => 'Send Message Now →',
 
             'subjects' => [
-                'inquiry'  => 'General inquiry about the restaurant and menu',
-                'event'    => 'Private event or large family Majlis reservation',
+                'inquiry' => 'General inquiry about the restaurant and menu',
+                'event' => 'Private event or large family Majlis reservation',
                 'catering' => 'Catering and external banquet services',
             ],
         ],
 
         'details' => [
-            'address'      => 'Address & Location',
+            'address' => 'Address & Location',
             'addressValue' => 'Damrak 45, Amsterdam, Netherlands',
-            'hours'        => 'Opening Hours',
-            'hoursValue'   => 'Daily from 12:00 to 23:30',
+            'hours' => 'Opening Hours',
+            'hoursValue' => 'Daily from 12:00 to 23:30',
         ],
     ],
 
@@ -328,22 +336,22 @@ return [
     // ═══════════════════════════════════════════
     'enums' => [
         'order_status' => [
-            'pending'    => 'Pending',
+            'pending' => 'Pending',
             'processing' => 'Processing',
-            'completed'  => 'Completed',
-            'cancelled'  => 'Cancelled',
+            'completed' => 'Completed',
+            'cancelled' => 'Cancelled',
         ],
         'order_type' => [
-            'pickup'    => 'Pickup (Takeaway)',
-            'dine_in'   => 'Dine-in',
-            'preorder'  => 'Pre-order with Reservation',
+            'pickup' => 'Pickup (Takeaway)',
+            'dine_in' => 'Dine-in',
+            'preorder' => 'Pre-order with Reservation',
         ],
         'reservation_status' => [
-            'pending'   => 'Pending Confirmation',
+            'pending' => 'Pending Confirmation',
             'confirmed' => 'Confirmed',
-            'seated'    => 'Guests Seated',
+            'seated' => 'Guests Seated',
             'cancelled' => 'Cancelled',
-            'no_show'   => 'No Show',
+            'no_show' => 'No Show',
         ],
     ],
 
@@ -351,14 +359,13 @@ return [
     // ♿ Accessibility & UI
     // ═══════════════════════════════════════════
     'accessibility' => [
-        'loading'     => 'Loading...',
+        'loading' => 'Loading...',
         'scrollToTop' => 'Scroll to top',
     ],
 
-
-     'discount_type' => [
+    'discount_type' => [
         'percentage' => 'Percentage',
-        'fixed'      => 'Fixed Amount',
+        'fixed' => 'Fixed Amount',
     ],
     'media_type' => [
         'image' => 'Image',
