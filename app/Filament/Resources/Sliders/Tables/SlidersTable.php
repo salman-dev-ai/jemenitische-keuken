@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\SliderResource\Tables;
+// namespace App\Filament\Resources\SliderResource\Tables;
 
- use Filament\Actions\DeleteAction;
+namespace App\Filament\Resources\Sliders\Tables;
+
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
- use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\TernaryFilter;
@@ -22,15 +24,14 @@ class SlidersTable
                     ->circular()
                     ->imageSize(50),
 
-                    TextColumn::make('eyebrow.ar')
+                TextColumn::make('eyebrow.ar')
                     ->label('النص العلوي')
                     ->limit(20)
                     ->toggleable()
                     ->color('gray'),
 
-                 TextColumn::make('title.ar')
+                TextColumn::make('title.ar')
                     ->label('العنوان')
-
                     ->sortable()
                     ->weight('bold')
                     ->limit(40)
@@ -43,13 +44,9 @@ class SlidersTable
                     ->toggleable()
                     ->color('gray'),
 
-
-
                 ToggleColumn::make('is_active')
                     ->label('الحالة')
-
-
-                     ->sortable(),
+                    ->sortable(),
 
                 TextColumn::make('created_at')
                     ->label('تاريخ الإضافة')

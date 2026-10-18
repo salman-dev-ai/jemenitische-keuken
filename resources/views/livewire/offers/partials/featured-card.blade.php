@@ -5,52 +5,55 @@
     $locale = app()->getLocale();
 @endphp
 {{-- D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemenitische-keuken-chat\resources\views\livewire\offers\partials\featured-card.blade.php --}}
-<div class="relative h-full overflow-hidden rounded-3xl bg-gradient-to-br from-red-900 via-red-950 to-red-900 shadow-xl">
+<div class="relative h-full min-h-[440px] overflow-hidden rounded-[40px] bg-gradient-to-br from-red-900 via-red-950 to-red-900 shadow-xl">
 
-    <div class="absolute inset-0 opacity-10"
-         style="background-image: radial-gradient(circle at 20% 30%, white 1px, transparent 1px), radial-gradient(circle at 80% 70%, white 1px, transparent 1px); background-size: 40px 40px;">
+    {{-- Full-bleed image --}}
+    @if ($promotion->image)
+        <img
+            src="{{ Storage::disk('public')->url($promotion->image) }}"
+            alt="{{ $promotion->getTranslation('title', $locale) }}"
+            class="absolute inset-0 h-full w-full object-cover"
+        >
+    @else
+        <div class="absolute inset-0 opacity-10"
+             style="background-image: radial-gradient(circle at 20% 30%, white 1px, transparent 1px), radial-gradient(circle at 80% 70%, white 1px, transparent 1px); background-size: 40px 40px;">
+        </div>
+    @endif
+
+    {{-- Bottom gradient --}}
+    <div class="pointer-events-none absolute inset-0"
+         style="background: linear-gradient(to top, rgba(38,8,14,0.98) 0%, rgba(58,12,20,0.88) 24%, rgba(58,12,20,0) 56%);">
     </div>
 
-    <div class="relative flex h-full flex-col p-6 text-white">
+    {{-- Slim corner discount tab --}}
+    <div class="absolute end-4 top-4 flex h-[102px] w-[52px] flex-col items-center justify-center rounded-b-[18px] rounded-t-[3px] border border-amber-200/70 bg-gradient-to-b from-amber-300 to-amber-500 text-[#4a2008] shadow-lg">
+        <span class="text-xl font-black leading-none">
+            {{ number_format((float) $discount, 0) }}%
+        </span>
+        <span class="mt-1.5 text-[8px] font-extrabold uppercase tracking-[0.2em]">
+            {{ __('offers.featured.discount_label') }}
+        </span>
+    </div>
 
-        <div class="text-center">
-            <p class="text-lg font-light text-amber-200/90">
-                {{ __('offers.featured.tagline') }}
-            </p>
-            <p class="mt-1 text-xl font-semibold">
-                {{ __('offers.featured.tagline2') }}
-            </p>
-        </div>
+    {{-- Centered footer --}}
+    <div class="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-4 text-center text-white">
 
-        <div class="my-6 text-center">
-            <div class="inline-flex items-center justify-center">
-                <span class="text-lg font-bold text-amber-300">
-                    {{ __('offers.featured.discount_label') }}
-                </span>
-            </div>
-            <div class="mt-2 flex items-baseline justify-center gap-1">
-                <span class="bg-gradient-to-b from-amber-200 to-amber-500 bg-clip-text text-8xl font-black text-transparent drop-shadow-lg">
-                    {{ number_format((float) $discount, 0) }}
-                </span>
-                <span class="text-5xl font-black text-amber-300">%</span>
-            </div>
-        </div>
+        <p class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-amber-200">
+            {{ __('offers.featured.tagline') }}
+        </p>
 
-        @if ($promotion->image)
-            <div class="relative -mx-6 mt-auto">
-                <img
-                    src="{{ Storage::disk('public')->url($promotion->image) }}"
-                    alt="{{ $promotion->getTranslation('title', $locale) }}"
-                    class="h-56 w-full object-cover"
-                >
-                <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-red-950 to-transparent"></div>
-            </div>
-        @endif
+        <h3 class="mt-1.5 text-[22px] font-extrabold leading-tight">
+            {{ $promotion->getTranslation('title', $locale) }}
+        </h3>
+
+        <p class="mt-1.5 text-[13px] text-white/85">
+            {{ __('offers.featured.tagline2') }}
+        </p>
 
         <button
             type="button"
             wire:click="useCoupon({{ $promotion->id }})"
-            class="mt-4 w-full rounded-xl bg-gradient-to-b from-amber-500 to-amber-700 px-6 py-3.5 text-base font-bold text-white shadow-lg transition hover:from-amber-400 hover:to-amber-600 active:scale-[0.98]"
+            class="mt-4 h-11 w-full rounded-full border border-amber-200/60 bg-[#D66E07] px-6 text-sm font-semibold text-white transition hover:bg-[#6a3220] active:scale-[0.98]"
         >
             {{ $promotion->getTranslation('cta_text', $locale) ?: __('offers.actions.use_now') }}
         </button>

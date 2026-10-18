@@ -11,7 +11,7 @@ class ContactForm extends Component
     #[Validate('required|string|min:3|max:100')]
     public string $name = '';
 
-    #[Validate('required|email|max:150')]
+    #[Validate('nullable|email|max:150')]
     public string $email = '';
 
     #[Validate('nullable|string|max:30')]

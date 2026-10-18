@@ -1,0 +1,35 @@
+{
+    "id": "/",
+    "name": "المطبخ اليمني - Jemenitische Keuken",
+    "short_name": "المطبخ اليمني",
+    "description": "قائمة الطعام، حجز الطاولات، والتوصيل لمطعم المطبخ اليمني في هولندا.",
+    "lang": "ar",
+    "dir": "rtl",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#FDFBF7",
+    "theme_color": "#E07513",
+    "categories": ["food", "shopping"],
+    "icons": [
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

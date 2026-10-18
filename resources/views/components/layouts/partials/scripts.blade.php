@@ -23,5 +23,22 @@
     </script>
 @endonce
 
+{{-- تسجيل Service Worker لتشغيل التثبيت على الشاشة الرئيسية --}}
+@once
+    <script>
+        (function () {
+            if (!('serviceWorker' in navigator) || window.__jemenitischeKeukenServiceWorker) return;
+
+            window.__jemenitischeKeukenServiceWorker = true;
+
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {
+                    // يفشل التسجيل على نطاق بلا HTTPS، والموقع يعمل طبيعياً بدونه.
+                });
+            });
+        })();
+    </script>
+@endonce
+
 {{-- سكربتات دُفعت من الصفحات عبر stack('scripts') --}}
 @stack('scripts')
