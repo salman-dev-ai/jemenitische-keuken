@@ -21,8 +21,8 @@ return [
 
     'actions' => [
         'use_now' => 'Use now',
-        'copy' => 'Copy code',
-        'copied' => 'Copied',
+        'copy' => 'Copy ',
+        'copied' => 'Copied!',
         'apply'  => 'Apply',
     ],
 
