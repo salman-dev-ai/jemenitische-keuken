@@ -9,6 +9,8 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Pest](https://img.shields.io/badge/Tests-Pest-8B5CF6)](https://pestphp.com)
 
+**اللغات:** العربية · [English](README.md)
+
 ---
 
 ## 📑 جدول المحتويات
