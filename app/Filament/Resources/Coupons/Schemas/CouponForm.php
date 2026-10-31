@@ -170,13 +170,13 @@ class CouponForm
                                     ->default(1)
                                     ->minValue(1),
 
-                                TextInput::make('used_count')
-                                    ->label('عدد مرات الاستخدام الحالي')
-                                    ->numeric()
-                                    ->default(0)
-                                    ->disabled()
-                                    ->dehydrated(false)
-                                    ->visibleOn('edit'),
+                                // TextInput::make('used_count')
+                                //     ->label('عدد مرات الاستخدام الحالي')
+                                //     ->numeric()
+                                //     ->default(0)
+                                //     ->disabled()
+                                //     ->dehydrated(false)
+                                //     ->visibleOn('edit'),
 
                                 Toggle::make('is_active')
                                     ->label('مفعّل')

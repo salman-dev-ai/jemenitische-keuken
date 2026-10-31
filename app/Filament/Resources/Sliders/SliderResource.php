@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Sliders;
 
-use App\Filament\Resources\SliderResource\Tables\SlidersTable as TablesSlidersTable;
+use App\Filament\Resources\Sliders\Tables\SlidersTable as TablesSlidersTable;
 use App\Filament\Resources\Sliders\Pages\CreateSlider;
 use App\Filament\Resources\Sliders\Pages\EditSlider;
 use App\Filament\Resources\Sliders\Pages\ListSliders;
