@@ -38,9 +38,7 @@ $close = function () {
                     class="absolute -top-12 end-0 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition hover:bg-white/20"
                     aria-label="{{ __('offers.video_modal.close') }}"
                 >
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
+                    <x-lucide-x class="h-5 w-5" aria-hidden="true" />
                 </button>
 
                 @if ($title)

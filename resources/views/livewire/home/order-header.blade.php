@@ -7,12 +7,7 @@
     {{-- الفاصل الزخرفي: معين ذهبي بين خطين أفقيين فوق العنوان مباشرة --}}
     <div class="flex items-center justify-center gap-4 text-[#C89B4A]">
         <span class="h-px w-16 bg-[#C89B4A]"></span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
-            aria-hidden="true">
-            <path
-                d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z" />
-        </svg>
+        <x-lucide-diamond class="h-5 w-5" aria-hidden="true" />
         <span class="h-px w-16 bg-[#C89B4A]"></span>
     </div>
 

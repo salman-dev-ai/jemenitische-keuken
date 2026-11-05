@@ -116,12 +116,9 @@
             @endif
         </span>
 
-        <svg viewBox="0 0 24 24" aria-hidden="true"
-            class="h-5 w-5 shrink-0 fill-none stroke-current transition-transform duration-300 md:hidden"
-            :class="open ? 'rotate-180' : ''"
-            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m6 9 6 6 6-6" />
-        </svg>
+        <x-lucide-chevron-down aria-hidden="true"
+            class="h-5 w-5 shrink-0 transition-transform duration-300 md:hidden"
+            ::class="open ? 'rotate-180' : ''" />
     </button>
 
     <div id="opening-hours-panel" x-show="open || desktop" x-collapse x-cloak class="p-4 sm:p-5">

@@ -37,10 +37,7 @@ D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemeniti
         @if ($hasVideo)
             <div
                 class="absolute end-3 top-3 flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
-                <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                        d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-                </svg>
+                <x-lucide-video class="h-3.5 w-3.5" />
                 <span>{{ __('offers.video') }}</span>
             </div>
 
@@ -52,10 +49,7 @@ D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemeniti
                 aria-label="{{ __('offers.video') }}">
                 <span
                     class="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 shadow-xl backdrop-blur-sm transition hover:scale-110">
-                    <svg class="ms-1 h-7 w-7 text-red-700" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-                    </svg>
+                    <x-lucide-play class="ms-1 h-7 w-7 fill-current text-red-700" />
                 </span>
             </button>
 
@@ -101,15 +95,10 @@ D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemeniti
             :class="copied ? 'text-green-600' : 'text-amber-700 hover:text-amber-900'">
 
             {{-- أيقونة النسخ --}}
-            <svg x-show="!copied" x-cloak class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
+            <x-lucide-copy x-show="!copied" x-cloak class="h-4 w-4" />
 
             {{-- أيقونة الصح --}}
-            <svg x-show="copied" x-cloak class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-            </svg>
+            <x-lucide-check x-show="copied" x-cloak class="h-4 w-4" />
 
             {{-- النص بجانب الأيقونة --}}
             <span x-show="!copied" x-cloak>{{ __('offers.actions.copy') }}</span>
@@ -120,11 +109,7 @@ D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemeniti
         {{-- ينتهي قريبًا --}}
         @if ($promotion->ends_at)
             <div class="mt-3 flex items-center justify-center gap-1.5 text-xs font-medium text-red-700">
-                <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                        clip-rule="evenodd" />
-                </svg>
+                <x-lucide-clock class="h-3.5 w-3.5" />
                 <span>{{ __('offers.expires_soon') }}</span>
             </div>
         @endif

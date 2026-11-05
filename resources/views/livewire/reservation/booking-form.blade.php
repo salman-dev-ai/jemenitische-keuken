@@ -100,10 +100,7 @@
                     <span>{{ __('messages.reservation.submit') }}</span>
                 </span>
                 <span wire:loading class="flex items-center gap-2">
-                    <svg class="h-5 w-5 animate-spin text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                    </svg>
+                    <x-lucide-loader-circle class="h-5 w-5 animate-spin text-white" aria-hidden="true" />
                     <span>{{ __('messages.reservation.processing') }}</span>
                 </span>
             </button>

@@ -69,10 +69,7 @@
         {{-- الرأس --}}
         <div class="mb-4 flex items-center gap-3">
             <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-100">
-                <svg class="h-6 w-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
-                </svg>
+                <x-lucide-ticket-percent class="h-6 w-6 text-amber-700" aria-hidden="true" />
             </div>
             <div>
                 <h3 id="coupon-modal-title" class="text-xl font-bold text-amber-900">
@@ -89,9 +86,7 @@
             <code class="font-mono text-base font-bold tracking-wider text-amber-900" dir="ltr">
                 {{ $couponCode }}
             </code>
-            <svg class="h-5 w-5 shrink-0 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
+            <x-lucide-check class="h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
         </div>
 
         {{-- نموذج الضيف --}}

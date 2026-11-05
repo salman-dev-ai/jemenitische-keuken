@@ -91,13 +91,13 @@
                     class="flex w-full items-center gap-3 bg-gradient-to-r from-[#1d4663] to-[#9D4907] px-5 py-4 text-start text-[#fff7ec] focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white sm:px-6 md:cursor-default"
                 >
                     <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10 ring-1 ring-white/20" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11.5a7 7 0 1 0-14 0C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+                        <x-lucide-map-pin class="size-5" aria-hidden="true" />
                     </span>
                     <span class="grid flex-1 gap-0.5">
                         <span class="text-sm font-black sm:text-base">{{ __('delivery.zones_title') }}</span>
                         <span class="text-[11px] font-semibold text-[#f6d9b0]">{{ __('delivery.zones_count', ['count' => $this->deliveryZones->count()]) }}</span>
                     </span>
-                    <svg viewBox="0 0 24 24" aria-hidden="true" class="size-5 shrink-0 fill-none stroke-current transition-transform duration-300 md:hidden" :class="open ? 'rotate-180' : ''" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    <x-lucide-chevron-down aria-hidden="true" class="size-5 shrink-0 transition-transform duration-300 md:hidden" ::class="open ? 'rotate-180' : ''" />
                 </button>
 
                 <div id="delivery-zones-panel" x-show="open || desktop" x-collapse x-cloak>

@@ -38,11 +38,7 @@
             {{-- علامة النجاح --}}
             <div
                 class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/15">
-                <svg class="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <x-lucide-circle-check class="h-5 w-5 text-emerald-400" aria-hidden="true" />
             </div>
 
             {{-- العنوان والنص وشريط المدة --}}
@@ -59,9 +55,7 @@
             {{-- إغلاق الإشعار الحالي --}}
             <button @click="remove(toast.id)" type="button"
                 class="mt-0.5 shrink-0 text-stone-500 transition-colors hover:text-stone-300" aria-label="Close">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <x-lucide-x class="h-4 w-4" aria-hidden="true" />
             </button>
         </div>
     </template>

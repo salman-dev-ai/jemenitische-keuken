@@ -48,6 +48,6 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perHour(2)->by($request->ip());
         });
 
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views/layouts', 'layouts');
+        // $this->loadViewsFrom(__DIR__ . '/../../resources/views/layouts', 'layouts');
     }
 }

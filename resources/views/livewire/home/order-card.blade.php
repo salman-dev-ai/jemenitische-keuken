@@ -1,20 +1,10 @@
 {{--
-    بطاقة طلب واحدة: صورة بتدرج لوني، أيقونة دائرية، عنوان، وصف، وزر سهم يتغير اتجاهه حسب اللغة. تستقبل المتغيرات option وisArabic وindex، وتحوّل مفتاح الخيار إلى أيقونة Heroicons مناسبة.
+    بطاقة طلب واحدة: صورة بتدرج لوني، أيقونة دائرية، عنوان، وصف، وزر سهم يتغير اتجاهه حسب اللغة. تستقبل المتغيرات option وisArabic وindex، وتحوّل مفتاح الخيار إلى أيقونة Lucide مناسبة.
 --}}
 
-{{-- تحويل مفتاح الخيار القادم من البيانات إلى اسم أيقونة Heroicons مناسبة --}}
+{{-- مفتاح الخيار القادم من البيانات، يُستخدم لاختيار أيقونة Lucide المناسبة بشكل ثابت --}}
 @php
-    $iconName = match ($option['key'] ?? '') {
-        'truck' => 'heroicon-o-truck',
-        'shopping-bag' => 'heroicon-o-shopping-bag',
-        'utensils' => 'heroicon-o-cake',
-        'clock' => 'heroicon-o-clock',
-        'map-pin' => 'heroicon-o-map-pin',
-        'credit-card' => 'heroicon-o-credit-card',
-        'package' => 'heroicon-o-cube',
-        'store' => 'heroicon-o-building-storefront',
-        default => 'heroicon-o-squares-2x2',
-    };
+    $optionKey = $option['key'] ?? '';
 @endphp
 
 <a href="#reservation" wire:key="order-card-{{ $index }}"
@@ -34,9 +24,27 @@
         <span
             class="relative -mt-6 mx-auto flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#FBF7ED] bg-[#57151B] shadow-md transition-transform duration-300 group-hover:scale-105"
             aria-hidden="true">
-            <x-dynamic-component :component="$iconName" class="h-6 w-6 text-[#D9B36B]" />
+            {{-- اختيار أيقونة Lucide ثابتة حسب مفتاح الخيار لتفادي المكوّن الديناميكي --}}
+            @if ($optionKey === 'truck')
+                <x-lucide-truck class="h-6 w-6 text-[#D9B36B]" />
+            @elseif ($optionKey === 'shopping-bag')
+                <x-lucide-shopping-bag class="h-6 w-6 text-[#D9B36B]" />
+            @elseif ($optionKey === 'utensils')
+                <x-lucide-utensils class="h-6 w-6 text-[#D9B36B]" />
+            @elseif ($optionKey === 'clock')
+                <x-lucide-clock class="h-6 w-6 text-[#D9B36B]" />
+            @elseif ($optionKey === 'map-pin')
+                <x-lucide-map-pin class="h-6 w-6 text-[#D9B36B]" />
+            @elseif ($optionKey === 'credit-card')
+                <x-lucide-credit-card class="h-6 w-6 text-[#D9B36B]" />
+            @elseif ($optionKey === 'package')
+                <x-lucide-package class="h-6 w-6 text-[#D9B36B]" />
+            @elseif ($optionKey === 'store')
+                <x-lucide-store class="h-6 w-6 text-[#D9B36B]" />
+            @else
+                <x-lucide-layout-grid class="h-6 w-6 text-[#D9B36B]" />
+            @endif
         </span>
-
         {{-- العنوان والوصف القادمان من عنصر البيانات الحالي في مصفوفة orderOptions --}}
         <h3 class="mt-3 font-serif text-2xl font-bold text-[#57151B]">
             {{ $option['title'] }}
@@ -50,17 +58,11 @@
         <span
             class="mx-auto mt-5 flex h-9 w-9 items-center justify-center rounded-full bg-[#C89B4A] text-[#FFF9EE] shadow-sm transition-all duration-300 group-hover:bg-[#B5863C] group-hover:shadow-md"
             aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                class="transition-transform duration-300 {{ $isArabic ? 'group-hover:-translate-x-0.5' : 'group-hover:translate-x-0.5' }}">
-                @if ($isArabic)
-                    <path d="m12 19-7-7 7-7" />
-                    <path d="M19 12H5" />
-                @else
-                    <path d="M5 12h14" />
-                    <path d="m12 5 7 7-7 7" />
-                @endif
-            </svg>
+            @if ($isArabic)
+                <x-lucide-arrow-left class="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
+            @else
+                <x-lucide-arrow-right class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+            @endif
         </span>
     </div>
 </a>
