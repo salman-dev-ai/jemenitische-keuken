@@ -65,7 +65,7 @@ class OrderForm
     private static function customerSection(): Section
     {
         return Section::make('بيانات العميل والطلب')
-            ->icon('heroicon-o-user')
+            ->icon('lucide-user')
             ->columns([
                 'default' => 1,
                 'md' => 2,
@@ -133,7 +133,7 @@ class OrderForm
     private static function itemsSection(): Section
     {
         return Section::make('الأطباق والوجبات المطلوبة')
-            ->icon('heroicon-o-shopping-bag')
+            ->icon('lucide-shopping-bag')
             ->schema([
                 Repeater::make('items')
                     ->hiddenLabel()
@@ -233,7 +233,7 @@ class OrderForm
     private static function deliverySection(): Section
     {
         return Section::make('عنوان التوصيل')
-            ->icon('heroicon-o-map-pin')
+            ->icon('lucide-map-pin')
             ->columns([
                 'default' => 1,
                 'md' => 2,
@@ -265,7 +265,7 @@ class OrderForm
     private static function notesSection(): Section
     {
         return Section::make('ملاحظات')
-            ->icon('heroicon-o-chat-bubble-bottom-center-text')
+            ->icon('lucide-message-square-text')
             ->collapsible()
             ->schema([
                 Textarea::make('notes')
@@ -279,7 +279,7 @@ class OrderForm
     private static function statusSection(): Section
     {
         return Section::make('حالة الطلب والنوع')
-            ->icon('heroicon-o-adjustments-horizontal')
+            ->icon('lucide-sliders-horizontal')
             ->schema([
                 Select::make('type')
                     ->label('نوع الطلب')
@@ -302,7 +302,7 @@ class OrderForm
     private static function paymentSection(): Section
     {
         return Section::make('الدفوعات والحسابات')
-            ->icon('heroicon-o-banknotes')
+            ->icon('lucide-banknote')
             ->schema([
                 Select::make('payment_status')
                     ->label('حالة الدفع')

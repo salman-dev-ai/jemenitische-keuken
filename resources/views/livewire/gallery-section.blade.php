@@ -28,7 +28,7 @@
         @if ($featured && $featured->localized_badge !== '')
             <div
                 class="absolute end-4 top-4 z-10 flex items-center gap-2 rounded-xl border border-[#F2C879]/50 bg-[#1C0907]/85 px-4 py-2 text-sm font-bold text-[#F2C879] backdrop-blur-sm sm:end-8 sm:top-6">
-                <x-lucide-star class="h-4 w-4 fill-[#F2C879]" aria-hidden="true" />
+                @svg('lucide-star', 'h-4 w-4 fill-[#F2C879]', ['aria-hidden' => 'true'])
                 <span>{{ $featured->localized_badge }}</span>
             </div>
         @endif
@@ -38,7 +38,7 @@
             class="relative z-10 flex flex-col items-center gap-4 px-6 py-8 text-center sm:px-10 lg:min-h-[30rem] lg:w-5/12 lg:justify-center lg:py-12">
             <div
                 class="flex h-24 w-24 flex-col items-center justify-center rounded-full border-4 border-[#C8892B] bg-[#4A0E0E] text-[#F2C879] shadow-lg ring-4 ring-[#C8892B]/30 sm:h-28 sm:w-28">
-                <x-lucide-moon class="h-8 w-8 fill-[#F2C879]" aria-hidden="true" />
+                @svg('lucide-moon', 'h-8 w-8 fill-[#F2C879]', ['aria-hidden' => 'true'])
                 <span class="text-xl font-black leading-none sm:text-2xl">{{ __('gallery.halal') }}</span>
             </div>
 

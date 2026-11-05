@@ -26,23 +26,23 @@
             aria-hidden="true">
             {{-- اختيار أيقونة Lucide ثابتة حسب مفتاح الخيار لتفادي المكوّن الديناميكي --}}
             @if ($optionKey === 'truck')
-                <x-lucide-truck class="h-6 w-6 text-[#D9B36B]" />
+                @svg('lucide-truck', 'h-6 w-6 text-[#D9B36B]', ['aria-hidden' => 'true'])
             @elseif ($optionKey === 'shopping-bag')
-                <x-lucide-shopping-bag class="h-6 w-6 text-[#D9B36B]" />
+                @svg('lucide-shopping-bag', 'h-6 w-6 text-[#D9B36B]', ['aria-hidden' => 'true'])
             @elseif ($optionKey === 'utensils')
-                <x-lucide-utensils class="h-6 w-6 text-[#D9B36B]" />
+                @svg('lucide-utensils', 'h-6 w-6 text-[#D9B36B]', ['aria-hidden' => 'true'])
             @elseif ($optionKey === 'clock')
-                <x-lucide-clock class="h-6 w-6 text-[#D9B36B]" />
+                @svg('lucide-clock', 'h-6 w-6 text-[#D9B36B]', ['aria-hidden' => 'true'])
             @elseif ($optionKey === 'map-pin')
-                <x-lucide-map-pin class="h-6 w-6 text-[#D9B36B]" />
+                @svg('lucide-map-pin', 'h-6 w-6 text-[#D9B36B]', ['aria-hidden' => 'true'])
             @elseif ($optionKey === 'credit-card')
-                <x-lucide-credit-card class="h-6 w-6 text-[#D9B36B]" />
+                @svg('lucide-credit-card', 'h-6 w-6 text-[#D9B36B]', ['aria-hidden' => 'true'])
             @elseif ($optionKey === 'package')
-                <x-lucide-package class="h-6 w-6 text-[#D9B36B]" />
+                @svg('lucide-package', 'h-6 w-6 text-[#D9B36B]', ['aria-hidden' => 'true'])
             @elseif ($optionKey === 'store')
-                <x-lucide-store class="h-6 w-6 text-[#D9B36B]" />
+                @svg('lucide-store', 'h-6 w-6 text-[#D9B36B]', ['aria-hidden' => 'true'])
             @else
-                <x-lucide-layout-grid class="h-6 w-6 text-[#D9B36B]" />
+                @svg('lucide-layout-grid', 'h-6 w-6 text-[#D9B36B]', ['aria-hidden' => 'true'])
             @endif
         </span>
         {{-- العنوان والوصف القادمان من عنصر البيانات الحالي في مصفوفة orderOptions --}}
@@ -59,9 +59,9 @@
             class="mx-auto mt-5 flex h-9 w-9 items-center justify-center rounded-full bg-[#C89B4A] text-[#FFF9EE] shadow-sm transition-all duration-300 group-hover:bg-[#B5863C] group-hover:shadow-md"
             aria-hidden="true">
             @if ($isArabic)
-                <x-lucide-arrow-left class="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
+                @svg('lucide-arrow-left', 'h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5', ['aria-hidden' => 'true'])
             @else
-                <x-lucide-arrow-right class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                @svg('lucide-arrow-right', 'h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5', ['aria-hidden' => 'true'])
             @endif
         </span>
     </div>

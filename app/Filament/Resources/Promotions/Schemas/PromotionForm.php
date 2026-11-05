@@ -24,7 +24,7 @@ class PromotionForm
                     ->tabs([
                         // ═══ الربط والوسائط ═══
                         Tab::make('الربط والوسائط')
-                            ->icon('heroicon-o-link')
+                            ->icon('lucide-link')
                             ->schema([
                                 Select::make('coupon_id')
                                     ->label('الكوبون المرتبط')
@@ -35,8 +35,7 @@ class PromotionForm
                                     ->unique(ignoreRecord: true)
                                     ->helperText('كل عرض مرتبط بكوبون واحد فقط. اختر كوبونًا من القائمة.')
                                     ->getOptionLabelFromRecordUsing(
-                                        fn($record): string =>
-                                        "{$record->code} — " .
+                                        fn ($record): string => "{$record->code} — ".
                                             ($record->getTranslation('name', 'ar') ?? '')
                                     ),
 
@@ -70,7 +69,6 @@ class PromotionForm
                                     ->helperText('MP4 / WEBM / MOV — حتى 50MB. يُعرض في صفحة العرض التفصيلية.')
                                     ->columnSpanFull(),
 
-
                                 Toggle::make('is_featured')
                                     ->label('عرض مميز (البطاقة الكبرى)')
                                     ->default(false)
@@ -79,10 +77,9 @@ class PromotionForm
                             ])
                             ->columns(1),
 
-
                         // ═══ الترجمات ═══
                         Tab::make('العربية')
-                            ->icon('heroicon-o-language')
+                            ->icon('lucide-languages')
                             ->schema([
                                 TextInput::make('title.ar')
                                     ->label('العنوان (عربي)')
@@ -105,7 +102,7 @@ class PromotionForm
                             ]),
 
                         Tab::make('English')
-                            ->icon('heroicon-o-language')
+                            ->icon('lucide-languages')
                             ->schema([
                                 TextInput::make('title.en')
                                     ->label('Title (English)')
@@ -128,7 +125,7 @@ class PromotionForm
                             ]),
 
                         Tab::make('Nederlands')
-                            ->icon('heroicon-o-language')
+                            ->icon('lucide-languages')
                             ->schema([
                                 TextInput::make('title.nl')
                                     ->label('Titel (Nederlands)')
@@ -152,7 +149,7 @@ class PromotionForm
 
                         // ═══ الفترة والترتيب ═══
                         Tab::make('الفترة والترتيب')
-                            ->icon('heroicon-o-calendar')
+                            ->icon('lucide-calendar')
                             ->schema([
                                 DateTimePicker::make('starts_at')
                                     ->label('يبدأ في')

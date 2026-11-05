@@ -8,8 +8,8 @@
                 : 'text-stone-600 hover:bg-stone-50 hover:text-[#2C0D0A]'"
             class="w-full text-start flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-300">
             <div class="flex items-center gap-3">
-                <x-lucide-layout-grid x-show="selected === 'all'" class="h-5 w-5" aria-hidden="true" />
-                <x-lucide-circle x-show="selected !== 'all'" class="h-2 w-2 fill-current" aria-hidden="true" />
+                @svg('lucide-layout-grid', 'h-5 w-5', ['x-show' => "selected === 'all'", 'aria-hidden' => 'true'])
+                @svg('lucide-circle', 'h-2 w-2 fill-current', ['x-show' => "selected !== 'all'", 'aria-hidden' => 'true'])
                 <span class="text-sm font-bold">{{ __('messages.menu.all') }}</span>
             </div>
         </button>
@@ -24,8 +24,8 @@
                     : 'text-stone-600 hover:bg-stone-50 hover:text-[#2C0D0A]'"
                 class="group w-full text-start flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-300">
                 <div class="flex items-center gap-3">
-                    <x-lucide-check x-show="selected === slug" class="h-4 w-4" aria-hidden="true" />
-                    <x-lucide-circle x-show="selected !== slug" class="h-2 w-2 fill-current" aria-hidden="true" />
+                    @svg('lucide-check', 'h-4 w-4', ['x-show' => "selected === slug", 'aria-hidden' => 'true'])
+                    @svg('lucide-circle', 'h-2 w-2 fill-current', ['x-show' => "selected !== slug", 'aria-hidden' => 'true'])
                     <span class="font-bold text-sm">{{ $cat->localized_name }}</span>
                 </div>
                 <span :class="selected === slug ? 'bg-white/20 text-white' : 'bg-stone-100 text-stone-500 group-hover:bg-stone-200'"

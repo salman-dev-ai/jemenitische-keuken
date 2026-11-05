@@ -36,7 +36,7 @@
     @submit.prevent="submit()"
     class="space-y-4 pt-4 border-t border-stone-200">
     <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-1 flex items-center gap-2">
-        <x-lucide-clipboard-list class="w-4 h-4" aria-hidden="true" />
+        @svg('lucide-clipboard-list', 'w-4 h-4', ['aria-hidden' => 'true'])
         {{ __('messages.reservation.contactDetails') }}
     </h4>
 
@@ -120,7 +120,7 @@
     <div x-show="$wire.order_type === 'delivery'" x-cloak x-transition
         class="space-y-3 p-3 rounded-2xl border border-amber-200 bg-amber-50/50">
         <h5 class="font-bold text-xs text-amber-800 uppercase tracking-wider flex items-center gap-2">
-            <x-lucide-truck-electric class="w-4 h-4" aria-hidden="true" />
+            @svg('lucide-truck-electric', 'w-4 h-4', ['aria-hidden' => 'true'])
             {{ __('messages.remember.delivery_details') }}
         </h5>
 
@@ -171,7 +171,7 @@
         @if ($isReturningCustomer)
             <div class="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm"
                 wire:key="returning-customer-banner">
-                <x-lucide-user-check class="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
+                @svg('lucide-user-check', 'mt-0.5 h-5 w-5 shrink-0 text-amber-600', ['aria-hidden' => 'true'])
                 <div class="flex-1">
                     <strong class="block font-bold text-amber-900">{{ __('messages.remember.welcome_back') }}</strong>
                     <span class="text-amber-800">{{ __('messages.remember.filled_automatically') }}</span>
@@ -188,7 +188,7 @@
                     class="shrink-0 rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-bold text-amber-700 transition hover:border-amber-400 hover:text-amber-900 disabled:cursor-wait disabled:opacity-50">
                     <span wire:loading.remove wire:target="forgetCustomer">{{ __('messages.remember.not_you') }}</span>
                     <span wire:loading wire:target="forgetCustomer" class="inline-flex items-center gap-1">
-                        <x-lucide-loader-2 class="w-3 h-3 animate-spin" aria-hidden="true" />
+                        @svg('lucide-loader-2', 'w-3 h-3 animate-spin', ['aria-hidden' => 'true'])
                     </span>
                 </button>
             </div>
@@ -199,7 +199,7 @@
             <input id="remember_me" type="checkbox" wire:model="remember_me"
                 class="h-5 w-5 rounded-md border-stone-300 text-[#E07513] focus:ring-2 focus:ring-[#E07513]/30">
             <span class="flex-1 text-sm font-semibold text-stone-700">{{ __('messages.remember.checkbox') }}
-                                <x-lucide-save-check class="ml-1 inline  font-semibold h-5 w-5 text-[#6B1F2B]" aria-hidden="true" />
+                                @svg('lucide-save-check', 'ml-1 inline  font-semibold h-5 w-5 text-[#6B1F2B]', ['aria-hidden' => 'true'])
 
             </span>
         </label>
@@ -209,7 +209,7 @@
     @if ($errors->any())
         <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3 space-y-2" role="alert">
             <div class="flex items-center gap-2">
-                <x-lucide-alert-octagon class="w-4 h-4 text-rose-600 shrink-0" aria-hidden="true" />
+                @svg('lucide-alert-octagon', 'w-4 h-4 text-rose-600 shrink-0', ['aria-hidden' => 'true'])
                 <span class="font-black text-xs text-rose-900 uppercase tracking-wider">
                     {{ $errors->count() }} {{ __('messages.order.validation_error') }}
                 </span>
@@ -225,7 +225,7 @@
     {{-- قسم الكوبون (تطبيق/إزالة = حساب على الخادم → Livewire) --}}
     <div class="pt-4 border-t border-stone-200 mt-6 space-y-3">
         <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-1 flex items-center gap-2">
-            <x-lucide-ticket-percent class="w-4 h-4" aria-hidden="true" />
+            @svg('lucide-ticket-percent', 'w-4 h-4', ['aria-hidden' => 'true'])
             {{ __('cart.coupon.section_title') }}
         </h4>
 
@@ -233,7 +233,7 @@
             <div class="flex items-center justify-between gap-3 p-3 rounded-xl border-2 border-emerald-200 bg-emerald-50">
                 <div class="flex items-center gap-3 flex-1 min-w-0">
                     <div class="w-9 h-9 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0">
-                        <x-lucide-check class="w-5 h-5" aria-hidden="true" />
+                        @svg('lucide-check', 'w-5 h-5', ['aria-hidden' => 'true'])
                     </div>
                     <div class="min-w-0 flex-1">
                         <div class="font-black text-sm text-emerald-900 truncate" dir="ltr">{{ $appliedCouponCode }}</div>
@@ -248,7 +248,7 @@
                     class="shrink-0 w-8 h-8 rounded-lg bg-white text-rose-500 hover:bg-rose-100 flex items-center justify-center transition-colors disabled:opacity-50"
                     title="{{ __('cart.coupon.remove') }}" aria-label="{{ __('cart.coupon.remove') }}">
                     <span wire:loading.remove wire:target="removeCoupon">
-                        <x-lucide-x class="w-4 h-4" aria-hidden="true" />
+                        @svg('lucide-x', 'w-4 h-4', ['aria-hidden' => 'true'])
                     </span>
                     <span wire:loading wire:target="removeCoupon"
                         class="w-4 h-4 border-2 border-rose-500/30 border-t-rose-600 rounded-full animate-spin"></span>
@@ -271,7 +271,7 @@
 
             @if ($couponError)
                 <div class="flex items-start gap-2 p-2.5 rounded-xl border border-rose-200 bg-rose-50 text-xs" role="alert">
-                    <x-lucide-alert-circle class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" aria-hidden="true" />
+                    @svg('lucide-alert-circle', 'w-4 h-4 text-rose-600 shrink-0 mt-0.5', ['aria-hidden' => 'true'])
                     <span class="text-rose-800 leading-relaxed">{{ $couponError }}</span>
                 </div>
             @endif
@@ -289,7 +289,7 @@
             @if ($pricing->discount > 0)
                 <div class="flex justify-between items-center text-sm">
                     <span class="text-emerald-700 flex items-center gap-1.5">
-                        <x-lucide-ticket-percent class="w-3.5 h-3.5" aria-hidden="true" />
+                        @svg('lucide-ticket-percent', 'w-3.5 h-3.5', ['aria-hidden' => 'true'])
                         <span>{{ __('cart.summary.discount') }}</span>
                         <span class="text-xs font-bold text-emerald-600" dir="ltr">({{ $appliedCouponCode }})</span>
                     </span>
@@ -321,7 +321,7 @@
             class="w-full py-4 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-xl text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
             <span wire:loading.remove wire:target="checkout" class="inline-flex items-center gap-2">
                 {{ __('messages.reservation.confirmReservation') }}
-                <x-lucide-crown class="w-5 h-5" aria-hidden="true" />
+                @svg('lucide-crown', 'w-5 h-5', ['aria-hidden' => 'true'])
             </span>
             <span wire:loading wire:target="checkout" class="inline-flex items-center gap-2">
                 <span class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
@@ -330,7 +330,7 @@
         </button>
 
         <p class="text-[10px] text-center text-stone-400 flex items-center justify-center gap-1">
-            <x-lucide-shield-check class="w-3 h-3" aria-hidden="true" />
+            @svg('lucide-shield-check', 'w-3 h-3', ['aria-hidden' => 'true'])
             <span>{{ __('messages.reservation.smsNotice') }}</span>
         </p>
     </div>

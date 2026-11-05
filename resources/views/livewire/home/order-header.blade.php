@@ -7,7 +7,7 @@
     {{-- الفاصل الزخرفي: معين ذهبي بين خطين أفقيين فوق العنوان مباشرة --}}
     <div class="flex items-center justify-center gap-4 text-[#C89B4A]">
         <span class="h-px w-16 bg-[#C89B4A]"></span>
-        <x-lucide-diamond class="h-5 w-5" aria-hidden="true" />
+        @svg('lucide-diamond', 'h-5 w-5', ['aria-hidden' => 'true'])
         <span class="h-px w-16 bg-[#C89B4A]"></span>
     </div>
 

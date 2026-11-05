@@ -34,7 +34,7 @@ class OrdersTable
                     ->label('رقم العميل')
                     ->searchable(),
 
-                                    // ➕ عمود مدينة التوصيل
+                // ➕ عمود مدينة التوصيل
                 TextColumn::make('delivery_city')
                     ->label('مدينة التوصيل')
                     ->placeholder('—')
@@ -54,7 +54,7 @@ class OrdersTable
                     ->badge()
                     ->sortable(),
 
-                                    // ➕ عمود العميل المسجل
+                // ➕ عمود العميل المسجل
                 TextColumn::make('customer.name')
                     ->label('العميل المسجل')
                     ->placeholder('—')
@@ -103,7 +103,7 @@ class OrdersTable
                 EditAction::make(),
                 Action::make('complete')
                     ->label('إكتمل')
-                    ->icon('heroicon-m-check')
+                    ->icon('lucide-check')
                     ->color('success')
                     ->hidden(fn (Order $record) => $record->status === OrderStatus::COMPLETED)
                     ->action(fn (Order $record) => $record->update([

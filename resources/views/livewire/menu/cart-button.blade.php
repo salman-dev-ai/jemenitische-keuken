@@ -8,7 +8,7 @@
                 <div class="relative">
                     <div
                         class="w-11 h-11 rounded-2xl bg-[#E07513] text-white flex items-center justify-center shadow-md">
-                        <x-lucide-shopping-cart class="w-6 h-6" aria-hidden="true" />
+                        @svg('lucide-shopping-cart', 'w-6 h-6', ['aria-hidden' => 'true'])
                     </div>
                     <span
                         class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber-400 text-stone-950 text-[11px] font-black flex items-center justify-center">
@@ -23,7 +23,7 @@
             <button type="button" @click="isCartOpen = true"
                 class="px-5 py-2.5 bg-gradient-to-r from-[#E07513] to-[#B85709] hover:from-[#c2620a] hover:to-[#994303] text-white font-black rounded-2xl text-xs sm:text-sm shadow-md transition-all flex items-center gap-2 cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD700]">
                 <span>{{ __('messages.menu.checkout') }}</span>
-                <x-lucide-arrow-left class="w-4 h-4 rtl:rotate-0 ltr:rotate-180" aria-hidden="true" />
+                @svg('lucide-arrow-left', 'w-4 h-4 rtl:rotate-0 ltr:rotate-180', ['aria-hidden' => 'true'])
             </button>
         </div>
     </div>

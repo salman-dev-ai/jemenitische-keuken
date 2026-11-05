@@ -18,7 +18,7 @@
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
         @else
             <div class="w-full h-full flex items-center justify-center bg-stone-50">
-                <x-lucide-soup class="w-10 h-10 text-stone-300" aria-hidden="true" />
+                @svg('lucide-soup', 'w-10 h-10 text-stone-300', ['aria-hidden' => 'true'])
             </div>
         @endif
 
@@ -26,14 +26,14 @@
             @if ($item->is_featured)
                 <span
                     class="px-2.5 py-1 bg-amber-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
-                    <x-lucide-star class="w-3 h-3 fill-white" aria-hidden="true" />
+                    @svg('lucide-star', 'w-3 h-3 fill-white', ['aria-hidden' => 'true'])
                     {{ __('messages.menu.featured') }}
                 </span>
             @endif
             @if ($item->is_spicy)
                 <span
                     class="px-2.5 py-1 bg-red-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
-                    <x-lucide-flame class="w-3 h-3" aria-hidden="true" />
+                    @svg('lucide-flame', 'w-3 h-3', ['aria-hidden' => 'true'])
                     {{ __('messages.menu.spicy') }}
                 </span>
             @endif
@@ -76,7 +76,7 @@
                     class="w-full py-3 bg-stone-900 hover:bg-amber-600 text-white font-bold rounded-xl text-sm transition-all duration-300 flex items-center justify-center gap-2 group-hover:shadow-lg disabled:opacity-70 disabled:cursor-wait">
                     <span wire:loading.remove wire:target="addToCart({{ $item->id }})"
                         class="flex items-center gap-2">
-                        <x-lucide-shopping-cart class="w-4 h-4" aria-hidden="true" />
+                        @svg('lucide-shopping-cart', 'w-4 h-4', ['aria-hidden' => 'true'])
                         <span>{{ __('messages.menu.addToCart') ?? 'أضف إلى السلة' }}</span>
                     </span>
                     <span wire:loading wire:target="addToCart({{ $item->id }})"
@@ -92,7 +92,7 @@
                         class="w-9 h-9 rounded-lg bg-white text-red-500 hover:bg-red-100 hover:text-red-600 flex items-center justify-center shadow-sm transition-all disabled:opacity-50 disabled:cursor-wait"
                         title="{{ __('messages.menu.removeFromCart') }}">
                         <span wire:loading.remove wire:target="removeFromCart({{ $item->id }})">
-                            <x-lucide-trash-2 class="w-4 h-4" aria-hidden="true" />
+                            @svg('lucide-trash-2', 'w-4 h-4', ['aria-hidden' => 'true'])
                         </span>
                         <span wire:loading wire:target="removeFromCart({{ $item->id }})"
                             class="w-4 h-4 border-2 border-red-500/30 border-t-red-600 rounded-full animate-spin"></span>

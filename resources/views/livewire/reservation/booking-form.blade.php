@@ -25,7 +25,7 @@
         {{-- تنبيه عام بفشل الإرسال كما أعاده مكوّن الحجز من الخادم. --}}
         <div class="mb-6 flex items-start gap-3 rounded-2xl border-s-4 border-rose-500 bg-rose-50 p-4 text-sm text-rose-800"
             role="alert">
-            <x-lucide-triangle-alert class="mt-0.5 h-5 w-5 shrink-0 text-rose-600" aria-hidden="true" />
+            @svg('lucide-triangle-alert', 'mt-0.5 h-5 w-5 shrink-0 text-rose-600', ['aria-hidden' => 'true'])
             <div>
                 <strong class="block font-bold">{{ __('messages.reservation.errorTitle') }}</strong>
                 <span>{{ $errorMessage }}</span>
@@ -96,11 +96,11 @@
             <button type="submit" x-show="step === 2" x-cloak wire:loading.attr="disabled"
                 class="flex w-full flex-1 items-center justify-center gap-3 rounded-2xl bg-[#6B1F2B] px-6 py-4 font-black text-white shadow-lg shadow-[#6B1F2B]/15 transition hover:bg-[#541721] hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-[#6B1F2B]/20 disabled:cursor-not-allowed disabled:opacity-50">
                 <span wire:loading.remove class="flex items-center gap-2">
-                    <x-lucide-send class="h-4 w-4" aria-hidden="true" />
+                    @svg('lucide-send', 'h-4 w-4', ['aria-hidden' => 'true'])
                     <span>{{ __('messages.reservation.submit') }}</span>
                 </span>
                 <span wire:loading class="flex items-center gap-2">
-                    <x-lucide-loader-circle class="h-5 w-5 animate-spin text-white" aria-hidden="true" />
+                    @svg('lucide-loader-circle', 'h-5 w-5 animate-spin text-white', ['aria-hidden' => 'true'])
                     <span>{{ __('messages.reservation.processing') }}</span>
                 </span>
             </button>

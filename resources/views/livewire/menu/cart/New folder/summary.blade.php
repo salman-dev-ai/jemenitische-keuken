@@ -10,7 +10,7 @@
     @if ($pricing->discount > 0)
         <div class="flex justify-between items-center text-sm">
             <span class="text-emerald-700 flex items-center gap-1.5">
-                <x-lucide-ticket-percent class="w-3.5 h-3.5" aria-hidden="true" />
+                @svg('lucide-ticket-percent', 'w-3.5 h-3.5', ['aria-hidden' => 'true'])
                 <span>{{ __('cart.summary.discount') }}</span>
                 <span class="text-xs font-bold text-emerald-600" dir="ltr">({{ $appliedCouponCode }})</span>
             </span>

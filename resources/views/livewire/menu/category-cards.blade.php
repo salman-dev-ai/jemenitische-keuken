@@ -16,7 +16,7 @@
                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                 @else
                     <div class="w-full h-full flex items-center justify-center bg-stone-100">
-                        <x-lucide-utensils class="w-8 h-8 text-stone-400" aria-hidden="true" />
+                        @svg('lucide-utensils', 'w-8 h-8 text-stone-400', ['aria-hidden' => 'true'])
                     </div>
                 @endif
                 <div class="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/40 to-transparent">

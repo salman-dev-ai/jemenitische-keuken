@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\OrderOptions\Tables;
 
- use Filament\Actions\DeleteAction;
- use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -12,7 +12,7 @@ use Filament\Tables\Table;
 
 class OrderOptionsTable
 {
-   public static function configure(Table $table): Table
+    public static function configure(Table $table): Table
     {
         return $table
             ->columns([
@@ -41,24 +41,22 @@ class OrderOptionsTable
                     ->badge()
                     ->color('info')
                     ->icon(fn ($state) => match ($state) {
-                        'truck'        => 'heroicon-o-truck',
-                        'shopping-bag' => 'heroicon-o-shopping-bag',
-                        'utensils'     => 'heroicon-o-cake',
-                        'clock'        => 'heroicon-o-clock',
-                        'map-pin'      => 'heroicon-o-map-pin',
-                        'credit-card'  => 'heroicon-o-credit-card',
-                        'package'      => 'heroicon-o-cube',
-                        'store'        => 'heroicon-o-building-storefront',
-                        default        => 'heroicon-o-squares-2x2',
+                        'truck' => 'lucide-truck',
+                        'shopping-bag' => 'lucide-shopping-bag',
+                        'utensils' => 'lucide-cake',
+                        'clock' => 'lucide-clock',
+                        'map-pin' => 'lucide-map-pin',
+                        'credit-card' => 'lucide-credit-card',
+                        'package' => 'lucide-package',
+                        'store' => 'lucide-store',
+                        default => 'lucide-layout-grid',
                     }),
-
-
 
                 IconColumn::make('is_active')
                     ->label('الحالة')
                     ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueIcon('lucide-circle-check')
+                    ->falseIcon('lucide-circle-x')
                     ->trueColor('success')
                     ->falseColor('danger'),
 

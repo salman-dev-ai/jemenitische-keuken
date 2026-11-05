@@ -9,6 +9,8 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\FileViewFinder;
+use InvalidArgumentException;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,30 @@ class AppServiceProvider extends ServiceProvider
             RestaurantSetting::class,
             fn (): RestaurantSetting => RestaurantSetting::current(),
         );
+
+        // ✅ تجاوز قيود open_basedir على ويندوز (IIS/Plesk):
+        // Livewire يمرّر نص قالب الصفحة الكامل إلى Blade::render()، فيعتبره Laravel
+        // اسم View ويستدعي file_exists() عليه. النص يحتوي رموزًا غير صالحة في أسماء
+        // ملفات ويندوز (? < >)، فيفشل فحص open_basedir ويُطلق تحذيرًا يتحوّل إلى
+        // ErrorException → خطأ 500. هذا الربط يرفض تلك الأسماء قبل لمس نظام الملفات؛
+        // فيلتقط Laravel استثناء InvalidArgumentException ويعيد false، ثم يولّد ملفًا
+        // مُصرّفًا بالـ hash كما هو مصمَّم أصلًا في BladeCompiler::render().
+        $this->app->bind('view.finder', function ($app): FileViewFinder {
+            return new class($app['files'], $app['config']['view.paths']) extends FileViewFinder
+            {
+                /**
+                 * رفض أسماء العرض التي تحتوي رموزًا غير مسموحة في أسماء ملفات ويندوز.
+                 */
+                public function find($name)
+                {
+                    if (is_string($name) && strpbrk($name, '<>?*|"') !== false) {
+                        throw new InvalidArgumentException("View [{$name}] not found.");
+                    }
+
+                    return parent::find($name);
+                }
+            };
+        });
     }
 
     /**

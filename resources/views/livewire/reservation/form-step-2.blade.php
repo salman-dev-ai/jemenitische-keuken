@@ -60,7 +60,7 @@
         @if ($isReturningCustomer)
             <div class="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm"
                 wire:key="returning-customer-banner">
-                <x-lucide-user-check class="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
+                @svg('lucide-user-check', 'mt-0.5 h-5 w-5 shrink-0 text-amber-600', ['aria-hidden' => 'true'])
                 <div class="flex-1">
                     <strong class="block font-bold text-amber-900">
                         {{ __('messages.remember.welcome_back') }}
@@ -96,7 +96,7 @@
                 class="h-5 w-5 rounded-md border-stone-300 text-[#6B1F2B] focus:ring-2 focus:ring-[#E07513]">
             <span class="flex-1 text-sm font-semibold text-stone-700">
                 {{ __('messages.remember.checkbox') }}
-                <x-lucide-save-check class="ml-1 inline  font-semibold h-5 w-5 text-[#6B1F2B]" aria-hidden="true" />
+                @svg('lucide-save-check', 'ml-1 inline  font-semibold h-5 w-5 text-[#6B1F2B]', ['aria-hidden' => 'true'])
             </span>
         </label>
     </div>

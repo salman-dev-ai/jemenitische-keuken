@@ -21,7 +21,7 @@ class CustomerForm
                     // 📋 القسم الأول: البيانات الأساسية
                     Section::make('البيانات الشخصية')
                         ->description('معلومات التواصل الأساسية للعميل')
-                        ->icon('heroicon-o-user')
+                        ->icon('lucide-user')
                         ->schema([
 
                             TextInput::make('name')
@@ -54,7 +54,7 @@ class CustomerForm
                     //   القسم الثاني: بيانات العنوان
                     Section::make('بيانات العنوان')
                         ->description('عنوان التوصيل الافتراضي للعميل')
-                        ->icon('heroicon-o-map-pin')
+                        ->icon('lucide-map-pin')
                         ->schema([
 
                             TextInput::make('address')

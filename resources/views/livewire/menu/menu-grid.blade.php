@@ -19,8 +19,8 @@
     {{-- عنوان القسم الحالي --}}
     <div class="hidden lg:flex items-center justify-between mb-6 pb-4 border-b border-stone-200">
         <h3 class="text-xl font-black text-[#2C0D0A] flex items-center gap-2">
-            <x-lucide-crown x-show="selected === 'all'" class="w-5 h-5" aria-hidden="true" />
-            <x-lucide-utensils x-show="selected !== 'all'" class="w-5 h-5" aria-hidden="true" />
+            @svg('lucide-crown', 'w-5 h-5', ['x-show' => "selected === 'all'", 'aria-hidden' => 'true'])
+            @svg('lucide-utensils', 'w-5 h-5', ['x-show' => "selected !== 'all'", 'aria-hidden' => 'true'])
             <span x-text="selected === 'all' ? @js(__('messages.menu.all')) : (names[selected] ?? @js(__('messages.menu.dishes')))"></span>
         </h3>
         <span class="text-xs font-bold text-stone-500 bg-stone-100 px-3 py-1 rounded-full">
@@ -37,7 +37,7 @@
         {{-- حالة فارغة --}}
         <div x-show="visible === 0" x-cloak
             class="col-span-full text-center py-16 bg-stone-50 rounded-3xl border border-dashed border-stone-300">
-            <x-lucide-utensils class="w-8 h-8 mx-auto mb-3 text-stone-400" aria-hidden="true" />
+            @svg('lucide-utensils', 'w-8 h-8 mx-auto mb-3 text-stone-400', ['aria-hidden' => 'true'])
             <h3 class="text-lg font-bold text-stone-700">{{ __('messages.menu.empty') }}</h3>
         </div>
     </div>

@@ -19,7 +19,7 @@
     <div class="rounded-3xl bg-[#6B1F2B] p-6 text-white shadow-xl sm:p-8">
         <div class="mb-4 flex items-center gap-3">
             <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
-                <x-lucide-info class="h-5 w-5 text-amber-300" aria-hidden="true" />
+                @svg('lucide-info', 'h-5 w-5 text-amber-300', ['aria-hidden' => 'true'])
             </div>
             <h3 class="font-black text-amber-200">{{ __('messages.reservation.step1') }}</h3>
         </div>
@@ -32,7 +32,7 @@
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
         <div class="flex items-start gap-4 rounded-2xl border border-stone-100 bg-white p-5 shadow-sm">
             <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#FAF0E8] text-[#6B1F2B]">
-                <x-lucide-calendar-check class="h-5 w-5" aria-hidden="true" />
+                @svg('lucide-calendar-check', 'h-5 w-5', ['aria-hidden' => 'true'])
             </div>
             <div>
                 <h4 class="font-bold text-[#32151C]">{{ __('messages.reservation.reservationDate') }}</h4>
@@ -43,7 +43,7 @@
 
         <div class="flex items-start gap-4 rounded-2xl border border-stone-100 bg-white p-5 shadow-sm">
             <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#FAF0E8] text-[#6B1F2B]">
-                <x-lucide-users class="h-5 w-5" aria-hidden="true" />
+                @svg('lucide-users', 'h-5 w-5', ['aria-hidden' => 'true'])
             </div>
             <div>
                 <h4 class="font-bold text-[#32151C]">{{ __('messages.reservation.guests') }}</h4>

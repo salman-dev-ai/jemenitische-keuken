@@ -5,7 +5,7 @@
 
 <form wire:submit="checkout" class="space-y-4 pt-4 border-t border-stone-200">
     <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-1 flex items-center gap-2">
-        <x-lucide-clipboard-list class="w-4 h-4" aria-hidden="true" />
+        @svg('lucide-clipboard-list', 'w-4 h-4', ['aria-hidden' => 'true'])
         {{ __('messages.reservation.contactDetails') }}
     </h4>
 
@@ -98,7 +98,7 @@
         @if ($isReturningCustomer)
             <div class="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm"
                 wire:key="returning-customer-banner">
-                <x-lucide-user-check class="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
+                @svg('lucide-user-check', 'mt-0.5 h-5 w-5 shrink-0 text-amber-600', ['aria-hidden' => 'true'])
                 <div class="flex-1">
                     <strong class="block font-bold text-amber-900">{{ __('messages.remember.welcome_back') }}</strong>
                     <span class="text-amber-800">{{ __('messages.remember.filled_automatically') }}</span>
@@ -109,7 +109,7 @@
                     class="shrink-0 rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-bold text-amber-700 transition hover:border-amber-400 hover:text-amber-900 disabled:cursor-wait disabled:opacity-50">
                     <span wire:loading.remove wire:target="forgetCustomer">{{ __('messages.remember.not_you') }}</span>
                     <span wire:loading wire:target="forgetCustomer" class="inline-flex items-center gap-1">
-                        <x-lucide-loader-2 class="w-3 h-3 animate-spin" aria-hidden="true" />
+                        @svg('lucide-loader-2', 'w-3 h-3 animate-spin', ['aria-hidden' => 'true'])
                     </span>
                 </button>
             </div>
@@ -127,7 +127,7 @@
     @if ($errors->any())
         <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3 space-y-2" role="alert">
             <div class="flex items-center gap-2">
-                <x-lucide-alert-octagon class="w-4 h-4 text-rose-600 shrink-0" aria-hidden="true" />
+                @svg('lucide-alert-octagon', 'w-4 h-4 text-rose-600 shrink-0', ['aria-hidden' => 'true'])
                 <span class="font-black text-xs text-rose-900 uppercase tracking-wider">
                     {{ $errors->count() }} {{ __('messages.order.validation_error') }}
                 </span>

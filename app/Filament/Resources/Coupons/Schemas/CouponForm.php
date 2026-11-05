@@ -25,7 +25,7 @@ class CouponForm
                     ->tabs([
                         // ═══ البيانات الأساسية ═══
                         Tab::make('البيانات الأساسية')
-                            ->icon('heroicon-o-information-circle')
+                            ->icon('lucide-info')
                             ->schema([
                                 TextInput::make('code')
                                     ->label('كود الكوبون')
@@ -49,8 +49,7 @@ class CouponForm
                                     ->minValue(0.01)
                                     ->step(0.01)
                                     ->suffix(
-                                        fn(callable $get): string =>
-                                        $get('discount_type') === DiscountType::Percentage->value
+                                        fn (callable $get): string => $get('discount_type') === DiscountType::Percentage->value
                                             ? '%'
                                             : '€'
                                     ),
@@ -71,12 +70,10 @@ class CouponForm
                                     ->searchable()
                                     ->preload()
                                     ->visible(
-                                        fn(callable $get): bool =>
-                                        $get('applies_to') === CouponScope::Products->value
+                                        fn (callable $get): bool => $get('applies_to') === CouponScope::Products->value
                                     )
                                     ->required(
-                                        fn(callable $get): bool =>
-                                        $get('applies_to') === CouponScope::Products->value
+                                        fn (callable $get): bool => $get('applies_to') === CouponScope::Products->value
                                     ),
 
                                 // يظهر فقط عند اختيار "تصنيفات محددة"
@@ -87,19 +84,17 @@ class CouponForm
                                     ->searchable()
                                     ->preload()
                                     ->visible(
-                                        fn(callable $get): bool =>
-                                        $get('applies_to') === CouponScope::Categories->value
+                                        fn (callable $get): bool => $get('applies_to') === CouponScope::Categories->value
                                     )
                                     ->required(
-                                        fn(callable $get): bool =>
-                                        $get('applies_to') === CouponScope::Categories->value
+                                        fn (callable $get): bool => $get('applies_to') === CouponScope::Categories->value
                                     ),
                             ])
                             ->columns(2),
 
                         // ═══ الترجمات ═══
                         Tab::make('العربية')
-                            ->icon('heroicon-o-language')
+                            ->icon('lucide-languages')
                             ->schema([
                                 TextInput::make('name.ar')
                                     ->label('الاسم (عربي)')
@@ -113,7 +108,7 @@ class CouponForm
                             ]),
 
                         Tab::make('English')
-                            ->icon('heroicon-o-language')
+                            ->icon('lucide-languages')
                             ->schema([
                                 TextInput::make('name.en')
                                     ->label('Name (English)')
@@ -127,7 +122,7 @@ class CouponForm
                             ]),
 
                         Tab::make('Nederlands')
-                            ->icon('heroicon-o-language')
+                            ->icon('lucide-languages')
                             ->schema([
                                 TextInput::make('name.nl')
                                     ->label('Naam (Nederlands)')
@@ -142,7 +137,7 @@ class CouponForm
 
                         // ═══ الحدود والقيود ═══
                         Tab::make('الحدود والصلاحية')
-                            ->icon('heroicon-o-shield-check')
+                            ->icon('lucide-shield-check')
                             ->schema([
                                 DateTimePicker::make('expires_at')
                                     ->label('تاريخ انتهاء الصلاحية')

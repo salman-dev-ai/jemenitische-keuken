@@ -26,8 +26,8 @@ class RestaurantStatus extends StatsOverviewWidget
                 )
                 ->descriptionIcon(
                     $settings?->accepts_online_orders
-                        ? 'heroicon-m-check-circle'
-                        : 'heroicon-m-x-circle'
+                        ? 'lucide-circle-check'
+                        : 'lucide-circle-x'
                 )
                 ->color(
                     $settings?->accepts_online_orders
@@ -46,8 +46,8 @@ class RestaurantStatus extends StatsOverviewWidget
                 )
                 ->descriptionIcon(
                     $settings?->accepts_reservations
-                        ? 'heroicon-m-check-circle'
-                        : 'heroicon-m-x-circle'
+                        ? 'lucide-circle-check'
+                        : 'lucide-circle-x'
                 )
                 ->color(
                     $settings?->accepts_reservations
@@ -58,9 +58,9 @@ class RestaurantStatus extends StatsOverviewWidget
             // إجمالي الإيرادات
             Stat::make('إجمالي الإيرادات', number_format($totalRevenue, 2).' €')
                 ->description('إيرادات الطلبات المعتمدة')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                ->descriptionIcon('lucide-trending-up')
                 ->chart([5, 8, 10, 15, 12, 20, 25])
-                ->icon('heroicon-o-banknotes')
+                ->icon('lucide-banknote')
                 ->color('warning'),
         ];
     }

@@ -17,7 +17,7 @@ class UserForm
 
                 Section::make('بيانات المستخدم')
                     ->description('المعلومات الأساسية للمستخدم')
-                    ->icon('heroicon-o-user')
+                    ->icon('lucide-user')
                     ->schema([
 
                         Grid::make([
@@ -48,7 +48,7 @@ class UserForm
 
                 Section::make('الأمان والصلاحيات')
                     ->description('كلمة المرور والدور الوظيفي للمستخدم')
-                    ->icon('heroicon-o-lock-closed')
+                    ->icon('lucide-lock')
                     ->schema([
 
                         Grid::make([
@@ -65,12 +65,10 @@ class UserForm
                                     ->minLength(8)
                                     ->confirmed()
                                     ->dehydrateStateUsing(
-                                        fn (?string $state): ?string =>
-                                            filled($state) ? $state : null
+                                        fn (?string $state): ?string => filled($state) ? $state : null
                                     )
                                     ->dehydrated(
-                                        fn (?string $state): bool =>
-                                            filled($state)
+                                        fn (?string $state): bool => filled($state)
                                     ),
 
                                 TextInput::make('password_confirmation')

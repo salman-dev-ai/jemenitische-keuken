@@ -102,7 +102,7 @@
         class="flex w-full items-center gap-3 bg-gradient-to-r from-[#1d4663] to-[#9D4907] px-5 py-4 text-start text-white focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white sm:px-6 md:cursor-default"
     >
         <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/20" aria-hidden="true">
-            <x-lucide-clock class="h-5 w-5" />
+            @svg('lucide-clock', 'h-5 w-5', ['aria-hidden' => 'true'])
         </span>
 
         <span class="grid flex-1 gap-1">
@@ -116,9 +116,7 @@
             @endif
         </span>
 
-        <x-lucide-chevron-down aria-hidden="true"
-            class="h-5 w-5 shrink-0 transition-transform duration-300 md:hidden"
-            ::class="open ? 'rotate-180' : ''" />
+        @svg('lucide-chevron-down', 'h-5 w-5 shrink-0 transition-transform duration-300 md:hidden', ['aria-hidden' => 'true', ':class' => "open ? 'rotate-180' : ''"])
     </button>
 
     <div id="opening-hours-panel" x-show="open || desktop" x-collapse x-cloak class="p-4 sm:p-5">
@@ -160,7 +158,7 @@
                                     </span>
 
                                     @if ($loop->first)
-                                        <x-lucide-arrow-right class="h-3.5 w-3.5 shrink-0 text-[#c05a1c] rtl:rotate-180" />
+                                        @svg('lucide-arrow-right', 'h-3.5 w-3.5 shrink-0 text-[#c05a1c] rtl:rotate-180', ['aria-hidden' => 'true'])
                                     @endif
                                 @endforeach
                             </div>

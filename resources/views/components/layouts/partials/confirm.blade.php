@@ -52,7 +52,7 @@
         {{-- أيقونة التنبيه --}}
         <div
             class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/30 bg-amber-500/15">
-            <x-lucide-triangle-alert class="h-7 w-7 text-amber-400" aria-hidden="true" />
+            @svg('lucide-triangle-alert', 'h-7 w-7 text-amber-400', ['aria-hidden' => 'true'])
         </div>
 
         {{-- العنوان والرسالة --}}

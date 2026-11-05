@@ -30,11 +30,10 @@
             <button type="button" @click="open = !open" :aria-expanded="open.toString()"
                 class="flex h-12 w-full items-center justify-between rounded-xl border border-stone-200 bg-[#FAF7F2] px-4 text-sm font-semibold text-stone-800 transition hover:border-[#E07513] focus:border-[#E07513] focus:outline-none focus:ring-4 focus:ring-[#E07513]/10">
                 <span class="flex items-center gap-2">
-                    <x-lucide-users class="h-4 w-4 text-[#6B1F2B]" aria-hidden="true" />
+                    @svg('lucide-users', 'h-4 w-4 text-[#6B1F2B]', ['aria-hidden' => 'true'])
                     <span>{{ __('messages.reservation.guestsCount', ['count' => $party_size]) }}</span>
                 </span>
-                <x-lucide-chevron-down class="h-4 w-4 text-[#6B1F2B] transition-transform duration-200"
-                    ::class="{ 'rotate-180': open }" aria-hidden="true" />
+                @svg('lucide-chevron-down', 'h-4 w-4 text-[#6B1F2B] transition-transform duration-200', [':class' => "{ 'rotate-180': open }", 'aria-hidden' => 'true'])
             </button>
 
             <div x-cloak x-show="open" x-transition:enter="transition ease-out duration-150"
@@ -49,7 +48,7 @@
                         class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-right text-sm transition {{ $party_size == $size ? 'bg-[#6B1F2B] font-bold text-white' : 'text-stone-700 hover:bg-[#FAF0E8] hover:text-[#6B1F2B]' }}">
                         <span>{{ __('messages.reservation.guestsCount', ['count' => $size]) }}</span>
                         @if ($party_size == $size)
-                            <x-lucide-check class="h-4 w-4" aria-hidden="true" />
+                            @svg('lucide-check', 'h-4 w-4', ['aria-hidden' => 'true'])
                         @endif
                     </button>
                 @endforeach
@@ -68,9 +67,7 @@
                 {{ __('messages.reservation.reservationDate') }}
             </label>
             <div class="relative">
-                <x-lucide-calendar-days
-                    class="pointer-events-none absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6B1F2B] p-3"
-                    aria-hidden="true" />
+                @svg('lucide-calendar-days', 'pointer-events-none absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6B1F2B] p-3', ['aria-hidden' => 'true'])
                 <input id="reservation-date-input" type="date" wire:model.live="reservation_date"
                     min="{{ now()->toDateString() }}"
                     class="h-12 w-full rounded-xl border-stone-200 bg-[#FAF7F2] ps-11 text-sm font-semibold focus:border-[#E07513] focus:ring-4 focus:ring-[#E07513]/10 p-3" />
@@ -93,9 +90,7 @@
                 {{ __('messages.reservation.preferredTime') }}
             </label>
             <div class="relative">
-                <x-lucide-clock
-                    class="pointer-events-none absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6B1F2B] p-3"
-                    aria-hidden="true" />
+                @svg('lucide-clock', 'pointer-events-none absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6B1F2B] p-3', ['aria-hidden' => 'true'])
                 <input id="reservation-time-input" type="time" wire:model.live="reservation_time"
                     class="h-12 w-full rounded-xl border-stone-200 bg-[#FAF7F2] ps-11 text-sm font-semibold focus:border-[#E07513] focus:ring-4 focus:ring-[#E07513]/10 p-3" />
             </div>

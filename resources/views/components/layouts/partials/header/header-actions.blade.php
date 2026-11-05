@@ -25,7 +25,7 @@
         <a href="{{ $whatsappHref }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
             class="inline-flex h-10 animate-pulse items-center gap-2 rounded-full border border-emerald-200 bg-white px-4 text-xs font-bold text-emerald-700 transition hover:-translate-y-0.5 hover:border-emerald-500">
             {{ __('footer.whatsapp') }}
-            <x-lucide-message-circle class="h-5 w-5" aria-hidden="true" />
+            @svg('lucide-message-circle', 'h-5 w-5', ['aria-hidden' => 'true'])
         </a>
     @endif
 
@@ -46,8 +46,7 @@
         <button @click="open = !open" @keydown.escape.window="open = false" type="button"
             class="flex h-10 items-center gap-1.5 rounded-xl border border-gray-200 bg-white/50 px-3 text-xs font-bold text-gray-800 transition-all hover:bg-gray-100">
             <span>{{ app()->getLocale() == 'ar' ? 'العربية' : (app()->getLocale() == 'nl' ? 'Nederlands' : 'English') }}</span>
-            <x-lucide-chevron-down class="h-3.5 w-3.5 text-gray-500 transition-transform duration-200"
-                ::class="{ 'rotate-180': open }" aria-hidden="true" />
+            @svg('lucide-chevron-down', 'h-3.5 w-3.5 text-gray-500 transition-transform duration-200', [':class' => "{ 'rotate-180': open }", 'aria-hidden' => 'true'])
         </button>
         <div x-show="open" @click.away="open = false" x-cloak x-transition:enter="transition ease-out duration-150"
             x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"

@@ -7,7 +7,7 @@
     <header class="flex items-center justify-between gap-2">
         <h3 class="text-base font-black text-[#2b1810]">{{ __('footer.location') }}</h3>
         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f0d3b0] text-[#c05a1c]">
-            <x-lucide-map-pin class="h-5 w-5" />
+            @svg('lucide-map-pin', 'h-5 w-5', ['aria-hidden' => 'true'])
         </span>
     </header>
 
@@ -27,7 +27,7 @@
     @if ($f['maps_link'])
         <a href="{{ $f['maps_link'] }}" target="_blank" rel="noopener noreferrer"
             class="mt-4 inline-flex h-10 items-center gap-2 rounded-xl border border-[#c05a1c] px-4 text-xs font-bold text-[#c05a1c] transition hover:bg-[#c05a1c] hover:text-white">
-            <x-lucide-map-pin class="h-4 w-4" />
+            @svg('lucide-map-pin', 'h-4 w-4', ['aria-hidden' => 'true'])
             {{ __('footer.view_map') }}
         </a>
     @endif
@@ -38,7 +38,7 @@
     <header class="flex items-center justify-between gap-2">
         <h3 class="text-base font-black text-[#2b1810]">{{ __('footer.contact') }}</h3>
         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f0d3b0] text-[#c05a1c]">
-            <x-lucide-phone class="h-5 w-5" />
+            @svg('lucide-phone', 'h-5 w-5', ['aria-hidden' => 'true'])
         </span>
     </header>
 
@@ -46,14 +46,14 @@
         @if ($f['phone'] && $f['phone_href'])
             <a dir="ltr" href="tel:{{ $f['phone_href'] }}"
                 class="flex items-center gap-2 transition hover:text-[#c05a1c]">
-                <x-lucide-phone class="h-4 w-4 shrink-0 text-[#c05a1c]" />
+                @svg('lucide-phone', 'h-4 w-4 shrink-0 text-[#c05a1c]', ['aria-hidden' => 'true'])
                 <span>{{ $f['phone'] }}</span>
             </a>
         @endif
         @if ($f['email'])
             <a dir="ltr" href="mailto:{{ $f['email'] }}"
                 class="flex items-center gap-2 break-all transition hover:text-[#c05a1c]">
-                <x-lucide-mail class="h-4 w-4 shrink-0 text-[#c05a1c]" />
+                @svg('lucide-mail', 'h-4 w-4 shrink-0 text-[#c05a1c]', ['aria-hidden' => 'true'])
                 <span>{{ $f['email'] }}</span>
             </a>
         @endif
@@ -68,7 +68,7 @@
     <header class="flex items-center justify-between gap-2">
         <h3 class="text-base font-black text-[#2b1810]">{{ __('footer.follow') }}</h3>
         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f0d3b0] text-[#c05a1c]">
-            <x-lucide-message-circle class="h-5 w-5" />
+            @svg('lucide-message-circle', 'h-5 w-5', ['aria-hidden' => 'true'])
         </span>
     </header>
 
@@ -77,7 +77,7 @@
             <a href="{{ $f['tiktok'] }}" target="_blank" rel="noopener noreferrer" aria-label="TikTok"
                 class="inline-flex h-10 items-center gap-2 rounded-full border border-[#e2c3a0] bg-white px-4 text-xs font-bold text-[#2b1810] transition hover:-translate-y-0.5 hover:border-[#c05a1c]">
                 {{ __('footer.tiktok') }}
-                <x-lucide-music-2 class="h-4 w-4" />
+                @svg('lucide-music-2', 'h-4 w-4', ['aria-hidden' => 'true'])
             </a>
         @endif
         @if ($f['whatsapp_href'])
@@ -85,7 +85,7 @@
                 aria-label="WhatsApp"
                 class="inline-flex h-10 items-center gap-2 rounded-full border border-emerald-200 bg-white px-4 text-xs font-bold text-emerald-700 transition hover:-translate-y-0.5 hover:border-emerald-500">
                 {{ __('footer.whatsapp') }}
-                <x-lucide-message-circle class="h-4 w-4" aria-hidden="true" />
+                @svg('lucide-message-circle', 'h-4 w-4', ['aria-hidden' => 'true'])
             </a>
         @endif
     </div>

@@ -17,7 +17,7 @@
         <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5">
             <div class="flex items-center gap-3">
                 <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500 shadow-lg">
-                    <x-lucide-check-circle class="h-7 w-7" aria-hidden="true" />
+                    @svg('lucide-check-circle', 'h-7 w-7', ['aria-hidden' => 'true'])
                 </div>
                 <div>
                     <h4 class="font-black">{{ $successMessage }}</h4>

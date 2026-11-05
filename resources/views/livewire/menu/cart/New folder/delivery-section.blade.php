@@ -2,7 +2,7 @@
 <div x-show="$wire.order_type === 'delivery'" x-cloak x-transition
     class="space-y-3 p-3 rounded-2xl border border-amber-200 bg-amber-50/50">
     <h5 class="font-bold text-xs text-amber-800 uppercase tracking-wider flex items-center gap-2">
-        <x-lucide-truck class="w-4 h-4" aria-hidden="true" />
+        @svg('lucide-truck', 'w-4 h-4', ['aria-hidden' => 'true'])
         {{ __('messages.remember.delivery_details') }}
     </h5>
 

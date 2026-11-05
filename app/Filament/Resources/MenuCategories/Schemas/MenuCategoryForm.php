@@ -6,7 +6,6 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -22,7 +21,7 @@ class MenuCategoryForm
                 Tabs::make('ترجمات القسم')
                     ->tabs([
                         Tab::make('🇸🇦 العربية')
-                            ->icon('heroicon-m-language')
+                            ->icon('lucide-languages')
                             ->schema([
                                 TextInput::make('name.ar')
                                     ->label('اسم القسم بالعربية')
@@ -63,11 +62,11 @@ class MenuCategoryForm
 
                 Section::make('البيانات الأساسية والوسائط')
                     ->description('إعدادات الرابط الثابت، صورة القسم، وحالة النشر')
-                    ->icon('heroicon-o-photo')
+                    ->icon('lucide-image')
                     ->columns(4)
                     ->schema([
 
-                         TextInput::make('slug')
+                        TextInput::make('slug')
                             ->label('الرابط الثابت (Slug)')
                             ->required()
                             ->unique(ignoreRecord: true)
@@ -102,7 +101,7 @@ class MenuCategoryForm
                             ->imageEditor()
                             ->directory('menu-categories')
                             ->disk('public')
-                            ->columnSpanFull() // تأخذ عرضاً كاملاً لسهولة السحب والإفلات والمعاينة
+                            ->columnSpanFull(), // تأخذ عرضاً كاملاً لسهولة السحب والإفلات والمعاينة
                     ])->columnSpanFull(),
 
             ]);

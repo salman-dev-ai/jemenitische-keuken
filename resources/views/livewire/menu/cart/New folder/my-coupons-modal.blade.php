@@ -18,7 +18,7 @@
                 class="p-5 bg-gradient-to-r from-[#2A0D0A] to-[#1A0604] text-white flex items-center justify-between border-b border-[#E07513]/30 shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
-                        <x-lucide-ticket-percent class="w-5 h-5" aria-hidden="true" />
+                        @svg('lucide-ticket-percent', 'w-5 h-5', ['aria-hidden' => 'true'])
                     </div>
                     <div>
                         <h3 id="my-coupons-title" class="font-black text-base text-white">{{ __('my-coupons.title') }}</h3>
@@ -27,14 +27,14 @@
                 </div>
                 <button type="button" wire:click="closeMyCoupons"
                     class="text-stone-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10">
-                    <x-lucide-x class="w-5 h-5" aria-hidden="true" />
+                    @svg('lucide-x', 'w-5 h-5', ['aria-hidden' => 'true'])
                 </button>
             </div>
 
             <div class="flex-1 overflow-y-auto p-5">
                 @if ($this->hasMyCoupons)
                     <div class="mb-4 p-3 rounded-xl border border-amber-200 bg-amber-50/60 flex items-start gap-2">
-                        <x-lucide-info class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+                        @svg('lucide-info', 'w-4 h-4 text-amber-600 shrink-0 mt-0.5', ['aria-hidden' => 'true'])
                         <p class="text-xs text-amber-800 leading-relaxed">{{ __('my-coupons.hint') }}</p>
                     </div>
 
@@ -51,7 +51,7 @@
                                     @if ($coupon->is_welcome)
                                         <span
                                             class="px-2 py-1 rounded-md bg-amber-500 text-white text-[10px] font-black flex items-center gap-1">
-                                            <x-lucide-sparkles class="w-3 h-3" aria-hidden="true" />
+                                            @svg('lucide-sparkles', 'w-3 h-3', ['aria-hidden' => 'true'])
                                             {{ __('my-coupons.welcome_badge') }}
                                         </span>
                                     @endif
@@ -74,12 +74,12 @@
                                 <div class="space-y-1 mb-4 text-xs text-stone-500">
                                     @if ((float) $coupon->min_order_total > 0)
                                         <div class="flex items-center gap-1.5">
-                                            <x-lucide-shopping-bag class="w-3.5 h-3.5" aria-hidden="true" />
+                                            @svg('lucide-shopping-bag', 'w-3.5 h-3.5', ['aria-hidden' => 'true'])
                                             <span>{{ __('my-coupons.min_order', ['value' => number_format((float) $coupon->min_order_total, 2)]) }}</span>
                                         </div>
                                     @endif
                                     <div class="flex items-center gap-1.5">
-                                        <x-lucide-calendar-clock class="w-3.5 h-3.5" aria-hidden="true" />
+                                        @svg('lucide-calendar-clock', 'w-3.5 h-3.5', ['aria-hidden' => 'true'])
                                         @if ($coupon->expires_at)
                                             <span>{{ __('my-coupons.expires', ['date' => $coupon->expires_at->format('Y-m-d')]) }}</span>
                                         @else
@@ -117,11 +117,11 @@
                                         @click="copy()"
                                         class="flex-1 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-sm transition-colors flex items-center justify-center gap-2">
                                         <span x-show="!copied" class="flex items-center gap-2">
-                                            <x-lucide-copy class="w-4 h-4" aria-hidden="true" />
+                                            @svg('lucide-copy', 'w-4 h-4', ['aria-hidden' => 'true'])
                                             <span>{{ __('my-coupons.copy') }}</span>
                                         </span>
                                         <span x-show="copied" x-cloak class="flex items-center gap-2 text-emerald-700">
-                                            <x-lucide-check class="w-4 h-4" aria-hidden="true" />
+                                            @svg('lucide-check', 'w-4 h-4', ['aria-hidden' => 'true'])
                                             <span>{{ __('my-coupons.copied') }}</span>
                                         </span>
                                     </button>
@@ -142,7 +142,7 @@
                     <div class="flex flex-col items-center justify-center py-12 text-center">
                         <div
                             class="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mb-4 border-2 border-stone-200">
-                            <x-lucide-ticket-percent class="w-10 h-10 text-stone-300" aria-hidden="true" />
+                            @svg('lucide-ticket-percent', 'w-10 h-10 text-stone-300', ['aria-hidden' => 'true'])
                         </div>
                         <h3 class="text-base font-black text-stone-700 mb-2">{{ __('my-coupons.empty') }}</h3>
                         <p class="text-xs text-stone-500 max-w-[260px] leading-relaxed">{{ __('my-coupons.empty_hint') }}</p>

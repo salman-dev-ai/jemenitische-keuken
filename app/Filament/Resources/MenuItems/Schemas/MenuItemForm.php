@@ -11,16 +11,14 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Utilities\Set as UtilitiesSet;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
-use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Components\Utilities\Set as UtilitiesSet;
-
 class MenuItemForm
 {
-    
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -37,24 +35,22 @@ class MenuItemForm
 
                         Section::make('البيانات الأساسية')
                             ->description('اسم الطبق ووصفه باللغات المتاحة')
-                            ->icon('heroicon-o-cake')
+                            ->icon('lucide-cake')
                             ->schema([
 
                                 Grid::make(3)
                                     ->schema([
 
-
                                         Tabs::make('محتوى اللغات')
                                             ->columnSpanFull()
                                             ->tabs([
                                                 Tabs\Tab::make('العربية 🇸🇦')
-                                                    ->icon('heroicon-o-language')
+                                                    ->icon('lucide-languages')
                                                     ->schema([
                                                         TextInput::make('name.ar')
                                                             ->label('اسم الطبق')
                                                             ->required()
-                                                            ->maxLength(255)
-                                                         ,
+                                                            ->maxLength(255),
 
                                                         Textarea::make('description.ar')
                                                             ->label('وصف الطبق')
@@ -63,7 +59,7 @@ class MenuItemForm
                                                     ]),
 
                                                 Tabs\Tab::make('English 🇬🇧')
-                                                    ->icon('heroicon-o-language')
+                                                    ->icon('lucide-languages')
                                                     ->schema([
                                                         TextInput::make('name.en')
                                                             ->label('Dish Name')
@@ -76,7 +72,7 @@ class MenuItemForm
                                                     ]),
 
                                                 Tabs\Tab::make('Nederlands 🇳🇱')
-                                                    ->icon('heroicon-o-language')
+                                                    ->icon('lucide-languages')
                                                     ->schema([
                                                         TextInput::make('name.nl')
                                                             ->label('Gerechtnaam')
@@ -117,7 +113,7 @@ class MenuItemForm
                                 */
 
                 Section::make('التصنيف والسعر')
-                    ->icon('heroicon-o-tag')
+                    ->icon('lucide-tag')
                     ->schema([
 
                         TextInput::make('slug')
@@ -138,10 +134,10 @@ class MenuItemForm
                             ->relationship(
                                 name: 'category',
                                 titleAttribute: 'name',
-                                modifyQueryUsing: fn(Builder $query) => $query->orderBy('sort_order'),
+                                modifyQueryUsing: fn (Builder $query) => $query->orderBy('sort_order'),
                             )
                             ->getOptionLabelFromRecordUsing(
-                                fn(MenuCategory $record) => $record->localized_name
+                                fn (MenuCategory $record) => $record->localized_name
                             )
                             ->searchable()
                             ->preload()
@@ -176,7 +172,7 @@ class MenuItemForm
                                 */
 
                 Section::make('خصائص الطبق')
-                    ->icon('heroicon-o-adjustments-horizontal')
+                    ->icon('lucide-sliders-horizontal')
                     ->schema([
 
                         Toggle::make('is_available')
@@ -204,7 +200,7 @@ class MenuItemForm
                                 */
 
                 Section::make('مسببات الحساسية')
-                    ->icon('heroicon-o-exclamation-triangle')
+                    ->icon('lucide-triangle-alert')
                     ->schema([
 
                         TagsInput::make('allergens')

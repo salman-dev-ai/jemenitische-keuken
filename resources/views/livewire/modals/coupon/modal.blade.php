@@ -69,7 +69,7 @@
         {{-- الرأس --}}
         <div class="mb-4 flex items-center gap-3">
             <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-100">
-                <x-lucide-ticket-percent class="h-6 w-6 text-amber-700" aria-hidden="true" />
+                @svg('lucide-ticket-percent', 'h-6 w-6 text-amber-700', ['aria-hidden' => 'true'])
             </div>
             <div>
                 <h3 id="coupon-modal-title" class="text-xl font-bold text-amber-900">
@@ -86,7 +86,7 @@
             <code class="font-mono text-base font-bold tracking-wider text-amber-900" dir="ltr">
                 {{ $couponCode }}
             </code>
-            <x-lucide-check class="h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
+            @svg('lucide-check', 'h-5 w-5 shrink-0 text-amber-600', ['aria-hidden' => 'true'])
         </div>
 
         {{-- نموذج الضيف --}}

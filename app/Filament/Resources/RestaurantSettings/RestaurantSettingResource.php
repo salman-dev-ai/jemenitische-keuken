@@ -10,7 +10,6 @@ use App\Models\RestaurantSetting;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
@@ -23,8 +22,7 @@ class RestaurantSettingResource extends Resource
     protected static ?string $model = RestaurantSetting::class;
 
     protected static string|BackedEnum|null $navigationIcon =
-        Heroicon::OutlinedCog6Tooth;
-
+        'lucide-settings';
 
     protected static ?string $navigationLabel =
         'إعدادات المطعم';
@@ -39,7 +37,6 @@ class RestaurantSettingResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup =
         'إعدادات المطعم';
-
 
     // This is the order of the resource in the navigation,
     // lower numbers are displayed first

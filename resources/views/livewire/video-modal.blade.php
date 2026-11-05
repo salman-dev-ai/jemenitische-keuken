@@ -38,7 +38,7 @@ $close = function () {
                     class="absolute -top-12 end-0 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition hover:bg-white/20"
                     aria-label="{{ __('offers.video_modal.close') }}"
                 >
-                    <x-lucide-x class="h-5 w-5" aria-hidden="true" />
+                    @svg('lucide-x', 'h-5 w-5', ['aria-hidden' => 'true'])
                 </button>
 
                 @if ($title)

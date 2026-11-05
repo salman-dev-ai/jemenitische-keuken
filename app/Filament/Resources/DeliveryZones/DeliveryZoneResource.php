@@ -19,7 +19,7 @@ class DeliveryZoneResource extends Resource
     protected static ?string $model = DeliveryZone::class;   // ربط المورد بالموديل
 
     // التصحيح: النوع يجب أن يكون string|BackedEnum|null وليس ?string
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-truck';
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-truck';
 
     // ملاحظة: $navigationGroup في Filament v5 قد يتطلب أيضًا النوع string|UnitEnum|null
     // إذا ظهر خطأ مشابه، غيّره إلى: protected static string|\UnitEnum|null $navigationGroup = 'Restaurant Settings';

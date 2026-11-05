@@ -37,7 +37,7 @@ D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemeniti
         @if ($hasVideo)
             <div
                 class="absolute end-3 top-3 flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
-                <x-lucide-video class="h-3.5 w-3.5" />
+                @svg('lucide-video', 'h-3.5 w-3.5', ['aria-hidden' => 'true'])
                 <span>{{ __('offers.video') }}</span>
             </div>
 
@@ -49,7 +49,7 @@ D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemeniti
                 aria-label="{{ __('offers.video') }}">
                 <span
                     class="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 shadow-xl backdrop-blur-sm transition hover:scale-110">
-                    <x-lucide-play class="ms-1 h-7 w-7 fill-current text-red-700" />
+                    @svg('lucide-play', 'ms-1 h-7 w-7 fill-current text-red-700', ['aria-hidden' => 'true'])
                 </span>
             </button>
 
@@ -95,10 +95,10 @@ D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemeniti
             :class="copied ? 'text-green-600' : 'text-amber-700 hover:text-amber-900'">
 
             {{-- أيقونة النسخ --}}
-            <x-lucide-copy x-show="!copied" x-cloak class="h-4 w-4" />
+            @svg('lucide-copy', 'h-4 w-4', ['x-show' => '!copied', 'x-cloak' => true])
 
             {{-- أيقونة الصح --}}
-            <x-lucide-check x-show="copied" x-cloak class="h-4 w-4" />
+            @svg('lucide-check', 'h-4 w-4', ['x-show' => 'copied', 'x-cloak' => true])
 
             {{-- النص بجانب الأيقونة --}}
             <span x-show="!copied" x-cloak>{{ __('offers.actions.copy') }}</span>
@@ -109,7 +109,7 @@ D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemeniti
         {{-- ينتهي قريبًا --}}
         @if ($promotion->ends_at)
             <div class="mt-3 flex items-center justify-center gap-1.5 text-xs font-medium text-red-700">
-                <x-lucide-clock class="h-3.5 w-3.5" />
+                @svg('lucide-clock', 'h-3.5 w-3.5', ['aria-hidden' => 'true'])
                 <span>{{ __('offers.expires_soon') }}</span>
             </div>
         @endif

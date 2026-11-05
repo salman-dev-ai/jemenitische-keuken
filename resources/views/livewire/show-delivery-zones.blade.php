@@ -91,13 +91,13 @@
                     class="flex w-full items-center gap-3 bg-gradient-to-r from-[#1d4663] to-[#9D4907] px-5 py-4 text-start text-[#fff7ec] focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white sm:px-6 md:cursor-default"
                 >
                     <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10 ring-1 ring-white/20" aria-hidden="true">
-                        <x-lucide-map-pin class="size-5" aria-hidden="true" />
+                        @svg('lucide-map-pin', 'size-5', ['aria-hidden' => 'true'])
                     </span>
                     <span class="grid flex-1 gap-0.5">
                         <span class="text-sm font-black sm:text-base">{{ __('delivery.zones_title') }}</span>
                         <span class="text-[11px] font-semibold text-[#f6d9b0]">{{ __('delivery.zones_count', ['count' => $this->deliveryZones->count()]) }}</span>
                     </span>
-                    <x-lucide-chevron-down aria-hidden="true" class="size-5 shrink-0 transition-transform duration-300 md:hidden" ::class="open ? 'rotate-180' : ''" />
+                    @svg('lucide-chevron-down', 'size-5 shrink-0 transition-transform duration-300 md:hidden', ['aria-hidden' => 'true', ':class' => "open ? 'rotate-180' : ''"])
                 </button>
 
                 <div id="delivery-zones-panel" x-show="open || desktop" x-collapse x-cloak>

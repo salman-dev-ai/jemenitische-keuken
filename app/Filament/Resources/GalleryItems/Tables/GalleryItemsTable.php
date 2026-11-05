@@ -160,7 +160,7 @@ class GalleryItemsTable
             ])
             ->emptyStateHeading('لا توجد صور في المعرض حالياً')
             ->emptyStateDescription('اضغط على زر "إضافة صورة جديدة" لبدء إضافة صور الأطباق والجلسات.')
-            ->emptyStateIcon('heroicon-o-camera')
+            ->emptyStateIcon('lucide-camera')
             ->emptyStateActions([
                 CreateAction::make()->label('إضافة صورة جديدة'),
             ]);

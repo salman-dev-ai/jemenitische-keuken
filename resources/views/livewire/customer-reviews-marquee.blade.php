@@ -9,7 +9,7 @@
         <div class="text-center max-w-3xl mx-auto space-y-3 mb-12">
             <div
                 class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-amber-300 text-xs font-bold shadow-md">
-                <span><x-lucide-star class="w-4 h-4 fill-amber-400 text-amber-400" /></span>
+                <span>@svg('lucide-star', 'w-4 h-4 fill-amber-400 text-amber-400', ['aria-hidden' => 'true'])</span>
                 <span>{{ __('messages.reviews.badge') }}</span>
             </div>
 
@@ -72,7 +72,7 @@
 
                             <span
                                 class="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30 shrink-0">
-                                {{ __('messages.reviews.verified') }} <x-lucide-badge-check class="w-3 h-3 inline" aria-hidden="true" />
+                                {{ __('messages.reviews.verified') }} @svg('lucide-badge-check', 'w-3 h-3 inline', ['aria-hidden' => 'true'])
                             </span>
                         </div>
                     </div>

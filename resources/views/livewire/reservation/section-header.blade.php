@@ -5,7 +5,7 @@
 <div class="mb-10 space-y-3 text-center sm:mb-12">
     <div
         class="inline-flex items-center gap-2 rounded-full border border-[#6B1F2B]/10 bg-white/70 px-4 py-2 text-xs font-bold text-[#6B1F2B] shadow-sm">
-        <x-lucide-calendar-days class="h-4 w-4" aria-hidden="true" />
+        @svg('lucide-calendar-days', 'h-4 w-4', ['aria-hidden' => 'true'])
         <span>{{ __('messages.reservation.badge') }}</span>
     </div>
 

@@ -27,7 +27,7 @@ class GalleryItemForm
                     ->tabs([
                         // ------------------ التبويب العربي (الأساسي) ------------------
                         Tab::make('🇸🇦 اللغة العربية (الأساسية)')
-                            ->icon('heroicon-m-language')
+                            ->icon('lucide-languages')
                             ->schema([
                                 TextInput::make('title.ar')
                                     ->label('عنوان الصورة (بالعربي) *')
@@ -151,7 +151,6 @@ class GalleryItemForm
                             ->default(0)
                             ->helperText('الأرقام الأصغر تظهر أولاً (مثال: 1 يظهر قبل 2).'),
 
-                   
                         Toggle::make('is_available')
                             ->label('تفعيل الصورة (تظهر في الموقع مباشرة)')
                             ->default(true)

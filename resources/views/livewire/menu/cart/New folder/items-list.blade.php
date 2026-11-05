@@ -1,7 +1,7 @@
 {{-- قائمة أطباق السلة --}}
 <div>
     <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-        <x-lucide-utensils class="w-4 h-4" aria-hidden="true" />
+        @svg('lucide-utensils', 'w-4 h-4', ['aria-hidden' => 'true'])
         {{ __('messages.menu.selectedDishes') ?? 'الأطباق المختارة للوليمة' }}
     </h4>
 
@@ -22,7 +22,7 @@
                         class="w-7 h-7 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors disabled:opacity-50"
                         title="{{ __('messages.menu.removeFromCart') }}">
                         <span wire:loading.remove wire:target="removeFromCart({{ $id }})">
-                            <x-lucide-trash-2 class="w-3 h-3" aria-hidden="true" />
+                            @svg('lucide-trash-2', 'w-3 h-3', ['aria-hidden' => 'true'])
                         </span>
                         <span wire:loading wire:target="removeFromCart({{ $id }})"
                             class="w-3 h-3 border border-red-500 border-t-transparent rounded-full animate-spin"></span>

@@ -6,14 +6,14 @@
 <button type="button" @click="previous(); start()"
     aria-label="{{ $isArabic ? 'الصورة السابقة' : ($isDutch ? 'Vorige dia' : 'Previous slide') }}"
     class="group absolute start-4 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D9B36B]/40 bg-[#4A0D12]/40 text-[#D9B36B] shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D9B36B] hover:bg-[#D9B36B] hover:text-[#4A0D12] sm:h-12 sm:w-12">
-    <x-lucide-chevron-left class="h-[22px] w-[22px]" aria-hidden="true" />
+    @svg('lucide-chevron-left', 'w-6 h-6', ['aria-hidden' => 'true'])
 </button>
 
 {{-- زر الشريحة التالية يستدعي next ثم يعيد تشغيل المؤقت التلقائي --}}
 <button type="button" @click="next(); start()"
     aria-label="{{ $isArabic ? 'الصورة التالية' : ($isDutch ? 'Volgende dia' : 'Next slide') }}"
     class="group absolute end-4 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D9B36B]/40 bg-[#4A0D12]/40 text-[#D9B36B] shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D9B36B] hover:bg-[#D9B36B] hover:text-[#4A0D12] sm:h-12 sm:w-12">
-    <x-lucide-chevron-right class="h-[22px] w-[22px]" aria-hidden="true" />
+    @svg('lucide-chevron-right', 'w-6 h-6', ['aria-hidden' => 'true'])
 </button>
 
 {{-- مؤشرات النقاط: نقطة لكل شريحة والنقطة النشطة أطول وبلون متدرج --}}

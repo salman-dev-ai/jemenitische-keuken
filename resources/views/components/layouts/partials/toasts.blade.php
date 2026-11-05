@@ -38,7 +38,7 @@
             {{-- علامة النجاح --}}
             <div
                 class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/15">
-                <x-lucide-circle-check class="h-5 w-5 text-emerald-400" aria-hidden="true" />
+                @svg('lucide-circle-check', 'h-5 w-5 text-emerald-400', ['aria-hidden' => 'true'])
             </div>
 
             {{-- العنوان والنص وشريط المدة --}}
@@ -55,7 +55,7 @@
             {{-- إغلاق الإشعار الحالي --}}
             <button @click="remove(toast.id)" type="button"
                 class="mt-0.5 shrink-0 text-stone-500 transition-colors hover:text-stone-300" aria-label="Close">
-                <x-lucide-x class="h-4 w-4" aria-hidden="true" />
+                @svg('lucide-x', 'h-4 w-4', ['aria-hidden' => 'true'])
             </button>
         </div>
     </template>

@@ -69,7 +69,7 @@ class ReservationsTable
 
                 Action::make('confirm')
                     ->label('تأكيد')
-                    ->icon('heroicon-m-check-circle')
+                    ->icon('lucide-circle-check')
                     ->color('success')
                     ->requiresConfirmation()
                     ->hidden(

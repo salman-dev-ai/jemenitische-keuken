@@ -20,7 +20,7 @@ class PromotionResource extends Resource
 {
     protected static ?string $model = Promotion::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-megaphone';
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-megaphone';
 
     protected static string|UnitEnum|null $navigationGroup = 'التخفيضات';
 

@@ -92,7 +92,7 @@
                 class="p-5 bg-gradient-to-r from-[#2A0D0A] to-[#1A0604] text-white flex items-center justify-between border-b border-[#E07513]/30 shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
-                        <x-lucide-crown class="w-5 h-5" aria-hidden="true" />
+                        @svg('lucide-crown', 'w-5 h-5', ['aria-hidden' => 'true'])
                     </div>
                     <div>
                         <h3 id="cart-modal-title" class="font-black text-base text-white">
@@ -109,13 +109,13 @@
                     <button type="button" @click="$dispatch('open-my-coupons')"
                         class="text-amber-200 hover:text-white hover:bg-white/10 rounded-full p-2 transition-colors"
                         title="{{ __('my-coupons.title') }}" aria-label="{{ __('my-coupons.title') }}">
-                        <x-lucide-ticket-percent class="w-5 h-5" aria-hidden="true" />
+                        @svg('lucide-ticket-percent', 'w-5 h-5', ['aria-hidden' => 'true'])
                     </button>
 
                     {{-- إغلاق فوري --}}
                     <button type="button" @click="isCartOpen = false" aria-label="{{ __('messages.menu.close') ?? 'Close' }}"
                         class="text-stone-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10">
-                        <x-lucide-x class="w-5 h-5" aria-hidden="true" />
+                        @svg('lucide-x', 'w-5 h-5', ['aria-hidden' => 'true'])
                     </button>
                 </div>
             </div>
@@ -128,7 +128,7 @@
                     class="flex flex-col items-center justify-center py-12 text-center">
                     <div
                         class="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mb-4 border-2 border-stone-200">
-                        <x-lucide-shopping-cart class="w-10 h-10 text-stone-300" aria-hidden="true" />
+                        @svg('lucide-shopping-cart', 'w-10 h-10 text-stone-300', ['aria-hidden' => 'true'])
                     </div>
                     <h3 class="text-sm font-black text-stone-700 mb-2">
                         {{ __('messages.menu.empty') ?? 'السلة فارغة' }}</h3>
@@ -143,7 +143,7 @@
                 <div x-show="rows.length > 0" class="space-y-5">
                     <div>
                         <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                            <x-lucide-utensils class="w-4 h-4" aria-hidden="true" />
+                            @svg('lucide-utensils', 'w-4 h-4', ['aria-hidden' => 'true'])
                             {{ __('messages.menu.selectedDishes') ?? 'الأطباق المختارة للوليمة' }}
                         </h4>
 
@@ -161,7 +161,7 @@
                                         <button type="button" @click="remove(row.id)"
                                             class="w-7 h-7 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors active:scale-90"
                                             title="{{ __('messages.menu.removeFromCart') }}">
-                                            <x-lucide-trash-2 class="w-3 h-3" aria-hidden="true" />
+                                            @svg('lucide-trash-2', 'w-3 h-3', ['aria-hidden' => 'true'])
                                         </button>
 
                                         <div class="w-px h-5 bg-stone-300"></div>

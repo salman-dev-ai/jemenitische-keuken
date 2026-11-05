@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Reservations\Schemas;
 
 use App\Enums\ReservationStatus;
+use App\Models\Customer;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -26,11 +27,9 @@ class ReservationForm
                     Grid::make(1)->schema([
                         Section::make('بيانات العميل')
                             ->description('معلومات التواصل مع صاحب الحجز')
-                            ->icon('heroicon-o-user')->
-
+                            ->icon('lucide-user')->
 
                             // ➕ حقل اختيار العميل المسجل (جديد)
-
 
                             schema([
 
@@ -42,7 +41,7 @@ class ReservationForm
                                         titleAttribute: 'name',
                                     )
                                     ->getOptionLabelFromRecordUsing(
-                                        fn($record) => sprintf('%s (%s)', $record->name, $record->phone ?? 'بدون هاتف')
+                                        fn ($record) => sprintf('%s (%s)', $record->name, $record->phone ?? 'بدون هاتف')
                                     )
                                     ->searchable(['name', 'email', 'phone'])
                                     ->preload()
@@ -50,7 +49,7 @@ class ReservationForm
                                     ->live()
                                     // ✨ تعبئة بيانات العميل تلقائياً عند الاختيار
                                     ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                                        if ($state && $customer = \App\Models\Customer::find($state)) {
+                                        if ($state && $customer = Customer::find($state)) {
                                             if (blank($get('customer_name'))) {
                                                 $set('customer_name', $customer->name);
                                             }
@@ -83,7 +82,7 @@ class ReservationForm
                             ]),
 
                         Section::make('تفاصيل الموعد')
-                            ->icon('heroicon-o-calendar-days')
+                            ->icon('lucide-calendar-days')
                             ->schema([
                                 Grid::make(2)->schema([
                                     DatePicker::make('reservation_date')
@@ -117,7 +116,7 @@ class ReservationForm
 
                     Grid::make(1)->schema([
                         Section::make('التخصيص والحالة')
-                            ->icon('heroicon-o-clipboard-document-check')
+                            ->icon('lucide-clipboard-check')
                             ->schema([
                                 TextInput::make('party_size')
                                     ->label('عدد الأشخاص')

@@ -11,13 +11,9 @@ use App\Models\GalleryItem;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
-
-
 use UnitEnum;
 
 class GalleryItemResource extends Resource
@@ -25,7 +21,7 @@ class GalleryItemResource extends Resource
     protected static ?string $model = GalleryItem::class;
 
     // 1. الأيقونة الاحترافية لمعرض الصور في القائمة الجانبية
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCamera;
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-camera';
 
     // 2. التسميات العربية لمدير المطعم
     protected static string|UnitEnum|null $navigationGroup = 'إدارة المحتوى والوسائط';
@@ -61,8 +57,6 @@ class GalleryItemResource extends Resource
         return GalleryItemsTable::configure($table);
     }
 
-
-
     public static function getRelations(): array
     {
         return [
@@ -85,7 +79,6 @@ class GalleryItemResource extends Resource
         return parent::getRecordRouteBindingEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ])
-            ;
+            ]);
     }
 }

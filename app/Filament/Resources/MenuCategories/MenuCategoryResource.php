@@ -11,7 +11,6 @@ use App\Models\MenuCategory;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
 use UnitEnum;
@@ -22,7 +21,7 @@ class MenuCategoryResource extends Resource
 
     protected static ?string $model = MenuCategory::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedQueueList;
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-layout-list';
 
     protected static ?string $navigationLabel = 'أقسام المنيو';
 

@@ -33,8 +33,8 @@
                 {{-- فاصل زخرفي على شكل معين ذهبي بين خطين أسفل الوصف --}}
                 <div class="mt-8 flex items-center justify-center gap-4 lg:justify-end">
                     <span class="h-px w-12 bg-[#D9B36B]"></span>
-                    <x-lucide-diamond class="h-[18px] w-[18px] text-[#D9B36B]" aria-hidden="true" />
-                    <span class="h-px w-12 bg-[#D9B36B]"></span>
+                    {{-- SVG مضمّن بدلاً من x-lucide لتجنب مشكلة open_basedir داخل Alpine x-for --}}
+ @svg('lucide-diamond', 'h-5 w-5', ['aria-hidden' => 'true'])                    <span class="h-px w-12 bg-[#D9B36B]"></span>
                 </div>
             </div>
         </template>
