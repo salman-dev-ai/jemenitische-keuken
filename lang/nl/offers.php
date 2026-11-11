@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 return [
 
-'header' => [
+    'valid_from' => 'Geldig vanaf',
+    'valid_until' => 'Geldig tot',
+    'coupon_code' => 'Kortingscode',
+    'ends_on' => 'Eindigt op :date',
+
+    'header' => [
         'tab' => 'Kortingen',
     ],
     'hero' => [
@@ -16,13 +21,14 @@ return [
         'tagline' => 'Meer besparen',
         'tagline2' => 'voor authentieke smaak',
         'discount_label' => 'Korting',
+        'badge' => 'Aanbieding van de dag',
     ],
 
     'actions' => [
         'use_now' => 'Nu gebruiken',
         'copy' => 'kopiëren',
         'copied' => 'Gekopieerd!',
-        'apply'  => 'Toepassen',
+        'apply' => 'Toepassen',
     ],
 
     'video' => 'Video',
@@ -30,21 +36,20 @@ return [
     'no_image' => 'Geen afbeelding',
     'empty' => 'Momenteel geen aanbiedingen beschikbaar',
 
- 'modal' => [
-    'title'    => 'Ontvang je korting',
-    'subtitle' => 'Vul je gegevens in om de kortingsbon te ontvangen',
-    'name'     => 'Volledige naam',
-    'phone'    => 'Telefoonnummer',
-    'email'              => 'E-mail',
-    'address'            => 'Adres',
-    'address_placeholder' => 'Straat, nummer, wijk',
-    'city'               => 'Stad',
-    'city_placeholder'   => 'Amsterdam',
-    'postal_code'        => 'Postcode',
-    'optional'           => 'optioneel',
-    'cancel'             => 'Annuleren',
-    'submit'             => 'Registreren & korting ontvangen',
-],
-
+    'modal' => [
+        'title' => 'Ontvang je korting',
+        'subtitle' => 'Vul je gegevens in om de kortingsbon te ontvangen',
+        'name' => 'Volledige naam',
+        'phone' => 'Telefoonnummer',
+        'email' => 'E-mail',
+        'address' => 'Adres',
+        'address_placeholder' => 'Straat, nummer, wijk',
+        'city' => 'Stad',
+        'city_placeholder' => 'Amsterdam',
+        'postal_code' => 'Postcode',
+        'optional' => 'optioneel',
+        'cancel' => 'Annuleren',
+        'submit' => 'Registreren & korting ontvangen',
+    ],
 
 ];

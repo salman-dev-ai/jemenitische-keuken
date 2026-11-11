@@ -13,20 +13,19 @@ use Filament\Schemas\Schema;
 
 class SliderForm
 {
-
-     public static function configure(Schema $schema): Schema
+    public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
                 // العمود الرئيسي (2/3)
                 Section::make('محتوى الشريحة')
-                    ->icon("lucide-image-play")
+                    ->icon('lucide-image-play')
                     ->schema([
                         Tabs::make('translations')
                             ->tabs([
                                 // ===== العربية =====
                                 Tab::make('العربية (AR)')
-                                    ->icon("lucide-languages")
+                                    ->icon('lucide-languages')
                                     ->schema([
                                         TextInput::make('eyebrow.ar')
                                             ->label('النص العلوي (Eyebrow)')
@@ -47,7 +46,7 @@ class SliderForm
 
                                 // ===== الهولندية =====
                                 Tab::make('الهولندية (NL)')
-                                    ->icon("lucide-languages")
+                                    ->icon('lucide-languages')
                                     ->schema([
                                         TextInput::make('eyebrow.nl')
                                             ->label('Bovenste tekst (Eyebrow)')
@@ -65,7 +64,7 @@ class SliderForm
 
                                 // ===== الإنجليزية =====
                                 Tab::make('الإنجليزية (EN)')
-                                    ->icon("lucide-languages")
+                                    ->icon('lucide-languages')
                                     ->schema([
                                         TextInput::make('eyebrow.en')
                                             ->label('Eyebrow Text')
@@ -88,16 +87,21 @@ class SliderForm
 
                 // الشريط الجانبي (1/3)
                 Section::make('الإعدادات')
-                    ->icon("lucide-settings")
+                    ->icon('lucide-settings')
                     ->schema([
                         FileUpload::make('image')
 
                             ->label('صورة الشريحة')
-                            ->hintIcon("lucide-image-down")
+                            ->hintIcon('lucide-image-down')
                             ->image()
                             ->imageEditor()
                             ->directory('sliders')
                             ->disk('public')
+                            // تصغير تلقائي في المتصفح قبل الرفع لتسريع الموقع (بلا تكبير للصور الصغيرة)
+                            ->automaticallyResizeImagesMode('contain')
+                            ->automaticallyResizeImagesToWidth(1920)
+                            ->automaticallyResizeImagesToHeight(1080)
+                            ->automaticallyUpscaleImagesWhenResizing(false)
 
                             ->required(),
 

@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 return [
-
+    'valid_from' => 'Starts',
+    'valid_until' => 'Ends',
+    'coupon_code' => 'Discount code',
+    'ends_on' => 'Ends on :date',
     'header' => [
         'tab' => 'Offers',
     ],
@@ -23,7 +26,8 @@ return [
         'use_now' => 'Use now',
         'copy' => 'Copy ',
         'copied' => 'Copied!',
-        'apply'  => 'Apply',
+        'apply' => 'Apply',
+        'badge' => 'Offer of the day',
     ],
 
     'video' => 'Video',
@@ -32,18 +36,18 @@ return [
     'empty' => 'No offers available at the moment',
 
     'modal' => [
-        'title'    => 'Get your discount',
+        'title' => 'Get your discount',
         'subtitle' => 'Fill in your details to receive the coupon',
-        'name'     => 'Full name',
-        'phone'    => 'Phone number',
-        'email'              => 'Email',
-        'address'            => 'Address',
+        'name' => 'Full name',
+        'phone' => 'Phone number',
+        'email' => 'Email',
+        'address' => 'Address',
         'address_placeholder' => 'Street, number, district',
-        'city'               => 'City',
-        'city_placeholder'   => 'Amsterdam',
-        'postal_code'        => 'Postal code',
-        'optional'           => 'optional',
-        'cancel'             => 'Cancel',
-        'submit'             => 'Register & get coupon',
+        'city' => 'City',
+        'city_placeholder' => 'Amsterdam',
+        'postal_code' => 'Postal code',
+        'optional' => 'optional',
+        'cancel' => 'Cancel',
+        'submit' => 'Register & get coupon',
     ],
 ];

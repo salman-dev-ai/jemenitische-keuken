@@ -33,8 +33,8 @@ class MenuItemFactory extends Factory
                 'ar' => 'وصف لذيذ لهذه الوجبة اليمنية الرائعة.',
                 'nl' => 'Lekker Jemenitisch gerecht.',
             ],
-            // توليد حساسية عشوائية لبعض الأطباق (متطلب قانوني أوروبي)
-            'allergens' => $this->faker->randomElements(['Gluten', 'Nuts', 'Lactose'], $this->faker->numberBetween(0, 2)),
+            // ملاحظة: مسببات الحساسية تُربط الآن بجدول allergens عبر علاقة متعدد-لمتعدد
+            // (انظر AllergenSeeder) ولا تُخزَّن كنص حر داخل الطبق.
             'price' => $this->faker->randomFloat(2, 12, 35), // أسعار بين 12 و 35 يورو
             'is_available' => $this->faker->boolean(90), // 90% من الأطباق متاحة
             'is_featured' => $this->faker->boolean(20), // 20% فقط أطباق مميزة للصفحة الرئيسية

@@ -1,125 +1,109 @@
 @php
     /** @var \App\Models\Promotion $promotion */
     $coupon = $promotion->coupon;
-    $badge = $promotion->discountBadge();
     $locale = app()->getLocale();
-    $hasVideo = !empty($promotion->video);
+    $title = $promotion->getTranslation('title', $locale);
+    $imageUrl = $promotion->image ? Storage::disk('public')->url($promotion->image) : null;
+
+    $hasVideo = ! empty($promotion->video);
+    $videoUrl = $hasVideo ? Storage::disk('public')->url($promotion->video) : null;
+
+    // سطر الصلاحية: "ينتهي في 22 نوفمبر 2026" (وإن لم يوجد تاريخ انتهاء يُعرض تاريخ البداية)
+    $endsAt = $promotion->ends_at;
+    $startsAt = $promotion->starts_at;
+    $dateLine = $endsAt
+        ? __('offers.ends_on', ['date' => $endsAt->locale($locale)->translatedFormat('j F Y')])
+        : ($startsAt ? __('offers.valid_from') . ': ' . $startsAt->locale($locale)->translatedFormat('j F Y') : null);
+    $dateIso = ($endsAt ?? $startsAt)?->toIso8601String();
 @endphp
 
-{{--
-D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemenitische-keuken-chat\resources\views\livewire\offers\partials\card.blade.php
---}}
-<div
-    class="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-md transition hover:shadow-xl">
+{{-- بطاقة العرض العادية: صورة بملء البطاقة + تدرج داكن + محتوى في الأسفل --}}
+<article
+    class="group relative isolate flex h-full min-h-[27rem] min-w-[16rem] flex-col justify-end overflow-hidden rounded-[1.75rem] border border-amber-500/70 bg-[#2a0d0d] shadow-xl shadow-black/30 transition duration-300 motion-safe:hover:-translate-y-1 hover:shadow-2xl hover:shadow-amber-900/30  ">
 
-    {{-- ═══ الصورة ═══ --}}
-    <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+    {{-- الصورة --}}
+    @if ($imageUrl)
+        <img src="{{ $imageUrl }}" alt="{{ $title }}" loading="lazy" decoding="async"
+            class="absolute inset-0 h-full w-full object-cover transition duration-700 motion-safe:group-hover:scale-105">
+    @else
+        <div class="absolute inset-0 opacity-10"
+            style="background-image: radial-gradient(circle at 20% 30%, white 1px, transparent 1px), radial-gradient(circle at 80% 70%, white 1px, transparent 1px); background-size: 40px 40px;">
+        </div>
+    @endif
 
-        @if ($promotion->image)
-            <img src="{{ Storage::disk('public')->url($promotion->image) }}"
-                alt="{{ $promotion->getTranslation('title', $locale) }}"
-                class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
-        @else
-            <div class="flex h-full items-center justify-center text-gray-400">
-                {{ __('offers.no_image') }}
-            </div>
-        @endif
-
-        {{-- شارة الخصم (بدون فيديو) --}}
-        @if ($badge && !$hasVideo)
-            <div
-                class="absolute end-3 top-3 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-red-600 text-white shadow-lg">
-                <span class="text-lg font-black">{{ $badge }}</span>
-            </div>
-        @endif
-
-        {{-- شارة فيديو + زر التشغيل --}}
-        @if ($hasVideo)
-            <div
-                class="absolute end-3 top-3 flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
-                @svg('lucide-video', 'h-3.5 w-3.5', ['aria-hidden' => 'true'])
-                <span>{{ __('offers.video') }}</span>
-            </div>
-
-            {{-- ⭐ زر تشغيل الفيديو (يفتح video modal) --}}
-            <button type="button" x-data @click="$dispatch('open-video-modal', {
-                        url: '{{ Storage::disk('public')->url($promotion->video) }}',
-                        title: @js($promotion->getTranslation('title', $locale))
-                    })" class="absolute inset-0 flex items-center justify-center bg-black/20 transition hover:bg-black/30"
-                aria-label="{{ __('offers.video') }}">
-                <span
-                    class="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 shadow-xl backdrop-blur-sm transition hover:scale-110">
-                    @svg('lucide-play', 'ms-1 h-7 w-7 fill-current text-red-700', ['aria-hidden' => 'true'])
-                </span>
-            </button>
-
-            {{-- مدة الفيديو --}}
-            @if ($promotion->video_duration)
-                <div
-                    class="pointer-events-none absolute bottom-3 start-3 rounded-md bg-black/70 px-2 py-0.5 text-xs font-bold text-white">
-                    {{ gmdate('i:s', $promotion->video_duration) }}
-                </div>
-            @endif
-        @endif
-
+    {{-- التدرج السفلي لوضوح النص --}}
+    <div class="pointer-events-none absolute inset-0"
+        style="background: linear-gradient(to top, rgba(28,6,6,0.97) 0%, rgba(28,6,6,0.78) 30%, rgba(28,6,6,0) 66%);">
     </div>
 
-    {{-- ═══ المحتوى ═══ --}}
-    <div class="flex flex-1 flex-col p-4">
+    {{-- الفيديو (إن وُجد): زر تشغيل صغير + المدة --}}
+    @if ($hasVideo)
+        <button type="button" x-data
+            @click="$dispatch('open-video-modal', { url: @js($videoUrl), title: @js($title) })"
+            class="absolute start-1/2 top-[26%] z-10 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full bg-white/90 shadow-xl backdrop-blur-sm transition hover:scale-110 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-400 rtl:translate-x-1/2"
+            aria-label="{{ __('offers.video') }}: {{ $title }}">
+            @svg('lucide-play', 'ms-0.5 h-6 w-6 fill-current text-red-700', ['aria-hidden' => 'true'])
+        </button>
 
-        {{-- العنوان --}}
-        <h3 class="text-center text-lg font-bold text-amber-900">
-            {{ $promotion->getTranslation('title', $locale) }}
+        @if ($promotion->video_duration)
+            <div
+                class="pointer-events-none absolute end-3 top-3 z-10 flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1 text-xs font-bold tabular-nums text-white backdrop-blur-sm">
+                @svg('lucide-video', 'h-3.5 w-3.5', ['aria-hidden' => 'true'])
+                {{ gmdate('i:s', $promotion->video_duration) }}
+            </div>
+        @endif
+    @endif
+
+    {{-- المحتوى --}}
+    <div class="relative z-10 flex flex-col items-center gap-3 p-4 text-center sm:p-5">
+
+        <h3 class="line-clamp-2 text-2xl font-extrabold leading-snug text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.65)]">
+            {{ $title }}
         </h3>
 
-        {{-- صندوق كود الكوبون + زر النسخ --}}
-     @if ($coupon)
-    <div
-        x-data="{ copied: false, timer: null }"
-        x-on:coupon-copied.window="
-            if ($event.detail.promotionId === {{ $promotion->id }}) {
-                copied = true;
-                clearTimeout(timer);
-                timer = setTimeout(() => copied = false, 2000);
-            }
-        "
-        class="mt-3 flex items-center justify-between gap-2 rounded-lg border-2 border-dashed border-amber-300 bg-amber-50/60 px-3 py-2"
-    >
-        <code class="font-mono text-sm font-bold tracking-wider text-amber-900">
-            {{ $coupon->code }}
-        </code>
-
-        <button type="button"
-            @click="$dispatch('open-coupon-modal', { promotionId: {{ $promotion->id }}, action: 'copy' })"
-            class="flex items-center gap-1 text-xs font-bold transition"
-            :class="copied ? 'text-green-600' : 'text-amber-700 hover:text-amber-900'">
-
-            {{-- أيقونة النسخ --}}
-            @svg('lucide-copy', 'h-4 w-4', ['x-show' => '!copied', 'x-cloak' => true])
-
-            {{-- أيقونة الصح --}}
-            @svg('lucide-check', 'h-4 w-4', ['x-show' => 'copied', 'x-cloak' => true])
-
-            {{-- النص بجانب الأيقونة --}}
-            <span x-show="!copied" x-cloak>{{ __('offers.actions.copy') }}</span>
-            <span x-show="copied" x-cloak>{{ __('offers.actions.copied') }}</span>
-        </button>
-    </div>
-@endif
-        {{-- ينتهي قريبًا --}}
-        @if ($promotion->ends_at)
-            <div class="mt-3 flex items-center justify-center gap-1.5 text-xs font-medium text-red-700">
-                @svg('lucide-clock', 'h-3.5 w-3.5', ['aria-hidden' => 'true'])
-                <span>{{ __('offers.expires_soon') }}</span>
-            </div>
+        {{-- صندوق الكود: أيقونة | كود الخصم | فاصل | الكود (يُنسخ عند الضغط) --}}
+        @if ($coupon)
+            <button type="button" dir="ltr" x-data="{ copied: false, timer: null }"
+                x-on:coupon-copied.window="
+                    if ($event.detail.promotionId === {{ $promotion->id }}) {
+                        copied = true;
+                        clearTimeout(timer);
+                        timer = setTimeout(() => copied = false, 2000);
+                    }
+                "
+                @click="$dispatch('open-coupon-modal', { promotionId: {{ $promotion->id }}, action: 'copy' })"
+                aria-label="{{ __('offers.actions.copy') }}: {{ $coupon->code }}"
+                class="inline-flex max-w-full items-center gap-3 rounded-xl border border-dashed border-white/55 bg-black/30 px-4 py-2.5 text-sm text-white backdrop-blur-sm transition hover:bg-black/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400">
+                <span class="shrink-0 text-amber-400">
+                    @svg('lucide-ticket', 'h-5 w-5', ['x-show' => '!copied', 'aria-hidden' => 'true'])
+                    @svg('lucide-check', 'h-5 w-5', ['x-show' => 'copied', 'x-cloak' => true, 'aria-hidden' => 'true'])
+                </span>
+                <span dir="auto" class="whitespace-nowrap font-medium">{{ __('offers.coupon_code') }}</span>
+                <span aria-hidden="true" class="h-6 shrink-0 border-l border-dashed border-white/45"></span>
+                <code class="truncate font-mono text-base font-bold tracking-wider">{{ $coupon->code }}</code>
+                <span class="sr-only" aria-live="polite" x-text="copied ? @js(__('offers.actions.copied')) : ''"></span>
+            </button>
         @endif
 
-        {{-- زر استخدم الآن (يفتح coupon modal) --}}
-        <button type="button" wire:click="useCoupon({{ $promotion->id }})"
-            class="mt-3 w-full rounded-lg bg-amber-800 px-4 py-3 text-sm font-bold text-white shadow-md transition hover:bg-amber-900 active:scale-[0.98]">
-            {{ __('offers.actions.use_now') }}
+        {{-- الصلاحية --}}
+        @if ($dateLine)
+            <p class="flex items-center gap-2 text-sm text-white/85">
+                @svg('lucide-clock', 'h-4 w-4 shrink-0 text-amber-400', ['aria-hidden' => 'true'])
+                <time datetime="{{ $dateIso }}">{{ $dateLine }}</time>
+            </p>
+        @endif
+
+        {{-- زر استخدم الآن --}}
+        <button type="button" wire:click="useCoupon({{ $promotion->id }})" wire:loading.attr="disabled"
+            wire:target="useCoupon({{ $promotion->id }})"
+            class="mt-1 inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-full border border-amber-400/70 bg-gradient-to-b from-amber-600 to-amber-800 px-6 text-base font-bold text-white shadow-lg shadow-black/30 transition hover:from-amber-500 hover:to-amber-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2a0d0d] active:scale-[0.98] disabled:cursor-wait disabled:opacity-70">
+            <span wire:loading.remove wire:target="useCoupon({{ $promotion->id }})" class="inline-flex items-center gap-3">
+                {{ __('offers.actions.use_now') }}
+                @svg('lucide-arrow-right', 'h-5 w-5 rtl:-scale-x-100', ['aria-hidden' => 'true'])
+            </span>
+            <span wire:loading wire:target="useCoupon({{ $promotion->id }})"
+                class="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" role="status"
+                aria-label="loading"></span>
         </button>
-
     </div>
-
-</div>
+</article>

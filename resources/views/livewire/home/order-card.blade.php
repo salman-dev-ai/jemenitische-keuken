@@ -7,7 +7,7 @@
     $optionKey = $option['key'] ?? '';
 @endphp
 
-<a href="#reservation" wire:key="order-card-{{ $index }}"
+<a href="{{ route('home') }}#reservation" wire:key="order-card-{{ $index }}"
     class="group relative overflow-hidden rounded-xl border border-[#D9C9B4] bg-[#FFFDF8] shadow-[0_5px_16px_rgba(87,21,27,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C89B4A] hover:shadow-[0_14px_28px_rgba(87,21,27,0.12)]">
 
     {{-- صورة البطاقة بتحميل متأخر وطبقة تدرج داكنة أسفلها لتحسين التباين --}}

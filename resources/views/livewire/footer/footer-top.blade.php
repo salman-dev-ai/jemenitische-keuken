@@ -4,8 +4,8 @@
 --}}
 {{-- الخلفية والتدرج الدافئ فوق الصورة --}}
 <div class="pointer-events-none absolute inset-0 -z-10">
-    <img src="{{ asset('images/footer-background.webp') }}" alt="" loading="lazy" decoding="async"
-        class="h-full w-full object-cover object-bottom">
+    <img src="{{ asset('images/footer-background.webp') }}" alt="" width="1456" height="819" loading="lazy"
+        decoding="async" class="h-full w-full object-cover object-bottom">
     <div class="absolute inset-0 bg-gradient-to-b from-[#f3c9a0]/70 via-[#f1c9a6]/55 to-[#d9a273]/70"></div>
 </div>
 
@@ -55,8 +55,8 @@
 
 {{-- بطاقة الطبق المميز مع الصورة --}}
 <div class="relative mt-6 overflow-hidden rounded-3xl shadow-[0_20px_50px_rgba(60,30,10,.28)]">
-    <img src="{{ asset('images/mandi-story-photo.webp') }}" alt="{{ $f['featured_title'] }}" loading="lazy" decoding="async"
-        class="h-64 w-full object-cover sm:h-80 lg:h-[22rem]">
+    <img src="{{ asset('images/mandi-story-photo.webp') }}" alt="{{ $f['featured_title'] }}" width="1600" height="1067"
+        loading="lazy" decoding="async" class="h-64 w-full object-cover sm:h-80 lg:h-[22rem]">
     <div
         class="p-3 sm:absolute sm:inset-y-0 sm:end-0 sm:flex sm:w-[46%] sm:items-center sm:p-5 lg:w-[38%] lg:p-6">
         <div     class="w-full rounded-2xl bg-[#fbf3e8]/95 p-5 text-start shadow-xl backdrop-blur sm:p-6">
@@ -68,7 +68,7 @@
                 {{ $f['featured_title'] }}
             </h3>
             <p class="mt-3 text-sm leading-7 text-[#6a5444]">{{ $f['featured_text'] }}</p>
-            <a href="#menu"
+            <a href="{{ route('home') }}#menu"
                 class="mt-4 inline-flex h-11 items-center gap-2 rounded-xl bg-[#c05a1c] px-6 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#a84a13]">
                 {{ __('footer.explore_menu') }}
                 <span aria-hidden="true" class="rtl:rotate-180">→</span>

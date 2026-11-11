@@ -6,6 +6,7 @@
 @php
     $categoryNames = $this->categories->pluck('localized_name', 'slug');
     $itemCounts = $this->menuItems->groupBy(fn ($i) => $i->category->slug)->map->count();
+        $freeDrinkItems = $this->freeDrinkCatalog['items'];
 @endphp
 
 <div class="col-span-1 lg:col-span-9"
@@ -29,10 +30,9 @@
         </span>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
         @foreach ($this->menuItems as $item)
-            @include('livewire.menu.menu-item-card', ['item' => $item])
-        @endforeach
+            @include('livewire.menu.menu-item-card', ['item' => $item, 'freeDrinkItems' => $freeDrinkItems])        @endforeach
 
         {{-- حالة فارغة --}}
         <div x-show="visible === 0" x-cloak

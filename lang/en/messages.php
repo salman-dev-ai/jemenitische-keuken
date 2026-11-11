@@ -34,10 +34,27 @@ return [
         'contact' => 'Contact Us',
         'bookTableBtn' => 'Book Your Table Now',
 
+        // New nav labels
+        'offers' => 'Offers',
+        'reserve' => 'Reserve',
+        'order' => 'Order',
+        'contactLink' => 'Contact',
+
         'primary' => 'Primary navigation',
         'secondary' => 'Secondary navigation',
         'mobile' => 'Mobile menu',
         'toggleMenu' => 'Open or close menu',
+
+        'galleryHeritage' => 'Gallery & Heritage',
+        'restaurantInfo' => 'Restaurant information',
+    ],
+
+    'cookies' => [
+        'aria' => 'Cookie notice',
+        'title' => 'Cookies on this website',
+        'message' => 'We only use functional cookies that are required for the website to work, such as remembering your cart and your details for a next order. We do not use analytics or tracking cookies.',
+        'accept' => 'Agree',
+        'necessary' => 'Necessary only',
     ],
 
     // ═══════════════════════════════════════════
@@ -46,7 +63,7 @@ return [
     'brand' => [
         'name' => 'Yemeni Kitchen',
         'subName' => 'JEMENITISCHE KEUKEN',
-        'slogan' => 'The Origin of Mandi | أصل المندي',
+        'slogan' => 'The Origin of Mandi',
         'description' => 'We take you on an authentic culinary journey...',
     ],
 
@@ -108,6 +125,13 @@ return [
         'featured' => 'Featured',
         'spicy' => 'Spicy',
         'removeFromCart' => 'Remove dish from cart',
+        'popular_title' => 'Popular Dishes',
+
+        'free_drink_badge' => 'Includes a free drink',
+        'free_drink_hint' => 'Choose your free drink in the cart.',
+        'free_drink_none' => 'No free drink available right now.',
+        'free_drink_added_hint' => 'This dish includes a free drink — pick it in the cart.',
+
     ],
 
     // ═══════════════════════════════════════════
@@ -247,6 +271,7 @@ return [
         'categories' => 'Gallery Categories',
         'loading' => 'Loading images...',
         'empty' => 'No images available in this category yet.',
+
     ],
 
     // ═══════════════════════════════════════════
@@ -297,28 +322,54 @@ return [
         'invalid_reservation' => 'The linked reservation does not exist.',
         'invalid_order_status' => 'Invalid order status.',
         'invalid_order_type' => 'Invalid order type.',
-    ],
 
+        'free_drink_not_eligible' => 'The item ":name" does not include a free drink.',
+        'invalid_free_drink' => 'The selected drink is not allowed for this item.',
+        'free_drink_quantity_exceeded' => 'You exceeded the allowed free drinks for ":name" (max: :max).',
+    ],
     // ═══════════════════════════════════════════
-    // 📞 Contact
+    // 📞 Contact section
     // ═══════════════════════════════════════════
     'contact' => [
-        'badge' => 'Get in touch with us – our hospitality awaits you',
-        'title' => 'We are delighted to welcome you and answer your questions',
+        'badge' => 'Contact Us',
+        'title' => 'We look forward to your visit and your questions',
+        'subtitle' => 'Our team is ready to answer all your questions, and we welcome you to our restaurant in Amsterdam.',
+
+        // Map and contact cards
+        'directions' => 'Directions',
+        'call_us' => 'Call Us',
+        'phone_label' => 'Phone number',
+        'phone_hint' => 'Available during opening hours',
+        'write_us' => 'Write to Us',
+        'email_label' => 'Email',
+        'email_hint' => 'We will reply as soon as possible',
 
         'form' => [
-            'title' => 'Send Us a Direct Message',
-            'success' => 'Your message has been sent successfully. We will get back to you as soon as possible.',
-            'name' => 'Full Name *',
-            'email' => 'Email Address *',
-            'phone' => 'Phone Number / WhatsApp',
-            'subject' => 'Inquiry Type',
-            'message' => 'Your Message or Special Request *',
-            'submit' => 'Send Message Now →',
+            'title' => 'Send Us a Message',
+            'subtitle' => 'Your feedback matters. Write to us and we will get back to you as soon as possible.',
+            'success' => 'Your message has been sent successfully. We will contact you as soon as possible.',
+
+            // Note: the asterisk (*) is added in the template
+            'name' => 'Full name',
+            'email' => 'Email',
+            'phone' => 'Phone / WhatsApp number',
+            'whatsapp' => 'Phone / WhatsApp number',
+            'subject' => 'Type of inquiry',
+            'message' => 'Your message or special request',
+
+            'name_placeholder' => 'Enter your full name',
+            'email_placeholder' => 'Enter your email address',
+            'whatsapp_placeholder' => 'Enter your phone or WhatsApp number',
+            'message_placeholder' => 'Write your message here...',
+
+            'submit' => 'Send message now →',
+            'submit_whatsapp' => 'Send Message',
+            'whatsapp_unavailable' => 'WhatsApp service is currently unavailable',
+            'whatsapp_note' => 'WhatsApp will open on your device — tap Send inside the app to complete sending.',
 
             'subjects' => [
                 'inquiry' => 'General inquiry about the restaurant and menu',
-                'event' => 'Private event or large family Majlis reservation',
+                'event' => 'Private event or large family gathering booking',
                 'catering' => 'Catering and external banquet services',
             ],
         ],

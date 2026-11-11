@@ -13,19 +13,24 @@ class DeliveryZonesTable
 {
     public static function configure(Table $table): Table
     {
-            return $table
+        return $table
             ->columns([
-                TextColumn::make('region_name')      // عمود اسم المنطقة
-                    ->label('اسم المنطقة')
-                    ->searchable()                   // قابل للبحث
-                    ->sortable(),                    // قابل للترتيب
-
-                TextColumn::make('postal_code')      // عمود الرمز البريدي
+                TextColumn::make('postal_code')      // عمود الرمز البريدي (Postcode)
                     ->label('الرمز البريدي')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('delivery_cost')    // عمود تكلفة التوصيل
+                TextColumn::make('region_name')      // عمود اسم المنطقة (Wijknaam)
+                    ->label('اسم المنطقة')
+                    ->searchable()                   // قابل للبحث
+                    ->sortable(),                    // قابل للترتيب
+
+                TextColumn::make('minimum_order')    // عمود الحد الأدنى للطلب (Minimum)
+                    ->label('الحد الأدنى للطلب')
+                    ->money('EUR')                   // عرض القيمة كعملة اليورو
+                    ->sortable(),
+
+                TextColumn::make('delivery_cost')    // عمود تكلفة التوصيل (Bezorging)
                     ->label('تكلفة التوصيل')
                     ->money('EUR')                   // عرض القيمة كعملة اليورو
                     ->sortable(),
@@ -55,5 +60,4 @@ class DeliveryZonesTable
                 ]),
             ]);
     }
-
 }

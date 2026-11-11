@@ -1,42 +1,35 @@
 {{--
-    نص الهيرو: يعرض السطر التمهيدي والعنوان والوصف وفاصلاً زخرفياً لكل شريحة بحركة دخول من الأسفل، ويظهر نص الشريحة النشطة فقط اعتماداً على متغيرات Alpine.js.
+    ترويسة قسم الهيرو: شارة تاج بين خطين ذهبيين ينتهيان بمعين، ثم العنوان والوصف.
+    تتطلب متغيري isArabic وisDutch للنصوص، وهي ثابتة لا تتغير مع الشريحة النشطة.
+    بيانات البطاقات نفسها تأتي من الشرائح في hero-slides.
 --}}
 
-<div
-    class="relative z-20 flex min-h-[560px] items-end justify-center px-7 pb-14 sm:min-h-[650px] sm:px-12 sm:pb-20 lg:min-h-[calc(100svh-78px)] lg:items-center lg:justify-end lg:px-16 lg:pb-0 xl:px-24">
-    <div class="w-full max-w-[500px] text-center lg:text-right">
+@php
+    $heading = $isArabic ? 'عروضنا' : ($isDutch ? 'Onze Aanbiedingen' : 'Our Offers');
+    $title = $isArabic
+        ? 'استفد من عروضنا الخاصة'
+        : ($isDutch ? 'Profiteer van onze speciale aanbiedingen' : 'Enjoy our special offers');
+    $subtitle = $isArabic
+        ? 'استمتع بأطباق شهية بأسعار مغرية'
+        : ($isDutch ? 'Geniet van heerlijke gerechten tegen aantrekkelijke prijzen' : 'Enjoy delicious dishes at attractive prices');
+@endphp
 
-        {{-- حلقة Alpine تكرر كتلة النص لكل شريحة وتظهر النشطة بحركة دخول --}}
-        <template x-for="(slide, index) in slides" :key="`copy-${index}`">
-            <div x-show="activeSlide === index"
-                x-transition:enter="transition ease-out duration-700 delay-150"
-                x-transition:enter-start="opacity-0 translate-y-6"
-                x-transition:enter-end="opacity-100 translate-y-0"
-                class="text-copy">
-
-                {{-- السطر التمهيدي الصغير فوق العنوان مع خطين ذهبيين زخرفيين جانبيين --}}
-                <div
-                    class="mb-6 flex items-center justify-center gap-4 text-[11px] font-bold tracking-[0.08em] text-[#D9B36B] lg:justify-end">
-                    <span class="h-px w-10 bg-[#D9B36B]"></span>
-                    <span x-text="slide.eyebrow"></span>
-                    <span class="h-px w-10 bg-[#D9B36B] lg:hidden"></span>
-                </div>
-
-                {{-- العنوان الرئيسي للشريحة، ويدعم الأسطر المتعددة عبر الكلاس whitespace-pre-line بدون وسوم إضافية --}}
-                <h1 class="whitespace-pre-line font-serif text-[44px] font-bold leading-[1.12] tracking-[-0.035em] text-[#FFF9EE] drop-shadow-[0_3px_18px_rgba(35,4,7,0.5)] sm:text-6xl lg:text-[70px]"
-                    x-text="slide.title"></h1>
-
-                {{-- الوصف القصير أسفل العنوان بعرض محدود يضمن سهولة القراءة على جميع الشاشات --}}
-                <p class="mx-auto mt-7 max-w-[410px] text-sm leading-8 text-[#F0DCC5] drop-shadow-md lg:mx-0"
-                    x-text="slide.text"></p>
-
-                {{-- فاصل زخرفي على شكل معين ذهبي بين خطين أسفل الوصف --}}
-                <div class="mt-8 flex items-center justify-center gap-4 lg:justify-end">
-                    <span class="h-px w-12 bg-[#D9B36B]"></span>
-                    {{-- SVG مضمّن بدلاً من x-lucide لتجنب مشكلة open_basedir داخل Alpine x-for --}}
- @svg('lucide-diamond', 'h-5 w-5', ['aria-hidden' => 'true'])                    <span class="h-px w-12 bg-[#D9B36B]"></span>
-                </div>
-            </div>
-        </template>
+<header class="px-4 text-center sm:px-8">
+    {{-- شارة التاج بين خطين ذهبيين ينتهيان بمعين --}}
+    <div class="mx-auto flex max-w-xl items-center justify-center gap-3">
+        <span class="h-px flex-1 bg-gradient-to-l from-[#D9B36B] to-transparent"></span>
+        <span aria-hidden="true" class="size-2 rotate-45 border border-[#D9B36B]"></span>
+        <div class="relative">
+            @svg('lucide-crown', 'absolute -top-4 start-1/2 h-5 w-5 -translate-x-1/2 text-[#D9B36B] ', ['aria-hidden' => 'true'])
+            <span class="block rounded-full bg-gradient-to-b from-[#7A1620] to-[#4A0D12] px-8 py-2.5 font-serif text-lg font-bold text-[#FFF9EE] shadow-lg sm:px-10 sm:text-xl">
+                {{ $heading }}
+            </span>
+        </div>
+        <span aria-hidden="true" class="size-2 rotate-45 border border-[#D9B36B]"></span>
+        <span class="h-px flex-1 bg-gradient-to-r from-[#D9B36B] to-transparent"></span>
     </div>
-</div>
+
+    {{-- العنوان الرئيسي والوصف القصير --}}
+    <h2 class="mt-6 font-serif text-2xl font-bold text-[#7A1620] sm:text-4xl">{{ $title }}</h2>
+    <p class="mt-2 text-sm text-[#4A0D12]/80 sm:text-base">{{ $subtitle }}</p>
+</header>

@@ -32,12 +32,27 @@ return [
         'gallery' => 'Galerij',
         'reservation' => 'Tafel reserveren',
         'contact' => 'Neem contact met ons op',
-        'bookTableBtn' => 'Reserveer nu uw tafel',
+        'bookTableBtn' => 'Reserveer nu uw tafel',                // روابط القائمة الجديدة (تسميات ثابتة)
+
+        'offers' => 'Aanbiedingen',
+        'reserve' => 'Reserveren',
+        'order' => 'Bestellen',
+        'contactLink' => 'Contact',
 
         'primary' => 'Primaire navigatie',
         'secondary' => 'Secundaire navigatie',
         'mobile' => 'Mobiel menu',
         'toggleMenu' => 'Menu openen of sluiten',
+        'galleryHeritage' => 'Galerij & Erfgoed',
+        'restaurantInfo' => 'Restaurantinformatie',
+    ],
+
+    'cookies' => [
+        'aria' => 'Melding over cookies',
+        'title' => 'Cookies',
+        'message' => 'We gebruiken alleen functionele cookies die noodzakelijk zijn voor de werking van de website, zoals het onthouden van je winkelmandje en je gegevens voor je volgende bestelling. We gebruiken geen analytische cookies of trackingcookies.',
+        'accept' => 'Akkoord',
+        'necessary' => 'Alleen noodzakelijke cookies',
     ],
 
     // ═══════════════════════════════════════════
@@ -46,7 +61,7 @@ return [
     'brand' => [
         'name' => 'Jemenitische Keuken',
         'subName' => 'JEMENITISCHE KEUKEN',
-        'slogan' => 'De oorsprong van Mandi | أصل المندي',
+        'slogan' => 'De oorsprong van Mandi',
         'description' => 'Wij nemen u mee op een authentieke culinaire reis...',
     ],
 
@@ -108,6 +123,13 @@ return [
         'featured' => 'Aanbevolen',
         'spicy' => 'Pittig',
         'removeFromCart' => 'Gerecht uit winkelwagen verwijderen',
+        'popular_title' => 'Populaire gerechten',   // nl — كما طلبت
+
+        'free_drink_badge' => 'Inclusief gratis drankje',
+        'free_drink_hint' => 'Kies je gratis drankje in de winkelwagen.',
+        'free_drink_none' => 'Momenteel geen gratis drankje beschikbaar.',
+        'free_drink_added_hint' => 'Dit gerecht is inclusief een gratis drankje — kies het in de winkelwagen.',
+
     ],
 
     // ═══════════════════════════════════════════
@@ -247,6 +269,7 @@ return [
         'categories' => 'Galerijcategorieën',
         'loading' => 'Afbeeldingen laden...',
         'empty' => 'Nog geen afbeeldingen in deze categorie.',
+        'galleryHeritage' => 'Galerij & Erfgoed',
     ],
 
     // ═══════════════════════════════════════════
@@ -297,40 +320,66 @@ return [
         'invalid_reservation' => 'De gekoppelde reservering bestaat niet.',
         'invalid_order_status' => 'Ongeldige bestelstatus.',
         'invalid_order_type' => 'Ongeldig besteltype.',
+
+        'free_drink_not_eligible' => 'Het  gerecht ":name" is niet inclusief een gratis drankje.',
+        'invalid_free_drink' => 'Het gekozen drankje is niet toegestaan voor dit gerecht.',
+        'free_drink_quantity_exceeded' => 'Je hebt het toegestane aantal gratis drankjes voor ":name" overschreden (max: :max).',
     ],
 
     // ═══════════════════════════════════════════
-    // 📞 Contact
+    // 📞 Contactsectie
     // ═══════════════════════════════════════════
     'contact' => [
-        'badge' => 'Neem contact met ons op – onze gastvrijheid staat voor u klaar',
-        'title' => 'Wij verwelkomen u graag en beantwoorden met plezier uw vragen',
+        'badge' => 'Neem contact met ons op',
+        'title' => 'Wij ontvangen u graag en beantwoorden uw vragen',
+        'subtitle' => 'Ons team staat klaar om al uw vragen te beantwoorden en heet u van harte welkom in ons restaurant in Amsterdam.',
+
+        // Kaart- en contactkaarten
+        'directions' => 'Routebeschrijving',
+        'call_us' => 'Bel ons',
+        'phone_label' => 'Telefoonnummer',
+        'phone_hint' => 'Bereikbaar tijdens openingstijden',
+        'write_us' => 'Mail ons',
+        'email_label' => 'E-mailadres',
+        'email_hint' => 'Wij reageren zo snel mogelijk',
 
         'form' => [
-            'title' => 'Stuur ons een direct bericht',
+            'title' => 'Stuur ons een bericht',
+            'subtitle' => 'Uw mening is belangrijk voor ons. Schrijf ons en wij reageren zo snel mogelijk.',
             'success' => 'Uw bericht is succesvol verzonden. Wij nemen zo snel mogelijk contact met u op.',
-            'name' => 'Volledige naam *',
-            'email' => 'E-mailadres *',
-            'phone' => 'Telefoonnummer / WhatsApp',
-            'subject' => 'Type vraag',
-            'message' => 'Uw bericht of speciaal verzoek *',
-            'submit' => 'Bericht nu versturen →',
+
+            // Let op: het sterretje (*) wordt in de template toegevoegd
+            'name' => 'Volledige naam',
+            'email' => 'E-mailadres',
+            'phone' => 'Telefoon- / WhatsApp-nummer',
+            'whatsapp' => 'Telefoon- / WhatsApp-nummer',
+            'subject' => 'Soort vraag',
+            'message' => 'Uw bericht of speciale verzoek',
+
+            'name_placeholder' => 'Vul uw volledige naam in',
+            'email_placeholder' => 'Vul uw e-mailadres in',
+            'whatsapp_placeholder' => 'Vul uw telefoon- of WhatsApp-nummer in',
+            'message_placeholder' => 'Schrijf hier uw bericht...',
+
+            'submit' => 'Bericht nu verzenden →',
+            'submit_whatsapp' => 'Bericht verzenden',
+            'whatsapp_unavailable' => 'De WhatsApp-service is momenteel niet beschikbaar',
+            'whatsapp_note' => 'WhatsApp wordt op uw apparaat geopend — druk in de app op Verzenden om het bericht te versturen.',
 
             'subjects' => [
-                'inquiry' => 'Algemene vraag over het restaurant en de menukaart',
-                'event' => 'Reservering voor een speciale gelegenheid of grote familiebijeenkomst',
-                'catering' => 'Catering- en externe banketdiensten',
+                'inquiry' => 'Algemene vraag over het restaurant en het menu',
+                'event' => 'Reservering voor een privé-evenement of grote familiebijeenkomst',
+                'catering' => 'Cateringdiensten en externe feestmaaltijden',
             ],
         ],
 
         'details' => [
-            'address' => 'Adres & locatie',
+            'address' => 'Adres en locatie',
             'addressValue' => 'Damrak 45, Amsterdam, Nederland',
             'hours' => 'Openingstijden',
             'hoursValue' => 'Dagelijks van 12:00 tot 23:30',
         ],
     ],
-
     // ═══════════════════════════════════════════
     // 🔢 Enums
     // ═══════════════════════════════════════════

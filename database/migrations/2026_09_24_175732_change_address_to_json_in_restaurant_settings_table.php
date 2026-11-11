@@ -3,9 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
@@ -28,6 +26,11 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // تعديل نوع العمود بصيغة MySQL خام؛ نتجاوز في بيئات الاختبار (SQLite).
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            return;
+        }
+
         // ─────────────────────────────────────────────────────────────
         // 1️⃣ حوّل VARCHAR إلى TEXT (JSON string موجود بالفعل)
         // ─────────────────────────────────────────────────────────────
@@ -36,6 +39,10 @@ return new class extends Migration
 
     public function down(): void
     {
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            return;
+        }
+
         DB::statement('ALTER TABLE `restaurant_settings` MODIFY COLUMN `address` VARCHAR(255) NULL');
     }
 };

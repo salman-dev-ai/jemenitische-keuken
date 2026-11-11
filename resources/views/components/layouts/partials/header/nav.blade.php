@@ -1,63 +1,55 @@
 {{--
-شريط الروابط الرئيسي.
-يعرض الرئيسية والمنيو والمعرض وعن المطعم،
-ويلون الرابط النشط مع خط سفلي يتحرك فوراً عبر Alpine.
+شريط الروابط الرئيسي (روابط التصفح فقط — مفصول عن أزرار الخدمات).
+
+- روابط أقسام الصفحة الرئيسية: يتحكم بها Alpine عبر المتغير activeSection.
+- رابط "معلومات المطعم": صفحة مستقلة، فيُحدَّد نشاطه من الخادم (request()->routeIs)
+  لأن إعادة تحميل الصفحة تُضيع حالة Alpine.
+
+مهم: في الـ x-data الأب اضبط القيمة الابتدائية هكذا، حتى لا يبقى "الرئيسية" مفعّلاً
+في صفحة معلومات المطعم:
+
+    x-data="{ activeSection: @js(request()->routeIs('restaurant-info') ? 'restaurant-info' : 'home') }"
+
+وإن كان لديك scroll-spy يغيّر activeSection، فشغّله على الصفحة الرئيسية فقط.
 --}}
+@php
+    // مفتاح القسم => مفتاح الترجمة
+    $sections = [
+        'home'    => 'messages.nav.home',
+        'about'   => 'messages.nav.about',
+        'gallery' => 'messages.nav.galleryHeritage',
+        'contact' => 'messages.nav.contactLink',
+    ];
+
+    $isRestaurantInfo = request()->routeIs('restaurant-info');
+@endphp
+
 <nav class="w-full border-t border-gray-200/50 pt-2 lg:w-auto lg:border-t-0 lg:pt-0"
-    aria-label="{{ __('messages.nav.primary') }}">
-    <ul class="flex items-center justify-center gap-4 text-xs font-bold text-gray-700 sm:gap-6 sm:text-sm lg:gap-8">
-        {{-- الرئيسية مع الخط النشط --}}
+     aria-label="{{ __('messages.nav.primary') }}">
+    <ul class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs font-bold text-gray-700 sm:gap-x-6 sm:text-sm lg:gap-x-8">
+
+        {{-- أقسام الصفحة الرئيسية: الرئيسية / معلومات / معرض الصور وتراثنا / تواصل --}}
+        @foreach ($sections as $id => $labelKey)
+            <li>
+                <a href="{{ route('home') }}#{{ $id }}"
+                   @click="activeSection = '{{ $id }}'"
+                   :aria-current="activeSection === '{{ $id }}' ? 'true' : null"
+                   class="group relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
+                   :class="activeSection === '{{ $id }}' ? 'text-[#E07513]' : ''">
+                    {{ __($labelKey) }}
+                    <span class="absolute bottom-0 start-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
+                          :class="activeSection === '{{ $id }}' ? 'w-full' : 'w-0 group-hover:w-full'"></span>
+                </a>
+            </li>
+        @endforeach
+
+        {{-- معلومات المطعم (صفحة مستقلة): الحالة النشطة تأتي من الخادم --}}
         <li>
-            <a href="#home" @click="activeSection = 'home'"
-                class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
-                :class="activeSection === 'home' ? 'text-[#E07513]' : ''">
-                {{ __('messages.nav.home') }}
-                <span class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
-                    :class="activeSection === 'home' ? 'w-full' : 'w-0 hover:w-full'"></span>
-            </a>
-        </li>
-
-
-        <li>{{-- تبويب التخفيضات --}}
-            <a href="#offers"  @click="activeSection ='offers' "
-               class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
-                :class="activeSection === 'offers' ? 'text-[#E07513]' : ''">
-                {{ __('offers.header.tab') }}
-                 <span class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
-                    :class="activeSection === 'offers' ? 'w-full' : 'w-0 hover:w-full'"></span>
-            </a>
-        </li>
-
-        {{-- قائمة الطعام --}}
-        <li>
-            <a href="#menu" @click="activeSection = 'menu'"
-                class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
-                :class="activeSection === 'menu' ? 'text-[#E07513]' : ''">
-                {{ __('messages.nav.menu') }}
-                <span class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
-                    :class="activeSection === 'menu' ? 'w-full' : 'w-0 hover:w-full'"></span>
-            </a>
-        </li>
-
-        {{-- معرض الصور --}}
-        <li>
-            <a href="#gallery" @click="activeSection = 'gallery'"
-                class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
-                :class="activeSection === 'gallery' ? 'text-[#E07513]' : ''">
-                {{ __('messages.nav.gallery') }}
-                <span class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
-                    :class="activeSection === 'gallery' ? 'w-full' : 'w-0 hover:w-full'"></span>
-            </a>
-        </li>
-
-        {{-- عن المطعم، والوجهة هي التذييل --}}
-        <li>
-            <a href="#about" @click="activeSection = 'about'"
-                class="relative block pb-1 transition-colors duration-300 hover:text-[#E07513]"
-                :class="activeSection === 'about' ? 'text-[#E07513]' : ''">
-                {{ __('messages.nav.about') }}
-                <span class="absolute bottom-0 left-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out"
-                    :class="activeSection === 'about' ? 'w-full' : 'w-0 hover:w-full'"></span>
+            <a href="{{ route('restaurant-info') }}"
+               @if ($isRestaurantInfo) aria-current="page" @endif
+               class="hidden xl:block group relative block pb-1 transition-colors duration-300 hover:text-[#E07513] {{ $isRestaurantInfo ? 'text-[#E07513]' : '' }}">
+                {{ __('messages.nav.restaurantInfo') }}
+                <span class="absolute bottom-0 start-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out {{ $isRestaurantInfo ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
             </a>
         </li>
     </ul>

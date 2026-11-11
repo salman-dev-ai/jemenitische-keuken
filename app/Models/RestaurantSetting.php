@@ -46,10 +46,10 @@ class RestaurantSetting extends Model
 
     // ─────────────────────────────────────────────────────────────
     // 🈯 الحقول القابلة للترجمة
-    //    - name: JSON في DB → مترجم
-    //    - address: string في DB → غير مترجم
+    //    - name / address: بيانات المطعم
+    //    - meta_title / meta_description: عنوان ووصف السيو لكل لغة
     // ─────────────────────────────────────────────────────────────
-    public array $translatable = ['name', 'address'];
+    public array $translatable = ['name', 'address', 'meta_title', 'meta_description'];
 
     // ─────────────────────────────────────────────────────────────
     // 📝 الحقول القابلة للتعيين الجماعي
@@ -68,6 +68,18 @@ class RestaurantSetting extends Model
         'accepts_online_orders',
         'vat_rate',
         'max_quantity_per_item',
+        'google_analytics_id',
+        'meta_pixel_id',
+        // ── حقول السيو (SEO) — تُدار من لوحة التحكم ──
+        'meta_title',
+        'meta_description',
+        'og_image',
+        'price_range',
+        'serves_cuisine',
+        'social_links',
+        'latitude',
+        'longitude',
+        'google_site_verification',
     ];
 
     /**
@@ -77,12 +89,17 @@ class RestaurantSetting extends Model
      */
     protected function casts(): array
     {
-         return [
+        return [
             'opening_hours' => 'array',
             'accepts_reservations' => 'boolean',
             'accepts_online_orders' => 'boolean',
             'vat_rate' => 'decimal:2',
             'max_quantity_per_item' => 'integer',
+            // ── حقول السيو: مصفوفات JSON + إحداثيات عشرية ──
+            'serves_cuisine' => 'array',
+            'social_links' => 'array',
+            'latitude' => 'float',
+            'longitude' => 'float',
         ];
     }
 

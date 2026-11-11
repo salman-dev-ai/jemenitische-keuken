@@ -11,7 +11,7 @@
  * ملاحظات:
  * - استخدام declare(strict_types=1) لفرض أنواع صارمة وتقليل الأخطاء.
  * - استخدام دالة casts() بدلًا من الخاصية $casts (الطريقة الحديثة في Laravel 12).
- * - delivery_cost يتم إرجاعه دائمًا بمنزلتين عشريتين.
+ * - delivery_cost و minimum_order يتم إرجاعهما دائمًا بمنزلتين عشريتين.
  */
 
 declare(strict_types=1);                              // فرض أنواع صارمة على مستوى الملف
@@ -23,12 +23,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int $id                                 // المعرف
- * @property string $region_name                     // اسم المنطقة
- * @property string $postal_code                     // الرمز البريدي
- * @property string $delivery_cost                   // تكلفة التوصيل
- * @property Carbon|null $created_at                 // تاريخ الإنشاء
- * @property Carbon|null $updated_at                 // تاريخ التحديث
+ * @property int $id // المعرف
+ * @property string $region_name // اسم المنطقة
+ * @property string $postal_code // الرمز البريدي
+ * @property string $delivery_cost // تكلفة التوصيل
+ * @property string $minimum_order // الحد الأدنى للطلب
+ * @property Carbon|null $created_at // تاريخ الإنشاء
+ * @property Carbon|null $updated_at // تاريخ التحديث
  */
 class DeliveryZone extends Model
 {
@@ -43,6 +44,7 @@ class DeliveryZone extends Model
         'region_name',                                // اسم المنطقة
         'postal_code',                                // الرمز البريدي
         'delivery_cost',                              // تكلفة التوصيل
+        'minimum_order',                              // الحد الأدنى للطلب
     ];
 
     /**
@@ -54,6 +56,7 @@ class DeliveryZone extends Model
     {
         return [
             'delivery_cost' => 'decimal:2',           // إرجاع التكلفة بمنزلتين عشريتين
+            'minimum_order' => 'decimal:2',           // إرجاع الحد الأدنى بمنزلتين عشريتين
         ];
     }
 }

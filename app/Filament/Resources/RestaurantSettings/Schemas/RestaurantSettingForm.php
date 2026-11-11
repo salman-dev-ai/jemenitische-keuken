@@ -25,9 +25,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\RestaurantSettings\Schemas;
 
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Repeater\TableColumn;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Tabs;
@@ -253,6 +255,93 @@ class RestaurantSettingForm
                                     ->maxValue(500)
                                     ->default(50)
                                     ->helperText('أقصى كمية يمكن طلبها من الطبق الواحد (مثال: 50)'),
+                            ])
+                            ->columns(2),
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | 5. Tracking & Privacy (GDPR)
+                        |--------------------------------------------------------------------------
+                        | معرّفات أدوات التتبّع — تُحمَّل في الواجهة فقط بعد موافقة الزائر (opt-in).
+                        */
+
+                        Tab::make('التتبع & الخصوصية')
+                            ->icon('lucide-shield-check')
+                            ->schema([
+                                TextInput::make('google_analytics_id')
+                                    ->label('معرّف Google Analytics 4')
+                                    ->placeholder('G-XXXXXXXXXX')
+                                    ->maxLength(50)
+                                    ->helperText('يُحمَّل فقط بعد موافقة الزائر على كوكيز التحليلات. اتركه فارغاً للتعطيل.'),
+
+                                TextInput::make('meta_pixel_id')
+                                    ->label('معرّف Meta Pixel')
+                                    ->placeholder('123456789012345')
+                                    ->maxLength(50)
+                                    ->helperText('يُحمَّل فقط بعد موافقة الزائر على كوكيز التسويق. اتركه فارغاً للتعطيل.'),
+                            ])
+                            ->columns(2),
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | 6. SEO — بيانات محركات البحث والمشاركة الاجتماعية
+                        |--------------------------------------------------------------------------
+                        | meta_title و meta_description مترجمان (لكل لغة قيمة)، وتُعدَّل
+                        | باستخدام مبدّل اللغة أعلى النموذج (LocaleSwitcher).
+                        | بقية الحقول تغذّي البيانات المنظّمة JSON-LD ووسوم Open Graph.
+                        */
+
+                        Tab::make('السيو (SEO)')
+                            ->icon('lucide-search')
+                            ->schema([
+                                TextInput::make('meta_title')
+                                    ->label('عنوان الصفحة الرئيسية (Meta title)')
+                                    ->maxLength(60)
+                                    ->helperText('يظهر في تبويب المتصفح ونتيجة البحث للصفحة الرئيسية فقط. الطول المثالي حتى 60 حرفاً.'),
+
+                                TextInput::make('meta_description')
+                                    ->label('وصف الصفحة الرئيسية (Meta description)')
+                                    ->maxLength(160)
+                                    ->helperText('الوصف الظاهر أسفل العنوان في نتائج البحث للصفحة الرئيسية. الطول المثالي حتى 160 حرفاً.'),
+
+                                TextInput::make('og_image')
+                                    ->label('صورة المشاركة الاجتماعية')
+                                    ->maxLength(255)
+                                    ->helperText('مسار نسبي داخل مجلد public (مثال: images/home/home_logo.webp) أو رابط كامل https. تُستخدم في Open Graph و Twitter.'),
+
+                                TextInput::make('price_range')
+                                    ->label('نطاق السعر')
+                                    ->maxLength(8)
+                                    ->placeholder('€€')
+                                    ->helperText('يُعرض في البيانات المنظّمة، مثال: €€ أو €€€.'),
+
+                                TagsInput::make('serves_cuisine')
+                                    ->label('أنواع المطبخ')
+                                    ->placeholder('أضف نوعاً ثم Enter')
+                                    ->helperText('مثال: Jemenitisch، Midden-Oosters. تُدرج في حقل servesCuisine للبيانات المنظّمة.'),
+
+                                KeyValue::make('social_links')
+                                    ->label('روابط التواصل الاجتماعي')
+                                    ->keyLabel('المنصة (instagram / facebook / x)')
+                                    ->valueLabel('الرابط الكامل')
+                                    ->addActionLabel('إضافة رابط')
+                                    ->helperText('تُضاف إلى sameAs في البيانات المنظّمة (روابط موثّقة لحسابات المطعم الرسمية).'),
+
+                                TextInput::make('latitude')
+                                    ->label('خط العرض (Latitude)')
+                                    ->numeric()
+                                    ->helperText('إحداثيات الموقع لدقة الظهور في البحث المحلي، مثال: 52.3702157'),
+
+                                TextInput::make('longitude')
+                                    ->label('خط الطول (Longitude)')
+                                    ->numeric()
+                                    ->helperText('مثال: 4.8951679 — تُستخدم مع خط العرض في حقل geo.'),
+
+                                TextInput::make('google_site_verification')
+                                    ->label('رمز تحقّق Google Search Console')
+                                    ->maxLength(120)
+                                    ->columnSpanFull()
+                                    ->helperText('الصق قيمة وسم التحقق كما تظهر في Search Console، لتأكيد ملكية الموقع (اتركه فارغاً إن لم تستخدمه).'),
                             ])
                             ->columns(2),
 

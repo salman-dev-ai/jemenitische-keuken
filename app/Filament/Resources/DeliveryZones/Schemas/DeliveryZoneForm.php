@@ -10,7 +10,7 @@ class DeliveryZoneForm
 {
     public static function configure(Schema $schema): Schema
     {
-   return $schema
+        return $schema
             ->components([
                 Section::make('معلومات منطقة التوصيل')   // قسم رئيسي يجمع الحقول
                     ->description('أدخل اسم المنطقة والرمز البريدي وتكلفة التوصيل.')
@@ -26,7 +26,7 @@ class DeliveryZoneForm
                             ->required()
                             ->maxLength(20)              // مطابق للـ Migration
                             ->unique(ignoreRecord: true), // فريد، مع تجاهل السجل الحالي عند التعديل
-                            // ملاحظة: إذا كنت لا تريد قيد unique، احذف السطر أعلاه.
+                        // ملاحظة: إذا كنت لا تريد قيد unique، احذف السطر أعلاه.
 
                         TextInput::make('delivery_cost') // حقل تكلفة التوصيل
                             ->label('تكلفة التوصيل')
@@ -35,6 +35,14 @@ class DeliveryZoneForm
                             ->prefix('€')                // بادئة عملة اليورو
                             ->minValue(0)                // لا يقبل قيمًا سالبة
                             ->step(0.01),                // خطوة بمقدار هللة واحدة
+
+                        TextInput::make('minimum_order') // حقل الحد الأدنى للطلب
+                            ->label('الحد الأدنى للطلب')
+                            ->numeric()                  // يقبل أرقامًا فقط
+                            ->prefix('€')                // بادئة عملة اليورو
+                            ->minValue(0)                // لا يقبل قيمًا سالبة
+                            ->step(0.01)                 // خطوة بمقدار هللة واحدة
+                            ->default(0),                // القيمة الافتراضية 0 = لا يوجد حد أدنى
                     ])
                     ->columns(2),                        // قسم من عمودين
             ]);

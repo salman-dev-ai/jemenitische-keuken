@@ -26,6 +26,11 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // تعديل ENUM مدعوم في MySQL/MariaDB فقط؛ نتجاوز في بيئات الاختبار (SQLite).
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            return;
+        }
+
         DB::statement(
             "ALTER TABLE `orders` 
              MODIFY COLUMN `type` 
@@ -36,6 +41,10 @@ return new class extends Migration
 
     public function down(): void
     {
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            return;
+        }
+
         DB::statement(
             "ALTER TABLE `orders` 
              MODIFY COLUMN `type` 

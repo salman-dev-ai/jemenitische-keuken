@@ -37,6 +37,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\DTOs\CouponResult;
+use App\DTOs\PricingBreakdown;
 use App\Enums\OrderStatus;
 use App\Enums\OrderType;
 use App\Exceptions\OrderException;
@@ -116,7 +117,7 @@ class OrderService
 
             // 2.3 ─── التحقق من الكوبون (إن وُجد) ───
             $couponResult = CouponResult::none();
-            $customer     = null;
+            $customer = null;
 
             if ($couponCode !== null && $couponCode !== '') {
                 $customer = $this->resolveCouponCustomer($orderData, $couponCode);
@@ -144,7 +145,7 @@ class OrderService
                 ? $couponResult->discountAmount
                 : 0.0;
 
-            /** @var \App\DTOs\PricingBreakdown $pricing */
+            /** @var PricingBreakdown $pricing */
             $pricing = $this->pricingService->calculate($subtotal, $discountAmount);
 
             // 2.5 ─── تجهيز بيانات الطلب ───
@@ -152,9 +153,9 @@ class OrderService
 
             // 2.6 ─── snapshot الكوبون ───
             if ($couponResult->isValid && $couponResult->coupon !== null) {
-                $finalOrderData['coupon_id']       = $couponResult->coupon->id;
-                $finalOrderData['coupon_code']     = $couponResult->coupon->code;
-                $finalOrderData['discount_type']   = $couponResult->coupon->discount_type->value;
+                $finalOrderData['coupon_id'] = $couponResult->coupon->id;
+                $finalOrderData['coupon_code'] = $couponResult->coupon->code;
+                $finalOrderData['discount_type'] = $couponResult->coupon->discount_type->value;
                 $finalOrderData['discount_amount'] = $pricing->discount;
             }
 
@@ -174,17 +175,17 @@ class OrderService
 
             // 2.9 ─── تسجيل تدقيقي ───
             Log::debug('Order created', [
-                'id'              => $order->id,
-                'order_number'    => $order->order_number,
-                'customer_id'     => $order->customer_id,
-                'type'            => $order->type->value,
-                'subtotal'        => $pricing->subtotal,
+                'id' => $order->id,
+                'order_number' => $order->order_number,
+                'customer_id' => $order->customer_id,
+                'type' => $order->type->value,
+                'subtotal' => $pricing->subtotal,
                 'discount_amount' => $pricing->discount,
-                'vat_rate'        => $pricing->vatRate,
-                'tax'             => $pricing->vat,
-                'total'           => $pricing->total,
-                'items_count'     => count($preparedItems),
-                'coupon_code'     => $couponResult->coupon?->code,
+                'vat_rate' => $pricing->vatRate,
+                'tax' => $pricing->vat,
+                'total' => $pricing->total,
+                'items_count' => count($preparedItems),
+                'coupon_code' => $couponResult->coupon?->code,
             ]);
 
             return $order;
@@ -228,7 +229,6 @@ class OrderService
      *
      * @param  array<int, array{menu_item_id: int, quantity: int, unit_price: float, total_price: float}>  $preparedItems
      * @param  Collection<int, MenuItem>  $menuItems
-     *
      * @return array<int, array{id: int, price: float, quantity: int, category_id: ?int}>
      */
     protected function buildCouponItems(array $preparedItems, Collection $menuItems): array
@@ -238,9 +238,9 @@ class OrderService
                 $menuItem = $menuItems->get($item['menu_item_id']);
 
                 return [
-                    'id'          => $item['menu_item_id'],
-                    'price'       => (float) $item['unit_price'],
-                    'quantity'    => (int) $item['quantity'],
+                    'id' => $item['menu_item_id'],
+                    'price' => (float) $item['unit_price'],
+                    'quantity' => (int) $item['quantity'],
                     'category_id' => $menuItem?->menu_category_id,
                 ];
             })
@@ -251,14 +251,12 @@ class OrderService
      * 📋 تجهيز البيانات النهائية للطلب.
      *
      * @param  array<string, mixed>  $orderData
-     * @param  \App\DTOs\PricingBreakdown  $pricing
-     *
      * @return array<string, mixed>
      */
     protected function buildFinalOrderData(
         array $orderData,
         OrderType $type,
-        \App\DTOs\PricingBreakdown $pricing,
+        PricingBreakdown $pricing,
     ): array {
         $data = Arr::only($orderData, [
             'customer_id',
@@ -273,12 +271,12 @@ class OrderService
             'notes',
         ]);
 
-        $data['type']           = $type;
-        $data['order_number']   = $this->generateOrderNumber();
-        $data['subtotal']       = $pricing->subtotal;
-        $data['tax']            = $pricing->vat;
-        $data['total']          = $pricing->total;
-        $data['status']         = $this->resolveStatus($orderData['status'] ?? null);
+        $data['type'] = $type;
+        $data['order_number'] = $this->generateOrderNumber();
+        $data['subtotal'] = $pricing->subtotal;
+        $data['tax'] = $pricing->vat;
+        $data['total'] = $pricing->total;
+        $data['status'] = $this->resolveStatus($orderData['status'] ?? null);
         $data['payment_status'] = $this->resolvePaymentStatus($orderData['payment_status'] ?? null);
 
         return $data;
@@ -293,7 +291,15 @@ class OrderService
      *
      * @param  array<int, array{menu_item_id: int|string, quantity: int|string}>  $items
      * @param  Collection<int, MenuItem>  $menuItems
+     * @return array{0: array<int, array<string, mixed>>, 1: float}
      *
+     * @throws OrderException
+     */
+    /**
+     * 🧾 تجهيز العناصر + subtotal + خيارات المشروب المجاني (تحقق خادمي صارم).
+     *
+     * @param  array<int, array{menu_item_id:int|string, quantity:int|string, free_drink_selections?:array<int,int|string>}>  $items
+     * @param  Collection<int, MenuItem>  $menuItems
      * @return array{0: array<int, array<string, mixed>>, 1: float}
      *
      * @throws OrderException
@@ -303,6 +309,40 @@ class OrderService
         $subtotal = 0.0;
         $preparedItems = [];
         $maxQuantity = RestaurantSetting::maxQuantityPerItem();
+
+        // ── 1) جمع معرّفات المشروبات المرشّحة (اختيارات العميل + المضبوط على الأطباق) ──
+        $candidateIds = [];
+
+        foreach ($items as $item) {
+            foreach ((array) ($item['free_drink_selections'] ?? []) as $id) {
+                $candidateIds[] = (int) $id;
+            }
+
+            $main = $menuItems->get((int) ($item['menu_item_id'] ?? 0));
+
+            if ($main !== null) {
+                $candidateIds = array_merge($candidateIds, $main->configuredFreeDrinkIds());
+            }
+        }
+
+        $candidateIds = array_values(array_unique(array_filter($candidateIds)));
+
+        // ── 2) تحميل المشروبات باستعلام واحد مع التصنيف (بدل استعلام لكل مشروب) ──
+        $drinks = empty($candidateIds)
+            ? collect()
+            : MenuItem::query()
+                ->with('category:id,is_drinks_category,slug')
+                ->whereIn('id', $candidateIds)
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+        // ── 3) المعرّفات الصالحة = متاح + من تصنيف المشروبات ──
+        $validDrinkIds = $drinks
+            ->filter(fn (MenuItem $d): bool => $d->is_available && (bool) $d->category?->is_drinks_category)
+            ->keys()
+            ->map(fn ($id): int => (int) $id)
+            ->all();
 
         foreach ($items as $item) {
             $menuItemId = (int) ($item['menu_item_id'] ?? 0);
@@ -318,7 +358,6 @@ class OrderService
             /** @var MenuItem $menuItem */
             $menuItem = $menuItems->get($menuItemId);
 
-            // ✅ التحقق من التوفر
             if (! $menuItem->is_available) {
                 throw OrderException::menuItemUnavailable($menuItemId);
             }
@@ -333,15 +372,115 @@ class OrderService
             $itemTotal = round($unitPrice * $quantity, 2);
             $subtotal += $itemTotal;
 
-            $preparedItems[] = [
+            $row = [
                 'menu_item_id' => $menuItem->id,
-                'quantity'     => $quantity,
-                'unit_price'   => $unitPrice,
-                'total_price'  => $itemTotal,
+                'quantity' => $quantity,
+                'unit_price' => $unitPrice,
+                'total_price' => $itemTotal,
             ];
+
+            //   خيارات المشروب المجاني (سعر صفر — لا تؤثر على subtotal)
+            $freeDrinkOptions = $this->buildFreeDrinkOptions(
+                $menuItem,
+                (array) ($item['free_drink_selections'] ?? []),
+                $drinks,
+                $validDrinkIds,
+                $quantity,
+            );
+
+            if ($freeDrinkOptions !== null) {
+                $row['options'] = $freeDrinkOptions;
+            }
+
+            $preparedItems[] = $row;
         }
 
         return [$preparedItems, round($subtotal, 2)];
+    }
+
+    /**
+     *   بناء خيارات المشروب المجاني لعنصر طلب.
+     *
+     * @param  array<int, int|string>  $rawSelections  اختيارات العميل
+     * @param  Collection<int, MenuItem>  $drinks
+     * @param  array<int, int>  $validDrinkIds
+     * @return array{free_drinks: array<int, array{id:int, name:string, qty:int, price:float}>}|null
+     *
+     * @throws OrderException
+     */
+    protected function buildFreeDrinkOptions(
+        MenuItem $mainItem,
+        array $rawSelections,
+        Collection $drinks,
+        array $validDrinkIds,
+        int $quantity,
+    ): ?array {
+        // المسموح لهذا الطبق = تقاطع (المضبوط من الأدمن) مع (الصالح فعلياً)
+        $allowed = array_values(array_intersect($mainItem->configuredFreeDrinkIds(), $validDrinkIds));
+
+        // طبق غير مؤهل لكن وصلت اختيارات ⇒ رفض صريح
+        if (empty($allowed)) {
+            if (! empty(array_filter($rawSelections))) {
+                throw OrderException::freeDrinkNotEligible($mainItem->localized_name);
+            }
+
+            return null;
+        }
+
+        $slots = $mainItem->freeDrinkSlotsFor($quantity);
+
+        // ✅ المشروب الثابت: يبنيه الخادم من إعدادات الطبق (لا يعتمد على العميل)
+        if (count($allowed) === 1) {
+            return $this->freeDrinkSnapshot([$allowed[0] => $slots], $drinks);
+        }
+
+        // وضع الاختيار
+        $selections = array_values(array_filter(array_map('intval', $rawSelections)));
+
+        if (empty($selections)) {
+            return null; // اختياري ⇒ لا مشروب
+        }
+
+        if (count($selections) > $slots) {
+            throw OrderException::freeDrinkQuantityExceeded($mainItem->localized_name, $slots);
+        }
+
+        $picks = [];
+
+        foreach ($selections as $drinkId) {
+            if (! in_array($drinkId, $allowed, true)) {
+                throw OrderException::invalidFreeDrink();
+            }
+
+            $picks[$drinkId] = ($picks[$drinkId] ?? 0) + 1;
+        }
+
+        return $this->freeDrinkSnapshot($picks, $drinks);
+    }
+
+    /**
+     *   تحويل الاختيارات إلى Snapshot مخزَّن في order_items.options (سعر 0).
+     *
+     * @param  array<int, int>  $picks  [drinkId => qty]
+     * @param  Collection<int, MenuItem>  $drinks
+     * @return array{free_drinks: array<int, array{id:int, name:string, qty:int, price:float}>}
+     */
+    protected function freeDrinkSnapshot(array $picks, Collection $drinks): array
+    {
+        $freeDrinks = [];
+
+        foreach ($picks as $drinkId => $qty) {
+            $drink = $drinks->get((int) $drinkId);
+
+            $freeDrinks[] = [
+                'id' => (int) $drinkId,
+                'name' => $drink?->localized_name ?? ('#'.$drinkId),
+                'qty' => (int) $qty,
+                'price' => 0.0,
+            ];
+        }
+
+        return ['free_drinks' => $freeDrinks];
     }
 
     /**
@@ -423,6 +562,6 @@ class OrderService
      */
     protected function generateOrderNumber(): string
     {
-        return 'ORD-' . now()->format('Ymd') . '-' . strtoupper(Str::ulid()->toBase32());
+        return 'ORD-'.now()->format('Ymd').'-'.strtoupper(Str::ulid()->toBase32());
     }
 }

@@ -29,7 +29,10 @@ trait ManagesMenu
     {
         return MenuItem::query()
             ->where('is_available', true)
-            ->with('category:id,slug') // اسم العلاقة في الموديل
+            ->with([
+                'category:id,slug',   // اسم العلاقة في الموديل
+                'activeAllergens',    // أيقونات الحساسية والعلامات (المفعّلة فقط)
+            ])
             ->orderBy('sort_order')
             ->get();
     }
@@ -67,7 +70,7 @@ trait ManagesMenu
     public function filteredItems(): Collection
     {
         return MenuItem::available()
-            ->with('category')
+            ->with(['category', 'activeAllergens'])
             ->when(
                 $this->selectedCategorySlug !== 'all',
                 fn ($q) => $q->whereHas(

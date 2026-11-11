@@ -24,6 +24,8 @@ class MenuCategory extends Model
         'image_path',
         'sort_order',
         'is_available',
+        'is_drinks_category',
+
     ];
 
     protected function casts(): array
@@ -31,7 +33,14 @@ class MenuCategory extends Model
         return [
             'sort_order' => 'integer',
             'is_available' => 'boolean',
+            'is_drinks_category' => 'boolean',
         ];
+    }
+
+    /**   نطاق تصنيفات المشروبات */
+    public function scopeDrinks(Builder $query): Builder
+    {
+        return $query->where('is_drinks_category', true);
     }
 
     public function scopeActive(Builder $query): Builder
@@ -63,16 +72,17 @@ class MenuCategory extends Model
         $translation = $this->getTranslation('name', $locale, false);
 
         // إذا وجدت الترجمة باللغة الحالية
-        if (!empty($translation) && is_string($translation)) {
+        if (! empty($translation) && is_string($translation)) {
             return $translation;
         }
 
         // Fallback: جرب الإنجليزية
         $englishTranslation = $this->getTranslation('name', 'en', false);
-        if (!empty($englishTranslation) && is_string($englishTranslation)) {
+        if (! empty($englishTranslation) && is_string($englishTranslation)) {
             return $englishTranslation;
         }
- return 'غير محدد';
+
+        return 'غير محدد';
     }
 
     public function getLocalizedDescriptionAttribute(): ?string
@@ -87,21 +97,22 @@ class MenuCategory extends Model
         //     true,
         // ) ?: null;
 
-                  $locale = app()->getLocale();
+        $locale = app()->getLocale();
 
         // استخدام getTranslation من Spatie لجلب النص بلغة محددة
         $translation = $this->getTranslation('description', $locale, false);
 
         // إذا وجدت الترجمة باللغة الحالية
-        if (!empty($translation) && is_string($translation)) {
+        if (! empty($translation) && is_string($translation)) {
             return $translation;
         }
 
         // Fallback: جرب الإنجليزية
         $englishTranslation = $this->getTranslation('description', 'en', false);
-        if (!empty($englishTranslation) && is_string($englishTranslation)) {
+        if (! empty($englishTranslation) && is_string($englishTranslation)) {
             return $englishTranslation;
         }
- return 'غير محدد';
+
+        return 'غير محدد';
     }
 }

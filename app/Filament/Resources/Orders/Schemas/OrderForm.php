@@ -7,6 +7,7 @@ use App\Enums\OrderType;
 use App\Models\Customer;
 use App\Models\MenuItem;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -227,6 +228,26 @@ class OrderForm
                                 'sm' => 2,
                             ]),
                     ]),
+
+                //   ملخص المشروبات المجانية (لا يؤثر على الحساب)
+                Placeholder::make('free_drinks_summary')
+                    ->hiddenLabel()
+                    ->columnSpanFull()
+                    ->visible(function (Get $get): bool {
+                        $drinks = $get('options.free_drinks') ?? [];
+
+                        return is_array($drinks) && count($drinks) > 0;
+                    })
+                    ->content(function (Get $get): string {
+                        $drinks = $get('options.free_drinks') ?? [];
+
+                        $parts = collect($drinks)->map(
+                            fn ($d): string => ($d['name'] ?? '—').' × '.(int) ($d['qty'] ?? 0),
+                        )->implode('، ');
+
+                        return '  مشروب مجاني: '.$parts;
+                    }),
+
             ]);
     }
 

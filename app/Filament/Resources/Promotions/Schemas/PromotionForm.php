@@ -52,6 +52,11 @@ class PromotionForm
                                         'image/png',
                                         'image/webp',
                                     ])
+                                    // تصغير تلقائي في المتصفح قبل الرفع لتسريع الموقع (بلا تكبير للصور الصغيرة)
+                                    ->automaticallyResizeImagesMode('contain')
+                                    ->automaticallyResizeImagesToWidth(1600)
+                                    ->automaticallyResizeImagesToHeight(1600)
+                                    ->automaticallyUpscaleImagesWhenResizing(false)
                                     ->helperText('تُعرض في بطاقة العرض — JPG/PNG/WEBP حتى 5MB')
                                     ->columnSpanFull(),
 

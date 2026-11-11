@@ -6,6 +6,7 @@ namespace App\Livewire\Concerns;
 
 use App\Enums\OrderType;
 use App\Exceptions\OrderException;
+use App\Models\RestaurantSetting;
 use App\Services\OrderService;
 use App\Services\ReservationService;
 use Illuminate\Support\Facades\DB;
@@ -59,9 +60,9 @@ trait ProcessesCheckout
         if ($this->isCartEmpty) {
             $this->dispatch(
                 'notify',
-                title:   __('messages.menu.empty'),
+                title: __('messages.menu.empty'),
                 message: '',
-                type:    'warning',
+                type: 'warning',
             );
 
             return null;
@@ -73,26 +74,26 @@ trait ProcessesCheckout
         } catch (ValidationException $e) {
             $this->dispatch(
                 'notify',
-                title:   __('messages.order.validation_error'),
+                title: __('messages.order.validation_error'),
                 message: $e->validator->errors()->first(),
-                type:    'error',
+                type: 'error',
             );
 
             throw $e;
         }
 
         // ─── 3. Rate Limiting ───
-        $rateKey = 'checkout:' . request()->ip();
+        $rateKey = 'checkout:'.request()->ip();
 
         if (RateLimiter::tooManyAttempts($rateKey, 5)) {
             $seconds = RateLimiter::availableIn($rateKey);
-            $msg     = sprintf(__('messages.order.rate_limit_exceeded'), $seconds);
+            $msg = sprintf(__('messages.order.rate_limit_exceeded'), $seconds);
 
             $this->dispatch(
                 'notify',
-                title:   __('messages.order.error_title'),
+                title: __('messages.order.error_title'),
                 message: $msg,
-                type:    'error',
+                type: 'error',
             );
 
             $this->addError('general', $msg);
@@ -141,11 +142,37 @@ trait ProcessesCheckout
                 }
 
                 // 6.4) تجهيز عناصر الطلب
+                // $orderItems = collect($this->cart)
+                //     ->map(fn (array $item): array => [
+                //         'menu_item_id' => $item['id'],
+                //         'quantity'     => $item['quantity'],
+                //     ])
+                //     ->all();
+
+                // 6.4) تجهيز عناصر الطلب (مع اختيارات المشروب المجاني إن وُجدت)
                 $orderItems = collect($this->cart)
-                    ->map(fn (array $item): array => [
-                        'menu_item_id' => $item['id'],
-                        'quantity'     => $item['quantity'],
-                    ])
+                    ->map(function (array $item): array {
+                        $row = [
+                            'menu_item_id' => $item['id'],
+                            'quantity' => $item['quantity'],
+                        ];
+
+                        //   فرد الاختيارات بمقدار العدد (الخادم يعيد التحقق/يبني الثابت)
+                        $picks = (array) ($item['free_drink']['picks'] ?? []);
+                        $selections = [];
+
+                        foreach ($picks as $drinkId => $count) {
+                            for ($i = 0; $i < (int) $count; $i++) {
+                                $selections[] = (int) $drinkId;
+                            }
+                        }
+
+                        if (! empty($selections)) {
+                            $row['free_drink_selections'] = $selections;
+                        }
+
+                        return $row;
+                    })
                     ->all();
 
                 // 6.5) إنشاء الطلب — تمرير couponCode للخدمة
@@ -177,9 +204,9 @@ trait ProcessesCheckout
             // ─── 10. إشعار النجاح ───
             $this->dispatch(
                 'notify',
-                title:   __('messages.notifications.order_title'),
+                title: __('messages.notifications.order_title'),
                 message: __('messages.notifications.order_message'),
-                type:    'success',
+                type: 'success',
             );
 
             // ─── 11. إرجاع رابط واتساب للنموذج ليفتحه في تبويب جديد ───
@@ -193,9 +220,9 @@ trait ProcessesCheckout
 
             $this->dispatch(
                 'notify',
-                title:   __('messages.order.error_title'),
+                title: __('messages.order.error_title'),
                 message: $errMsg,
-                type:    'error',
+                type: 'error',
             );
 
             $this->addError('general', $errMsg);
@@ -207,9 +234,9 @@ trait ProcessesCheckout
 
             $this->dispatch(
                 'notify',
-                title:   __('messages.order.error_title'),
+                title: __('messages.order.error_title'),
                 message: $errMsg,
-                type:    'error',
+                type: 'error',
             );
 
             $this->addError('general', $errMsg);
@@ -229,9 +256,9 @@ trait ProcessesCheckout
      */
     protected function whatsAppNumber(): string
     {
-  $whatsapp = preg_replace('/\D+/', '', (string) \App\Models\RestaurantSetting::current()->whatsapp ?? '');
+        $whatsapp = preg_replace('/\D+/', '', (string) RestaurantSetting::current()->whatsapp ?? '');
 
-    return $whatsapp ;    
+        return $whatsapp;
     }
 
     /**
@@ -240,13 +267,13 @@ trait ProcessesCheckout
      * ⚠️ فشل البناء لا يجب أن يُفسد الطلب (محفوظ مسبقاً في قاعدة البيانات)،
      *    لذلك نلتقط الاستثناء ونسجّله فقط بدل رميه.
      *
-     * @param array<string, mixed> $validated المدخلات بعد التحقق وتطبيع الهاتف
+     * @param  array<string, mixed>  $validated  المدخلات بعد التحقق وتطبيع الهاتف
      */
     protected function makeWhatsAppUrl(array $validated): ?string
     {
         try {
-            return 'https://wa.me/' . $this->whatsAppNumber()
-                . '?text=' . rawurlencode($this->buildWhatsAppMessage($validated));
+            return 'https://wa.me/'.$this->whatsAppNumber()
+                .'?text='.rawurlencode($this->buildWhatsAppMessage($validated));
         } catch (\Throwable $e) {
             report($e);
 
@@ -261,16 +288,16 @@ trait ProcessesCheckout
      * يشمل: بيانات العميل، الخدمة والموعد، العنوان (للتوصيل)، الأطباق،
      * الخصم، الضريبة، والإجمالي — كلها من الحالة قبل تنظيفها.
      *
-     * @param array<string, mixed> $validated
+     * @param  array<string, mixed>  $validated
      */
     protected function buildWhatsAppMessage(array $validated): string
     {
         $pricing = $this->pricing;
-        $money   = static fn (float|int|string $v): string => '€' . number_format((float) $v, 2);
+        $money = static fn (float|int|string $v): string => '€'.number_format((float) $v, 2);
 
         $orderTypeLabels = [
-            OrderType::DINE_IN->value  => 'داخل المطعم',
-            OrderType::PICKUP->value   => 'استلام',
+            OrderType::DINE_IN->value => 'داخل المطعم',
+            OrderType::PICKUP->value => 'استلام',
             OrderType::DELIVERY->value => 'توصيل',
             OrderType::PREORDER->value => 'طلب مسبق',
         ];
@@ -290,8 +317,25 @@ trait ProcessesCheckout
         if (! empty($validated['customer_email'])) {
             $lines[] = "البريد: {$validated['customer_email']}";
         }
+        // سطر المشروب في رسالة واتساب داخل
+        foreach ($this->cart as $item) {
+            $lines[] = "• {$item['name']} × {$item['quantity']} = "
+                .$money($item['price'] * $item['quantity']);
 
-        $lines[] = 'الخدمة: ' . ($orderTypeLabels[$this->order_type] ?? $this->order_type);
+            //   المشروبات المجانية المرتبطة بالطبق
+            $picks = (array) ($item['free_drink']['picks'] ?? []);
+
+            if (! empty($picks)) {
+                $catalog = $this->freeDrinkCatalog;
+                $names = collect($picks)
+                    ->map(fn ($n, $drinkId) => ($catalog['drinks'][$drinkId] ?? ('#'.$drinkId))." × {$n}")
+                    ->implode('، ');
+
+                $lines[] = "     مشروب مجاني: {$names}";
+            }
+        }
+
+        $lines[] = 'الخدمة: '.($orderTypeLabels[$this->order_type] ?? $this->order_type);
 
         if (! empty($validated['reservation_date'])) {
             $lines[] = "التاريخ: {$validated['reservation_date']} {$validated['reservation_time']}";
@@ -314,17 +358,17 @@ trait ProcessesCheckout
 
         foreach ($this->cart as $item) {
             $lines[] = "• {$item['name']} × {$item['quantity']} = "
-                . $money($item['price'] * $item['quantity']);
+                .$money($item['price'] * $item['quantity']);
         }
 
         $lines[] = '';
 
         if ($pricing->discount > 0) {
-            $lines[] = "الخصم ({$this->appliedCouponCode}): -" . $money($pricing->discount);
+            $lines[] = "الخصم ({$this->appliedCouponCode}): -".$money($pricing->discount);
         }
 
-        $lines[] = 'الضريبة: ' . $money($pricing->vat);
-        $lines[] = '*الإجمالي: ' . $money($pricing->total) . '*';
+        $lines[] = 'الضريبة: '.$money($pricing->vat);
+        $lines[] = '*الإجمالي: '.$money($pricing->total).'*';
 
         return implode("\n", $lines);
     }
@@ -345,8 +389,8 @@ trait ProcessesCheckout
         }
 
         return [
-            'address'     => $this->delivery_address ?: null,
-            'city'        => $this->delivery_city ?: null,
+            'address' => $this->delivery_address ?: null,
+            'city' => $this->delivery_city ?: null,
             'postal_code' => $this->delivery_postal_code ?: null,
         ];
     }
@@ -355,7 +399,7 @@ trait ProcessesCheckout
      * بيانات الحجز: تدمج ملخص الأطباق والإجمالي والملاحظات في special_requests.
      *
      * @param  array<string, mixed>  $validated  المدخلات بعد التحقق
-     * @param  object|null           $customer   العميل المحفوظ إن فُعّل "تذكرني"
+     * @param  object|null  $customer  العميل المحفوظ إن فُعّل "تذكرني"
      * @return array<string, mixed>
      */
     protected function buildReservationData(array $validated, $customer): array
@@ -375,10 +419,10 @@ trait ProcessesCheckout
         ));
 
         $data = [
-            'customer_name'    => $validated['customer_name'],
-            'customer_phone'   => $validated['customer_phone'],
-            'customer_email'   => $validated['customer_email'],
-            'party_size'       => $this->party_size,
+            'customer_name' => $validated['customer_name'],
+            'customer_phone' => $validated['customer_phone'],
+            'customer_email' => $validated['customer_email'],
+            'party_size' => $this->party_size,
             'reservation_date' => $validated['reservation_date'],
             'reservation_time' => $validated['reservation_time'],
             'special_requests' => $combinedNotes,
@@ -395,8 +439,8 @@ trait ProcessesCheckout
      * بيانات الطلب التي تُمرَّر إلى OrderService::createOrder().
      *
      * @param  array<string, mixed>  $validated
-     * @param  object|null           $customer
-     * @param  object|null           $reservation  الحجز المرتبط (dine_in/preorder فقط)
+     * @param  object|null  $customer
+     * @param  object|null  $reservation  الحجز المرتبط (dine_in/preorder فقط)
      * @return array<string, mixed>
      */
     protected function buildOrderData(
@@ -406,15 +450,15 @@ trait ProcessesCheckout
         OrderType $finalOrderType,
     ): array {
         $data = [
-            'customer_name'        => $validated['customer_name'],
-            'customer_phone'       => $validated['customer_phone'],
-            'customer_email'       => $validated['customer_email'],
-            'type'                 => $finalOrderType,
-            'notes'                => $reservation
+            'customer_name' => $validated['customer_name'],
+            'customer_phone' => $validated['customer_phone'],
+            'customer_email' => $validated['customer_email'],
+            'type' => $finalOrderType,
+            'notes' => $reservation
                 ? "Linked to Reservation: {$reservation->reference_code}"
                 : 'Direct order',
-            'delivery_address'     => $this->delivery_address ?: null,
-            'delivery_city'        => $this->delivery_city ?: null,
+            'delivery_address' => $this->delivery_address ?: null,
+            'delivery_city' => $this->delivery_city ?: null,
             'delivery_postal_code' => $this->delivery_postal_code ?: null,
         ];
 

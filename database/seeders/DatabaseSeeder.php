@@ -18,10 +18,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. زرع الإعدادات العامة للمطعم
+        // 1. زرع الإعدادات العامة للمطعم وقاموس الحساسية والعلامات الغذائية
         $this->call([
             RestaurantSeeder::class,
-            RolesAndPermissionsSeeder::class
+            RolesAndPermissionsSeeder::class,
+            AllergenSeeder::class,
         ]);
 
         // 2. زرع 5 أقسام منيو، وكل قسم يحتوي على 6 أطباق
@@ -51,9 +52,6 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         });
-
-
-
 
     }
 }

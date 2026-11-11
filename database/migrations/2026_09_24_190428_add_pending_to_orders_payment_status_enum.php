@@ -3,9 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -14,6 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // تعديل ENUM مدعوم في MySQL/MariaDB فقط؛ نتجاوز في بيئات الاختبار (SQLite).
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            return;
+        }
+
         // ─────────────────────────────────────────────────────────────
         // إضافة 'pending' إلى ENUM عمود payment_status
         // ─────────────────────────────────────────────────────────────
@@ -35,6 +38,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            return;
+        }
+
         // إعادة التعريف القديم (احذف 'pending' من القائمة)
         DB::statement("
             ALTER TABLE `orders`

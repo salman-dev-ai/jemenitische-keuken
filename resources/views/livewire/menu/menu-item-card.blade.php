@@ -1,8 +1,15 @@
 @php
     $inCart = isset($cart[$item->id]);
     $cartQty = $inCart ? $cart[$item->id]['quantity'] : 0;
-    $allergens = is_array($item->allergens) ? $item->allergens : (json_decode($item->allergens ?? '[]', true) ?: []);
-@endphp
+
+    $hasFreeDrink = isset($freeDrinkItems[$item->id]);
+
+    // معلومات الحساسية والعلامات الغذائية — القاموس المُدار من لوحة التحكم (المفعّل فقط)
+    $itemAllergens = $item->relationLoaded('activeAllergens')
+        ? $item->activeAllergens
+        : $item->activeAllergens()->get();
+
+    @endphp
 
 <div wire:key="item-{{ $item->id }}"
     x-data="{ slug: @js($item->category->slug), expanded: false }"
@@ -11,10 +18,10 @@
     class="group bg-white rounded-3xl overflow-hidden border border-stone-100 shadow-sm hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-300 flex flex-col">
 
     {{-- صورة الطبق --}}
-    <div class="relative aspect-[4/3] overflow-hidden bg-stone-100">
+    <div class="relative aspect-[4/4] overflow-hidden bg-stone-100">
         @if ($item->image_path)
-            <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->localized_name }}" loading="lazy"
-                width="600" height="450"
+            <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->localized_name }}" width="600" height="600"
+                loading="lazy" decoding="async"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
         @else
             <div class="w-full h-full flex items-center justify-center bg-stone-50">
@@ -23,6 +30,25 @@
         @endif
 
         <div class="absolute top-3 start-3 flex flex-col gap-2">
+                        {{--   شارة المشروب المجاني: hover على الحاسوب + نقر/لمس على الجوال --}}
+            @if ($hasFreeDrink)
+                <div x-data="{ tip: false }" class="relative">
+                    <button type="button"
+                        @click.stop="tip = !tip"
+                        @mouseenter="tip = true" @mouseleave="tip = false"
+                        @keydown.enter.prevent="tip = !tip" @keydown.escape="tip = false"
+                        class="px-2.5 py-1 bg-emerald-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1"
+                        aria-label="{{ __('messages.menu.free_drink_badge') }}">
+                        @svg('lucide-gift', 'w-4 h-4', ['aria-hidden' => 'true'])
+                        <!-- {{ __('messages.menu.free_drink_badge') }} -->
+                    </button>
+                    <span x-show="tip" x-cloak x-transition.opacity
+                        class="absolute top-full start-0 mt-1 z-20 w-44 text-[10px] font-bold bg-stone-900 text-white rounded-lg px-2.5 py-1.5 shadow-xl">
+                        {{ __('messages.menu.free_drink_hint') }}
+                    </span>
+                </div>
+            @endif
+            
             @if ($item->is_featured)
                 <span
                     class="px-2.5 py-1 bg-amber-500 text-white text-[10px] font-black rounded-lg shadow-lg flex items-center gap-1">
@@ -56,13 +82,44 @@
                 {{ $item->localized_description }}
             </p>
 
-            @if (!empty($allergens))
-                <div class="flex flex-wrap gap-1 mb-3">
-                    @foreach ($allergens as $allergen)
-                        <span
-                            class="text-[12px] font-bold px-2 py-0.5 bg-stone-100 text-stone-600 rounded-md border border-stone-200">
-                            {{ $allergen }}
-                        </span>
+            @if ($itemAllergens->isNotEmpty())
+                <div class="flex flex-wrap gap-1.5 mb-3">
+                    @foreach ($itemAllergens as $allergen)
+                        @php
+                            // كهرماني لمسببات الحساسية، أخضر للعلامات الغذائية
+                            $badgeClasses = $allergen->isDietaryLabel()
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                : 'bg-amber-50 text-amber-700 border-amber-200';
+
+                            // صورة مرفوعة أولاً، وإلا أيقونة Lucide المحفوظة في القاموس
+                            $svgMarkup = (! $allergen->hasImage() && $allergen->iconName() !== null)
+                                ? rescue(fn () => svg($allergen->iconName(), 'w-4 h-4')->toHtml(), null, false)
+                                : null;
+                        @endphp
+
+                        <div x-data="{ tip: false }" class="relative">
+                            <span @mouseenter="tip = true" @mouseleave="tip = false"
+                                @click.stop="tip = !tip" @keydown.enter.prevent="tip = !tip"
+                                @keydown.escape="tip = false" tabindex="0"
+                                class="inline-flex items-center justify-center w-7 h-7 rounded-lg border {{ $badgeClasses }} cursor-help"
+                                aria-label="{{ $allergen->localized_name }}">
+                                @if ($allergen->hasImage())
+                                    <img src="{{ Storage::disk('public')->url($allergen->image_path) }}"
+                                        alt="{{ $allergen->localized_name }}" loading="lazy"
+                                        class="w-4 h-4 object-contain">
+                                @elseif ($svgMarkup)
+                                    {!! $svgMarkup !!}
+                                @else
+                                    @svg('lucide-info', 'w-4 h-4', ['aria-hidden' => 'true'])
+                                @endif
+                            </span>
+
+                            {{-- تلميح الاسم المترجَم: hover على الحاسوب + نقر/لمس على الجوال --}}
+                            <span x-show="tip" x-cloak x-transition.opacity
+                                class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-20 whitespace-nowrap text-[10px] font-bold bg-stone-900 text-white rounded-lg px-2.5 py-1.5 shadow-xl pointer-events-none">
+                                {{ $allergen->localized_name }}
+                            </span>
+                        </div>
                     @endforeach
                 </div>
             @endif

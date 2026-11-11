@@ -8,6 +8,7 @@ use App\Models\RestaurantSetting;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\FileViewFinder;
 use InvalidArgumentException;
@@ -57,6 +58,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // 🌍 قيمة افتراضية لوسيط اللغة في الروابط، حتى يعمل توليد الروابط
+        //    (route('home') ... إلخ) خارج دورة الطلب أيضاً (الاختبارات، الأوامر).
+        //    ويتم تجاوزها لكل طلب فعلي داخل middleware SetLocale بحسب بادئة الرابط.
+        URL::defaults(['locale' => (string) config('locales.default', 'nl')]);
+
         RateLimiter::for('reservation-submit', function (Request $request) {
             return Limit::perHour(3)->by($request->ip())->response(
                 fn () => response()->json(

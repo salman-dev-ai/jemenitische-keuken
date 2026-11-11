@@ -2,16 +2,18 @@
 
 namespace App\Filament\Resources\MenuItems\Schemas;
 
+use App\Models\Allergen;
 use App\Models\MenuCategory;
+use App\Models\MenuItem;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set as UtilitiesSet;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
@@ -99,6 +101,11 @@ class MenuItemForm
                                     ->directory('menu-items')
                                     ->disk('public')
                                     ->maxSize(5120)
+                                    // تصغير تلقائي في المتصفح قبل الرفع لتسريع الموقع (بلا تكبير للصور الصغيرة)
+                                    ->automaticallyResizeImagesMode('contain')
+                                    ->automaticallyResizeImagesToWidth(1200)
+                                    ->automaticallyResizeImagesToHeight(1200)
+                                    ->automaticallyUpscaleImagesWhenResizing(false)
                                     ->columnSpanFull(),
 
                             ])
@@ -194,37 +201,88 @@ class MenuItemForm
                     ])->columns(3),
 
                 /*
+                |--------------------------------------------------------------------------
+                |   المشروب المجاني
+                |--------------------------------------------------------------------------
+                */
+
+                Section::make('المشروب المجاني  ')
+                    ->icon('lucide-gift')
+                    ->description('اربط الطبق بمشروب مجاني بسعر صفر — لا يؤثر على الإجمالي أو الضريبة.')
+                    ->columns(2)
+                    ->schema([
+
+                        Toggle::make('offers_free_drink')
+                            ->label('يقدّم مشروباً مجانياً')
+                            ->default(false)
+                            ->onColor('success')
+                            ->live()
+                            ->columnSpanFull(),
+
+                        TextInput::make('free_drink_qty')
+                            ->label('عدد المشروبات المجانية')
+                            ->numeric()
+                            ->integer()
+                            ->minValue(1)
+                            ->default(1)
+                            ->visible(fn (Get $get): bool => (bool) $get('offers_free_drink')),
+
+                        Select::make('free_drink_policy')
+                            ->label('سياسة تطبيق العدد')
+                            ->options([
+                                MenuItem::FREE_DRINK_POLICY_PER_UNIT => 'لكل وحدة (يتضاعف مع الكمية)',
+                                MenuItem::FREE_DRINK_POLICY_PER_LINE => 'حد لسطر الطبق (ثابت)',
+                            ])
+                            ->default(MenuItem::FREE_DRINK_POLICY_PER_UNIT)
+                            ->native(false)
+                            ->visible(fn (Get $get): bool => (bool) $get('offers_free_drink')),
+
+                        Select::make('free_drink_item_ids')
+                            ->label('المشروبات المسموحة')
+                            ->multiple()
+                            ->searchable()
+                            ->options(fn () => MenuItem::query()
+                                ->available()
+                                ->whereHas('category', fn (Builder $q) => $q->where('is_drinks_category', true))
+                                ->orderBy('sort_order')
+                                ->get()
+                                ->mapWithKeys(fn (MenuItem $m): array => [$m->id => $m->localized_name])
+                                ->all())
+                            ->helperText('تُعرض أصناف تصنيف المشروبات فقط. مشروب واحد ⇒ يُضاف تلقائياً، وأكثر ⇒ يختار العميل.')
+                            ->visible(fn (Get $get): bool => (bool) $get('offers_free_drink'))
+                            ->columnSpanFull(),
+
+                    ]),
+
+                /*
                                 |--------------------------------------------------------------------------
                                 | مسببات الحساسية
                                 |--------------------------------------------------------------------------
                                 */
 
-                Section::make('مسببات الحساسية')
+                Section::make('معلومات الحساسية والعلامات الغذائية')
                     ->icon('lucide-triangle-alert')
+                    ->description('اختر العناصر من القاموس المُدار في «الحساسية والعلامات» — تُعرض أيقوناتها تلقائياً في بطاقة الطبق.')
                     ->schema([
 
-                        TagsInput::make('allergens')
-                            ->label('مسببات الحساسية')
-                            ->placeholder(
-                                'أضف مسبب حساسية'
+                        Select::make('allergens')
+                            ->label('مسببات الحساسية والعلامات')
+                            ->relationship(
+                                name: 'allergens',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn (Builder $query) => $query->active()->ordered(),
                             )
-                            ->suggestions([
-                                'Gluten',
-                                'Lactose',
-                                'Nuts',
-                                'Peanuts',
-                                'Eggs',
-                                'Soy',
-                                'Fish',
-                                'Shellfish',
-                                'Sesame',
-                            ])
-                            ->helperText(
-                                'مثال: Gluten, Lactose, Nuts'
-                            ),
+                            ->getOptionLabelFromRecordUsing(
+                                fn (Allergen $record): string => $record->localized_name
+                            )
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->columnSpanFull()
+                            ->helperText('تُضاف العناصر وتُعدَّل من: إدارة المنيو ← الحساسية والعلامات.'),
 
                     ])
-                    ->columns(2),
+                    ->columns(1),
 
             ]);
     }

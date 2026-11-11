@@ -30,13 +30,16 @@
     </main>
 
     <!-- #endregion -->
-    <section id="about" class="">
+    <section   class="">
         <livewire:footer />
     </section>
 
     {{-- زر العودة للأعلى --}}
     @include('components.layouts.partials.scroll-to-top')
-
+    
+    
+    {{-- إشعار الكوكيز (يظهر مرة واحدة) --}}
+    @include('components.layouts.partials.cookie-notice')
     {{-- إشعارات المتصفح الفورية --}}
     @include('components.layouts.partials.toasts')
 

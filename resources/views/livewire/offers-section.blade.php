@@ -50,31 +50,33 @@ $useCoupon = function (int $promotionId) {
     </div>
 
     {{-- ═══ Grid ═══ --}}
-    @if ($this->promotions->isNotEmpty())
-        <div class="mx-auto grid max-w-7xl gap-6 px-4 lg:grid-cols-12">
+   @if ($this->promotions->isNotEmpty())
+    @php $hasFeatured = (bool) $this->featured; @endphp
 
-            {{-- البطاقة المميزة --}}
-            @if ($this->featured)
-                <div class="lg:col-span-3">
-                    @include('livewire.offers.partials.featured-card', [
-                        'promotion' => $this->featured,
-                    ])
-                </div>
-            @endif
+    <div class="mx-auto grid max-w-7xl gap-6 px-4 lg:grid-cols-6">
 
-            {{-- البطاقات العادية --}}
-            <div class="lg:col-span-9">
-                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    @foreach ($this->regular as $promotion)
-                        @include('livewire.offers.partials.card', [
-                            'promotion' => $promotion,
-                        ])
-                    @endforeach
-                </div>
+        {{-- البطاقة المميزة: نصف العرض --}}
+        @if ($hasFeatured)
+            <div class="lg:col-span-3">
+                @include('livewire.offers.partials.featured-card', [
+                    'promotion' => $this->featured,
+                ])
             </div>
+        @endif
 
+        {{-- البطاقات العادية: النصف الآخر (عمودان)، أو كامل العرض إن لم توجد مميزة --}}
+        <div class="{{ $hasFeatured ? 'lg:col-span-3' : 'lg:col-span-6' }}">
+            <div class="grid h-full auto-rows-fr gap-6 sm:grid-cols-2 {{ $hasFeatured ? '' : 'lg:grid-cols-4' }}">
+                @foreach ($this->regular as $promotion)
+                    @include('livewire.offers.partials.card', [
+                        'promotion' => $promotion,
+                    ])
+                @endforeach
+            </div>
         </div>
-    @else
+
+    </div>
+@else
         <div class="py-16 text-center text-gray-500">
             {{ __('offers.empty') }}
         </div>

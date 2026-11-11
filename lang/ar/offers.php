@@ -3,6 +3,10 @@
 declare(strict_types=1);
 
 return [
+    'valid_from' => 'يبدأ في',
+    'valid_until' => 'ينتهي في',
+    'coupon_code' => 'كود الخصم',
+    'ends_on' => 'ينتهي في :date',
 
     'header' => [
         'tab' => 'التخفيضات',
@@ -16,6 +20,7 @@ return [
         'tagline' => 'توفير أكثر',
         'tagline2' => 'لمذاق أصيل',
         'discount_label' => 'خصم',
+        'badge' => 'عرض اليوم',
     ],
 
     'actions' => [

@@ -10,6 +10,7 @@ return [
     'table_label' => 'جدول مناطق وأسعار التوصيل',
     'region' => 'المنطقة',
     'postal_code' => 'الرمز البريدي',
+    'minimum_order' => 'الحد الأدنى للطلب',
     'delivery_cost' => 'تكلفة التوصيل',
     'empty' => 'لا توجد مناطق توصيل متاحة حاليًا.',
     'copy_postal' => 'نسخ الرمز البريدي :postcode',
@@ -20,7 +21,7 @@ return [
     'order_arrow' => '←',
     'loading' => 'جارٍ تحديث مناطق التوصيل...',
 
-'zones_title'  => 'مناطق التوصيل',
-'zones_count'  => ':count منطقة متاحة',
+    'zones_title' => 'مناطق التوصيل',
+    'zones_count' => ':count منطقة متاحة',
 
-    ];
+];

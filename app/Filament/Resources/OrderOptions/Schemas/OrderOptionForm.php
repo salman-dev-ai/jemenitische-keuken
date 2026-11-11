@@ -4,8 +4,8 @@ namespace App\Filament\Resources\OrderOptions\Schemas;
 
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
@@ -16,7 +16,7 @@ class OrderOptionForm
 {
     public static function configure(Schema $schema): Schema
     {
-          return $schema
+        return $schema
             ->components([
                 // ========== العمود الرئيسي (2/3) ==========
                 Section::make('محتوى الخيار')
@@ -26,7 +26,7 @@ class OrderOptionForm
                             ->tabs([
                                 // ----- العربية -----
                                 Tab::make('العربية (AR)')
-                                    ->icon("lucide-languages")
+                                    ->icon('lucide-languages')
                                     ->schema([
                                         TextInput::make('title.ar')
                                             ->label('العنوان')
@@ -43,7 +43,7 @@ class OrderOptionForm
 
                                 // ----- الهولندية -----
                                 Tab::make('الهولندية (NL)')
-                                    ->icon("lucide-languages")
+                                    ->icon('lucide-languages')
                                     ->schema([
                                         TextInput::make('title.nl')
                                             ->label('Titel')
@@ -57,7 +57,7 @@ class OrderOptionForm
 
                                 // ----- الإنجليزية -----
                                 Tab::make('الإنجليزية (EN)')
-                                    ->icon("lucide-languages")
+                                    ->icon('lucide-languages')
                                     ->schema([
                                         TextInput::make('title.en')
                                             ->label('Title')
@@ -76,7 +76,7 @@ class OrderOptionForm
 
                 // ========== الشريط الجانبي (1/3) ==========
                 Section::make('الإعدادات والوسائط')
-                    ->icon("lucide-cog")
+                    ->icon('lucide-cog')
                     ->schema([
                         FileUpload::make('image')
                             ->label('الصورة')
@@ -85,19 +85,24 @@ class OrderOptionForm
                             ->directory('order-options')
                             ->disk('public')
                             ->maxSize(2048)
+                            // تصغير تلقائي في المتصفح قبل الرفع لتسريع الموقع (بلا تكبير للصور الصغيرة)
+                            ->automaticallyResizeImagesMode('contain')
+                            ->automaticallyResizeImagesToWidth(1200)
+                            ->automaticallyResizeImagesToHeight(1200)
+                            ->automaticallyUpscaleImagesWhenResizing(false)
                             ->required(),
 
                         Select::make('icon')
                             ->label('الأيقونة')
                             ->options([
-                                'truck'         => '🚚 شاحنة توصيل',
-                                'shopping-bag'  => '🛍️ كيس تسوق',
-                                'utensils'      => '🍽️ أدوات طعام',
-                                'clock'         => '⏰ ساعة',
-                                'map-pin'       => '  موقع',
-                                'credit-card'   => '💳 بطاقة دفع',
-                                'package'       => '📦 طرد',
-                                'store'         => '🏪 متجر',
+                                'truck' => '🚚 شاحنة توصيل',
+                                'shopping-bag' => '🛍️ كيس تسوق',
+                                'utensils' => '🍽️ أدوات طعام',
+                                'clock' => '⏰ ساعة',
+                                'map-pin' => '  موقع',
+                                'credit-card' => '💳 بطاقة دفع',
+                                'package' => '📦 طرد',
+                                'store' => '🏪 متجر',
                             ])
                             ->default('truck')
                             ->required()

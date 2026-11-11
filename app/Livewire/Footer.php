@@ -10,12 +10,11 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use App\Models\RestaurantSetting;
-use App\Support\OpeningHoursPresenter;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
- use Livewire\Component;
+use Livewire\Component;
 
- final class Footer extends Component
+final class Footer extends Component
 {
     private const RTL_LOCALES = ['ar', 'he', 'fa', 'ur'];
 
@@ -63,10 +62,10 @@ use Illuminate\Support\Facades\Storage;
         $whatsappDigits = preg_replace('/\D+/', '', (string) $s?->getAttribute('whatsapp'));
         $tiktok = trim((string) $s?->getAttribute('tiktok_url'));
 
-        $mapsLink = $s?->getAttribute('google_maps_url')
+        $mapsLink = $s?->getAttribute('google_maps_link')
             ?: ($address !== ''
                 ? 'https://www.google.com/maps/search/?api=1&query='
-                    . rawurlencode(trim("{$address} {$cityLine}"))
+                    .rawurlencode(trim("{$address} {$cityLine}"))
                 : null);
 
         return [
@@ -88,9 +87,8 @@ use Illuminate\Support\Facades\Storage;
             'email' => trim((string) $s?->getAttribute('email')),
 
             'tiktok' => $tiktok !== '' ? $tiktok : null,
-            'whatsapp_href' => $whatsappDigits !== '' ? 'https://wa.me/' . $whatsappDigits : null,
+            'whatsapp_href' => $whatsappDigits !== '' ? 'https://wa.me/'.$whatsappDigits : null,
 
-            'hours' => OpeningHoursPresenter::rows($s?->getAttribute('opening_hours')),
             'locales' => config('app.supported_locales', ['ar', 'en', 'nl']),
         ];
     }

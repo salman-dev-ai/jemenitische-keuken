@@ -117,6 +117,11 @@ class GalleryItemForm
                             ->disk('public')
                             ->imageEditor()
                             ->required()
+                            // تصغير تلقائي في المتصفح قبل الرفع لتسريع الموقع (بلا تكبير للصور الصغيرة)
+                            ->automaticallyResizeImagesMode('contain')
+                            ->automaticallyResizeImagesToWidth(1920)
+                            ->automaticallyResizeImagesToHeight(1440)
+                            ->automaticallyUpscaleImagesWhenResizing(false)
                             ->helperText('يفضل استخدام صور أفقية بدقة لا تقل عن 1200x800 بكسل.'),
 
                         TextInput::make('thumbnail_path')

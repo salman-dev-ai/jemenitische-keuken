@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\MenuCategory;
 use App\Models\MenuItem;
 use App\Models\Promotion;
+use App\Services\CouponService;
 use Livewire\Livewire;
 
 it('renders a safe browser-copy flow for promotion coupon buttons', function () {
@@ -42,7 +43,7 @@ it('renders a safe browser-copy flow for promotion coupon buttons', function () 
 
     expect($html)
         ->toContain("document.execCommand('copy')")
-        ->toContain("open-coupon-modal")
+        ->toContain('open-coupon-modal')
         ->toContain("action: 'copy'");
 });
 
@@ -68,7 +69,6 @@ it('claims a valid coupon when applied so it appears in my coupons', function ()
         'name' => ['en' => 'Test Dish', 'ar' => 'طبق اختبار'],
         'slug' => 'test-dish',
         'description' => ['en' => 'A test dish', 'ar' => 'طبق تجريبي'],
-        'allergens' => ['n/a'],
         'price' => 20.00,
         'image_path' => null,
         'is_available' => true,
@@ -104,7 +104,7 @@ it('claims a valid coupon when applied so it appears in my coupons', function ()
             ],
         ])
         ->set('couponCode', $coupon->code)
-        ->call('applyCoupon', app(\App\Services\CouponService::class));
+        ->call('applyCoupon', app(CouponService::class));
 
     expect($component->get('appliedCouponCode'))->toBe('SAVE10')
         ->and(CouponUsage::query()->where('customer_id', $customer->id)->where('coupon_id', $coupon->id)->exists())->toBeTrue();

@@ -52,7 +52,7 @@ class OrderException extends Exception
     {
         return new self(__('messages.errors.invalid_quantity', [
             'name' => $name,
-            'qty'  => $qty,
+            'qty' => $qty,
         ]));
     }
 
@@ -78,5 +78,23 @@ class OrderException extends Exception
     public static function invalidType(): self
     {
         return new self(__('messages.errors.invalid_order_type'));
+    }
+
+    /**   طبق غير مؤهل لكن وصلت اختيارات مشروب */
+    public static function freeDrinkNotEligible(string $name): self
+    {
+        return new self(__('messages.errors.free_drink_not_eligible', ['name' => $name]));
+    }
+
+    /**   مشروب غير مسموح لهذا الطبق */
+    public static function invalidFreeDrink(): self
+    {
+        return new self(__('messages.errors.invalid_free_drink'));
+    }
+
+    /**   تجاوز العدد المسموح من المشروبات المجانية */
+    public static function freeDrinkQuantityExceeded(string $name, int $max): self
+    {
+        return new self(__('messages.errors.free_drink_quantity_exceeded', ['name' => $name, 'max' => $max]));
     }
 }

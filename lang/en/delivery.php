@@ -8,8 +8,9 @@ return [
     'page_title' => 'Delivery Areas & Fees',
     'description' => 'Authentic Yemeni mandi, served with Dutch elegance.',
     'table_label' => 'Delivery areas and fees table',
-    'region' => 'Region',
+    'region' => 'Neighbourhood',
     'postal_code' => 'Postal code',
+    'minimum_order' => 'Minimum order',
     'delivery_cost' => 'Delivery fee',
     'empty' => 'No delivery areas are currently available.',
     'copy_postal' => 'Copy postal code :postcode',
@@ -19,8 +20,7 @@ return [
     'order_now' => 'Order now',
     'order_arrow' => '→',
     'loading' => 'Updating delivery areas...',
-'zones_title'  => 'Delivery zones',
-'zones_count'  => ':count zones available',
+    'zones_title' => 'Delivery zones',
+    'zones_count' => ':count zones available',
 
-
-    ];
+];

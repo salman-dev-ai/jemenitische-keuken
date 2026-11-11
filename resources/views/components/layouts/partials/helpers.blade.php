@@ -14,7 +14,7 @@
     $mapsLink = trim((string) ($settings?->google_maps_link ?? ''));
     $city = trim((string) ($settings?->city ?? ''));
     $postalCode = trim((string) ($settings?->postal_code ?? ''));
-    $address = trim((string) ($settings?->localized_address ?? ''));
+    $address = trim((string) ($settings?->address ?? ''));
     $openingHours = is_array($settings?->opening_hours ?? null) ? $settings->opening_hours : [];
 
     $phoneHref = preg_replace('/[^0-9+]/', '', $phone) ?: '';

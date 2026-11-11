@@ -94,6 +94,15 @@ class MenuCategoryForm
                             ->columnSpan(1)
                             ->helperText('تفعيل أو إخفاء القسم من الموقع'),
 
+                        //   تصنيف المشروبات (يشترط لتفعيل اختيار المشروب المجاني)
+                        Toggle::make('is_drinks_category')
+                            ->label('تصنيف المشروبات  ')
+                            ->default(false)
+                            ->onColor('success')
+                            ->offColor('gray')
+                            ->columnSpan(1)
+                            ->helperText('عند تفعيله تُعتبر أصناف هذا القسم مشروبات قابلة للاختيار كمشروب مجاني.'),
+
                         // 4. صورة القسم (تأخذ العرض الكامل لتبدو واضحة وجذابة)
                         FileUpload::make('image_path')
                             ->label('صورة القسم')
@@ -101,6 +110,11 @@ class MenuCategoryForm
                             ->imageEditor()
                             ->directory('menu-categories')
                             ->disk('public')
+                            // تصغير تلقائي في المتصفح قبل الرفع لتسريع الموقع (بلا تكبير للصور الصغيرة)
+                            ->automaticallyResizeImagesMode('contain')
+                            ->automaticallyResizeImagesToWidth(1200)
+                            ->automaticallyResizeImagesToHeight(1200)
+                            ->automaticallyUpscaleImagesWhenResizing(false)
                             ->columnSpanFull(), // تأخذ عرضاً كاملاً لسهولة السحب والإفلات والمعاينة
                     ])->columnSpanFull(),
 

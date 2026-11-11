@@ -8,9 +8,10 @@ return [
     'page_title' => 'Bezorggebieden en -kosten',
     'description' => 'Authentieke Jemenitische mandi, met Nederlandse elegantie.',
     'table_label' => 'Tabel met bezorggebieden en -kosten',
-    'region' => 'Regio',
+    'region' => 'Wijknaam',
     'postal_code' => 'Postcode',
-    'delivery_cost' => 'Bezorgkosten',
+    'minimum_order' => 'Minimum',
+    'delivery_cost' => 'Bezorging',
     'empty' => 'Er zijn momenteel geen bezorggebieden beschikbaar.',
     'copy_postal' => 'Postcode :postcode kopiëren',
     'copy' => 'Kopiëren',
@@ -20,7 +21,7 @@ return [
     'order_arrow' => '→',
     'loading' => 'Bezorggebieden worden bijgewerkt...',
 
-'zones_title'  => 'Bezorgzones',
-'zones_count'  => ':count zones beschikbaar',
+    'zones_title' => 'Bezorgzones',
+    'zones_count' => ':count zones beschikbaar',
 
-    ];
+];
