@@ -58,6 +58,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+      // 🔒 إجبار الروابط على HTTPS في الإنتاج (يحل مشكلة Mixed Content)
+    if ($this->app->environment('production')) {
+        URL::forceScheme('https');
+    }
+
         // 🌍 قيمة افتراضية لوسيط اللغة في الروابط، حتى يعمل توليد الروابط
         //    (route('home') ... إلخ) خارج دورة الطلب أيضاً (الاختبارات، الأوامر).
         //    ويتم تجاوزها لكل طلب فعلي داخل middleware SetLocale بحسب بادئة الرابط.
