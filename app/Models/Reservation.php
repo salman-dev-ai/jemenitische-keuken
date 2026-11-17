@@ -25,13 +25,17 @@ namespace App\Models;
 
 use App\Enums\OrderType;
 use App\Enums\ReservationStatus;
+use App\Observers\ReservationObserver;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
+
+#[ObservedBy([ReservationObserver::class])]
 
 class Reservation extends Model
 {
@@ -48,6 +52,7 @@ class Reservation extends Model
         'reservation_time',
         'special_requests',
         'status',
+        'locale',
     ];
 
     /**
@@ -58,10 +63,10 @@ class Reservation extends Model
     protected function casts(): array
     {
         return [
-            'party_size'       => 'integer',
+            'party_size' => 'integer',
             'reservation_date' => 'date',
             'reservation_time' => 'string',   // ✅ نص بسيط (H:i)
-            'status'           => ReservationStatus::class,
+            'status' => ReservationStatus::class,
         ];
     }
 
@@ -72,7 +77,7 @@ class Reservation extends Model
     {
         static::creating(function (Reservation $reservation): void {
             if (empty($reservation->reference_code)) {
-                $reservation->reference_code = 'RES-' . strtoupper(Str::ulid()->toBase32());
+                $reservation->reference_code = 'RES-'.strtoupper(Str::ulid()->toBase32());
             }
         });
     }

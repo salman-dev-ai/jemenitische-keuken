@@ -7,6 +7,8 @@ namespace App\Models;
 use App\Enums\DiscountType;
 use App\Enums\OrderStatus;
 use App\Enums\OrderType;
+use App\Observers\OrderObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,6 +23,7 @@ use Illuminate\Support\Str;
  * 💰 الحقول المالية: subtotal, tax, total, discount_amount
  * 🎫 snapshot الكوبون: coupon_id, coupon_code, discount_type, discount_amount
  */
+#[ObservedBy([OrderObserver::class])]
 class Order extends Model
 {
     use HasFactory;
@@ -45,6 +48,9 @@ class Order extends Model
         'customer_name',
         'customer_phone',
         'customer_email',
+
+        // ─── لغة العميل وقت الطلب (لرسالة تحديث الحالة) ───
+        'locale',
 
         // ─── عنوان التوصيل ───
         'delivery_address',
@@ -79,14 +85,14 @@ class Order extends Model
     {
         return [
             // ─── Enums ───
-            'type'           => OrderType::class,
-            'status'         => OrderStatus::class,
-            'discount_type'  => DiscountType::class,
+            'type' => OrderType::class,
+            'status' => OrderStatus::class,
+            'discount_type' => DiscountType::class,
 
             // ─── المبالغ المالية (دقة عشرية) ───
-            'subtotal'        => 'decimal:2',
-            'tax'             => 'decimal:2',
-            'total'           => 'decimal:2',
+            'subtotal' => 'decimal:2',
+            'tax' => 'decimal:2',
+            'total' => 'decimal:2',
             'discount_amount' => 'decimal:2',
         ];
     }
@@ -100,7 +106,7 @@ class Order extends Model
     {
         static::creating(function (Order $order): void {
             if (empty($order->order_number)) {
-                $order->order_number = 'ORD-' . strtoupper(Str::random(5));
+                $order->order_number = 'ORD-'.strtoupper(Str::random(5));
             }
         });
     }

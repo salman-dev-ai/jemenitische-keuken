@@ -68,7 +68,7 @@
     <header class="flex items-center justify-between gap-2">
         <h3 class="text-base font-black text-[#2b1810]">{{ __('footer.follow') }}</h3>
         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f0d3b0] text-[#c05a1c]">
-            @svg('lucide-message-circle', 'h-5 w-5', ['aria-hidden' => 'true'])
+            @svg('icon-whatsapp', 'h-5 w-5', ['aria-hidden' => 'true'])
         </span>
     </header>
 
@@ -85,7 +85,7 @@
                 aria-label="WhatsApp"
                 class="inline-flex h-10 items-center gap-2 rounded-full border border-emerald-200 bg-white px-4 text-xs font-bold text-emerald-700 transition hover:-translate-y-0.5 hover:border-emerald-500">
                 {{ __('footer.whatsapp') }}
-                @svg('lucide-message-circle', 'h-4 w-4', ['aria-hidden' => 'true'])
+                @svg('icon-whatsapp', 'h-4 w-4', ['aria-hidden' => 'true'])
             </a>
         @endif
     </div>

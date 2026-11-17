@@ -1,7 +1,6 @@
 @include('errors.layout', [
     'code'      => 404,
     'actions'   => ['home', 'back'],
-    'livewire'  => true,
     'autoRetry' => null,
     'copy'      => [
         'nl' => ['title' => 'Deze pagina staat niet op het menu', 'text' => 'De pagina die je zoekt bestaat niet of is verplaatst. Ga terug naar de startpagina of controleer het adres.'],

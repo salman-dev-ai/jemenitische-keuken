@@ -1,7 +1,6 @@
 {{--
 أزرار التفاعل السريع والخدمات لسطح المكتب فقط.
-تتضمن: الطلب، الحجز (بارز)، العروض، الواتساب، ومحوّل اللغة.
-مخفية تحت نقطة lg وتظهر بجانب روابط التصفح.
+كل زر: أيقونة معروفة + نص مكتوب تحتها (لمن لا يقرأ ولا يكتب).
 --}}
 
 @php
@@ -9,46 +8,58 @@
     extract($f, EXTR_SKIP);
     $whatsappHref = (string) ($whatsappHref ?? ($f['whatsapp_href'] ?? ''));
 
-    // 🔎 سيو: اسم صفحة الموقع الحالية لبناء روابط اللغات البديلة المباشرة.
     $seoPage = (string) (request()->route()?->getName() ?? 'home');
     $seoPage = in_array($seoPage, ['home', 'restaurant-info', 'delivery-zones'], true) ? $seoPage : 'home';
+
+    // كلاس مشترك: أيقونة فوق، نص تحت
+    $btn = 'inline-flex h-14 min-w-[68px] shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl border px-2 shadow-sm transition-all hover:-translate-y-0.5';
+    $lbl = 'text-[11px] font-bold leading-none whitespace-nowrap';
 @endphp
 
-<div class="hidden shrink-0 items-center gap-2.5 lg:flex">
+<div class="hidden shrink-0 items-center gap-2 lg:flex">
 
     {{-- الطلب / Bestellen --}}
     <a href="{{ route('home') }}#menu" @click="activeSection = 'menu'"
-        class="inline-flex h-10 items-center gap-1.5 rounded-xl border border-gray-200 bg-white/70 px-4 text-xs font-bold text-gray-800 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#E07513]/40 hover:text-[#E07513]">
-        @svg('lucide-shopping-bag', 'h-4 w-4', ['aria-hidden' => 'true'])
-        <span>{{ __('messages.nav.order') }}</span>
+        class="{{ $btn }} border-gray-200 bg-white/70 text-gray-800 hover:border-[#E07513]/40 hover:text-[#E07513]">
+        @svg('lucide-shopping-bag', 'h-6 w-6', ['aria-hidden' => 'true'])
+        <span class="{{ $lbl }}">{{ __('messages.nav.order') }}</span>
     </a>
 
     {{-- العروض / Aanbiedingen --}}
     <a href="{{ route('home') }}#offers" @click="activeSection = 'offers'"
-        class="inline-flex h-10 items-center gap-1.5 rounded-xl border border-gray-200 bg-white/70 px-4 text-xs font-bold text-gray-800 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#E07513]/40 hover:text-[#E07513]">
-        @svg('lucide-tag', 'h-4 w-4', ['aria-hidden' => 'true'])
-        <span>{{ __('messages.nav.offers') }}</span>
+        class="{{ $btn }} border-gray-200 bg-white/70 text-gray-800 hover:border-[#E07513]/40 hover:text-[#E07513]">
+        @svg('lucide-tag', 'h-6 w-6', ['aria-hidden' => 'true'])
+        <span class="{{ $lbl }}">{{ __('messages.nav.offers') }}</span>
     </a>
 
-    {{-- الحجز / Reserveren — بارز بتدرج لوني --}}
+    {{-- احجز طاولة / Reserveren — أيقونة الشوكة والسكين --}}
     <a href="{{ route('home') }}#reservation" @click="activeSection = 'reservation'"
-        class="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl bg-gradient-to-r from-[#E07513] to-[#B85709] px-5 text-sm font-bold text-white shadow-md shadow-[#E07513]/30 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#E07513]/40">
-        @svg('lucide-calendar-check', 'h-4 w-4', ['aria-hidden' => 'true'])
-        <span>{{ __('messages.nav.reserve') }}</span>
+        class="{{ $btn }} border-transparent bg-gradient-to-r from-[#E07513] to-[#B85709] text-white shadow-md shadow-[#E07513]/30 hover:shadow-lg hover:shadow-[#E07513]/40">
+       @svg('icon-dining-table', 'h-7 w-7', ['aria-hidden' => 'true'])
+        <span class="{{ $lbl }}">{{ __('messages.nav.reserve') }}</span>
+    </a>
+
+    {{-- التوصيل / Bezorgen --}}
+    <a  href="{{ route('restaurant-info') }}#delivery"  rel="noopener noreferrer"
+        class="{{ $btn }} border-gray-200 bg-white/70 text-gray-800 hover:border-[#E07513]/40">
+        <img src="{{ asset('images/thuisbezorgd.png') }}" alt="" width="200" height="206"
+            loading="lazy" decoding="async" class="h-6 w-6 object-contain" />
+        <span class="{{ $lbl }}">{{ __('messages.nav.delivery') }}</span>
     </a>
 
     {{-- واتساب / WhatsApp --}}
     @if ($whatsappHref !== '')
-        <a href="{{ $whatsappHref }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
-            class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-200 bg-white text-emerald-600 shadow-sm transition-all hover:-translate-y-0.5 hover:border-emerald-500 hover:bg-emerald-50">
-            @svg('lucide-message-circle', 'h-5 w-5', ['aria-hidden' => 'true'])
+        <a href="{{ $whatsappHref }}" target="_blank" rel="noopener noreferrer"
+            class="{{ $btn }} border-[#25D366] bg-[#25D366] text-white shadow-md shadow-[#25D366]/30 hover:bg-[#1ebe5a]">
+           @svg('icon-whatsapp', 'h-6 w-6', ['aria-hidden' => 'true'])
+            <span class="{{ $lbl }}">{{ __('messages.nav.whatsapp') }}</span>
         </a>
     @endif
 
     {{-- محوّل اللغة / Language Switcher --}}
     <div class="relative shrink-0" x-data="{ open: false }">
         <button @click="open = !open" @keydown.escape.window="open = false" type="button"
-            class="flex h-10 items-center gap-1.5 rounded-xl border border-gray-200 bg-white/70 px-3 text-xs font-bold text-gray-800 transition-all hover:bg-gray-100">
+            class="flex h-14 items-center gap-1.5 rounded-xl border border-gray-200 bg-white/70 px-3 text-xs font-bold text-gray-800 transition-all hover:bg-gray-100">
             <span>{{ app()->getLocale() == 'ar' ? 'العربية' : (app()->getLocale() == 'nl' ? 'NL' : 'EN') }}</span>
             @svg('lucide-chevron-down', 'h-3.5 w-3.5 text-gray-500 transition-transform duration-200', [':class' => "{ 'rotate-180': open }", 'aria-hidden' => 'true'])
         </button>

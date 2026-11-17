@@ -132,7 +132,7 @@
         </div>
 
         {{-- ========== جدول مناطق التوصيل ========== --}}
-        <div class="mt-4 overflow-hidden rounded-2xl border-2 border-[#e08a3c] bg-[#fffdf8]/95 shadow-2xl backdrop-blur sm:mt-5">
+        <div id='delivery' class="mt-4 overflow-hidden rounded-2xl border-2 border-[#e08a3c] bg-[#fffdf8]/95 shadow-2xl backdrop-blur sm:mt-5">
             <div class="flex items-center gap-3 bg-gradient-to-r from-[#1d4663] to-[#9D4907] px-5 py-4 text-start text-[#fff7ec] sm:px-6">
                 <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10 ring-1 ring-white/20" aria-hidden="true">
                     @svg('lucide-truck', 'size-5', ['aria-hidden' => 'true'])

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Reservations\Tables;
 
 use App\Enums\ReservationStatus;
 use App\Models\Reservation;
+use App\Services\ReservationService;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -58,6 +59,7 @@ class ReservationsTable
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
+            ->poll('1s')
             ->filters([
                 SelectFilter::make('status')
                     ->label('تصفية حسب الحالة')
@@ -80,6 +82,21 @@ class ReservationsTable
                             ['status' => ReservationStatus::CONFIRMED]
                         )
                     ),
+
+                // 📲 زر دائم لإرسال رسالة تأكيد الحجز للعميل عبر واتساب (متاح لاحقاً في أي وقت)
+                Action::make('send_confirmation_whatsapp')
+                    ->label(__('messages.reservation_confirmation.send_action', [], 'ar'))
+                    ->icon('lucide-message-circle')
+                    ->color('info')
+                    ->visible(
+                        fn (?Reservation $record): bool => $record !== null
+                            && $record->status === ReservationStatus::CONFIRMED
+                            && app(ReservationService::class)->customerWhatsAppUrl($record) !== null
+                    )
+                    ->url(fn (?Reservation $record): ?string => $record === null
+                        ? null
+                        : app(ReservationService::class)->customerWhatsAppUrl($record))
+                    ->openUrlInNewTab(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

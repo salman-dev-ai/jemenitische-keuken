@@ -1,12 +1,12 @@
 {{--
     Jemenitische Keuken – gedeelde foutpagina-layout
     Verwacht: $code, $copy[nl|en|ar][title|text]
-    Optioneel: $actions (eerste = primaire knop), $livewire (bool), $autoRetry (seconden)
-    Bewust géén Vite/Tailwind-afhankelijkheid: foutpagina's moeten ook werken als de build stuk is.
+    Optioneel: $actions (eerste = primaire knop), $autoRetry (seconden)
+    Bewust géén Vite/Tailwind/Livewire-afhankelijkheid: foutpagina's moeten ook werken
+    als de build of de frontend-assets stuk zijn.
 --}}
 @php
     $actions   = $actions ?? ['home', 'back'];
-    $livewire  = $livewire ?? false;
     $autoRetry = $autoRetry ?? null;
 
     // Respecteer een Retry-After header (bv. artisan down --retry=60 of throttle)
@@ -117,8 +117,6 @@
         @media (prefers-reduced-motion:reduce){.cloche .lid,.cloche .steam,.bar span{transition:none}}
     </style>
     <noscript><style>.cloche .lid{transform:translateY(-78px)}.cloche .steam{opacity:1}</style></noscript>
-
-    @if ($livewire) @livewireStyles @endif
 </head>
 
 <body x-data="errorPage(@js(['copy' => $copy, 'ui' => $ui, 'retry' => $retryAfter ?? 0]))">
@@ -217,12 +215,11 @@
     });
 </script>
 
-@if ($livewire)
-    {{-- Livewire levert Alpine zelf mee --}}
-    @livewireScripts
-@else
-    {{-- Pagina's zonder Livewire (419/429/503): Alpine los laden --}}
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"></script>
-@endif
+{{-- Alpine los laden.
+     Hier bewust géén Livewire-directieven (@livewireStyles/@livewireScripts): een foutpagina
+     moet volledig zelfstandig werken. Als deze view gecompileerd wordt vóórdat Livewire zijn
+     Blade-directieven geregistreerd heeft, blijven die directieven als platte tekst in de HTML
+     staan, en dan mist de pagina zowel de styling als de interactie. --}}
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"></script>
 </body>
 </html>

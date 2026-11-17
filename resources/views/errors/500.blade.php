@@ -1,7 +1,6 @@
 @include('errors.layout', [
     'code'      => 500,
     'actions'   => ['retry', 'home'],
-    'livewire'  => true,
     'autoRetry' => null,
     'copy'      => [
         'nl' => ['title' => 'Er ging iets mis in de keuken', 'text' => 'Er is een fout opgetreden aan onze kant. Probeer het over een paar minuten opnieuw.'],

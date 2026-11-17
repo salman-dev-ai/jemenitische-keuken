@@ -1,6 +1,10 @@
-
 <?php
 
 return [
-    'sets' => [],
+    'sets' => [
+        'default' => [
+            'path' => 'resources/svg',
+            'prefix' => '',
+        ],
+    ],
 ];

@@ -11,12 +11,14 @@
     x-data="{ activeSection: @js(request()->routeIs('restaurant-info') ? 'restaurant-info' : 'home') }"
 
 وإن كان لديك scroll-spy يغيّر activeSection، فشغّله على الصفحة الرئيسية فقط.
---}}
+--}} 
+
+<!-- 'about'   => 'messages.nav.about', -->
 @php
     // مفتاح القسم => مفتاح الترجمة
     $sections = [
         'home'    => 'messages.nav.home',
-        'about'   => 'messages.nav.about',
+       
         'gallery' => 'messages.nav.galleryHeritage',
         'contact' => 'messages.nav.contactLink',
     ];
@@ -47,7 +49,7 @@
         <li>
             <a href="{{ route('restaurant-info') }}"
                @if ($isRestaurantInfo) aria-current="page" @endif
-               class="hidden xl:block group relative block pb-1 transition-colors duration-300 hover:text-[#E07513] {{ $isRestaurantInfo ? 'text-[#E07513]' : '' }}">
+               class="  group relative block pb-1 transition-colors duration-300 hover:text-[#E07513] {{ $isRestaurantInfo ? 'text-[#E07513]' : '' }}">
                 {{ __('messages.nav.restaurantInfo') }}
                 <span class="absolute bottom-0 start-0 h-0.5 bg-[#E07513] transition-all duration-300 ease-out {{ $isRestaurantInfo ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
             </a>

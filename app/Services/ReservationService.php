@@ -1,4 +1,5 @@
 <?php
+
 // D:\YearTherPartOne\learn-php\projects\jemenitische-keuken-chat-v-valide\jemenitische-keuken-chat\app\Services\ReservationService.php
 declare(strict_types=1);
 
@@ -37,11 +38,9 @@ class ReservationService
 
         // 2. العملية داخل Transaction
         return DB::transaction(function () use ($data) {
-            $date      = $data['reservation_date'];
-            $time      = $data['reservation_time'];
+            $date = $data['reservation_date'];
+            $time = $data['reservation_time'];
             $partySize = (int) $data['party_size'];
-
-       
 
             // 2.2 تجهيز البيانات
             $status = $this->resolveStatus($data['status'] ?? null);
@@ -52,24 +51,25 @@ class ReservationService
                 'customer_email',
                 'customer_phone',
                 'special_requests',
+                'locale',
             ]);
 
-            $reservationData['reference_code']   = $this->generateReferenceCode();
-            $reservationData['party_size']       = $partySize;
+            $reservationData['reference_code'] = $this->generateReferenceCode();
+            $reservationData['party_size'] = $partySize;
             $reservationData['reservation_date'] = $date;
             $reservationData['reservation_time'] = $time;
-            $reservationData['status']           = $status;
+            $reservationData['status'] = $status;
 
             // 2.3 الإنشاء
             $reservation = Reservation::create($reservationData);
 
             // 2.4 تسجيل للتدقيق
             Log::info('Reservation created', [
-                'id'             => $reservation->id,
+                'id' => $reservation->id,
                 'reference_code' => $reservation->reference_code,
-                'customer_id'    => $reservation->customer_id,
-                'date'           => $date,
-                'time'           => $time,
+                'customer_id' => $reservation->customer_id,
+                'date' => $date,
+                'time' => $time,
             ]);
 
             return $reservation;
@@ -85,7 +85,7 @@ class ReservationService
         ?int $ignoreReservationId = null
     ): bool {
         $start = Carbon::parse("{$date} {$time}");
-        $end   = (clone $start)->addMinutes($this->defaultDurationMinutes);
+        $end = (clone $start)->addMinutes($this->defaultDurationMinutes);
 
         return Reservation::query()
             ->where('reservation_date', $date)
@@ -98,10 +98,10 @@ class ReservationService
             ->where(function ($query) use ($start, $end) {
                 // التداخل: existing.start < new.end AND existing.end > new.start
                 $query->where('reservation_time', '<', $end->format('H:i:s'))
-                      ->whereRaw(
-                          'ADDTIME(reservation_time, SEC_TO_TIME(? * 60)) > ?',
-                          [$this->defaultDurationMinutes, $start->format('H:i:s')]
-                      );
+                    ->whereRaw(
+                        'ADDTIME(reservation_time, SEC_TO_TIME(? * 60)) > ?',
+                        [$this->defaultDurationMinutes, $start->format('H:i:s')]
+                    );
             })
             ->exists();
     }
@@ -162,6 +162,84 @@ class ReservationService
         }
 
         return ReservationStatus::PENDING;
+    }
+
+    /**
+     * 📲 رابط واتساب جاهز لإرسال تأكيد الحجز إلى العميل، أو null إن تعذّر.
+     */
+    public function customerWhatsAppUrl(Reservation $reservation): ?string
+    {
+        $phone = $this->normalizeToInternational((string) $reservation->customer_phone);
+
+        if ($phone === '') {
+            return null;
+        }
+
+        return 'https://wa.me/'.$phone.'?text='.rawurlencode($this->buildCustomerConfirmationMessage($reservation));
+    }
+
+    /**
+     * 🗒️ نص رسالة التأكيد بلغة العميل (fallback: اللغة الافتراضية للموقع).
+     */
+    public function buildCustomerConfirmationMessage(Reservation $reservation): string
+    {
+        $supported = (array) config('locales.supported', ['nl', 'en', 'ar']);
+
+        $locale = in_array((string) $reservation->locale, $supported, true)
+            ? (string) $reservation->locale
+            : (string) config('locales.default', 'nl');
+
+        $date = $reservation->reservation_date?->format('Y-m-d') ?? '';
+        $time = substr((string) $reservation->reservation_time, 0, 5); // H:i
+
+        $lines = [
+            __('messages.reservation_confirmation.whatsapp_title', [
+                'restaurant' => config('app.name'),
+            ], $locale),
+            '',
+            __('messages.reservation_confirmation.whatsapp_greeting', [
+                'name' => $reservation->customer_name,
+            ], $locale),
+            __('messages.reservation_confirmation.whatsapp_intro', [], $locale),
+            '',
+            '• '.__('messages.reservation_confirmation.whatsapp_reference', ['code' => $reservation->reference_code], $locale),
+            '• '.__('messages.reservation_confirmation.whatsapp_datetime', ['date' => $date, 'time' => $time], $locale),
+            '• '.__('messages.reservation_confirmation.whatsapp_guests', ['count' => $reservation->party_size], $locale),
+        ];
+
+        if (filled($reservation->special_requests)) {
+            $lines[] = '• '.__('messages.reservation_confirmation.whatsapp_requests', ['requests' => $reservation->special_requests], $locale);
+        }
+
+        $lines[] = '';
+        $lines[] = __('messages.reservation_confirmation.whatsapp_footer', [], $locale);
+
+        return implode("\n", $lines);
+    }
+
+    /**
+     * 🔢 تحويل الرقم إلى صيغة دولية بلا + (الصيغة المطلوبة في روابط wa.me).
+     */
+    protected function normalizeToInternational(string $phone): string
+    {
+        $digits = (string) preg_replace('/\D+/', '', trim($phone));
+
+        if ($digits === '') {
+            return '';
+        }
+
+        // صيغة دولية مكتوبة بـ 00
+        if (str_starts_with($digits, '00')) {
+            return substr($digits, 2);
+        }
+
+        // رقم يمني محلي: 7XXXXXXXX أو 07XXXXXXXX → 9677XXXXXXXX
+        if (preg_match('/^0?7\d{8}$/', $digits) === 1) {
+            return '967'.ltrim($digits, '0');
+        }
+
+        // أي رقم آخر يُترك كما هو (يُفترض أنه يبدأ بمفتاح الدولة)
+        return $digits;
     }
 
     /**

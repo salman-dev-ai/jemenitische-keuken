@@ -1,7 +1,6 @@
 @include('errors.layout', [
     'code'      => 429,
     'actions'   => ['retry', 'home'],
-    'livewire'  => false,
     'autoRetry' => 60,
     'copy'      => [
         'nl' => ['title' => 'Even geduld, de keuken is druk', 'text' => 'Je hebt te veel verzoeken gedaan. Wacht even, we proberen het automatisch opnieuw.'],

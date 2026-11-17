@@ -31,7 +31,7 @@ trait ValidatesCheckout
      */
     protected function rules(): array
     {
-        $isDelivery       = $this->order_type === OrderType::DELIVERY->value;
+        $isDelivery = $this->order_type === OrderType::DELIVERY->value;
         $needsReservation = in_array($this->order_type, [
             OrderType::DINE_IN->value,
             OrderType::PREORDER->value,
@@ -42,7 +42,7 @@ trait ValidatesCheckout
 
         return [
             // ─── بيانات العميل ───
-            'customer_name'  => ['required', 'string', 'min:3', 'max:100'],
+            'customer_name' => ['required', 'string', 'min:3', 'max:100'],
             'customer_phone' => [
                 'required',
                 'string',
@@ -63,12 +63,12 @@ trait ValidatesCheckout
                 'string',
                 'max:255',
             ],
-            'delivery_postal_code' => [
-                $isDelivery ? 'required' : 'nullable',
-                'string',
-                'max:30',
-                'regex:/^\d{4}\s?[A-Za-z]{2}$/',
-            ],
+            // ⚠️ صيغة الرمز البريدي (regex) تُطبَّق فقط عند التوصيل؛
+            //    لأن الحقل قد يحتفظ بقيمة محفوظة من "تذكرني" فيظهر خطأ
+            //    الصيغة حتى مع الاستلام/داخل المطعم.
+            'delivery_postal_code' => $isDelivery
+                ? ['required', 'string', 'max:30', 'regex:/^\d{4}\s?[A-Za-z]{2}$/']
+                : ['nullable', 'string', 'max:30'],
 
             // ─── الحجز ───
             'reservation_date' => [
@@ -84,8 +84,8 @@ trait ValidatesCheckout
             'party_size' => [
                 $needsReservation ? 'required' : 'nullable',
                 'integer',
-                'min:' . $minPartySize,
-                'max:' . $maxPartySize,
+                'min:'.$minPartySize,
+                'max:'.$maxPartySize,
             ],
 
             'special_requests' => ['nullable', 'string', 'max:500'],
@@ -112,10 +112,10 @@ trait ValidatesCheckout
     protected function messages(): array
     {
         return [
-            'delivery_address.required'     => __('messages.order.address_required'),
-            'delivery_city.required'        => __('messages.order.city_required'),
+            'delivery_address.required' => __('messages.order.address_required'),
+            'delivery_city.required' => __('messages.order.city_required'),
             'delivery_postal_code.required' => __('messages.order.postal_required'),
-            'customer_phone.regex'          => __('messages.order.phone_format'),
+            'customer_phone.regex' => __('messages.order.phone_format'),
         ];
     }
 
@@ -126,7 +126,7 @@ trait ValidatesCheckout
     protected function normalizeOrderType(): void
     {
         $legacyMap = [
-            'dineIn'   => OrderType::DINE_IN->value,
+            'dineIn' => OrderType::DINE_IN->value,
             'takeaway' => OrderType::PICKUP->value,
         ];
 

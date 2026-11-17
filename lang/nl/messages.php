@@ -45,6 +45,10 @@ return [
         'toggleMenu' => 'Menu openen of sluiten',
         'galleryHeritage' => 'Galerij & Erfgoed',
         'restaurantInfo' => 'Restaurantinformatie',
+
+        // Serviceknoppen in de header
+        'whatsapp' => 'WhatsApp',
+        'delivery' => 'Bezorgen',
     ],
 
     'cookies' => [
@@ -257,6 +261,41 @@ return [
         'order_message' => 'Ons team neemt binnenkort contact met u op.',
         'preorder_title' => '🛒 Voorbestelling toegevoegd!',
         'preorder_message' => 'We bereiden uw gerechten voor uw aankomst.',
+    ],
+
+    // ═══════════════════════════════════════════
+    // 📲 Bevestigingsbericht reservering (WhatsApp)
+    // ═══════════════════════════════════════════
+    'reservation_confirmation' => [
+        'toast_title' => '✅ Reservering bevestigd',
+        'toast_body' => 'Stuur de bevestiging naar :name via WhatsApp.',
+        'send_action' => 'Bevestiging via WhatsApp versturen',
+        'whatsapp_title' => '*Bevestiging van uw reservering bij :restaurant*',
+        'whatsapp_greeting' => 'Hallo :name,',
+        'whatsapp_intro' => 'Wij bevestigen graag uw reservering. Dit zijn de gegevens:',
+        'whatsapp_reference' => 'Referentie: :code',
+        'whatsapp_datetime' => 'Datum en tijd: :date om :time',
+        'whatsapp_guests' => 'Aantal personen: :count',
+        'whatsapp_requests' => 'Speciale wensen: :requests',
+        'whatsapp_footer' => 'We kijken ernaar uit u te verwelkomen. Antwoord op dit bericht voor wijzigingen.',
+    ],
+
+    // ═══════════════════════════════════════════
+    // 📲 Statusupdate van bestelling naar klant (WhatsApp)
+    // ═══════════════════════════════════════════
+    'order_status' => [
+        'toast_title' => '📦 Bestelstatus bijgewerkt',
+        'toast_body' => 'Stuur de update van bestelling :number naar de klant via WhatsApp.',
+        'send_action' => 'Bestelupdate via WhatsApp versturen',
+        'whatsapp_title' => '*Update van uw bestelling bij :restaurant*',
+        'whatsapp_greeting' => 'Hallo :name,',
+        'whatsapp_intro_completed' => 'Uw bestelling is succesvol afgerond. Bedankt voor uw bezoek!',
+        'whatsapp_intro_cancelled' => 'Helaas moeten wij u melden dat uw bestelling is geannuleerd. Antwoord op dit bericht voor vragen.',
+        'whatsapp_order_number' => 'Bestelnummer: :number',
+        'whatsapp_status' => 'Status: :status',
+        'whatsapp_items_header' => 'Artikelen:',
+        'whatsapp_total' => 'Totaal: :total',
+        'whatsapp_footer' => 'Wij verwelkomen u graag opnieuw.',
     ],
 
     // ═══════════════════════════════════════════

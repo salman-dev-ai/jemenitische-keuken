@@ -28,9 +28,11 @@ namespace App\Livewire;
 
 use App\Exceptions\ReservationException;
 use App\Livewire\Concerns\RemembersCustomer;
+use App\Models\RestaurantSetting;
 use App\Services\ReservationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Validate;
@@ -47,11 +49,8 @@ class ReservationForm extends Component
     #[Validate('required|date|after_or_equal:today')]
     public string $reservation_date = '';
 
-   #[Validate(['required',  'regex:/^([01]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/',])]
-
-
-
-public string $reservation_time = '';
+    #[Validate(['required',  'regex:/^([01]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/'])]
+    public string $reservation_time = '';
 
     #[Validate('required|string|min:3|max:255')]
     public string $customer_name = '';
@@ -105,9 +104,9 @@ public string $reservation_time = '';
         $customer = $this->loadCustomerFromCookie();
 
         if ($customer) {
-            $this->customer_name       = $customer->name ?? '';
-            $this->customer_phone      = $customer->phone ?? '';
-            $this->customer_email      = $customer->email ?? '';
+            $this->customer_name = $customer->name ?? '';
+            $this->customer_phone = $customer->phone ?? '';
+            $this->customer_email = $customer->email ?? '';
             $this->isReturningCustomer = true;
         }
     }
@@ -127,11 +126,11 @@ public string $reservation_time = '';
         ]);
 
         $this->isReturningCustomer = false;
-        $this->remember_me         = true;
+        $this->remember_me = true;
 
         $this->dispatch(
             'notify',
-            title:   __('messages.remember.forgotten_title'),
+            title: __('messages.remember.forgotten_title'),
             message: __('messages.remember.forgotten_message'),
         );
     }
@@ -143,7 +142,6 @@ public string $reservation_time = '';
      *    ليفتحه النموذج (Alpine) في تبويب جديد. وتُرجع null في كل حالة أخرى
      *    (Rate Limit، خطأ، أو فشل بناء الرسالة).
      *
-     * @param  ReservationService $reservationService
      * @return string|null رابط واتساب الجاهز أو null
      */
     public function submitReservation(ReservationService $reservationService): ?string
@@ -153,7 +151,7 @@ public string $reservation_time = '';
         // ─────────────────────────────────────────────────────────────
         // 1️⃣ Rate Limiting (IP فقط — قبل التحقق)
         // ─────────────────────────────────────────────────────────────
-        $rateKey = 'reservation:' . request()->ip();
+        $rateKey = 'reservation:'.request()->ip();
 
         if (RateLimiter::tooManyAttempts($rateKey, 5)) {
             $this->errorMessage = __('messages.reservation.rate_limit_exceeded');
@@ -168,7 +166,7 @@ public string $reservation_time = '';
         // ─────────────────────────────────────────────────────────────
         try {
             $validated = $this->validate();
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             RateLimiter::clear($rateKey);
             throw $e;
         }
@@ -181,7 +179,10 @@ public string $reservation_time = '';
         ]);
 
         $validated['customer_phone'] = $phone;
-        $this->customer_phone        = $phone;
+        $this->customer_phone = $phone;
+
+        // 🌐 لغة العميل الحالية — لأجل رسالة التأكيد لاحقاً
+        $validated['locale'] = app()->getLocale();
 
         // ─────────────────────────────────────────────────────────────
         // 3️⃣ الحفظ داخل Transaction
@@ -208,7 +209,7 @@ public string $reservation_time = '';
 
             RateLimiter::clear($rateKey);
 
-            $this->referenceCode  = $reservation->reference_code;
+            $this->referenceCode = $reservation->reference_code;
             $this->successMessage = __('messages.reservation.success');
 
             // 📲 رابط واتساب للمدير — يجب بناؤه قبل تفريغ الحقول أدناه لأنه يقرأ بيانات الحجز
@@ -216,7 +217,7 @@ public string $reservation_time = '';
 
             $this->dispatch(
                 'notify',
-                title:   __('messages.notifications.reservation_title'),
+                title: __('messages.notifications.reservation_title'),
                 message: __('messages.notifications.reservation_message'),
             );
 
@@ -256,9 +257,10 @@ public string $reservation_time = '';
      */
     protected function whatsAppNumber(): string
     {
-  $whatsapp = preg_replace('/\D+/', '', (string) \App\Models\RestaurantSetting::current()->whatsapp ?? '');
+        $whatsapp = preg_replace('/\D+/', '', (string) RestaurantSetting::current()->whatsapp ?? '');
 
-    return $whatsapp !== '' ? $whatsapp : '';    }
+        return $whatsapp !== '' ? $whatsapp : '';
+    }
 
     /**
      * يبني رابط wa.me الجاهز بنص الحجز، أو null إذا فشل البناء.
@@ -266,14 +268,14 @@ public string $reservation_time = '';
      * ⚠️ فشل البناء لا يجب أن يُفسد الحجز (محفوظ مسبقاً في قاعدة البيانات)،
      *    لذلك نلتقط الاستثناء ونسجّله فقط بدل رميه.
      *
-     * @param array<string, mixed> $validated      المدخلات بعد التحقق وتطبيع الهاتف
-     * @param string|int|null      $referenceCode  رمز مرجع الحجز
+     * @param  array<string, mixed>  $validated  المدخلات بعد التحقق وتطبيع الهاتف
+     * @param  string|int|null  $referenceCode  رمز مرجع الحجز
      */
     protected function makeWhatsAppUrl(array $validated, string|int|null $referenceCode): ?string
     {
         try {
-            return 'https://wa.me/' . $this->whatsAppNumber()
-                . '?text=' . rawurlencode($this->buildWhatsAppMessage($validated, (string) $referenceCode));
+            return 'https://wa.me/'.$this->whatsAppNumber()
+                .'?text='.rawurlencode($this->buildWhatsAppMessage($validated, (string) $referenceCode));
         } catch (\Throwable $e) {
             report($e);
 
@@ -285,7 +287,7 @@ public string $reservation_time = '';
      * يبني نص رسالة الحجز (يصل للمدير، لذلك لغته ثابتة بالعربية
      * بغض النظر عن لغة واجهة العميل).
      *
-     * @param array<string, mixed> $validated
+     * @param  array<string, mixed>  $validated
      */
     protected function buildWhatsAppMessage(array $validated, string $referenceCode): string
     {

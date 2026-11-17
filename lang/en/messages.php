@@ -47,6 +47,10 @@ return [
 
         'galleryHeritage' => 'Gallery & Heritage',
         'restaurantInfo' => 'Restaurant information',
+
+        // Header service buttons
+        'whatsapp' => 'WhatsApp',
+        'delivery' => 'Delivery',
     ],
 
     'cookies' => [
@@ -259,6 +263,41 @@ return [
         'order_message' => 'Our team will contact you shortly.',
         'preorder_title' => '🛒 Pre-order Added!',
         'preorder_message' => 'We will prepare your dishes before you arrive.',
+    ],
+
+    // ═══════════════════════════════════════════
+    // 📲 Reservation confirmation message (WhatsApp)
+    // ═══════════════════════════════════════════
+    'reservation_confirmation' => [
+        'toast_title' => '✅ Reservation confirmed',
+        'toast_body' => 'Send the confirmation to :name on WhatsApp.',
+        'send_action' => 'Send confirmation on WhatsApp',
+        'whatsapp_title' => '*Your reservation at :restaurant is confirmed*',
+        'whatsapp_greeting' => 'Hello :name,',
+        'whatsapp_intro' => 'We are happy to confirm your reservation. Here are the details:',
+        'whatsapp_reference' => 'Reference: :code',
+        'whatsapp_datetime' => 'When: :date at :time',
+        'whatsapp_guests' => 'Guests: :count',
+        'whatsapp_requests' => 'Special requests: :requests',
+        'whatsapp_footer' => 'We look forward to welcoming you. Reply to this message for changes.',
+    ],
+
+    // ═══════════════════════════════════════════
+    // 📲 Order status update to customer (WhatsApp)
+    // ═══════════════════════════════════════════
+    'order_status' => [
+        'toast_title' => '📦 Order status updated',
+        'toast_body' => 'Send the update for order :number to the customer on WhatsApp.',
+        'send_action' => 'Send order update on WhatsApp',
+        'whatsapp_title' => '*Update about your order at :restaurant*',
+        'whatsapp_greeting' => 'Hello :name,',
+        'whatsapp_intro_completed' => 'Your order has been completed successfully. Thank you for choosing us!',
+        'whatsapp_intro_cancelled' => 'We are sorry to inform you that your order has been cancelled. Reply to this message for any questions.',
+        'whatsapp_order_number' => 'Order number: :number',
+        'whatsapp_status' => 'Status: :status',
+        'whatsapp_items_header' => 'Items:',
+        'whatsapp_total' => 'Total: :total',
+        'whatsapp_footer' => 'We look forward to serving you again.',
     ],
 
     // ═══════════════════════════════════════════

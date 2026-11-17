@@ -279,6 +279,9 @@ class OrderService
         $data['status'] = $this->resolveStatus($orderData['status'] ?? null);
         $data['payment_status'] = $this->resolvePaymentStatus($orderData['payment_status'] ?? null);
 
+        // 🌐 لغة العميل وقت الطلب — لاختيار لغة رسالة تحديث الحالة لاحقاً
+        $data['locale'] = $this->resolveLocale($orderData['locale'] ?? app()->getLocale());
+
         return $data;
     }
 
@@ -563,5 +566,114 @@ class OrderService
     protected function generateOrderNumber(): string
     {
         return 'ORD-'.now()->format('Ymd').'-'.strtoupper(Str::ulid()->toBase32());
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // 📲 تحديث حالة الطلب عبر واتساب (Click-to-chat)
+    // ══════════════════════════════════════════════════════════════
+
+    /**
+     * 📲 رابط واتساب لإرسال رسالة تحديث حالة الطلب للعميل.
+     *
+     * يُرجِع null إذا كان رقم الهاتف غير صالح.
+     */
+    public function customerWhatsAppUrl(Order $order): ?string
+    {
+        $phone = $this->normalizeToInternational((string) $order->customer_phone);
+
+        if ($phone === '') {
+            return null;
+        }
+
+        return 'https://wa.me/'.$phone.'?text='.rawurlencode($this->buildOrderStatusMessage($order));
+    }
+
+    /**
+     * ✉️ بناء نص رسالة تحديث حالة الطلب بلغة العميل.
+     *
+     * @return string نص الرسالة متعدد الأسطر
+     */
+    public function buildOrderStatusMessage(Order $order): string
+    {
+        $locale = $this->resolveLocale($order->locale);
+        $statusValue = $order->status instanceof OrderStatus
+            ? $order->status->value
+            : (string) $order->status;
+
+        $lines = [
+            __('messages.order_status.whatsapp_title', ['restaurant' => config('app.name')], $locale),
+            '',
+            __('messages.order_status.whatsapp_greeting', ['name' => $order->customer_name], $locale),
+            __('messages.order_status.whatsapp_intro_'.$statusValue, [], $locale),
+            '',
+            '• '.__('messages.order_status.whatsapp_order_number', ['number' => $order->order_number], $locale),
+            '• '.__('messages.order_status.whatsapp_status', [
+                'status' => __("messages.enums.order_status.{$statusValue}", [], $locale),
+            ], $locale),
+        ];
+
+        // 🍽️ قائمة أصناف الطلب
+        $order->loadMissing('items.menuItem');
+
+        if ($order->items->isNotEmpty()) {
+            $lines[] = '';
+            $lines[] = __('messages.order_status.whatsapp_items_header', [], $locale);
+
+            foreach ($order->items as $item) {
+                $name = $item->menuItem?->getTranslation('name', $locale, false)
+                    ?: ($item->menuItem?->localized_name ?? ('#'.$item->menu_item_id));
+
+                $lines[] = '  - '.$name.' × '.$item->quantity;
+            }
+        }
+
+        $lines[] = '';
+        $lines[] = '• '.__('messages.order_status.whatsapp_total', [
+            'total' => '€'.number_format((float) $order->total, 2),
+        ], $locale);
+
+        $lines[] = '';
+        $lines[] = __('messages.order_status.whatsapp_footer', [], $locale);
+
+        return implode("\n", $lines);
+    }
+
+    /**
+     * 🌐 تحديد لغة الرسالة: تُقبل اللغة إن كانت مدعومة، وإلا تُستخدم اللغة الافتراضية.
+     */
+    protected function resolveLocale(mixed $locale): string
+    {
+        $supported = (array) config('locales.supported', ['nl', 'en', 'ar']);
+
+        if (is_string($locale) && in_array($locale, $supported, true)) {
+            return $locale;
+        }
+
+        return (string) config('locales.default', 'nl');
+    }
+
+    /**
+     * 📞 تحويل رقم الهاتف إلى صيغة دولية (بدون +) صالحة لرابط wa.me.
+     */
+    protected function normalizeToInternational(string $phone): string
+    {
+        $digits = (string) preg_replace('/\D+/', '', trim($phone));
+
+        if ($digits === '') {
+            return '';
+        }
+
+        // صيغة دولية مكتوبة بـ 00
+        if (str_starts_with($digits, '00')) {
+            return substr($digits, 2);
+        }
+
+        // رقم يمني محلي: 7XXXXXXXX أو 07XXXXXXXX → 9677XXXXXXXX
+        if (preg_match('/^0?7\d{8}$/', $digits) === 1) {
+            return '967'.ltrim($digits, '0');
+        }
+
+        // أي رقم آخر يُترك كما هو (يُفترض أنه يبدأ بمفتاح الدولة)
+        return $digits;
     }
 }

@@ -45,6 +45,9 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')             // الرابط: yourdomain.com/admin
             ->login()                   // تفعيل صفحة تسجيل الدخول المدمجة
 
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('1s')
+
             // ─────────────────────────────────────────────
             // 2) الهوية البصرية (Branding)
             // ─────────────────────────────────────────────
@@ -74,6 +77,10 @@ class AdminPanelProvider extends PanelProvider
             ->maxContentWidth('full')                          // استغلال كامل عرض الشاشة للجداول والرسوم
             ->unsavedChangesAlerts()                           // تنبيه عند مغادرة نموذج غير محفوظ
             ->globalSearchKeyBindings(['command+k', 'ctrl+k']) // اختصار البحث السريع
+
+            // بعد الحفظ أو الإنشاء يُعاد المدير إلى جدول القائمة (مهم خصوصاً على الجوال)
+            ->resourceCreatePageRedirect('index')
+            ->resourceEditPageRedirect('index')
 
             // ─────────────────────────────────────────────
             // 4) اكتشاف المكوّنات تلقائيًا (Auto-discovery)

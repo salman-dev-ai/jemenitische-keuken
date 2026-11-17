@@ -1,7 +1,6 @@
 @include('errors.layout', [
     'code'      => 401,
     'actions'   => ['login', 'home'],
-    'livewire'  => false,
     'autoRetry' => null,
     'copy'      => [
         'nl' => ['title' => 'Log eerst in', 'text' => 'Voor deze pagina moet je ingelogd zijn.'],

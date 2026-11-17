@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Orders\Tables;
 use App\Enums\OrderStatus;
 use App\Enums\OrderType;
 use App\Models\Order;
+use App\Services\OrderService;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -83,6 +84,7 @@ class OrdersTable
                     ->dateTime('H:i - Y-m-d')
                     ->sortable(),
             ])->defaultSort('created_at', 'desc')
+            ->poll('1s')
             ->filters([
                 SelectFilter::make('status')
                     ->label('تصفية حسب الحالة')
@@ -110,6 +112,21 @@ class OrdersTable
                         'status' => OrderStatus::COMPLETED,
                         'payment_status' => 'paid',
                     ])),
+
+                // 📲 زر دائم لإرسال تحديث حالة الطلب للعميل عبر واتساب (متاح لاحقاً في أي وقت)
+                Action::make('send_status_whatsapp')
+                    ->label(__('messages.order_status.send_action', [], 'ar'))
+                    ->icon('lucide-message-circle')
+                    ->color('info')
+                    ->visible(
+                        fn (?Order $record): bool => $record !== null
+                            && in_array($record->status, [OrderStatus::COMPLETED, OrderStatus::CANCELLED], true)
+                            && app(OrderService::class)->customerWhatsAppUrl($record) !== null
+                    )
+                    ->url(fn (?Order $record): ?string => $record === null
+                        ? null
+                        : app(OrderService::class)->customerWhatsAppUrl($record))
+                    ->openUrlInNewTab(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

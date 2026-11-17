@@ -1,7 +1,6 @@
 @include('errors.layout', [
     'code'      => 503,
     'actions'   => ['retry'],
-    'livewire'  => false,
     'autoRetry' => 30,
     'copy'      => [
         'nl' => ['title' => 'We zijn zo terug', 'text' => 'We werken aan de website. Deze pagina wordt automatisch vernieuwd zodra we klaar zijn.'],

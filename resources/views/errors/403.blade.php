@@ -1,7 +1,6 @@
 @include('errors.layout', [
     'code'      => 403,
     'actions'   => ['home', 'back'],
-    'livewire'  => true,
     'autoRetry' => null,
     'copy'      => [
         'nl' => ['title' => 'Deze tafel is gereserveerd', 'text' => 'Je hebt geen toegang tot deze pagina. Denk je dat dit niet klopt? Neem dan contact met ons op.'],

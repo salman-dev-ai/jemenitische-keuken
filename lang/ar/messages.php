@@ -50,6 +50,10 @@ return [
         'galleryHeritage' => 'معرضنا وتراثنا',
         'restaurantInfo' => 'معلومات المطعم',
 
+        // أزرار خدمات الهيدر
+        'whatsapp' => 'واتساب',
+        'delivery' => 'التوصيل',
+
     ],
 
     'cookies' => [
@@ -278,6 +282,41 @@ return [
         'order_message' => 'سيتواصل معك فريقنا قريباً.',
         'preorder_title' => '🛒 تم إضافة الطلب المسبق!',
         'preorder_message' => 'سنجهز أطباقك قبل وصولك.',
+    ],
+
+    // ═══════════════════════════════════════════
+    // 📲 رسالة تأكيد الحجز للعميل (واتساب)
+    // ═══════════════════════════════════════════
+    'reservation_confirmation' => [
+        'toast_title' => '✅ تم تأكيد الحجز',
+        'toast_body' => 'أرسل رسالة التأكيد إلى :name على واتساب.',
+        'send_action' => 'إرسال التأكيد على واتساب',
+        'whatsapp_title' => '*تأكيد حجزكم في :restaurant*',
+        'whatsapp_greeting' => 'مرحباً :name،',
+        'whatsapp_intro' => 'يسعدنا تأكيد حجزكم، وهذه تفاصيله:',
+        'whatsapp_reference' => 'رقم المرجع: :code',
+        'whatsapp_datetime' => 'الموعد: :date الساعة :time',
+        'whatsapp_guests' => 'عدد الأشخاص: :count',
+        'whatsapp_requests' => 'طلبات خاصة: :requests',
+        'whatsapp_footer' => 'نتشرف بخدمتكم. للتعديل أو الإلغاء يرجى الرد على هذه الرسالة.',
+    ],
+
+    // ═══════════════════════════════════════════
+    // 📲 رسالة تحديث حالة الطلب للعميل (واتساب)
+    // ═══════════════════════════════════════════
+    'order_status' => [
+        'toast_title' => '📦 تحديث حالة الطلب',
+        'toast_body' => 'أرسل تحديث الطلب :number إلى العميل على واتساب.',
+        'send_action' => 'إرسال تحديث الطلب على واتساب',
+        'whatsapp_title' => '*تحديث طلبكم في :restaurant*',
+        'whatsapp_greeting' => 'مرحباً :name،',
+        'whatsapp_intro_completed' => 'تم إكمال طلبكم بنجاح. شكراً لتعاملكم معنا!',
+        'whatsapp_intro_cancelled' => 'نأسف لإبلاغكم بأنه تم إلغاء طلبكم. للاستفسار يمكنكم الرد على هذه الرسالة.',
+        'whatsapp_order_number' => 'رقم الطلب: :number',
+        'whatsapp_status' => 'الحالة: :status',
+        'whatsapp_items_header' => 'الأصناف:',
+        'whatsapp_total' => 'الإجمالي: :total',
+        'whatsapp_footer' => 'نتشرف بخدمتكم دائماً.',
     ],
 
     // ═══════════════════════════════════════════
