@@ -15,5 +15,6 @@ return [
     'footer_link' => 'Cookie Settings',
 
     'hide_settings' => 'Hide settings',
+    'close' => 'Close',
 
 ];

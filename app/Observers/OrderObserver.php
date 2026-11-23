@@ -24,6 +24,11 @@ class OrderObserver
 
     public function created(Order $order): void
     {
+        // الطلب الإلكتروني لا يصل للمطبخ إلا بعد تأكيد الدفع (OrderPaid)
+        if ($order->payment_method === 'online') {
+            return;
+        }
+
         $this->notifyAdmins(new NewOrderPlaced($order));
     }
 

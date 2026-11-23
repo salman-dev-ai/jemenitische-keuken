@@ -80,7 +80,17 @@ class RestaurantSetting extends Model
         'latitude',
         'longitude',
         'google_site_verification',
+        //  حقول الدفع
+        'online_payments_enabled',
+        'cash_on_delivery_enabled',
+        'paypro_api_key',
+        'paypro_webhook_secret',
+        'paypro_webhook_id',
+        'paypro_connected_at',
     ];
+
+    //  حقول الدفع: مشفّر
+    protected $hidden = ['paypro_api_key', 'paypro_webhook_secret'];
 
     /**
      * 🎭 تحويلات الأنواع.
@@ -100,7 +110,23 @@ class RestaurantSetting extends Model
             'social_links' => 'array',
             'latitude' => 'float',
             'longitude' => 'float',
+            //  حقول الدفع:
+            'online_payments_enabled' => 'boolean',
+            'cash_on_delivery_enabled' => 'boolean',
+            'paypro_api_key' => 'encrypted',
+            'paypro_webhook_secret' => 'encrypted',
+            'paypro_connected_at' => 'datetime',
         ];
+    }
+
+    /** هل الدفع الإلكتروني مفعّل ومضبوط فعلاً؟ */
+    public static function canAcceptOnlinePayments(): bool
+    {
+        $s = static::current();
+
+        return $s->online_payments_enabled
+            && filled($s->paypro_api_key)
+            && filled($s->paypro_webhook_secret);
     }
 
     /**

@@ -33,7 +33,7 @@
 
     {{-- التوصيل عبر Thuisbezorgd --}}
     <a href="{{ route('restaurant-info') }}#delivery"  rel="noopener noreferrer"
-        class="{{ $btn }} border-gray-200 bg-white/50 text-gray-800">
+        class="{{ $btn }}  max-[300px]:hidden    border-gray-200 bg-white/50 text-gray-800">
         <img src="{{ asset('images/thuisbezorgd.png') }}" alt="" width="200" height="206"
             loading="lazy" decoding="async" class="h-5 w-5 object-contain" />
         <span class="{{ $lbl }}">{{ __('messages.nav.delivery') }}</span>

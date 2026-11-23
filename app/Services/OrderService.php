@@ -40,6 +40,7 @@ use App\DTOs\CouponResult;
 use App\DTOs\PricingBreakdown;
 use App\Enums\OrderStatus;
 use App\Enums\OrderType;
+use App\Enums\PaymentStatus;
 use App\Exceptions\OrderException;
 use App\Models\Customer;
 use App\Models\MenuItem;
@@ -551,8 +552,7 @@ class OrderService
      */
     protected function resolvePaymentStatus(mixed $paymentStatus): string
     {
-        $allowed = ['pending', 'paid', 'failed', 'refunded'];
-
+        $allowed = array_column(PaymentStatus::cases(), 'value');
         if (! is_string($paymentStatus) || ! in_array($paymentStatus, $allowed, true)) {
             return 'pending';
         }

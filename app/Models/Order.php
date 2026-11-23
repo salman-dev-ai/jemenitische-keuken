@@ -192,4 +192,9 @@ class Order extends Model
     {
         return round((float) $this->subtotal - (float) $this->discount_amount, 2);
     }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

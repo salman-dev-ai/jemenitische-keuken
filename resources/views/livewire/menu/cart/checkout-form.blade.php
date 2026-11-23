@@ -14,18 +14,22 @@
 <form
     x-data="{
         async submit() {
-            const tab = window.open('', '_blank');
+            const online = this.$wire.payment_choice === 'online';
+            const tab = online ? null : window.open('', '_blank');
             let url = null;
 
             try {
                 url = await this.$wire.checkout();
             } finally {
-                const isValid = typeof url === 'string' && url.startsWith('https://wa.me/');
+                const isWa = typeof url === 'string' && url.startsWith('https://wa.me/');
+                const isPay = typeof url === 'string' && url.startsWith('https://') && !isWa;
 
-                if (isValid && tab && !tab.closed) {
+                if (isPay) {
+                    window.location.href = url;
+                } else if (isWa && tab && !tab.closed) {
                     tab.opener = null;
                     tab.location.href = url;
-                } else if (isValid) {
+                } else if (isWa) {
                     window.location.href = url;
                 } else if (tab && !tab.closed) {
                     tab.close();
@@ -279,7 +283,46 @@
     </div>
 
     <div class="pt-4 border-t border-stone-200 mt-6 space-y-4">
-        {{-- ملخص السعر --}}
+       
+        {{-- طريقة الدفع --}}
+    @php
+        $payCfg = \App\Models\RestaurantSetting::current();
+        $cashOn = (bool) $payCfg->cash_on_delivery_enabled;
+        $onlineOn = \App\Models\RestaurantSetting::canAcceptOnlinePayments();
+        $pl = in_array(app()->getLocale(), ['nl', 'en', 'ar'], true) ? app()->getLocale() : 'en';
+        $payText = [
+            'title' => ['nl' => 'Betaalmethode', 'en' => 'Payment method', 'ar' => 'طريقة الدفع'],
+            'cash' => ['nl' => 'Betalen bij ontvangst', 'en' => 'Pay on pickup / delivery', 'ar' => 'الدفع عند الاستلام'],
+            'online' => ['nl' => 'Online betalen (iDEAL, kaart)', 'en' => 'Pay online (iDEAL, card)', 'ar' => 'الدفع إلكترونياً (iDEAL، بطاقة)'],
+        ];
+    @endphp
+
+    @if ($cashOn || $onlineOn)
+        <div class="space-y-2" x-init="if (!@js($cashOn)) $wire.payment_choice = 'online'">
+            <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider flex items-center gap-2">
+                @svg('lucide-wallet', 'w-4 h-4', ['aria-hidden' => 'true'])
+                {{ $payText['title'][$pl] }}
+            </h4>
+
+            @if ($cashOn)
+                <label class="flex items-center gap-3 rounded-xl border border-stone-200 bg-white p-3 cursor-pointer">
+                    <input type="radio" value="cash" wire:model.live="payment_choice" class="h-4 w-4 text-[#E07513]">
+                    <span class="text-sm font-semibold text-stone-700">{{ $payText['cash'][$pl] }}</span>
+                </label>
+            @endif
+
+            @if ($onlineOn)
+                <label class="flex items-center gap-3 rounded-xl border border-stone-200 bg-white p-3 cursor-pointer">
+                    <input type="radio" value="online" wire:model.live="payment_choice" class="h-4 w-4 text-[#E07513]">
+                    <span class="text-sm font-semibold text-stone-700">{{ $payText['online'][$pl] }}</span>
+                </label>
+            @endif
+
+            @error('payment_choice') <span class="text-xs text-rose-500 block">{{ $message }}</span> @enderror
+        </div>
+    @endif
+    
+    {{-- ملخص السعر --}}
         <div class="bg-[#FAF4ED] p-4 rounded-xl border border-[#E07513]/25 space-y-2.5">
             <div class="flex justify-between items-center text-sm">
                 <span class="text-stone-600">{{ __('cart.summary.subtotal') }}</span>

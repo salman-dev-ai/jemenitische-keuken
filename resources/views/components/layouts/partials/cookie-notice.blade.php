@@ -16,17 +16,29 @@
      aria-describedby="cookie-desc"
      class="fixed bottom-4 start-4 z-[900] w-[calc(100%-2rem)] sm:max-w-sm rounded-3xl border border-stone-200/70 bg-[#fbf9f5] p-6 text-stone-800 shadow-2xl focus:outline-none">
 
-    {{-- الرأس: أيقونة + عنوان --}}
-    <div class="flex items-center gap-3">
-        <svg class="h-9 w-9 shrink-0 text-[#A84A13]" viewBox="0 0 48 48" fill="none" stroke="currentColor"
-             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M24 4a20 20 0 1 0 20 20 8 8 0 0 1-8-8 8 8 0 0 1-8-8 4 4 0 0 1-4-4Z"/>
-            <circle cx="16" cy="20" r="1.8" fill="currentColor"/>
-            <circle cx="24" cy="30" r="1.8" fill="currentColor"/>
-            <circle cx="32" cy="34" r="1.8" fill="currentColor"/>
-            <circle cx="14" cy="32" r="1.8" fill="currentColor"/>
-        </svg>
-        <h2 id="cookie-title" class="text-xl font-bold text-stone-900">{{ __('cookies.title') }}</h2>
+    {{-- الرأس: أيقونة + عنوان + زر إغلاق --}}
+    <div class="flex items-start justify-between gap-3">
+        <div class="flex items-center gap-3">
+            <svg class="h-9 w-9 shrink-0 text-[#A84A13]" viewBox="0 0 48 48" fill="none" stroke="currentColor"
+                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M24 4a20 20 0 1 0 20 20 8 8 0 0 1-8-8 8 8 0 0 1-8-8 4 4 0 0 1-4-4Z"/>
+                <circle cx="16" cy="20" r="1.8" fill="currentColor"/>
+                <circle cx="24" cy="30" r="1.8" fill="currentColor"/>
+                <circle cx="32" cy="34" r="1.8" fill="currentColor"/>
+                <circle cx="14" cy="32" r="1.8" fill="currentColor"/>
+            </svg>
+            <h2 id="cookie-title" class="text-xl font-bold text-stone-900">{{ __('cookies.title') }}</h2>
+        </div>
+
+        {{-- زر الإغلاق: يخفي الإشعار دون تسجيل أي قرار، فلا تُفعَّل ملفات غير ضرورية --}}
+        <button type="button" @click="dismiss()"
+                class="-me-1 -mt-1 shrink-0 rounded-full p-2 text-stone-500 transition hover:bg-stone-200/70 hover:text-stone-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A84A13] focus-visible:ring-offset-2"
+                aria-label="{{ __('cookies.close') }}">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+        </button>
     </div>
 
     <p id="cookie-desc" class="mt-3 text-sm leading-relaxed text-stone-600">{{ __('cookies.description') }}</p>
@@ -82,9 +94,19 @@
     document.addEventListener('alpine:init', function () {
         Alpine.data('cookieBanner', function () {
             const consent = window.CookieConsent;
+            const DISMISS_KEY = 'cookie-banner-dismissed';
+
+            // هل أُغلق الإشعار سابقاً في هذه الجلسة دون تسجيل قرار؟
+            const wasDismissed = function () {
+                try {
+                    return sessionStorage.getItem(DISMISS_KEY) === '1';
+                } catch (e) {
+                    return false;
+                }
+            };
 
             return {
-                visible: !consent.state.decided,
+                visible: !consent.state.decided && !wasDismissed(),
                 details: false,
                 analytics: consent.state.analytics,
                 marketing: consent.state.marketing,
@@ -99,6 +121,16 @@
                         this.visible = true;
                         this.$nextTick(() => this.$refs.dialog.focus());
                     });
+                },
+
+                // إغلاق الإشعار دون انتظار استجابة الخادم ودون تسجيل أي موافقة.
+                dismiss() {
+                    try {
+                        sessionStorage.setItem(DISMISS_KEY, '1');
+                    } catch (e) {
+                        /* وضع التصفح الخاص قد يمنع التخزين؛ نتجاهل الخطأ */
+                    }
+                    this.visible = false;
                 },
 
                 async save(analytics, marketing) {

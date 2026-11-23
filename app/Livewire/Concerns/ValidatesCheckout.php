@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Concerns;
 
 use App\Enums\OrderType;
+use App\Models\RestaurantSetting;
 use Illuminate\Validation\Rule;
 
 /**
@@ -39,6 +40,12 @@ trait ValidatesCheckout
 
         $minPartySize = (int) config('reservations.party_size.min', 1);
         $maxPartySize = (int) config('reservations.party_size.max', 20);
+
+        $settings = RestaurantSetting::current();
+        $allowedPayments = array_values(array_filter([
+            $settings->cash_on_delivery_enabled ? 'cash' : null,
+            RestaurantSetting::canAcceptOnlinePayments() ? 'online' : null,
+        ])) ?: ['cash'];
 
         return [
             // ─── بيانات العميل ───
@@ -100,6 +107,8 @@ trait ValidatesCheckout
                     OrderType::PREORDER->value,
                     OrderType::DELIVERY->value,
                 ]),
+
+                'payment_choice' => ['required', 'string', Rule::in($allowedPayments)],
             ],
         ];
     }
@@ -116,6 +125,8 @@ trait ValidatesCheckout
             'delivery_city.required' => __('messages.order.city_required'),
             'delivery_postal_code.required' => __('messages.order.postal_required'),
             'customer_phone.regex' => __('messages.order.phone_format'),
+
+            'payment_choice.in' => 'Selected payment method is not available.',
         ];
     }
 

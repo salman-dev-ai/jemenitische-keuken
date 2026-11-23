@@ -2,16 +2,18 @@
 
 namespace App\Filament\Resources\MenuCategories\Tables;
 
-use App\Models\GalleryItem;
+use App\Models\MenuCategory;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Collection;
 
 class MenuCategoriesTable
 {
@@ -65,11 +67,53 @@ class MenuCategoriesTable
             ])
             ->recordActions([
                 EditAction::make(),
-                DeleteAction::make(),
+
+                // منع حذف القسم إذا كان مرتبطاً بأطباق (يجب حذف الأطباق أولاً)
+                DeleteAction::make()
+                    ->before(function (DeleteAction $action, MenuCategory $record): void {
+                        $menuItemsCount = $record->menuItems()->count();
+
+                        // لا توجد أطباق مرتبطة → اسمح بالحذف
+                        if ($menuItemsCount === 0) {
+                            return;
+                        }
+
+                        Notification::make()
+                            ->danger()
+                            ->title('لا يمكن حذف القسم')
+                            ->body("القسم \"{$record->localized_name}\" مرتبط بـ {$menuItemsCount} من الأطباق. يجب حذف الأطباق المرتبطة به مسبقاً قبل حذف القسم.")
+                            ->persistent()
+                            ->send();
+
+                        $action->halt();
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    // منع الحذف الجماعي إذا كان أي قسم من الأقسام المحددة مرتبطاً بأطباق
+                    DeleteBulkAction::make()
+                        ->before(function (DeleteBulkAction $action, Collection $records): void {
+                            $blockedCategories = $records->filter(
+                                fn (MenuCategory $category): bool => $category->menuItems()->exists(),
+                            );
+
+                            if ($blockedCategories->isEmpty()) {
+                                return;
+                            }
+
+                            $names = $blockedCategories
+                                ->map(fn (MenuCategory $category): string => $category->localized_name)
+                                ->implode('، ');
+
+                            Notification::make()
+                                ->danger()
+                                ->title('لا يمكن حذف بعض الأقسام')
+                                ->body("الأقسام التالية مرتبطة بأطباق ولا يمكن حذفها: {$names}. يجب حذف الأطباق المرتبطة بها مسبقاً.")
+                                ->persistent()
+                                ->send();
+
+                            $action->halt();
+                        }),
                 ]),
 
             ])

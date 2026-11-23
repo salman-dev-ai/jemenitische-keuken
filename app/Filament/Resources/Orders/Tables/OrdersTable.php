@@ -4,15 +4,21 @@ namespace App\Filament\Resources\Orders\Tables;
 
 use App\Enums\OrderStatus;
 use App\Enums\OrderType;
+use App\Enums\PaymentAttemptStatus;
+use App\Exceptions\PaymentException;
 use App\Models\Order;
 use App\Services\OrderService;
+use App\Services\Payments\PayProService;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class OrdersTable
 {
@@ -84,6 +90,12 @@ class OrdersTable
                     ->dateTime('H:i - Y-m-d')
                     ->sortable(),
             ])->defaultSort('created_at', 'desc')
+            // المطبخ يرى الطلب الإلكتروني فقط بعد الدفع
+            ->modifyQueryUsing(fn (Builder $query) => $query->where(function (Builder $q): void {
+                $q->whereNull('payment_method')
+                    ->orWhere('payment_method', '!=', 'online')
+                    ->orWhereIn('payment_status', ['paid', 'refunded']);
+            }))
             ->poll('1s')
             ->filters([
                 SelectFilter::make('status')
@@ -103,6 +115,7 @@ class OrdersTable
             ])
             ->recordActions([
                 EditAction::make(),
+
                 Action::make('complete')
                     ->label('إكتمل')
                     ->icon('lucide-check')
@@ -111,7 +124,54 @@ class OrdersTable
                     ->action(fn (Order $record) => $record->update([
                         'status' => OrderStatus::COMPLETED,
                         'payment_status' => 'paid',
-                    ])),
+
+                    ])
+
+                    ),
+                // زر الاسترداد
+                Action::make('refund')
+                    ->label('استرداد')
+                    ->icon('lucide-undo-2')
+                    ->color('warning')
+                    ->visible(fn (Order $record): bool => $record->payments()
+                        ->where('status', PaymentAttemptStatus::PAID)->get()
+                        ->contains(fn ($p): bool => $p->refundableAmount() > 0))
+                    ->schema(function (Order $record): array {
+                        $payment = $record->payments()->where('status', PaymentAttemptStatus::PAID)->latest('id')->first();
+                        $needsBank = in_array($payment?->pay_method, ['bancontact', 'creditcard'], true);
+
+                        return [
+                            TextInput::make('amount')
+                                ->label('المبلغ (يورو)')
+                                ->numeric()->prefix('€')->required()
+                                ->default($payment ? $payment->refundableAmount() / 100 : 0),
+                            TextInput::make('reason')->label('السبب (داخلي)')->maxLength(255),
+                            TextInput::make('account_holder_name')->label('اسم صاحب الحساب')->visible($needsBank)->required($needsBank),
+                            TextInput::make('iban')->label('IBAN')->visible($needsBank)->required($needsBank),
+                        ];
+                    })
+                    ->requiresConfirmation()
+                    ->action(function (Order $record, array $data): void {
+                        $payment = $record->payments()->where('status', PaymentAttemptStatus::PAID)->latest('id')->first();
+
+                        try {
+                            app(PayProService::class)->refund(
+                                $payment,
+                                (int) round(((float) $data['amount']) * 100),
+                                $data['reason'] ?? null,
+                                null,
+                                auth()->id(),
+                                array_filter([
+                                    'iban' => $data['iban'] ?? null,
+                                    'account_holder_name' => $data['account_holder_name'] ?? null,
+                                ]),
+                            );
+
+                            Notification::make()->title('أُرسل طلب الاسترداد إلى PayPro')->success()->send();
+                        } catch (PaymentException $e) {
+                            Notification::make()->title($e->getMessage())->danger()->send();
+                        }
+                    }),
 
                 // 📲 زر دائم لإرسال تحديث حالة الطلب للعميل عبر واتساب (متاح لاحقاً في أي وقت)
                 Action::make('send_status_whatsapp')

@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace App\Livewire\Concerns;
 
+use App\Enums\OrderStatus;
 use App\Enums\OrderType;
+use App\Enums\PaymentStatus;
 use App\Exceptions\OrderException;
+use App\Exceptions\PaymentException;
+use App\Models\Order;
 use App\Models\RestaurantSetting;
 use App\Services\OrderService;
+use App\Services\Payments\PayProService;
 use App\Services\ReservationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -32,6 +38,8 @@ trait ProcessesCheckout
     // ═══════════════════════════════════════════
     // 💳 إتمام الطلب (Checkout)
     // ═══════════════════════════════════════════
+    /** طريقة دفع الزبون: cash | online */
+    public string $payment_choice = 'cash';
 
     /**
      * 💳 إتمام الطلب.
@@ -52,6 +60,7 @@ trait ProcessesCheckout
     public function checkout(
         ReservationService $reservationService,
         OrderService $orderService,
+        PayProService $payments,
     ): ?string {
         $this->normalizeOrderType();
         $this->resetErrorBag();
@@ -112,13 +121,14 @@ trait ProcessesCheckout
         // ─── 6. التنفيذ داخل Transaction ───
         try {
             $customer = null;
-
+            $order = null;
             DB::transaction(function () use (
                 $validated,
                 $reservationService,
                 $orderService,
                 $couponCode,
                 &$customer,
+                &$order,
             ): void {
                 // 6.1) العميل (عند تفعيل "تذكرني")
                 if ($this->remember_me) {
@@ -176,11 +186,12 @@ trait ProcessesCheckout
                     ->all();
 
                 // 6.5) إنشاء الطلب — تمرير couponCode للخدمة
-                $orderService->createOrder(
+                $order = $orderService->createOrder(
                     $this->buildOrderData($validated, $customer, $reservation, $finalOrderType),
                     $orderItems,
                     $couponCode,
                 );
+
             });
 
             // ─── 7. بعد نجاح Transaction: كوكي "تذكرني" ───
@@ -192,16 +203,46 @@ trait ProcessesCheckout
             // ─── 8. مسح Rate Limiter ───
             RateLimiter::clear($rateKey);
 
-            // ─── 8.5. رابط واتساب (يجب بناؤه قبل تنظيف الحالة لأنه يقرأ السلة والحقول) ───
-            $whatsAppUrl = $this->makeWhatsAppUrl($validated);
+            // ─── 8.4. الدفع الإلكتروني: إنشاء الدفعة وتحويل الزبون إلى PayPro ───
+            $isOnline = $this->payment_choice === 'online';
+            $checkoutUrl = null;
+
+            if ($isOnline) {
+                try {
+                    $returnUrl = URL::signedRoute('payment.return', [
+                        'locale' => app()->getLocale(),
+                        'order' => $order->order_number,
+                    ]);
+
+                    $checkoutUrl = $payments->createPayment($order, $returnUrl, $returnUrl)->checkout_url;
+                } catch (PaymentException $e) {
+                    // الدفعة لم تبدأ: نُلغي الطلب بصمت (بدون إشعار للمدير) ونُبقي السلة
+                    Order::withoutEvents(fn () => $order->update([
+                        'status' => OrderStatus::CANCELLED,
+                        'payment_status' => PaymentStatus::FAILED->value,
+                    ]));
+
+                    $this->dispatch('notify', title: __('messages.order.error_title'), message: $e->getMessage(), type: 'error');
+                    $this->addError('general', $e->getMessage());
+
+                    return null;
+                }
+            }
+
+            // ─── 8.5. رابط واتساب (للدفع عند الاستلام فقط) ───
+            $whatsAppUrl = $isOnline ? null : $this->makeWhatsAppUrl($validated);
 
             // ─── 9. تنظيف الحالة ───
             $this->clearCart();
             $this->isCartModalOpen = false;
             $this->resetCustomerForm();
-            $this->resetCoupon();   // 🎫 تنظيف الكوبون
+            $this->resetCoupon();
 
-            // ─── 10. إشعار النجاح ───
+            // ─── 10/11. إرجاع الرابط ───
+            if ($isOnline) {
+                return $checkoutUrl; // تحويل إلى صفحة دفع PayPro
+            }
+
             $this->dispatch(
                 'notify',
                 title: __('messages.notifications.order_title'),
@@ -209,8 +250,6 @@ trait ProcessesCheckout
                 type: 'success',
             );
 
-            // ─── 11. إرجاع رابط واتساب للنموذج ليفتحه في تبويب جديد ───
-            // (بعد حفظ الطلب فعلياً، فلا يضيع الطلب إن أغلق العميل واتساب)
             return $whatsAppUrl;
         } catch (OrderException $e) {
             // ─── استثناءات العمل المعروفة ───
@@ -454,6 +493,8 @@ trait ProcessesCheckout
             'customer_phone' => $validated['customer_phone'],
             'customer_email' => $validated['customer_email'],
             'type' => $finalOrderType,
+            'payment_method' => $this->payment_choice === 'online' ? 'online' : 'cash',
+
             'notes' => $reservation
                 ? "Linked to Reservation: {$reservation->reference_code}"
                 : 'Direct order',

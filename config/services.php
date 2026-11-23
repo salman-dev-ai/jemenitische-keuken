@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'paypro' => [
+        'api_url' => env('PAYPRO_API_URL'), // اتركه فارغاً للإنتاج
+    ],
+
 ];

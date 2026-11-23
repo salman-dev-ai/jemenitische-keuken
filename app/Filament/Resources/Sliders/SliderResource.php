@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources\Sliders;
 
-use App\Filament\Resources\Sliders\Tables\SlidersTable as TablesSlidersTable;
 use App\Filament\Resources\Sliders\Pages\CreateSlider;
 use App\Filament\Resources\Sliders\Pages\EditSlider;
 use App\Filament\Resources\Sliders\Pages\ListSliders;
 use App\Filament\Resources\Sliders\Schemas\SliderForm;
+use App\Filament\Resources\Sliders\Tables\SlidersTable as TablesSlidersTable;
 use App\Models\Slider;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -38,6 +38,11 @@ class SliderResource extends Resource
      */
     public static function getNavigationBadge(): ?string
     {
+        // حماية من انهيار القائمة الجانبية في حال كان جدول sliders غير موجود
+        if (! \Illuminate\Support\Facades\Schema::hasTable('sliders')) {
+            return null;
+        }
+
         return (string) static::getModel()::where('is_active', true)->count();
     }
 

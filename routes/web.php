@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\PaymentReturnController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\Webhooks\PayProWebhookController;
 use App\Models\RestaurantSetting;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,3 +73,14 @@ Route::get('lang/switch/{locale}', [LanguageController::class, 'switch'])
 Route::post('cookie-consent', [CookieConsentController::class, 'store'])
     ->middleware('throttle:30,1')
     ->name('cookie-consent.store');
+
+// ─────────────────────────────────────────────────────────────
+// 6) Webhooks: PayPro (Payment)
+// ─────────────────────────────────────────────────────────────
+Route::post('/webhooks/paypro', PayProWebhookController::class)
+    ->name('webhooks.paypro')
+    ->withoutMiddleware([ValidateCsrfToken::class]);
+
+Route::get('payment/return/{order:order_number}', PaymentReturnController::class)
+    ->middleware('signed')
+    ->name('payment.return');

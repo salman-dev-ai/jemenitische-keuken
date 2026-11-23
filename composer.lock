@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f014579fe6ce0ffff6fd7850b7525f1",
+    "content-hash": "4bb39e2b9acaeb5acfd4e7fde4b91a4e",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -4375,6 +4375,59 @@
                 "source": "https://github.com/paragonie/constant_time_encoding"
             },
             "time": "2025-09-24T15:06:41+00:00"
+        },
+        {
+            "name": "paypro/paypro-php",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paypronl/paypro-php.git",
+                "reference": "2527b5489e240264c4a19a6dd905d7271441fe98"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paypronl/paypro-php/zipball/2527b5489e240264c4a19a6dd905d7271441fe98",
+                "reference": "2527b5489e240264c4a19a6dd905d7271441fe98",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": "^7.2|^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "3.68.3",
+                "phpstan/phpstan": "^1.4",
+                "phpunit/phpunit": "^8.5 || ^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PayPro\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PayPro BV",
+                    "email": "support@paypro.nl"
+                }
+            ],
+            "description": "PayPro PHP library",
+            "homepage": "https://www.paypro.nl",
+            "keywords": [
+                "api",
+                "payment processing",
+                "paypro"
+            ],
+            "support": {
+                "issues": "https://github.com/paypronl/paypro-php/issues",
+                "source": "https://github.com/paypronl/paypro-php/tree/1.2.0"
+            },
+            "time": "2025-11-10T10:27:02+00:00"
         },
         {
             "name": "phpoption/phpoption",

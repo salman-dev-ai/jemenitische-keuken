@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Orders\Schemas;
 
 use App\Enums\OrderStatus;
 use App\Enums\OrderType;
+use App\Enums\PaymentStatus;
 use App\Models\Customer;
 use App\Models\MenuItem;
 use Filament\Actions\Action;
@@ -325,23 +326,21 @@ class OrderForm
         return Section::make('الدفوعات والحسابات')
             ->icon('lucide-banknote')
             ->schema([
+
                 Select::make('payment_status')
                     ->label('حالة الدفع')
-                    ->options([
-                        'unpaid' => 'غير مدفوع',
-                        'paid' => 'مدفوع',
-                        'refunded' => 'مسترجع',
-                    ])
-                    ->default('unpaid')
+                    ->options(collect(PaymentStatus::cases())->mapWithKeys(fn ($c) => [$c->value => $c->label()])->all())
+                    ->default('pending')
                     ->native(false)
                     ->required(),
 
                 Select::make('payment_method')
                     ->label('طريقة الدفع')
                     ->options([
-                        'iDEAL' => 'iDEAL (هولندا)',
-                        'Credit Card' => 'بطاقة ائتمان',
-                        'Cash' => 'نقداً (كاش)',
+                        'cash' => 'نقداً عند الاستلام',
+                        'online' => 'إلكتروني (PayPro)',
+                        'ideal' => 'iDEAL',
+                        'creditcard' => 'بطاقة ائتمان',
                     ])
                     ->native(false),
 

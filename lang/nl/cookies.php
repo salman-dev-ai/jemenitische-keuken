@@ -15,4 +15,5 @@ return [
     'footer_link' => 'Cookie-instellingen',
 
     'hide_settings' => 'Instellingen verbergen',
+    'close' => 'Sluiten',
 ];
